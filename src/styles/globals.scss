@@ -1,0 +1,39 @@
+@import "reset";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.removeInputIcon {
+  -webkit-appearance: none;
+}
+
+.customScroll::-webkit-scrollbar {
+  width: 3px;
+}
+
+.customScroll::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 5px;
+}
+
+.customScroll::-webkit-scrollbar-thumb:hover {
+  background-color: #75748bc2;
+}
+
+.customScroll::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
+}
+

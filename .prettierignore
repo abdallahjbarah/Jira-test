@@ -1,0 +1,8 @@
+node_modules
+build
+dist
+.next
+*.css
+*.js.map
+bitbucket-pipelines.yml
+Dockerfile

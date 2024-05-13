@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "next",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    //should be checked later
+    // "plugin:import/errors",
+    "plugin:import/warnings",
+    "eslint-config-next",
+    "eslint-config-prettier",
+    "prettier",
+    "plugin:@tanstack/eslint-plugin-query/recommended"
+  ],
+  "plugins": ["@tanstack/query"],
+  "rules": {
+    "react-hooks/exhaustive-deps": "off" // Disables the "React Hook useEffect has a missing dependency" warning globally
+  }
+}
