@@ -1,9 +1,10 @@
-import Image from "next/image";
+import LandingPage from "@containers/web/LandingPage";
+import PublicLayout from "@layouts/PublicLayout";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Omar
-    </main>
+    <PublicLayout>
+      <LandingPage />
+    </PublicLayout>
   );
 }

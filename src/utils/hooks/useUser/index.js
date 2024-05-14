@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { ROLES, USER_DETAILS } from "@utils/constants";
 
 /**
@@ -73,6 +73,7 @@ export default function useUser() {
    * @returns {boolean} True if the user is authentic, false otherwise.
    */
   function isAuthenticUser() {
+    const userData = getUserSession();
     return (
       Number(userData?.role?.id) === ROLES.SUPER_ADMIN ||
       Number(userData?.role?.id) === ROLES.PARTNER

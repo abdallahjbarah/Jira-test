@@ -90,6 +90,11 @@ export const PDF_TYPES = {
   "application/pdf": [],
 };
 
+export const SEO = {
+  CONTENT: "none", // for staging
+  // CONTENT: "all", // for production
+};
+
 // -----------------------------------------------------------------------------------------------------------//
 // ⋆༺𓆩☠︎︎𓆪༻⋆ Do not change the order of the arrays. I repeat, do not change the order of the arrays ⋆༺𓆩☠︎︎𓆪༻⋆ //
 // -----------------------------------------------------------------------------------------------------------//

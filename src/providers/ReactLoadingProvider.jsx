@@ -1,4 +1,5 @@
-import Loader from "@components/layout/Loader";
+"use client"
+
 import { usePublicContext } from "./ReactPublicContextProvider";
 import { RotatingLines } from "react-loader-spinner";
 
@@ -38,7 +39,7 @@ export default function ReactLoadingProvider({ children }) {
             }}
           >
             <RotatingLines
-              strokeColor="#6363fc"
+              strokeColor="#47C409"
               strokeWidth="3"
               animationDuration="1.5"
               width="60"

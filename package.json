@@ -9,12 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.36.0",
+    "@tanstack/react-query-devtools": "^5.36.0",
     "axios": "^1.6.8",
     "dayjs": "^1.11.11",
     "dotenv": "^16.4.5",
+    "formik": "^2.4.6",
     "next": "14.2.3",
+    "prop-types": "^15.8.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-loader-spinner": "^6.1.6",
     "react-toastify": "^10.0.5",
     "sass": "^1.77.1",
     "yup": "^1.4.0"
