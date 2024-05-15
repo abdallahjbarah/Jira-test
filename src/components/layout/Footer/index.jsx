@@ -19,7 +19,7 @@ export default function Footer() {
             {/*  Social Media */}
             <ul className='mt-6 laptopS:mt-[9.25rem] flex gap-[0.9375rem]'>
               {SOCIAL_MEDIA_DATA?.map((item, index) => (
-                <a target='_blank' href={item?.link}>
+                <a key={item?.link + index + "Footer"} target='_blank' href={item?.link}>
                   <li>{item.icon}</li>
                 </a>
               ))}
