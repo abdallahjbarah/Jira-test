@@ -1,3 +1,9 @@
+import InstagramSvg from "@components/svg/InstagramSvg";
+import FacebookSvg from '@components/svg/FacebookSvg';
+import TiktokSvg from "@components/svg/TiktokSvg";
+import LinkedinSvg from "@components/svg/LinkedinSvg";
+import WhatsappSvg from "@components/svg/WhatsappSvg";
+
 // -----------------------------------------------------------------------------------------------------------//
 // ⋆༺𓆩☠︎︎𓆪༻⋆ Do not change the order of the arrays. I repeat, do not change the order of the arrays ⋆༺𓆩☠︎︎𓆪༻⋆ //
 // -----------------------------------------------------------------------------------------------------------//
@@ -94,6 +100,44 @@ export const SEO = {
   CONTENT: "none", // for staging
   // CONTENT: "all", // for production
 };
+
+export const LINKS_DATA = [
+  {path: "/", name: "Home"},
+  {path: "/about-us", name: "About Us"},
+  {path: "/gallery", name: "Gallery"},
+  {path: "/news", name: "News"},
+  {path: "/contact-us", name: "Contact Us"},
+
+  {path: "/experiences", name: "Experiences"},
+  {path: "/events", name: "Events"},
+  {path: "/stays", name: "Stays"},
+  {path: "/offers-Packages", name: "Offers & Packages"},
+  {path: "/products", name: "Products"},
+];
+
+export const SOCIAL_MEDIA_DATA = [
+    {
+        icon: <InstagramSvg style={'fill-primary_4 hover:fill-primary_1 transition-all duration-500'}/>, 
+        link: "#"
+    },
+    {
+        icon: <FacebookSvg style={'fill-primary_4 hover:fill-primary_1 transition-all duration-500'}/>, 
+        link: "#"
+    },
+    {
+        icon: <TiktokSvg style={'fill-primary_4 hover:fill-primary_1 transition-all duration-500'}/>, 
+        link: "#"
+    },
+    {
+        icon: <LinkedinSvg style={'fill-primary_4 hover:fill-primary_1 transition-all duration-500'}/>, 
+        link: "#"
+    },
+    {
+        icon: <WhatsappSvg style={'fill-primary_4 hover:fill-primary_1 transition-all duration-500'}/>, 
+        link: "#"
+    },
+];
+
 
 // -----------------------------------------------------------------------------------------------------------//
 // ⋆༺𓆩☠︎︎𓆪༻⋆ Do not change the order of the arrays. I repeat, do not change the order of the arrays ⋆༺𓆩☠︎︎𓆪༻⋆ //

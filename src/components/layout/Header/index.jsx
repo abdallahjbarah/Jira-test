@@ -1,10 +1,10 @@
 'use client';
 
 import CustomLink from '@components/ui/CustomLink';
-import { NAV_DATA1, NAV_DATA2 } from './data';
 import HeaderLink from './HeaderLink';
 import { usePathname } from 'next/navigation';
 import BookagriLogo from '@components/svg/BookagriLogo';
+import { LINKS_DATA } from '@utils/constants';
 
 export default function Header() {
   const pathname = usePathname();
@@ -14,9 +14,9 @@ export default function Header() {
       <div className='flex justify-between items-center'>
         {/* Navigation Left */}
         <nav className='flex justify-start items-center gap-6 flex-grow ms-[8.75rem]'>
-          {NAV_DATA1?.map((item, index) => (
+          {LINKS_DATA?.slice(0,5)?.map((item, index) => (
             <HeaderLink
-              key={item?.name + index}
+              key={item?.name + index + "Nav"}
               path={item?.path}
               text={item?.name}
               isActive={item?.path === pathname}
@@ -35,9 +35,9 @@ export default function Header() {
 
         {/* Navigation Right */}
         <nav className='flex justify-end items-center gap-6 flex-grow me-[8.75rem]'>
-          {NAV_DATA2?.map((item, index) => (
+          {LINKS_DATA?.slice(5)?.map((item, index) => (
             <HeaderLink
-              key={item?.name + index}
+              key={item?.name + index + "Nav"}
               path={item?.path}
               text={item?.name}
               isActive={item?.path === pathname}

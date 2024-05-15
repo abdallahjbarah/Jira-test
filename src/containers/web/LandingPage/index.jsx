@@ -7,9 +7,9 @@ export default function LandingPage() {
   return (
     <>
       <Hero />
+      <Statistics />
       <About />
       <Contact />
-      <Statistics />
     </>
   );
 }
