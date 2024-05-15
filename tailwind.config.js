@@ -1,4 +1,10 @@
 /** @type {import('tailwindcss').Config} */
+
+/* 
+  All custom values write like this :
+  "custom-px": "value in rem" 
+*/
+
 module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -16,24 +22,24 @@ module.exports = {
         'overflow': 'overflow'
       },
       backgroundImage: {
-        heroHomeImg: "url('/src/images/home/BgHomePage.png'), url('/src/images/home/BgHomePage_placeholder.png')",
       },
       screens: {
-        xxsm: "375px",
-        xsm: "420px",
-        sm: "640px",
-        md: "768px",
-        lg: "1024px",
-        xl: "1280px",
-        xxl: "1440px",
-        xxxl: "1920px",
+        mobileS: "375px",     // Small mobile devices
+        mobileM: "420px",     // Medium mobile devices, larger phones
+        tabletS: "640px",     // Small tablets
+        tabletM: "768px",     // Medium tablets
+        laptopS: "1024px",    // Small laptops
+        laptopM: "1280px",    // Medium laptops
+        laptopL: "1440px",    // Large laptops/desktops
+        desktop: "1920px",    // Standard desktop screens
       },
       colors: {
         //$primary
         primary_1: "#47C409",
-        primary_2: "#222",
+        primary_2: "#FF5F0A",
         primary_3: "#000",
         primary_4: "#FFF",
+        primary_5: "#222",
         //secondary
         secondary_1: "#999",
         secondary_2: "#F7F7F7",
@@ -42,41 +48,129 @@ module.exports = {
         secondary_5: "#F8F8F8",
       },
       fontSize: {
-        "custom-xs": "0.8125rem", // 13px 
-        "custom-sm": "0.875rem", // 14px 
-        "custom-base": "0.9375rem", // 15px 
-        "custom-lg": "1rem", // 16px 
-        "custom-xl": "1.125rem", // 18px 
-        "custom-2xl": "1.25rem", // 20px 
-        "custom-3xl": "1.5rem", // 24px 
-        "custom-4xl": "1.75rem", // 28px 
-        "custom-5xl": "2.5rem", // 40px 
-        "custom-6xl": "3rem", // 48px 
-        "custom-7xl": "3.5rem", // 56px 
-        "custom-8xl": "6rem", // 96px 
+        'custom-1': '0.0625rem',
+        'custom-2': '0.1250rem',
+        'custom-3': '0.1875rem',
+        'custom-4': '0.2500rem',
+        'custom-5': '0.3125rem',
+        'custom-6': '0.3750rem',
+        'custom-7': '0.4375rem',
+        'custom-8': '0.5000rem',
+        'custom-9': '0.5625rem',
+        'custom-10': '0.6250rem',
+        'custom-11': '0.6875rem',
+        'custom-12': '0.7500rem',
+        'custom-13': '0.8125rem',
+        'custom-14': '0.8750rem',
+        'custom-15': '0.9375rem',
+        'custom-16': '1.0000rem',
+        'custom-17': '1.0625rem',
+        'custom-18': '1.1250rem',
+        'custom-19': '1.1875rem',
+        'custom-20': '1.2500rem',
+        'custom-21': '1.3125rem',
+        'custom-22': '1.3750rem',
+        'custom-23': '1.4375rem',
+        'custom-24': '1.5000rem',
+        'custom-25': '1.5625rem',
+        'custom-26': '1.6250rem',
+        'custom-27': '1.6875rem',
+        'custom-28': '1.7500rem',
+        'custom-29': '1.8125rem',
+        'custom-30': '1.8750rem',
+        'custom-31': '1.9375rem',
+        'custom-32': '2.0000rem',
+        'custom-33': '2.0625rem',
+        'custom-34': '2.1250rem',
+        'custom-35': '2.1875rem',
+        'custom-36': '2.2500rem',
+        'custom-37': '2.3125rem',
+        'custom-38': '2.3750rem',
+        'custom-39': '2.4375rem',
+        'custom-40': '2.5000rem',
+        'custom-41': '2.5625rem',
+        'custom-42': '2.6250rem',
+        'custom-43': '2.6875rem',
+        'custom-44': '2.7500rem',
+        'custom-45': '2.8125rem',
+        'custom-46': '2.8750rem',
+        'custom-47': '2.9375rem',
+        'custom-48': '3.0000rem',
+        'custom-49': '3.0625rem',
+        'custom-50': '3.1250rem',
+        'custom-51': '3.1875rem',
+        'custom-52': '3.2500rem',
+        'custom-53': '3.3125rem',
+        'custom-54': '3.3750rem',
+        'custom-55': '3.4375rem',
+        'custom-56': '3.5000rem',
+        'custom-57': '3.5625rem',
+        'custom-58': '3.6250rem',
+        'custom-59': '3.6875rem',
+        'custom-60': '3.7500rem',
+        'custom-61': '3.8125rem',
+        'custom-62': '3.8750rem',
+        'custom-63': '3.9375rem',
+        'custom-64': '4.0000rem',
+        'custom-65': '4.0625rem',
+        'custom-66': '4.1250rem',
+        'custom-67': '4.1875rem',
+        'custom-68': '4.2500rem',
+        'custom-69': '4.3125rem',
+        'custom-70': '4.3750rem',
+        'custom-71': '4.4375rem',
+        'custom-72': '4.5000rem',
+        'custom-73': '4.5625rem',
+        'custom-74': '4.6250rem',
+        'custom-75': '4.6875rem',
+        'custom-76': '4.7500rem',
+        'custom-77': '4.8125rem',
+        'custom-78': '4.8750rem',
+        'custom-79': '4.9375rem',
+        'custom-80': '5.0000rem',
+        'custom-81': '5.0625rem',
+        'custom-82': '5.1250rem',
+        'custom-83': '5.1875rem',
+        'custom-84': '5.2500rem',
+        'custom-85': '5.3125rem',
+        'custom-86': '5.3750rem',
+        'custom-87': '5.4375rem',
+        'custom-88': '5.5000rem',
+        'custom-89': '5.5625rem',
+        'custom-90': '5.6250rem',
+        'custom-91': '5.6875rem',
+        'custom-92': '5.7500rem',
+        'custom-93': '5.8125rem',
+        'custom-94': '5.8750rem',
+        'custom-95': '5.9375rem',
+        'custom-96': '6.0000rem',
+        'custom-97': '6.0625rem',
+        'custom-98': '6.1250rem',
+        'custom-99': '6.1875rem'
       },
       lineHeight: {
-        "custom-20": "1.25rem", // 20px 
-        "custom-24": "1.5rem", // 24px 
-        "custom-30": "1.875rem", // 30px 
-        "custom-40": "2.5rem", // 40px 
-        "custom-56": "3.5rem", // 56px 
-        "custom-80": "5rem", // 80px 
-        "custom-112": "7rem", // 112px 
+        "custom-20": "1.25rem",
+        "custom-24": "1.5rem",
+        "custom-30": "1.875rem",
+        "custom-40": "2.5rem",
+        "custom-56": "3.5rem",
+        "custom-80": "5rem",
+        "custom-112": "7rem",
       },
       fontWeight: {
-        "custom-semi-bold": 600,
-        // Font weight for "semiBold" //font-semi-bold
-        "custom-medium": 500,
-        // Font weight for "medium" //font-medium
-        "custom-regular": 400,
-        // Font weight for "Regular" (Tailwind uses 400 as the default) //font-regular
+        "custom-300": 300,
+        "custom-400": 400,
+        "custom-500": 500,
+        "custom-600": 600,
+        "custom-700": 700,
+        "custom-800": 800,
+        "custom-900": 900,
       },
       borderRadius: {
-        "custom-44": "2.75rem", // 44px 
-        "custom-40": "2.5rem", // 40px 
-        "custom-24": "1.5rem", // 24px  
-        "custom-16": "1rem", // 16px 
+        "custom-16": "1rem",
+        "custom-24": "1.5rem",
+        "custom-40": "2.5rem",
+        "custom-44": "2.75rem",
       }
     },
   },

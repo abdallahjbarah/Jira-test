@@ -30,7 +30,7 @@ const SEOWrapper = (props) => {
       <link rel="manifest" href="/manifest.json" />
       <link rel="icon" href="/favicon.svg" />
       <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-      <meta property="og:site_name" content="Taktiv" />
+      <meta property="og:site_name" content="Bookagri" />
     </Head>
   );
 };

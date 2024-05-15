@@ -15,10 +15,10 @@ export default function ErrorPagesLayout({
         style={{ height: "calc(100vh - 80px)" }}
       >
         <div className="text-center mb-10">
-          <div className="text-grayscale_1 text-custom-6xl leading-custom-80 font-custom-semi-bold mb-8">
+          <div className="text-grayscale_1 text-custom-48 leading-custom-80 font-custom-600 mb-8">
             {title}
           </div>
-          <div className="text-grayscale_2 text-custom-xl leading-custom-30 font-custom-medium mb-8">
+          <div className="text-grayscale_2 text-custom-18 leading-custom-30 font-custom-500 mb-8">
             {subTitle}
           </div>
         </div>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {
   getAuthToken,
-} from '@utils/functions'; // Adjust according to your utility functions
+} from '@utils/methods'; // Adjust according to your utility functions
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_PUBLIC_API_URL,

@@ -18,7 +18,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" >
       <body className={Gellix.className}>
         {/* {pageProps?.seo ? <SEOWrapper {...pageProps.seo} /> : null} */}
         <CustomAuthProvider>
