@@ -5,3 +5,9 @@ import api from "@configs/api";
 //   const response = await api.post("/posts", postData);
 //   return response?.data;
 // };
+
+
+
+export async function postContactUsMutateFn(data) {
+    return await api.post(`/users/contact-form`, data);
+  }

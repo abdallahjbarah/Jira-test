@@ -1,4 +1,4 @@
-import BookagriLogo from '@components/svg/BookagriLogo';
+import BookagriLogoSvg from '@components/svg/shared/BookagriLogoSvg';
 import CustomLink from '@components/ui/CustomLink';
 import FilledButton from '@components/ui/buttons/FilledButton';
 import BgHomePage from '@public/images/home/BgHomePage.jpg';
@@ -26,7 +26,7 @@ export default function ComingSoon() {
       <div className='z-10 text-white text-center'>
         <div className='absolute top-[20px] left-[20px]'>
           <CustomLink path={'/'}>
-            <BookagriLogo />
+            <BookagriLogoSvg />
           </CustomLink>
         </div>
 

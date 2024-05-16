@@ -1,22 +1,26 @@
 import BgHomePageImg from '@images/home/BgHomePage.jpg';
 import LeafImg from '@images/home/Leaf.png';
 import Image from 'next/image';
-import styles from './style.module.scss';
 import FilledButton from '@components/ui/buttons/FilledButton';
+import styles from './style.module.scss';
 
 export default function Hero() {
   return (
-    <div
-      className={`${styles['bg-linear-gradient']} relative w-full h-screen flex items-end justify-start`}
+    <section
+      className={`${styles['bg-linear-gradient']} relative w-full min-h-screen flex items-end justify-start`}
     >
       <div className='absolute top-0 left-0 w-full h-full -z-10'>
         <Image
           src={BgHomePageImg}
-          layout='fill'
+          fill
+          sizes="100vw"
           objectFit='cover'
           objectPosition='center'
           alt='Background'
           priority
+          placeholder="blur"
+          quality={100}
+
         />
       </div>
       <div className='z-10 text-white ms-[8.75rem] mb-[8rem] desktop:mb-[16.9375rem] relative'>
@@ -34,10 +38,10 @@ export default function Hero() {
           path='/'
           text='Discover More'
           width='w-[13.67rem]'
-          height='h-[4.81rem]'
+          height='h-[4.8125rem]'
           className='mt-5 rounded-custom-16'
         />
       </div>
-    </div>
+    </section>
   );
 }

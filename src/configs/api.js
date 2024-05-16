@@ -1,10 +1,8 @@
 import axios from 'axios';
-import {
-  getAuthToken,
-} from '@utils/methods'; // Adjust according to your utility functions
+import { getAuthToken } from '@utils/methods'; // Adjust according to your utility functions
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL, // Corrected the environment variable name
   headers: {
     'Content-Type': 'application/json',
   },
@@ -28,14 +26,6 @@ async function request(
 ) {
   try {
     const config = { method, url, headers, params, ...(data && { data }) };
-
-    if (isPrivate) {
-      const authToken = getAuthToken();
-      if (authToken) {
-        config.headers['Authorization'] = `Bearer ${authToken}`;
-      }
-    }
-
     const response = await api(config);
     return response.data;
   } catch (error) {

@@ -13,6 +13,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        "sans": ['GellixRegular', 'sans-serif'],
+        "gellix-Bold": ['GellixBold', 'sans-serif'],
+      },
       boxShadow: {
         customShadow_1: '0px 8px 30px #0000001A',
       },
@@ -42,8 +46,8 @@ module.exports = {
         primary_5: "#222",
         //secondary
         secondary_1: "#999",
-        secondary_2: "#F7F7F7",
-        secondary_3: "#E7E7E7",
+        secondary_2: "#F2F2F2",
+        secondary_3: "#EEEEEE",
         secondary_4: "#CCCCCC",
         secondary_5: "#F8F8F8",
       },
@@ -153,6 +157,7 @@ module.exports = {
         "custom-24": "1.5rem",
         "custom-30": "1.875rem",
         "custom-40": "2.5rem",
+        "custom-48": "3rem",
         "custom-56": "3.5rem",
         "custom-80": "5rem",
         "custom-112": "7rem",
@@ -168,7 +173,9 @@ module.exports = {
       },
       borderRadius: {
         "custom-16": "1rem",
+        "custom-20": "1.25rem",
         "custom-24": "1.5rem",
+        "custom-32": "2rem",
         "custom-40": "2.5rem",
         "custom-44": "2.75rem",
       }

@@ -1,4 +1,4 @@
-export default function Facebook({
+export default function FacebookSvg({
   style = "fill-white",
   width = '3.7500rem',
   height = '3.7500rem',

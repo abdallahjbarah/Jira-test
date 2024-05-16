@@ -12,7 +12,8 @@
       "@utils/*": ["src/utils/*"],
       "@queries/*": ["src/queries/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@images/*": ["public/images/*"]
+      "@images/*": ["public/images/*"],
+      "@SVGs/*": ["public/SVGs/*"]
     }
   }
 }

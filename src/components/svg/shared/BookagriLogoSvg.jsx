@@ -1,4 +1,4 @@
-export default function BookagriLogo({ width = '11.8125rem', height = '3rem' }) {
+export default function BookagriLogoSvg({ width = '11.8125rem', height = '3rem' }) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'

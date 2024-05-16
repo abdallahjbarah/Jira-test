@@ -1,15 +1,21 @@
-import About from '@components/web/landing-page/About';
-import Contact from '@components/web/landing-page/Contact';
+import About from '@components/web/landing-page/AboutUs';
+import ContactUs from '@components/web/landing-page/ContactUs';
+import ContactUsForm from '@components/web/landing-page/ContactUsForm';
+import DiscoverBookagri from '@components/web/landing-page/DiscoverBookagri';
+import DownloadApp from '@components/web/landing-page/DownloadApp';
 import Hero from '@components/web/landing-page/Hero';
 import Statistics from '@components/web/landing-page/Statistics';
 
 export default function LandingPage() {
   return (
-    <>
+    <main>
       <Hero />
       <Statistics />
       <About />
-      <Contact />
-    </>
+      <DiscoverBookagri />
+      <DownloadApp />
+      <ContactUs />
+      <ContactUsForm />
+    </main>
   );
 }
