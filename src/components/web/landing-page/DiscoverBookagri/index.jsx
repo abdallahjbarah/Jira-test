@@ -1,6 +1,11 @@
 import ProductsImg from '@images/home/Products.jpg';
 import Events from '@images/home/Events.jpg';
 import ImageContainer from './ImageContainer';
+import Experiences from  '@images/home/Experiences.png'
+import Stays from  '@images/home/Stays.png'
+import Offers from  '@images/home/Offers.png'
+
+
 
 export default function DiscoverBookagri() {
   return (
@@ -9,7 +14,7 @@ export default function DiscoverBookagri() {
         <div className='flex flex-col gap-8'>
           {/* Experiences */}
           <ImageContainer
-            image={Events}
+            image={Experiences}
             title={'Experiences'}
             alt={'Experiences'}
             style={{
@@ -21,7 +26,7 @@ export default function DiscoverBookagri() {
 
           {/* Stays */}
           <ImageContainer
-            image={Events}
+            image={Stays}
             title={'Stays'}
             alt={'Stays'}
             style={{
@@ -47,7 +52,7 @@ export default function DiscoverBookagri() {
 
           {/* Offers & Packages */}
           <ImageContainer
-            image={Events}
+            image={Offers}
             title={'Offers & Packages'}
             alt={'Offers & Packages'}
             style={{
