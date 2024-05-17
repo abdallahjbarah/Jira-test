@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import AboutUsImg from '@images/home/AboutUs.jpg';
+import Vector from '@images/home/Vector.png';
 import VisionSVG from '@SVGs/home/VisionSVG.svg';
 import MissionSvg from '@SVGs/home/MissionSvg.svg';
 import FilledButton from '@components/ui/buttons/FilledButton';
@@ -9,8 +9,8 @@ export default function AboutUs() {
     <section id='AboutUs' className='bg-secondary_2 min-h-screen w-full flex ps-[8.75rem] items-center'>
       <div className='flex flex-col laptopS:flex-row gap-20 items-center'>
         {/* Image */}
-        <div className='w-[50rem] h-[50rem] my-[8.75rem]'>
-          <Image style={{borderRadius: "2rem"}} placeholder="blur" src={AboutUsImg} alt='AboutUs' />
+        <div className='w-[50rem] h-[50rem] my-[8.75remEXper]'>
+          <Image style={{borderRadius: "2rem"}} placeholder="blur" src={Vector} alt='AboutUs' />
         </div>
 
         {/* Content */}
