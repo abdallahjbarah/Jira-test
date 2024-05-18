@@ -1,4 +1,4 @@
-import About from '@components/web/landing-page/AboutUs';
+import AboutUs from '@components/web/landing-page/AboutUs';
 import ContactUs from '@components/web/landing-page/ContactUs';
 import ContactUsForm from '@components/web/landing-page/ContactUsForm';
 import DiscoverBookagri from '@components/web/landing-page/DiscoverBookagri';
@@ -11,7 +11,7 @@ export default function LandingPage() {
     <main>
       <Hero />
       <Statistics />
-      <About />
+      <AboutUs />
       <DiscoverBookagri />
       <DownloadApp />
       <ContactUs />

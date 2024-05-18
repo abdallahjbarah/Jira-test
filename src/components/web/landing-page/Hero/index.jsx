@@ -24,10 +24,10 @@ export default function Hero() {
         />
       </div>
       <div className='z-10 text-white ms-[8.75rem] mb-[8rem] desktop:mb-[16.9375rem] relative'>
-        <div className='w-full h-full absolute top-[-45px] left-[-40px]'>
+        <div className='w-[4.6875rem] h-[3.875rem] absolute top-[-3.4375rem] left-[-2.1875rem]'>
           <Image src={LeafImg} alt='Leaf' priority />
         </div>
-        <h1 className='text-custom-70 font-custom-700'>
+        <h1 className='text-custom-70 font-custom-700 font-gellix-Bold'>
           Connecting you with <br /> a world of agritourism
         </h1>
         <h2 className='text-custom-32 font-custom-400 mt-4'>

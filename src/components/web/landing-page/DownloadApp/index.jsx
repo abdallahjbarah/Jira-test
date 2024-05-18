@@ -29,14 +29,14 @@ export default function DownloadApp() {
             {/* App Store */}
             <MovingColorfulBorder className='rounded-[12px]'>
               <a className='element' href='#' target='_blank'>
-                <Image src={GooglePlaySvg} alt='Frame' />
+                <Image quality={100} src={GooglePlaySvg} alt='Google Play' />
               </a>
             </MovingColorfulBorder>
 
             {/* Google Play */}
             <MovingColorfulBorder className='rounded-[12px]'>
               <a href='#' target='_blank'>
-                <Image src={AppStoreSvg} alt='Frame' />
+                <Image quality={100} src={AppStoreSvg} alt='App Store' />
               </a>
             </MovingColorfulBorder>
           </div>
@@ -44,7 +44,7 @@ export default function DownloadApp() {
 
         {/* Image */}
         <div className='w-[36rem] h-[40.125rem] my-10 rounded-custom-32'>
-          <Image placeholder='blur' src={DownloadBookagriApp} alt='AboutUs' />
+          <Image quality={100} placeholder='blur' src={DownloadBookagriApp} alt='AboutUs' />
         </div>
       </div>
     </section>

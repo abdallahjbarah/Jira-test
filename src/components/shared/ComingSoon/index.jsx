@@ -30,8 +30,8 @@ export default function ComingSoon() {
           </CustomLink>
         </div>
 
-        <h1 className='text-custom-72 font-custom-700'>Coming Soon</h1>
-        <p className='text-custom-32 mt-2 font-custom-400'>
+        <h1 className='text-custom-72 font-custom-700 font-gellix-Bold'>Coming Soon</h1>
+        <p className='text-custom-32 mt-2 font-custom-700'>
           We're working hard to bring you something amazing.
           <br /> Stay tuned!
         </p>

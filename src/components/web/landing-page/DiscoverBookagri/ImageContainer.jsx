@@ -12,7 +12,7 @@ export default function ImageContainer({ image, alt, style, title, path }) {
       className={`relative rounded-custom-32`}
     >
       <div className='relative w-full' style={{ zIndex: -1 }}>
-        <Image placeholder='blur' src={image} alt={alt} style={{ ...style }} />
+        <Image quality={100} placeholder='blur' src={image} alt={alt} style={{ ...style }} />
       </div>
       <div className='absolute top-[2.5rem] left-[2.5rem]'>
         <h2 className='text-custom-32 font-custom-800 text-primary_4 font-gellix-Bold mb-2 select-none'>

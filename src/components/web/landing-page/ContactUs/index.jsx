@@ -17,11 +17,15 @@ import Luster_Item from '@components/ui/Luster_Item';
 
 export default function ContactUs() {
   return (
-    <section id='ContactUs' className='min-h-screen w-full flex ps-[8.75rem] items-center'>
+    <section
+      id='ContactUs'
+      className='min-h-screen w-full flex ps-[8.75rem] items-center'
+    >
       <div className='flex flex-col laptopS:flex-row gap-20 items-center'>
         {/* Image */}
         <div className='w-[50rem] h-[50rem] my-[7.5rem]'>
           <Image
+            quality={100}
             style={{ borderRadius: '2rem' }}
             placeholder='blur'
             src={AboutUsImg}

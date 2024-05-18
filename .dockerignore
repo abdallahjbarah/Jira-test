@@ -1,8 +1,41 @@
-# .dockerignore
+# Node.js related
 node_modules
-build
-.dockerignore
+npm-debug.log
+yarn-error.log
+.yarn
+.pnpm-store
+
+# Next.js specific
+.next
+out
+.next/cache
+
+# Environment files
+.env.local
+.env.*.local
+
+# Ignore Dockerfile
+Dockerfile
+Dockerfile.*
+
+# Ignore Git and version control
 .git
 .gitignore
-Dockerfile
-README.md
+.gitattributes
+
+# Ignore logs
+*.log
+logs
+
+# IDE specific files
+.idea
+.vscode
+*.swp
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Optional: Ignore markdown files, except for the README
+*.md
+!README.md

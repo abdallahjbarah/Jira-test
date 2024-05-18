@@ -9,8 +9,8 @@ export default function AboutUs() {
     <section id='AboutUs' className='bg-secondary_2 min-h-screen w-full flex ps-[8.75rem] items-center'>
       <div className='flex flex-col laptopS:flex-row gap-20 items-center'>
         {/* Image */}
-        <div className='w-[50rem] h-[50rem] my-[8.75remEXper]'>
-          <Image style={{borderRadius: "2rem"}} placeholder="blur" src={Vector} alt='AboutUs' />
+        <div className='w-[50rem] h-[50rem] my-[8.75rem]'>
+          <Image quality={100} style={{borderRadius: "2rem"}} placeholder="blur" src={Vector} alt='AboutUs' />
         </div>
 
         {/* Content */}
