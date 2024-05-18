@@ -10,7 +10,7 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className='absolute left-1/2 top-[48px] mx-auto w-full -translate-x-1/2 transform sm:block z-10'>\
+    <header className='absolute left-1/2 top-[3rem] mx-auto w-full -translate-x-1/2 transform sm:block z-10'>
       <nav className='flex justify-between items-center'>
         {/* Navigation Left */}
         <ul className='flex justify-start items-center gap-6 flex-grow ms-[8.75rem]'>
