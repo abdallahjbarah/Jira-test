@@ -65,7 +65,7 @@ export default function ContactUsForm() {
       firstName: values?.firstName,
       lastName: values?.lastName,
       email: values?.email,
-      phone: values?.phone,
+      phoneNumber: values?.phone?.toString(),
       message: values?.message,
     });
   }
