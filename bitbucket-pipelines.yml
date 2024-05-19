@@ -1,0 +1,33 @@
+#  This template allows you to validate your NodeJS code.
+#  The workflow allows running tests and code linting on the default branch.
+
+image: node:16
+
+
+pipelines:        
+  branches:
+    staging:
+    - step:
+          name: Deploy to registry
+          script:
+          - export IMAGE_NAME=majali1/bookagri-website:$BITBUCKET_COMMIT
+          - docker build -f Dockerfile.staging -t $IMAGE_NAME .
+          - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+          - docker push $IMAGE_NAME
+          services:
+           - docker
+    - step:
+          name: Deploy to droplet
+          script:
+          - export IMAGE_NAME=majali1/bookagri-website:$BITBUCKET_COMMIT
+          - pipe: atlassian/ssh-run:0.6.1
+            variables:
+              SSH_USER: $SSH_USER
+              SERVER: $SSH_SERVER
+              COMMAND: |
+                docker stop $CONTAINERS_TO_STOP
+                docker rm $CONTAINERS_TO_STOP
+                docker run -p $SERVER_PORT:3000 --name $CONTAINERS_TO_STOP --restart unless-stopped -d $IMAGE_NAME
+          services:
+            - docker
+            
