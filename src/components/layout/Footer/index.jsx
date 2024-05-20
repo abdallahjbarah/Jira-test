@@ -1,23 +1,28 @@
 import CustomLink from '@components/ui/CustomLink';
-import BookagriLogoSvg from '@components/svg/shared/BookagriLogoSvg';
+import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
 import { LINKS_DATA, SOCIAL_MEDIA_DATA } from '@utils/constants';
 import InstagramSvg from '@components/svg/footer/InstagramSvg';
 import TiktokSvg from '@components/svg/footer/TiktokSvg';
 import LinkedinSvg from '@components/svg/footer/LinkedinSvg';
 import WhatsappSvg from '@components/svg/footer/WhatsappSvg';
 import FacebookSvg from '@components/svg/footer/FacebookSvg';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
     <footer className='flex min-h-[28.875rem] flex-col items-center justify-between bg-primary_5'>
-      <div className='pt-[4rem] w-full px-[8.75rem]'>
+      <div className='pt-[4rem] w-full laptopS:px-[8.75rem]'>
         <div className='flex flex-col items-center gap-x-[15.5rem] gap-y-8 lg:flex-row'>
           <div className='self-center laptopS:self-start'>
-            
             {/* Logo */}
             <div className='w-full h-full max-w-[11.81rem] max-h-[3rem] m-auto laptopS:m-0'>
               <CustomLink path={'/'}>
-                <BookagriLogoSvg />
+                <Image
+                  className='w-[11.8125rem] h-[3rem]'
+                  quality={100}
+                  src={BookagriLogoSvg}
+                  alt='Bookagri Logo'
+                />
               </CustomLink>
             </div>
 
@@ -73,7 +78,6 @@ export default function Footer() {
 
           {/* Links */}
           <div className='flex w-full flex-col items-center justify-end tabletM:gap-y-8 tabletM:flex-row tabletM:items-start'>
-
             {/* Pages */}
             <div className='w-[19rem] tabletM:w-[12.5rem] tabletM:me-6'>
               <h2 className='text-custom-20 font-custom-700 text-primary_4'>

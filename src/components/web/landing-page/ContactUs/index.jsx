@@ -19,11 +19,11 @@ export default function ContactUs() {
   return (
     <section
       id='ContactUs'
-      className='min-h-screen w-full flex ps-[8.75rem] items-center'
+      className='min-h-screen w-full flex px-4 laptopS:ps-[8.75rem] items-center justify-center laptopS:justify-start'
     >
-      <div className='flex flex-col laptopS:flex-row gap-20 items-center'>
+      <div className='flex flex-col laptopS:flex-row laptopS:gap-20 items-center'>
         {/* Image */}
-        <div className='w-[50rem] h-[50rem] my-[7.5rem]'>
+        <div className='max-w-[50rem] max-h-[50rem] my-[4rem] laptopS:my-[7.5rem]'>
           <Image
             quality={100}
             style={{ borderRadius: '2rem' }}
@@ -104,7 +104,7 @@ export default function ContactUs() {
             </div>
           </div>
 
-          <div className='flex gap-4'>
+          <div className='flex gap-4 justify-center laptopS:justify-start pb-16'>
             <a
               className='w-[3.75rem] h-[3.75rem]'
               href={SOCIAL_MEDIA_DATA?.facebook}

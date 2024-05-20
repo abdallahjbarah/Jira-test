@@ -9,9 +9,9 @@ export default function DownloadApp() {
     <section className='bg-secondary_2 w-full flex justify-center items-center'>
       <div className='flex flex-col laptopS:flex-row gap-20 items-center'>
         {/* Content */}
-        <div className='flex flex-col gap-12 max-w-[43.875rem]'>
+        <div className='flex flex-col gap-12 max-w-[43.875rem] pt-[4rem]'>
           {/* About Us */}
-          <div>
+          <div className='px-4'>
             <h2 className='text-custom-32 font-custom-400 text-primary_1 mb-2'>
               Download the Bookagri app
             </h2>
@@ -25,7 +25,7 @@ export default function DownloadApp() {
               locals besides locally made foods and crafts.
             </p>
           </div>
-          <div className='flex gap-6'>
+          <div className='flex flex-wrap gap-6 justify-center laptopS:justify-start'>
             {/* App Store */}
             <MovingColorfulBorder className='rounded-[12px]'>
               <a className='element' href='#' target='_blank'>
@@ -43,7 +43,7 @@ export default function DownloadApp() {
         </div>
 
         {/* Image */}
-        <div className='w-[36rem] h-[40.125rem] my-10 rounded-custom-32'>
+        <div className='w-full h-full max-w-[36rem] max-h-[40.125rem] my-10 rounded-custom-32'>
           <Image quality={100} placeholder='blur' src={DownloadBookagriApp} alt='AboutUs' />
         </div>
       </div>
