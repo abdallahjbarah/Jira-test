@@ -108,6 +108,8 @@ export const LINKS_DATA = [
   { path: "/stays", name: "Stays" },
   { path: "/offers-Packages", name: "Offers & Packages" },
   { path: "/products", name: "Products" },
+  { path: "/privacy-policy", name: "Privacy policy" },
+
 ];
 
 export const SOCIAL_MEDIA_DATA = {
