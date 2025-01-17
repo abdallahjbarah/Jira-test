@@ -45,6 +45,7 @@ export default function Header() {
         {/* Navigation Right */}
         <ul className='flex justify-end items-center gap-6 flex-grow me-[8.75rem]'>
           {LINKS_DATA?.slice(5)?.map((item, index) => (
+            index != 5 &&
             <HeaderLink
               key={item?.name + index + 'Nav'}
               path={item?.path}
