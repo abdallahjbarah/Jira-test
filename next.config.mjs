@@ -18,6 +18,10 @@ const nextConfig = {
     // Don't run TypeScript during production builds - should be done in CI
     ignoreBuildErrors: process.env.NODE_ENV === 'production',
   },
+  i18n: {
+    locales: ['en', 'ar'],
+    defaultLocale: 'en',
+  },
 };
 
 export default nextConfig;
