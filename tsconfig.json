@@ -31,7 +31,8 @@
       "@queries/*": ["./src/queries/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@images/*": ["./public/images/*"],
-      "@SVGs/*": ["./public/SVGs/*"]
+      "@SVGs/*": ["./public/SVGs/*"],
+      "@lib/*": ["./src/lib/*"]
     },
     "baseUrl": "."
   },

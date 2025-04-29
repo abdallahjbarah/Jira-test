@@ -1,8 +1,14 @@
+interface FacebookSvgProps {
+  style?: string;
+  width?: string;
+  height?: string;
+}
+
 export default function FacebookSvg({
-  style = "fill-white",
+  style = 'fill-white',
   width = '3.7500rem',
   height = '3.7500rem',
-}) {
+}: FacebookSvgProps): React.ReactElement {
   return (
     <svg
       className={style}
@@ -11,7 +17,7 @@ export default function FacebookSvg({
       height={height}
       viewBox='0 0 60 60'
     >
-      <circle opacity='0.1' cx='30' cy='30' r='30'  />
+      <circle opacity='0.1' cx='30' cy='30' r='30' />
       <path
         fill-rule='evenodd'
         clip-rule='evenodd'

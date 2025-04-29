@@ -5,10 +5,9 @@ import {
   hasNumbers,
   hasSymbols,
   hasSpaces,
-  phoneNumber,
 } from './regex';
 
-const passwordSchema = (requiredMessage) => {
+const passwordSchema = (requiredMessage: string): Yup.StringSchema => {
   return Yup.string()
     .min(8, 'Weak password. Must contain at least 8 characters.')
     .max(
@@ -40,7 +39,7 @@ const passwordSchema = (requiredMessage) => {
     .required(requiredMessage);
 };
 
-const isValidPasswordSchema = (requiredMessage) => {
+const isValidPasswordSchema = (requiredMessage: string): Yup.StringSchema => {
   return Yup.string()
     .min(8, 'Invalid Password')
     .max(50, 'Invalid Password')
@@ -69,9 +68,7 @@ const isValidPasswordSchema = (requiredMessage) => {
 export const SignUpSchema = Yup.object().shape({
   firstName: Yup.string().required('First Name is required'),
   lastName: Yup.string().required('Last Name is required'),
-  email: Yup.string()
-    .email('Invalid email')
-    .required('Email is required'),
+  email: Yup.string().email('Invalid email').required('Email is required'),
   password: passwordSchema('Password is required'),
   phoneNumber: Yup.string().required('Phone Number is required'),
   phoneNumberLocal: Yup.string().required('Phone Number is required'),
@@ -101,23 +98,20 @@ export const VerificationCodeSchema = Yup.object().shape({
 // Reset Password Forget
 export const resetPasswordForgotSchema = Yup.object().shape({
   newPassword: passwordSchema('New Password is required'),
-
   ConfirmPassword: Yup.string()
-    .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
+    .oneOf([Yup.ref('newPassword')], 'Passwords must match')
     .required('Confirm Password is required'),
 });
 
 // Change Password
 export const changePasswordSchema = Yup.object().shape({
   oldPassword: isValidPasswordSchema('Old Password is required').notOneOf(
-    [Yup.ref('newPassword'), null],
+    [Yup.ref('newPassword')],
     "Old Password and new Password can't be same.",
   ),
-
   newPassword: passwordSchema('New Password is required'),
-
   confirmNewPassword: Yup.string()
-    .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
+    .oneOf([Yup.ref('newPassword')], 'Passwords must match')
     .required('Confirm Password is required'),
 });
 
@@ -132,14 +126,13 @@ export const contactUsSchema = Yup.object().shape({
 
 export const ResetPasswordSchema = Yup.object().shape({
   password: Yup.string()
-    .required("Password is required")
-    .min(8, "Password must be at least 8 characters")
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-      "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character"
+      'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character',
     ),
   confirmPassword: Yup.string()
-    .required("Please confirm your password")
-    .oneOf([Yup.ref("password"), null], "Passwords must match"),
+    .required('Please confirm your password')
+    .oneOf([Yup.ref('password')], 'Passwords must match'),
 });
-

@@ -1,8 +1,14 @@
+interface TiktokSvgProps {
+  style?: string;
+  width?: string;
+  height?: string;
+}
+
 export default function TiktokSvg({
   style = 'fill-white',
   width = '3.7500rem',
   height = '3.7500rem',
-}) {
+}: TiktokSvgProps): React.ReactElement {
   return (
     <svg
       className={style}
