@@ -67,16 +67,18 @@ const isValidPasswordSchema = (requiredMessage) => {
 
 // SignUp form
 export const SignUpSchema = Yup.object().shape({
-  fullName: Yup.string().required('Full Name is required'),
+  firstName: Yup.string().required('First Name is required'),
+  lastName: Yup.string().required('Last Name is required'),
   email: Yup.string()
     .email('Invalid email')
-    .required('Business email is required'),
+    .required('Email is required'),
   password: passwordSchema('Password is required'),
   phoneNumber: Yup.string().required('Phone Number is required'),
-  companyName: Yup.string().required('Company Name is required'),
-  numberOfUnits: Yup.number()
-    .min(1, 'The Number Of Units number must be greater than 1')
-    .required('Number Of Units is required'),
+  phoneNumberLocal: Yup.string().required('Phone Number is required'),
+  countryCode: Yup.string(),
+  agreeToTerms: Yup.boolean()
+    .oneOf([true], 'You must accept the terms and conditions')
+    .required('You must accept the terms and conditions'),
 });
 
 // SignIn
@@ -126,5 +128,18 @@ export const contactUsSchema = Yup.object().shape({
   email: Yup.string().required('Email is required'),
   phone: Yup.string().required('Phone is required'),
   message: Yup.string().required('Message is required'),
+});
+
+export const ResetPasswordSchema = Yup.object().shape({
+  password: Yup.string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+      "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character"
+    ),
+  confirmPassword: Yup.string()
+    .required("Please confirm your password")
+    .oneOf([Yup.ref("password"), null], "Passwords must match"),
 });
 

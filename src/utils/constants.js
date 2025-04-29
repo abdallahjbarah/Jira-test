@@ -92,6 +92,9 @@ export const IMAGES_TYPES = [
 
 export const VIDEO_TYPES = ["video/mp4"];
 
+export const USERS_ACCEPT_IMAGES_TYPES = IMAGES_TYPES;
+export const USERS_ACCEPT_VIDEO_TYPES = VIDEO_TYPES;
+
 export const PDF_TYPES = {
   "application/pdf": [],
 };

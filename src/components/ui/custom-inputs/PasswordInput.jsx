@@ -54,7 +54,7 @@ export default function PasswordInput({
       />
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className='absolute right-4 top-1/2 -translate-y-1/2 transform cursor-pointer'
+        className='absolute right-4 top-1/2 -translate-y-1/2 transform cursor-pointer text-[#47C409]'
         type='button'
       >
         {isOpen ? <OpenEyeSvg /> : <CloseEyeSvg />}
