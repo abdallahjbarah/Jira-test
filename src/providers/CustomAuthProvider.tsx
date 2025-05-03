@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Loader from '@components/layout/Loader';
-// import useUser from '@hooks/useUser';
 
 interface CustomAuthProviderProps {
   children: React.ReactNode;
