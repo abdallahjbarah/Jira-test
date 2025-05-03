@@ -7,10 +7,13 @@ import FilledButton from '@components/ui/buttons/FilledButton';
 
 export default function AboutUs(): React.ReactElement {
   return (
-    <section id='AboutUs' className='bg-secondary_2 w-full flex items-center'>
-      <div className='flex flex-col laptopS:flex-row gap-20 items-center justify-center container mx-auto'>
+    <section
+      id='AboutUs'
+      className='bg-secondary_2 min-h-screen w-full flex px-[1rem] laptopS:ps-[8.75rem] items-center justify-center laptopS:justify-start'
+    >
+      <div className='flex flex-col laptopS:flex-row laptopS:gap-20 items-center justify-center'>
         {/* Image */}
-        <div className='w-[50rem] h-[50rem] my-[8.75rem]'>
+        <div className='w-full max-w-[50rem] max-h-[50rem] my-[4rem] laptopS:my-[8.75rem]'>
           <Image
             quality={100}
             style={{ borderRadius: '2rem' }}
@@ -21,7 +24,7 @@ export default function AboutUs(): React.ReactElement {
         </div>
 
         {/* Content */}
-        <div className='flex flex-col gap-12 max-w-[43.875rem]'>
+        <div className='flex flex-col gap-12 max-w-[43.875rem] pb-[4rem] laptopS:pb-0'>
           {/* About Us */}
           <div>
             <h1 className='text-custom-48 font-custom-800 text-primary_5 font-gellix-Bold'>

@@ -154,3 +154,36 @@ export const SOCIAL_MEDIA_DATA: Record<string, SocialMediaLink> = {
   linkedin: { link: '#' },
   whatsapp: { link: '#' },
 };
+
+export const SEO_KEYWORDS = [
+  'agritourism',
+  'farming experiences',
+  'rural tourism',
+  'Jordan agriculture',
+  'farm tours',
+  'Bookagri',
+  'eco-tourism',
+  'sustainable travel',
+  'agricultural tours',
+  'organic farming',
+  'farm stays',
+  'cultural tourism',
+  'local farm experiences',
+  'hands-on farming',
+  'farm-to-table experiences',
+  'rural escapes',
+  'nature tourism',
+  'Jordan farm visits',
+  'agricultural heritage',
+  'Jordan rural experiences',
+  'community tourism',
+  'farm adventures',
+  'traditional farming',
+  'Jordan countryside',
+  'eco-friendly tourism',
+  'rural community interaction',
+];
+
+// -----------------------------------------------------------------------------------------------------------//
+// ⋆༺𓆩☠︎︎𓆪༻⋆ Do not change the order of the arrays. I repeat, do not change the order of the arrays ⋆༺𓆩☠︎︎𓆪༻⋆ //
+// -----------------------------------------------------------------------------------------------------------//

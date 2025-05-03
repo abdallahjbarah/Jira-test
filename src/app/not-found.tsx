@@ -26,17 +26,25 @@ export default function NotFound(): React.ReactElement {
       </div>
       <div className='z-10 text-white text-center'>
         <div className='absolute top-[20px] left-[20px]'>
-          <CustomLink path='/'>
-            <BookagriLogoSvg />
+          <CustomLink path={'/'}>
+            <Image
+              className='w-[11.8125rem] h-[3rem]'
+              quality={100}
+              // @ts-ignore
+              src={BookagriLogoSvg}
+              alt='Bookagri Logo'
+            />
           </CustomLink>
         </div>
 
-        <h1 className='text-custom-72 font-custom-700 font-gellix-Bold'>
-          404 Not Found
-        </h1>
-        <p className='text-custom-32 mt-2 font-custom-700'>
-          Oops! The page you're looking for <br /> is not here.
-        </p>
+        <div className='mx-1'>
+          <h1 className='text-custom-72 font-custom-700 font-gellix-Bold'>
+            404 Not Found
+          </h1>
+          <p className='text-custom-32 mt-2 font-custom-700'>
+            Oops! The page you're looking for is not here.
+          </p>
+        </div>
         <FilledButton
           path='/'
           text='Go To Home'
@@ -45,8 +53,8 @@ export default function NotFound(): React.ReactElement {
           className='mt-5 rounded-custom-16'
           icon={null}
           isButton={false}
-          onClick={undefined}
-          buttonType={undefined}
+          onClick={() => {}}
+          buttonType='button'
           isDisable={false}
         />
       </div>

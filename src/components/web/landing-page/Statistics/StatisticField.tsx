@@ -24,14 +24,14 @@ export default function StatisticField({
   }, [inView]);
 
   return (
-    <div ref={ref} key={key} className='w-[15.625rem]'>
+    <div ref={ref} key={key} className='w-[15.625rem] flex flex-col items-center laptopS:items-start'>
       <div className='text-primary_1 text-custom-40 font-custom-600 leading-custom-48'>
         {counterOn && (
           <CountUp start={0} end={parseInt(number)} duration={3} delay={0} />
         )}
         +
       </div>
-      <div className='text-primary_5 text-custom-22 font-custom-400 mt-1'>
+      <div className='text-primary_5 text-custom-22 font-custom-400 mt-1 text-center laptopS:text-start'>
         {title}
       </div>
     </div>

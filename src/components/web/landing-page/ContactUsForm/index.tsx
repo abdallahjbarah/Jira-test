@@ -71,7 +71,7 @@ export default function ContactUsForm(): React.ReactElement {
       firstName: values?.firstName,
       lastName: values?.lastName,
       email: values?.email,
-      phone: values?.phone,
+      phone: values?.phone?.toString(),
       message: values?.message,
     });
   }
@@ -79,9 +79,9 @@ export default function ContactUsForm(): React.ReactElement {
   return (
     <div
       id='ContactUsForm'
-      className='bg-secondary_2 min-h-screen flex w-full justify-center  items-center gap-[5rem] px-[8.75rem]'
+      className='bg-secondary_2 min-h-screen flex flex-col laptopS:flex-row w-full justify-center  items-center gap-[5rem] px-4 laptopS:px-[8.75rem]'
     >
-      <div className='flex flex-col  justify-center max-w-[35.875rem]'>
+      <div className='flex flex-col justify-center max-w-[35.875rem] mt-16 laptopS:mt-0'>
         <h1 className='text-custom-70 font-custom-700 text-primary_5 font-gellix-Bold'>
           Fill The Form
         </h1>
@@ -94,7 +94,7 @@ export default function ContactUsForm(): React.ReactElement {
         onSubmit={handleSubmit}
         className='flex w-full max-w-[61.6875rem] flex-col gap-6'
       >
-        <div className='w-full flex gap-8'>
+        <div className='w-full flex flex-col laptopS:flex-row gap-8'>
           <div className='w-full'>
             <CustomInput
               shape={1}
@@ -134,7 +134,7 @@ export default function ContactUsForm(): React.ReactElement {
             />
           </div>
         </div>
-        <div className='w-full flex gap-8'>
+        <div className='w-full flex flex-col laptopS:flex-row gap-8'>
           <div className='w-full'>
             <CustomInput
               shape={1}
@@ -192,7 +192,7 @@ export default function ContactUsForm(): React.ReactElement {
             error={errors?.message || ''}
           />
         </div>
-        <div className='self-start'>
+        <div className='self-start mb-16 laptopS:mb-0'>
           <FilledButton
             path='#'
             width='w-[14rem] mt-[2.5rem]'

@@ -27,7 +27,13 @@ export default function ComingSoon(): React.ReactElement {
       <div className='z-10 text-white text-center'>
         <div className='absolute top-[20px] left-[20px]'>
           <CustomLink path={'/'}>
-            <BookagriLogoSvg />
+            <Image
+              className='w-[11.8125rem] h-[3rem]'
+              quality={100}
+              // @ts-ignore
+              src={BookagriLogoSvg}
+              alt='Bookagri Logo'
+            />
           </CustomLink>
         </div>
 
