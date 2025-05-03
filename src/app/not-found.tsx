@@ -1,5 +1,5 @@
 import React from 'react';
-import BookagriLogoSvg from '@components/svg/shared/BookagriLogoSvg';
+import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
 import CustomLink from '@components/ui/CustomLink';
 import FilledButton from '@components/ui/buttons/FilledButton';
 import BgHomePage from '@public/images/home/BgHomePage.jpg';

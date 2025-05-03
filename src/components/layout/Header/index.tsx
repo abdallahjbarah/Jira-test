@@ -19,11 +19,11 @@ export default function Header(): React.ReactElement {
   const pathname = usePathname();
 
   return (
-    <header className=''>
-      <nav className='hidden laptopS:flex absolute left-1/2 top-[3rem] mx-auto w-full -translate-x-1/2 transform z-10'>
+    <header className='relative'>
+      <nav className='hidden laptopS:flex absolute left-1/2 top-[3rem] mx-auto w-full -translate-x-1/2 transform z-10 container '>
         <div className='flex justify-between items-center'></div>
         {/* Navigation Left */}
-        <ul className='flex justify-start items-center gap-6 flex-grow ms-[8.75rem]'>
+        <ul className='flex justify-start items-center gap-6 flex-grow'>
           {LINKS_DATA?.slice(0, 5)?.map((item: LinkData, index: number) => (
             <HeaderLink
               key={item?.name + index + 'Nav'}
@@ -47,7 +47,7 @@ export default function Header(): React.ReactElement {
           </li>
         </ul>
 
-        <ul className='flex justify-end items-center gap-6 flex-grow me-[8.75rem]'>
+        <ul className='flex justify-end items-center gap-6 flex-grow'>
           {LINKS_DATA?.slice(5)?.map(
             (item, index) =>
               index != 5 && (

@@ -133,8 +133,8 @@ interface LinkData {
 export const LINKS_DATA: LinkData[] = [
   { path: '/', name: 'Home' },
   { path: '/#AboutUs', name: 'About Us' },
-  { path: '/gallery', name: 'Gallery' },
   { path: '/news', name: 'News' },
+  { path: '/gallery', name: 'Gallery' },
   { path: '/#ContactUsForm', name: 'Contact Us' },
   { path: '/experiences', name: 'Experiences' },
   { path: '/events', name: 'Events' },
