@@ -1,16 +1,15 @@
+import React from 'react';
 import ProductsImg from '@images/home/Products.jpg';
 import Events from '@images/home/Events.jpg';
 import ImageContainer from './ImageContainer';
-import Experiences from  '@images/home/Experiences.png'
-import Stays from  '@images/home/Stays.png'
-import Offers from  '@images/home/Offers.png'
+import Experiences from '@images/home/Experiences.png';
+import Stays from '@images/home/Stays.png';
+import Offers from '@images/home/Offers.png';
 
-
-
-export default function DiscoverBookagri() {
+export default function DiscoverBookagri(): React.ReactElement {
   return (
-    <section className='mt-[8.375rem] my-[7.5rem] flex flex-col gap-8 justify-center items-center'>
-      <div className='w-full max-w-[102.5rem] flex gap-8 flex-col laptopS:flex-row'>
+    <section className='mt-[8.375rem] my-[7.5rem] flex flex-col gap-8 justify-center items-center container mx-auto'>
+      <div className='flex gap-8 flex-col laptopS:flex-row'>
         <div className='flex flex-col gap-8'>
           {/* Experiences */}
           <ImageContainer
@@ -33,7 +32,7 @@ export default function DiscoverBookagri() {
               maxHeight: '43.8125rem',
               objectFit: 'cover',
               borderRadius: '2rem',
-              zIndex: "-10"
+              zIndex: -10,
             }}
           />
         </div>

@@ -1,18 +1,25 @@
 'use client';
 
+import React, { useEffect } from 'react';
 import ErrorFormik from '@components/ui/ErrorFormik';
 import FilledButton from '@components/ui/buttons/FilledButton';
 import CustomInput from '@components/ui/custom-inputs/CustomInput';
 import CustomTextarea from '@components/ui/custom-inputs/CustomTextarea';
 import { usePublicContext } from '@providers/ReactPublicContextProvider';
-import { postContactUsMutateFn } from '@queries/mutations/postMutations';
-import { useMutation } from '@tanstack/react-query';
+import { usePostContactUs } from '@queries/mutations/postMutations';
 import { contactUsSchema } from '@utils/formsSchemas';
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-export default function ContactUsForm() {
+interface ContactUsFormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  message: string;
+}
+
+export default function ContactUsForm(): React.ReactElement {
   const { setIsLoading } = usePublicContext();
 
   const {
@@ -27,7 +34,7 @@ export default function ContactUsForm() {
     isValid,
     resetForm,
     setValues,
-  } = useFormik({
+  } = useFormik<ContactUsFormValues>({
     initialValues: {
       firstName: '',
       lastName: '',
@@ -43,9 +50,8 @@ export default function ContactUsForm() {
     mutate,
     isPending: isLoadingMutate,
     isError: isErrorMutate,
-  } = useMutation({
-    mutationFn: postContactUsMutateFn,
-    async onSuccess(data) {
+  } = usePostContactUs({
+    onSuccess(data) {
       toast.success(
         'Your message has been sent successfully. We will contact you as soon as possible',
       );
@@ -58,9 +64,9 @@ export default function ContactUsForm() {
 
   useEffect(() => {
     setIsLoading(isLoadingMutate);
-  }, [isLoadingMutate]);
+  }, [isLoadingMutate, setIsLoading]);
 
-  function onSubmit() {
+  function onSubmit(): void {
     mutate({
       firstName: values?.firstName,
       lastName: values?.lastName,
@@ -84,7 +90,10 @@ export default function ContactUsForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className='flex w-full max-w-[61.6875rem] flex-col gap-6'>
+      <form
+        onSubmit={handleSubmit}
+        className='flex w-full max-w-[61.6875rem] flex-col gap-6'
+      >
         <div className='w-full flex gap-8'>
           <div className='w-full'>
             <CustomInput
@@ -97,11 +106,12 @@ export default function ContactUsForm() {
               value={values?.firstName}
               onChange={handleChange}
               onBlur={handleBlur}
+              pattern='.*'
             />
             <ErrorFormik
-              isError={errors?.firstName}
-              isTouched={touched?.firstName}
-              error={errors?.firstName}
+              isError={!!errors?.firstName}
+              isTouched={!!touched?.firstName}
+              error={errors?.firstName || ''}
             />
           </div>
           <div className='w-full'>
@@ -115,11 +125,12 @@ export default function ContactUsForm() {
               value={values?.lastName}
               onChange={handleChange}
               onBlur={handleBlur}
+              pattern='.*'
             />
             <ErrorFormik
-              isError={errors?.lastName}
-              isTouched={touched?.lastName}
-              error={errors?.lastName}
+              isError={!!errors?.lastName}
+              isTouched={!!touched?.lastName}
+              error={errors?.lastName || ''}
             />
           </div>
         </div>
@@ -135,11 +146,12 @@ export default function ContactUsForm() {
               value={values?.email}
               onChange={handleChange}
               onBlur={handleBlur}
+              pattern='.*'
             />
             <ErrorFormik
-              isError={errors?.email}
-              isTouched={touched?.email}
-              error={errors?.email}
+              isError={!!errors?.email}
+              isTouched={!!touched?.email}
+              error={errors?.email || ''}
             />
           </div>
           <div className='w-full'>
@@ -153,11 +165,12 @@ export default function ContactUsForm() {
               value={values?.phone}
               onChange={handleChange}
               onBlur={handleBlur}
+              pattern='.*'
             />
             <ErrorFormik
-              isError={errors?.phone}
-              isTouched={touched?.phone}
-              error={errors?.phone}
+              isError={!!errors?.phone}
+              isTouched={!!touched?.phone}
+              error={errors?.phone || ''}
             />
           </div>
         </div>
@@ -174,18 +187,22 @@ export default function ContactUsForm() {
             onBlur={handleBlur}
           />
           <ErrorFormik
-            isError={errors?.message}
-            isTouched={touched?.message}
-            error={errors?.message}
+            isError={!!errors?.message}
+            isTouched={!!touched?.message}
+            error={errors?.message || ''}
           />
         </div>
         <div className='self-start'>
           <FilledButton
+            path='#'
             width='w-[14rem] mt-[2.5rem]'
             height='h-[4.8125rem]'
             text='Send Message'
             isButton
             buttonType='submit'
+            icon={null}
+            onClick={() => {}}
+            isDisable={false}
           />
         </div>
       </form>

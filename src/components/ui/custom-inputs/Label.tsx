@@ -1,4 +1,18 @@
-export default function Label({ text, isRequired = false, forId, style }) {
+import React from 'react';
+
+interface LabelProps {
+  text: string;
+  isRequired?: boolean;
+  forId: string;
+  style?: string;
+}
+
+export default function Label({
+  text,
+  isRequired = false,
+  forId,
+  style,
+}: LabelProps): React.ReactElement {
   return (
     <label className={`mb-[4px] ${style}`} htmlFor={forId}>
       <span className='text-grayscale_3 select-none text-custom-xs font-medium leading-custom-24'>

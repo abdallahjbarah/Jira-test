@@ -1,31 +1,43 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const VerifyCodeInput = ({ length, onComplete, placeholder = '•' }) => {
-  const [otp, setOtp] = useState(new Array(length).fill(''));
-  const inputsRef = useRef(otp.map(() => React.createRef()));
+interface VerifyCodeInputProps {
+  length: number;
+  onComplete: (code: string) => void;
+  placeholder?: string;
+}
+
+const VerifyCodeInput = ({
+  length,
+  onComplete,
+  placeholder = '•',
+}: VerifyCodeInputProps): React.ReactElement => {
+  const [otp, setOtp] = useState<string[]>(new Array(length).fill(''));
+  const inputRefs = useRef<HTMLInputElement[]>([]);
 
   useEffect(() => {
-    inputsRef.current[0].current.focus();
+    if (inputRefs.current[0]) {
+      inputRefs.current[0].focus();
+    }
   }, []);
 
-  const isValidCharacter = (char) => /^[0-9]$/.test(char);
+  const isValidCharacter = (char: string): boolean => /^[0-9]$/.test(char);
 
-  const handleChange = (element, index) => {
+  const handleChange = (element: HTMLInputElement, index: number): void => {
     const value = element.value.slice(-1);
     const newOtp = [...otp];
 
     if (!value) {
       newOtp[index] = '';
       setOtp(newOtp);
-      if (index > 0) {
-        inputsRef.current[index - 1].current.focus();
+      if (index > 0 && inputRefs.current[index - 1]) {
+        inputRefs.current[index - 1].focus();
       }
     } else {
       if (!isValidCharacter(value)) return;
       newOtp[index] = value;
       setOtp(newOtp);
-      if (index < length - 1) {
-        inputsRef.current[index + 1].current.focus();
+      if (index < length - 1 && inputRefs.current[index + 1]) {
+        inputRefs.current[index + 1].focus();
       }
     }
 
@@ -35,10 +47,13 @@ const VerifyCodeInput = ({ length, onComplete, placeholder = '•' }) => {
     }
   };
 
-  const handleKeyDown = (event, index) => {
+  const handleKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+    index: number,
+  ): void => {
     if (event.key === 'Backspace' && !otp[index]) {
-      if (index > 0) {
-        inputsRef.current[index - 1].current.focus();
+      if (index > 0 && inputRefs.current[index - 1]) {
+        inputRefs.current[index - 1].focus();
         const newOtp = [...otp];
         newOtp[index - 1] = '';
         setOtp(newOtp);
@@ -51,11 +66,13 @@ const VerifyCodeInput = ({ length, onComplete, placeholder = '•' }) => {
       {otp.map((value, index) => (
         <input
           key={index}
-          ref={inputsRef.current[index]}
+          ref={(el) => {
+            if (el) inputRefs.current[index] = el;
+          }}
           type='text'
           inputMode='numeric'
           pattern='[0-9]*'
-          maxLength='1'
+          maxLength={1}
           value={value}
           placeholder={placeholder}
           onChange={(e) => handleChange(e.target, index)}

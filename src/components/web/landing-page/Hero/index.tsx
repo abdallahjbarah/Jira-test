@@ -1,3 +1,4 @@
+import React from 'react';
 import BgHomePageImg from '@images/home/BgHomePage.jpg';
 import LeafImg from '@images/home/Leaf.png';
 import Image from 'next/image';
@@ -13,14 +14,13 @@ export default function Hero() {
         <Image
           src={BgHomePageImg}
           fill
-          sizes="100vw"
+          sizes='100vw'
           objectFit='cover'
           objectPosition='center'
           alt='Background'
           priority
-          placeholder="blur"
+          placeholder='blur'
           quality={100}
-
         />
       </div>
       <div className='z-10 text-white ms-[8.75rem] mb-[8rem] desktop:mb-[16.9375rem] relative'>
@@ -40,6 +40,10 @@ export default function Hero() {
           width='w-[13.67rem]'
           height='h-[4.8125rem]'
           className='mt-5 rounded-custom-16'
+          icon={null}
+          onClick={() => {}}
+          buttonType='button'
+          isDisable={false}
         />
       </div>
     </section>

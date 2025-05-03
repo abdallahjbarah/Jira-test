@@ -1,5 +1,19 @@
-import PropTypes from 'prop-types';
+import React, { ReactElement, ReactNode } from 'react';
 import CustomLink from '../CustomLink';
+
+interface FilledButtonProps {
+  path: string;
+  text: string;
+  icon: ReactNode;
+  width: string;
+  height: string;
+  iconLeft?: boolean;
+  isButton?: boolean;
+  onClick: () => void;
+  buttonType: 'button' | 'submit' | 'reset';
+  isDisable: boolean;
+  className?: string;
+}
 
 function FilledButton({
   path,
@@ -13,7 +27,7 @@ function FilledButton({
   buttonType,
   isDisable,
   className = 'rounded-custom-16',
-}) {
+}: FilledButtonProps): ReactElement {
   const buttonStyles = {
     normal: `${className} text-custom-24 font-custom-700 bg-primary_1 justify-center items-center inline-flex text-primary_4 hover:bg-primary_2 transaction-colors duration-200 select-none`,
     disabled: `${className} text-custom-24 font-custom-700 bg-secondary_4 justify-center items-center inline-flex text-primary_2 transaction-colors duration-200 select-none`,
@@ -60,18 +74,5 @@ function FilledButton({
     </CustomLink>
   );
 }
-
-FilledButton.propTypes = {
-  path: PropTypes.string,
-  text: PropTypes.string,
-  icon: PropTypes.element,
-  iconLeft: PropTypes.bool,
-  width: PropTypes.string,
-  height: PropTypes.string,
-  isButton: PropTypes.bool,
-  onClick: PropTypes.func,
-  buttonType: PropTypes.string,
-  isDisable: PropTypes.bool,
-};
 
 export default FilledButton;

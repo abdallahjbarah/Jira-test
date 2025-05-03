@@ -1,10 +1,11 @@
+import React from 'react';
 import Image from 'next/image';
 import DownloadBookagriApp from '@images/home/DownloadBookagriApp.png';
 import AppStoreSvg from '@SVGs/home/AppStore.svg';
 import GooglePlaySvg from '@SVGs/home/GooglePlay.svg';
 import MovingColorfulBorder from '@components/ui/MovingColorfulBorder';
 
-export default function DownloadApp() {
+export default function DownloadApp(): React.ReactElement {
   return (
     <section className='bg-secondary_2 w-full flex justify-center items-center'>
       <div className='flex flex-col laptopS:flex-row gap-20 items-center'>
@@ -44,7 +45,12 @@ export default function DownloadApp() {
 
         {/* Image */}
         <div className='w-[36rem] h-[40.125rem] my-10 rounded-custom-32'>
-          <Image quality={100} placeholder='blur' src={DownloadBookagriApp} alt='AboutUs' />
+          <Image
+            quality={100}
+            placeholder='blur'
+            src={DownloadBookagriApp}
+            alt='AboutUs'
+          />
         </div>
       </div>
     </section>

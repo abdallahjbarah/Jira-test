@@ -1,10 +1,25 @@
-import Image from 'next/image';
+import React from 'react';
+import Image, { StaticImageData } from 'next/image';
 import CustomLink from '@components/ui/CustomLink';
 import ArrowRight from '@components/svg/shared/ArrowRight';
 
-export default function ImageContainer({ image, alt, style, title, path }) {
+interface ImageContainerProps {
+  image: StaticImageData;
+  alt: string;
+  style: React.CSSProperties;
+  title: string;
+  path?: string;
+}
+
+export default function ImageContainer({
+  image,
+  alt,
+  style,
+  title,
+  path,
+}: ImageContainerProps): React.ReactElement {
   return (
-    <CustomLink className={"group"} path={path || '#'}>
+    <CustomLink className={'group'} path={path || '#'}>
       <div
         style={{
           backgroundImage:

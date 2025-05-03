@@ -1,9 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ChangeEvent } from 'react';
 
-const SHAPE_STYLES = {
+const SHAPE_STYLES: Record<number, string> = {
   1: 'no-scrollbar resize-none bg-primary_4 text-custom-24 text-primary_5 border border-solid border-secondary_3 rounded-[16px] removeInputIcon',
 };
+
+interface CustomTextareaProps {
+  className?: string;
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  onBlur: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  placeholder: string;
+  isRequired?: boolean;
+  name: string;
+  id: string;
+  value: string | number;
+  withFocus?: boolean;
+  isDisable?: boolean;
+  shape: number;
+}
 
 export default function CustomTextarea({
   className = '',
@@ -17,12 +30,12 @@ export default function CustomTextarea({
   withFocus = true,
   isDisable = false,
   shape,
-}) {
+}: CustomTextareaProps): React.ReactElement {
   const disabledClass = isDisable ? 'bg-secondary_4' : '';
   const focusClass = withFocus
     ? 'focus:outline-primary_1 transition-all duration-200'
     : 'outline-none';
-  const shapeClass = SHAPE_STYLES[shape] || 2;
+  const shapeClass = SHAPE_STYLES[shape] || '';
 
   return (
     <textarea
@@ -38,17 +51,3 @@ export default function CustomTextarea({
     />
   );
 }
-
-CustomTextarea.propTypes = {
-  className: PropTypes.string,
-  placeholder: PropTypes.string,
-  onChange: PropTypes.func,
-  onBlur: PropTypes.func,
-  isRequired: PropTypes.bool,
-  name: PropTypes.string,
-  id: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  withFocus: PropTypes.bool,
-  isDisable: PropTypes.bool,
-  shape: PropTypes.number,
-};

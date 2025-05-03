@@ -1,16 +1,23 @@
+import React from 'react';
 import Image from 'next/image';
 import Vector from '@images/home/Vector.png';
 import VisionSVG from '@SVGs/home/VisionSVG.svg';
 import MissionSvg from '@SVGs/home/MissionSvg.svg';
 import FilledButton from '@components/ui/buttons/FilledButton';
 
-export default function AboutUs() {
+export default function AboutUs(): React.ReactElement {
   return (
-    <section id='AboutUs' className='bg-secondary_2 min-h-screen w-full flex ps-[8.75rem] items-center'>
-      <div className='flex flex-col laptopS:flex-row gap-20 items-center'>
+    <section id='AboutUs' className='bg-secondary_2 w-full flex items-center'>
+      <div className='flex flex-col laptopS:flex-row gap-20 items-center justify-center container mx-auto'>
         {/* Image */}
         <div className='w-[50rem] h-[50rem] my-[8.75rem]'>
-          <Image quality={100} style={{borderRadius: "2rem"}} placeholder="blur" src={Vector} alt='AboutUs' />
+          <Image
+            quality={100}
+            style={{ borderRadius: '2rem' }}
+            placeholder='blur'
+            src={Vector}
+            alt='AboutUs'
+          />
         </div>
 
         {/* Content */}
@@ -75,6 +82,10 @@ export default function AboutUs() {
               width='w-[11.3125rem]'
               height='h-[4.8125rem]'
               className='mt-5 rounded-custom-16'
+              icon={null}
+              onClick={() => {}}
+              buttonType='button'
+              isDisable={false}
             />
           </div>
         </div>

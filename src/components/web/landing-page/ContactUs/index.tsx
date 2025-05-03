@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import AboutUsImg from '@images/home/AboutUs.jpg';
 
@@ -15,13 +16,10 @@ import WhatsappSVG from '@SVGs/home/Whatsapp.svg';
 import { SOCIAL_MEDIA_DATA } from '@utils/constants';
 import Luster_Item from '@components/ui/Luster_Item';
 
-export default function ContactUs() {
+export default function ContactUs(): React.ReactElement {
   return (
-    <section
-      id='ContactUs'
-      className='min-h-screen w-full flex ps-[8.75rem] items-center'
-    >
-      <div className='flex flex-col laptopS:flex-row gap-20 items-center'>
+    <section id='ContactUs' className='w-full flex ps-[8.75rem] items-center'>
+      <div className='flex flex-col laptopS:flex-row gap-20 items-center justify-center container mx-auto'>
         {/* Image */}
         <div className='w-[50rem] h-[50rem] my-[7.5rem]'>
           <Image
@@ -107,46 +105,46 @@ export default function ContactUs() {
           <div className='flex gap-4'>
             <a
               className='w-[3.75rem] h-[3.75rem]'
-              href={SOCIAL_MEDIA_DATA?.facebook}
+              href={SOCIAL_MEDIA_DATA?.facebook?.link}
               target='_blank'
             >
-              <Luster_Item>
+              <Luster_Item className=''>
                 <Image src={FacebookSVG} alt='Facebook logo' />
               </Luster_Item>
             </a>
             <a
               className='w-[3.75rem] h-[3.75rem]'
-              href={SOCIAL_MEDIA_DATA?.linkedin}
+              href={SOCIAL_MEDIA_DATA?.linkedin?.link}
               target='_blank'
             >
-              <Luster_Item>
+              <Luster_Item className=''>
                 <Image src={LinkedinSVG} alt='Linkedin logo' />
               </Luster_Item>
             </a>
             <a
               className='w-[3.75rem] h-[3.75rem]'
-              href={SOCIAL_MEDIA_DATA?.instagram}
+              href={SOCIAL_MEDIA_DATA?.instagram?.link}
               target='_blank'
             >
-              <Luster_Item>
+              <Luster_Item className=''>
                 <Image src={InstagramSVG} alt='Instagram logo' />
               </Luster_Item>
             </a>
             <a
               className='w-[3.75rem] h-[3.75rem]'
-              href={SOCIAL_MEDIA_DATA?.tiktok}
+              href={SOCIAL_MEDIA_DATA?.tiktok?.link}
               target='_blank'
             >
-              <Luster_Item>
+              <Luster_Item className=''>
                 <Image src={TiktokSVG} alt='Tiktok logo' />
               </Luster_Item>
             </a>
             <a
               className=' relative w-[3.75rem] h-[3.75rem]'
-              href={SOCIAL_MEDIA_DATA?.whatsapp}
+              href={SOCIAL_MEDIA_DATA?.whatsapp?.link}
               target='_blank'
             >
-              <Luster_Item>
+              <Luster_Item className=''>
                 <Image src={WhatsappSVG} alt='Whatsapp logo' />
               </Luster_Item>
             </a>
