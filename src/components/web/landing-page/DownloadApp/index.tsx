@@ -8,7 +8,7 @@ import MovingColorfulBorder from '@components/ui/MovingColorfulBorder';
 export default function DownloadApp(): React.ReactElement {
   return (
     <section className='bg-secondary_2 w-full flex justify-center items-center'>
-      <div className='flex flex-col laptopS:flex-row gap-20 items-center'>
+      <div className='flex flex-col laptopS:flex-row gap-20 items-center justify-center'>
         {/* Content */}
         <div className='flex flex-col gap-12 max-w-[43.875rem] pt-[4rem]'>
           {/* About Us */}

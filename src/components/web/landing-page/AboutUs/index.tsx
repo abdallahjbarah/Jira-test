@@ -9,9 +9,9 @@ export default function AboutUs(): React.ReactElement {
   return (
     <section
       id='AboutUs'
-      className='bg-secondary_2 min-h-screen w-full flex px-[1rem] laptopS:ps-[8.75rem] items-center justify-center laptopS:justify-start'
+      className='bg-secondary_2 flex px-[1rem] items-center justify-center laptopS:justify-start '
     >
-      <div className='flex flex-col laptopS:flex-row laptopS:gap-20 items-center justify-center'>
+      <div className='flex flex-col laptopS:flex-row laptopS:gap-20 items-center justify-center container mx-auto'>
         {/* Image */}
         <div className='w-full max-w-[50rem] max-h-[50rem] my-[4rem] laptopS:my-[8.75rem]'>
           <Image

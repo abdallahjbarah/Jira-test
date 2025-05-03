@@ -8,9 +8,9 @@ import Offers from '@images/home/Offers.png';
 
 export default function DiscoverBookagri(): React.ReactElement {
   return (
-    <section className='px-[1rem] laptopS:px-0 mt-[4rem] laptopS:mt-[8.375rem] my-[7.5rem] flex flex-col gap-8 justify-center items-center'>
+    <section className='px-[1rem] laptopS:px-0 mt-[4rem] laptopS:mt-[8.375rem] my-[7.5rem] flex flex-col gap-8 justify-center items-center container mx-auto'>
       <div className='w-full max-w-[102.5rem] flex gap-8 flex-col laptopS:flex-row justify-center'>
-        <div className='flex flex-col gap-8'>
+        <div className='flex flex-col gap-8 flex-1'>
           {/* Experiences */}
           <ImageContainer
             image={Experiences}
@@ -28,7 +28,7 @@ export default function DiscoverBookagri(): React.ReactElement {
           />
         </div>
 
-        <div className='flex flex-col gap-8'>
+        <div className='flex flex-col gap-8 flex-1'>
           {/* Events */}
           <ImageContainer
             image={Events}
@@ -46,8 +46,6 @@ export default function DiscoverBookagri(): React.ReactElement {
           />
         </div>
       </div>
-
-      {/* Products */}
       <div className='flex flex-col gap-8 w-full laptopS:w-fit'>
         <ImageContainer
           image={ProductsImg}

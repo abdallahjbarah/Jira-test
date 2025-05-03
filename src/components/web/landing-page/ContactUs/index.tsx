@@ -20,11 +20,11 @@ export default function ContactUs(): React.ReactElement {
   return (
     <section
       id='ContactUs'
-      className='min-h-screen w-full flex px-4 laptopS:ps-[8.75rem] items-center justify-center laptopS:justify-start'
+      className='w-full flex container mx-auto px-4 items-center justify-center laptopS:justify-start'
     >
-      <div className='flex flex-col laptopS:flex-row laptopS:gap-20 items-center'>
+      <div className='flex flex-col laptopS:flex-row laptopS:gap-20 items-center justify-center w-full'>
         {/* Image */}
-        <div className='max-w-[50rem] max-h-[50rem] my-[4rem] laptopS:my-[7.5rem]'>
+        <div className='my-[4rem] laptopS:my-[7.5rem]'>
           <Image
             quality={100}
             style={{ borderRadius: '2rem' }}

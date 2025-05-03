@@ -77,135 +77,134 @@ export default function ContactUsForm(): React.ReactElement {
   }
 
   return (
-    <div
-      id='ContactUsForm'
-      className='bg-secondary_2 min-h-screen flex flex-col laptopS:flex-row w-full justify-center  items-center gap-[5rem] px-4 laptopS:px-[8.75rem]'
-    >
-      <div className='flex flex-col justify-center max-w-[35.875rem] mt-16 laptopS:mt-0'>
-        <h1 className='text-custom-70 font-custom-700 text-primary_5 font-gellix-Bold'>
-          Fill The Form
-        </h1>
-        <p className='mt-6 text-custom-32 font-custom-400 text-primary_5'>
-          We listen carefully to your opinions and suggestions
-        </p>
+    <div id='ContactUsForm' className='bg-secondary_2'>
+      <div className='container mx-auto py-[15.125rem] flex flex-col laptopS:flex-row w-full justify-center items-center gap-[5rem] px-4 laptopS:px-[8.75rem]'>
+        <div className='flex flex-col justify-center max-w-[35.875rem] mt-16 laptopS:mt-0'>
+          <h1 className='text-custom-70 font-custom-700 text-primary_5 font-gellix-Bold'>
+            Fill The Form
+          </h1>
+          <p className='mt-6 text-custom-32 font-custom-400 text-primary_5'>
+            We listen carefully to your opinions and suggestions
+          </p>
+        </div>
+
+        <form
+          onSubmit={handleSubmit}
+          className='flex w-full max-w-[61.6875rem] flex-col gap-6'
+        >
+          <div className='w-full flex flex-col laptopS:flex-row gap-8'>
+            <div className='w-full'>
+              <CustomInput
+                shape={1}
+                className='h-[5rem] w-full px-6'
+                placeholder='First Name'
+                type='text'
+                id='firstName'
+                name='firstName'
+                value={values?.firstName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                pattern='.*'
+              />
+              <ErrorFormik
+                isError={!!errors?.firstName}
+                isTouched={!!touched?.firstName}
+                error={errors?.firstName || ''}
+              />
+            </div>
+            <div className='w-full'>
+              <CustomInput
+                shape={1}
+                className='h-[5rem] w-full px-6'
+                placeholder='Last Name'
+                type='text'
+                id='lastName'
+                name='lastName'
+                value={values?.lastName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                pattern='.*'
+              />
+              <ErrorFormik
+                isError={!!errors?.lastName}
+                isTouched={!!touched?.lastName}
+                error={errors?.lastName || ''}
+              />
+            </div>
+          </div>
+          <div className='w-full flex flex-col laptopS:flex-row gap-8'>
+            <div className='w-full'>
+              <CustomInput
+                shape={1}
+                className='h-[5rem] w-full px-6'
+                placeholder='Email'
+                type='email'
+                id='email'
+                name='email'
+                value={values?.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                pattern='.*'
+              />
+              <ErrorFormik
+                isError={!!errors?.email}
+                isTouched={!!touched?.email}
+                error={errors?.email || ''}
+              />
+            </div>
+            <div className='w-full'>
+              <CustomInput
+                shape={1}
+                className='h-[5rem] w-full px-6'
+                placeholder='Phone Number'
+                type='text'
+                id='phone'
+                name='phone'
+                value={values?.phone}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                pattern='.*'
+              />
+              <ErrorFormik
+                isError={!!errors?.phone}
+                isTouched={!!touched?.phone}
+                error={errors?.phone || ''}
+              />
+            </div>
+          </div>
+
+          <div className='w-full'>
+            <CustomTextarea
+              shape={1}
+              className='h-[15rem] w-full px-4 pt-5'
+              placeholder='Type your message here'
+              id='message'
+              name='message'
+              value={values?.message}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <ErrorFormik
+              isError={!!errors?.message}
+              isTouched={!!touched?.message}
+              error={errors?.message || ''}
+            />
+          </div>
+          <div className='self-start mb-16 laptopS:mb-0'>
+            <FilledButton
+              path='#'
+              width='w-[14rem] mt-[2.5rem]'
+              height='h-[4.8125rem]'
+              text='Send Message'
+              isButton
+              buttonType='submit'
+              icon={null}
+              onClick={() => {}}
+              isDisable={false}
+            />
+          </div>
+        </form>
       </div>
-
-      <form
-        onSubmit={handleSubmit}
-        className='flex w-full max-w-[61.6875rem] flex-col gap-6'
-      >
-        <div className='w-full flex flex-col laptopS:flex-row gap-8'>
-          <div className='w-full'>
-            <CustomInput
-              shape={1}
-              className='h-[5rem] w-full px-6'
-              placeholder='First Name'
-              type='text'
-              id='firstName'
-              name='firstName'
-              value={values?.firstName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              pattern='.*'
-            />
-            <ErrorFormik
-              isError={!!errors?.firstName}
-              isTouched={!!touched?.firstName}
-              error={errors?.firstName || ''}
-            />
-          </div>
-          <div className='w-full'>
-            <CustomInput
-              shape={1}
-              className='h-[5rem] w-full px-6'
-              placeholder='Last Name'
-              type='text'
-              id='lastName'
-              name='lastName'
-              value={values?.lastName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              pattern='.*'
-            />
-            <ErrorFormik
-              isError={!!errors?.lastName}
-              isTouched={!!touched?.lastName}
-              error={errors?.lastName || ''}
-            />
-          </div>
-        </div>
-        <div className='w-full flex flex-col laptopS:flex-row gap-8'>
-          <div className='w-full'>
-            <CustomInput
-              shape={1}
-              className='h-[5rem] w-full px-6'
-              placeholder='Email'
-              type='email'
-              id='email'
-              name='email'
-              value={values?.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              pattern='.*'
-            />
-            <ErrorFormik
-              isError={!!errors?.email}
-              isTouched={!!touched?.email}
-              error={errors?.email || ''}
-            />
-          </div>
-          <div className='w-full'>
-            <CustomInput
-              shape={1}
-              className='h-[5rem] w-full px-6'
-              placeholder='Phone Number'
-              type='text'
-              id='phone'
-              name='phone'
-              value={values?.phone}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              pattern='.*'
-            />
-            <ErrorFormik
-              isError={!!errors?.phone}
-              isTouched={!!touched?.phone}
-              error={errors?.phone || ''}
-            />
-          </div>
-        </div>
-
-        <div className='w-full'>
-          <CustomTextarea
-            shape={1}
-            className='h-[15rem] w-full px-4 pt-5'
-            placeholder='Type your message here'
-            id='message'
-            name='message'
-            value={values?.message}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          <ErrorFormik
-            isError={!!errors?.message}
-            isTouched={!!touched?.message}
-            error={errors?.message || ''}
-          />
-        </div>
-        <div className='self-start mb-16 laptopS:mb-0'>
-          <FilledButton
-            path='#'
-            width='w-[14rem] mt-[2.5rem]'
-            height='h-[4.8125rem]'
-            text='Send Message'
-            isButton
-            buttonType='submit'
-            icon={null}
-            onClick={() => {}}
-            isDisable={false}
-          />
-        </div>
-      </form>
     </div>
   );
 }
