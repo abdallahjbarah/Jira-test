@@ -4,7 +4,7 @@ import React from 'react';
 import CustomLink from '@components/ui/CustomLink';
 import HeaderLink from './HeaderLink';
 import { usePathname } from 'next/navigation';
-import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
+import BookagriLogoSvg from '@SVGs/shared/BookagriLogoSvg.svg';
 import { DEFAULT_LOCALE, LINKS_DATA } from '@utils/constants';
 import { useState } from 'react';
 import Image from 'next/image';
@@ -32,7 +32,6 @@ export default function Header(): React.ReactElement {
     <header className='relative'>
       <nav className='hidden laptopS:flex absolute left-1/2 top-[3rem] mx-auto w-full -translate-x-1/2 transform z-10 container '>
         <div className='flex justify-between items-center'></div>
-        {/* Navigation Left */}
         <ul className='flex justify-start items-center gap-6 flex-grow'>
           {LINKS_DATA?.slice(0, 5)?.map((item: LinkData, index: number) => (
             <HeaderLink

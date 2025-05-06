@@ -28,7 +28,7 @@ export default function Hero({ className }: { className?: string }) {
           quality={100}
         />
       </div>
-      <div className='text-white mx-[1rem] laptopS:ms-[8.75rem] mb-[8rem] desktop:mb-[16.9375rem] relative'>
+      <div className='text-white relative container mx-auto'>
         <div className='w-[4.6875rem] h-[3.875rem] absolute top-[-3.4375rem] left-[-2.1875rem]'>
           <Image src={LeafImg} alt='Leaf' priority />
         </div>
