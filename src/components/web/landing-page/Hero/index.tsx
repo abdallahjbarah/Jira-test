@@ -4,11 +4,16 @@ import LeafImg from '@images/home/Leaf.png';
 import Image from 'next/image';
 import FilledButton from '@components/ui/buttons/FilledButton';
 import styles from './style.module.scss';
+import { cn } from '@/utils/cn';
 
-export default function Hero() {
+export default function Hero({ className }: { className?: string }) {
   return (
     <section
-      className={`${styles['bg-linear-gradient']} relative w-full min-h-screen flex items-end justify-center laptopS:items-end laptopS:justify-start`}
+      className={cn(
+        styles['bg-linear-gradient'],
+        'relative w-full min-h-screen flex items-end justify-center laptopS:items-end laptopS:justify-start',
+        className,
+      )}
     >
       <div className='absolute top-0 left-0 w-full h-full -z-10'>
         <Image
@@ -28,11 +33,12 @@ export default function Hero() {
           <Image src={LeafImg} alt='Leaf' priority />
         </div>
         <h1 className='text-custom-45 tabletS:text-custom-70 font-custom-700 font-gellix-Bold'>
-          Connecting you with <br className='hidden laptopS:block' /> a world of agritourism
+          Connecting you with <br className='hidden laptopS:block' /> a world of
+          agritourism
         </h1>
         <h2 className='text-custom-30 tabletS:text-custom-32 font-custom-400 mt-4'>
-          Book or become a host for agritourism <br className='hidden laptopS:block' /> experiences and rural
-          stays
+          Book or become a host for agritourism{' '}
+          <br className='hidden laptopS:block' /> experiences and rural stays
         </h2>
         <FilledButton
           path='/'

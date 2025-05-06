@@ -7,6 +7,8 @@ import ReactToastifyProvider from '@providers/ReactToastifyProvider';
 import ReactPublicContextProvider from '@providers/ReactPublicContextProvider';
 import ReactLoadingProvider from '@providers/ReactLoadingProvider';
 import { SEO_KEYWORDS } from '@utils/constants';
+import { Locale } from '@utils/constants';
+import { TranslationProvider } from '@/contexts/TranslationContext';
 
 export const metadata = {
   title: 'Bookagri - Authentic Agritourism in Jordan',
@@ -39,18 +41,21 @@ export const metadata = {
 
 interface RootLayoutProps {
   children: React.ReactNode;
+  params: { lang: Locale };
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children, params }: RootLayoutProps) {
   return (
-    <html lang='en'>
+    <html lang={params.lang} dir={params.lang === 'ar' ? 'rtl' : 'ltr'}>
       <body>
         <CustomAuthProvider>
           <ErrorBoundaryProvider>
             <ReactQueryProvider>
               <ReactToastifyProvider>
                 <ReactPublicContextProvider>
-                  <ReactLoadingProvider>{children}</ReactLoadingProvider>
+                  <ReactLoadingProvider>
+                    <TranslationProvider>{children}</TranslationProvider>
+                  </ReactLoadingProvider>
                 </ReactPublicContextProvider>
               </ReactToastifyProvider>
             </ReactQueryProvider>

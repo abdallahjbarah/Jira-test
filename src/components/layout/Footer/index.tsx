@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import CustomLink from '@components/ui/CustomLink';
 import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
@@ -8,21 +9,19 @@ import LinkedinSvg from '@components/svg/footer/LinkedinSvg';
 import WhatsappSvg from '@components/svg/footer/WhatsappSvg';
 import FacebookSvg from '@components/svg/footer/FacebookSvg';
 import Image from 'next/image';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface LinkData {
-  name: string;
+  name: {
+    en: string;
+    ar: string;
+  };
   path: string;
 }
 
-interface SocialMediaData {
-  instagram: { link: string };
-  facebook: { link: string };
-  tiktok: { link: string };
-  linkedin: { link: string };
-  whatsapp: { link: string };
-}
-
 export default function Footer(): React.ReactElement {
+  const { locale } = useTranslation();
+  console.log(locale, 'locale');
   return (
     <footer className='flex min-h-[28.875rem] flex-col items-center justify-between bg-primary_5'>
       <div className='container mx-auto px-4'>
@@ -82,14 +81,14 @@ export default function Footer(): React.ReactElement {
                   {LINKS_DATA?.slice(0, 5)?.map(
                     (item: LinkData, index: number) => (
                       <li
-                        key={item?.name + index + 'Footer'}
+                        key={index}
                         className='text-custom-18 font-custom-400 text-primary_4'
                       >
                         <CustomLink
                           className='transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
                           path={item?.path}
                         >
-                          {item?.name}
+                          {item?.name[locale]}
                         </CustomLink>
                       </li>
                     ),
@@ -102,14 +101,14 @@ export default function Footer(): React.ReactElement {
                   {LINKS_DATA?.slice(5)?.map(
                     (item: LinkData, index: number) => (
                       <li
-                        key={item?.name + index + 'Footer'}
+                        key={index}
                         className='text-custom-18 font-custom-400 text-primary_4'
                       >
                         <CustomLink
                           className='transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
                           path={item?.path}
                         >
-                          {item?.name}
+                          {item?.name[locale]}
                         </CustomLink>
                       </li>
                     ),

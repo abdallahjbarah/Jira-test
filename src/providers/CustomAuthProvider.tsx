@@ -11,7 +11,6 @@ interface CustomAuthProviderProps {
 const CustomAuthProvider = ({
   children,
 }: CustomAuthProviderProps): React.ReactElement => {
-  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   // const { userData } = useUser();
 

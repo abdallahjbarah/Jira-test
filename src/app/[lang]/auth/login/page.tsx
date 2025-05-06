@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { Formik, Form, FormikHelpers } from 'formik';
 import { SignInSchema } from '@utils/formsSchemas';
 import PasswordInput from '@components/ui/custom-inputs/PasswordInput';
 import { toast } from 'react-toastify';
 import useUser from '@utils/hooks/useUser';
 import Image from 'next/image';
+import { Locale } from '@utils/constants';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface SignInFormValues {
   email: string;
@@ -16,8 +18,11 @@ interface SignInFormValues {
 
 export default function LoginPage(): React.ReactElement {
   const router = useRouter();
+  const params = useParams<{ lang: Locale }>();
+  const lang = params.lang;
   const { setUserData } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const handleSubmit = async (
     values: SignInFormValues,
@@ -41,7 +46,7 @@ export default function LoginPage(): React.ReactElement {
 
       setUserData(data);
       toast.success('Login successful!');
-      router.push('/dashboard');
+      router.push(`/${lang}/dashboard`);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message || 'Login failed. Please try again.');
@@ -60,7 +65,7 @@ export default function LoginPage(): React.ReactElement {
       <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[240px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
-            <span className='text-lg font-medium text-white'>Log in</span>
+            <span className='text-lg font-medium text-white'>{t('login')}</span>
           </div>
         </div>
       </div>
@@ -70,7 +75,7 @@ export default function LoginPage(): React.ReactElement {
         {/* Logo */}
         <div className='flex items-center justify-center gap-2'>
           <h1 className='text-[#222222] text-[32px] leading-[32px] font-bold'>
-            Welcome to
+            {t('welcome')} {t('to')}
           </h1>
           <Image
             src='/images/shared/bookagriCOM.png'
@@ -98,7 +103,7 @@ export default function LoginPage(): React.ReactElement {
                   <input
                     type='text'
                     name='email'
-                    placeholder='Email / Phone Number'
+                    placeholder={t('email')}
                     value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -113,7 +118,7 @@ export default function LoginPage(): React.ReactElement {
                   <PasswordInput
                     id='password'
                     name='password'
-                    placeholder='Password'
+                    placeholder={t('password')}
                     value={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -132,10 +137,10 @@ export default function LoginPage(): React.ReactElement {
                 <div className='flex justify-end'>
                   <button
                     type='button'
-                    onClick={() => router.push('/auth/forgot-password')}
+                    onClick={() => router.push(`/${lang}/auth/forgot-password`)}
                     className='text-sm text-primary_1'
                   >
-                    Forgot Password?
+                    {t('forgot-password')}
                   </button>
                 </div>
 
@@ -148,7 +153,7 @@ export default function LoginPage(): React.ReactElement {
                       : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
                   }`}
                 >
-                  {isLoading ? 'Signing in...' : 'Sign In'}
+                  {isLoading ? t('signing-in') : t('signin')}
                 </button>
               </Form>
             )}
@@ -158,23 +163,23 @@ export default function LoginPage(): React.ReactElement {
           <div className='space-y-4'>
             <div className='text-center'>
               <p className='text-sm text-gray-600'>
-                Don't have an account?{' '}
+                {t('dont-have-account')}{' '}
                 <button
                   type='button'
-                  onClick={() => router.push('/auth/signup')}
+                  onClick={() => router.push(`/${lang}/auth/signup`)}
                   className='text-[#47C409] hover:text-[#3ba007]'
                 >
-                  Sign Up
+                  {t('signup')}
                 </button>
               </p>
             </div>
             <div className='text-center'>
               <button
                 type='button'
-                onClick={() => router.push('/auth/forgot-password')}
+                onClick={() => router.push(`/${lang}/auth/forgot-password`)}
                 className='text-sm text-[#47C409] hover:text-[#3ba007]'
               >
-                Forgot Password?
+                {t('forgot-password')}
               </button>
             </div>
           </div>
@@ -184,7 +189,9 @@ export default function LoginPage(): React.ReactElement {
               <div className='w-full border-t-[1px] border-solid border-[#D1D5DB]'></div>
             </div>
             <div className='relative flex justify-center'>
-              <span className='bg-white px-8 text-base text-[#6B7280]'>Or</span>
+              <span className='bg-white px-8 text-base text-[#6B7280]'>
+                {t('or')}
+              </span>
             </div>
           </div>
 

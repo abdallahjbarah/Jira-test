@@ -5,18 +5,28 @@ import CustomLink from '@components/ui/CustomLink';
 import HeaderLink from './HeaderLink';
 import { usePathname } from 'next/navigation';
 import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
-import { LINKS_DATA } from '@utils/constants';
+import { DEFAULT_LOCALE, LINKS_DATA } from '@utils/constants';
 import { useState } from 'react';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
+import { Locale } from '@utils/constants';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 interface LinkData {
-  name: string;
+  name: {
+    en: string;
+    ar: string;
+  };
   path: string;
 }
 
 export default function Header(): React.ReactElement {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const params = useParams<{ lang: Locale }>();
+  const lang = params.lang || DEFAULT_LOCALE;
+
+  console.log(lang, 'langlanglang');
 
   return (
     <header className='relative'>
@@ -26,17 +36,20 @@ export default function Header(): React.ReactElement {
         <ul className='flex justify-start items-center gap-6 flex-grow'>
           {LINKS_DATA?.slice(0, 5)?.map((item: LinkData, index: number) => (
             <HeaderLink
-              key={item?.name + index + 'Nav'}
+              key={index}
               path={item?.path}
-              text={item?.name}
-              isActive={item?.path === pathname}
+              text={item?.name[lang]}
+              isActive={
+                item?.path === pathname.replace(`/${lang}`, '') ||
+                (item.path === '/' && pathname === `/${lang}`)
+              }
             />
           ))}
         </ul>
 
         <ul className='flex justify-center items-center flex-shrink-0 mx-auto'>
           <li>
-            <CustomLink path={'/'}>
+            <CustomLink path={`/${lang}`}>
               <Image
                 className='w-[11.8125rem] h-[3rem]'
                 quality={100}
@@ -52,13 +65,19 @@ export default function Header(): React.ReactElement {
             (item, index) =>
               index != 5 && (
                 <HeaderLink
-                  key={item?.name + index + 'Nav'}
+                  key={index}
                   path={item?.path}
-                  text={item?.name}
-                  isActive={item?.path === pathname}
+                  text={item?.name[lang]}
+                  isActive={
+                    item?.path === pathname.replace(`/${lang}`, '') ||
+                    (item.path === '/' && pathname === `/${lang}`)
+                  }
                 />
               ),
           )}
+          <li>
+            <LanguageSwitcher />
+          </li>
         </ul>
       </nav>
 
@@ -100,7 +119,7 @@ export default function Header(): React.ReactElement {
               <div className='pt-5 pb-6 px-5'>
                 <div className='flex items-center justify-between'>
                   <div className=''>
-                    <CustomLink path={'/'}>
+                    <CustomLink path={`/${lang}`}>
                       <Image
                         className='w-[11.8125rem] h-[3rem]'
                         quality={100}
@@ -139,12 +158,18 @@ export default function Header(): React.ReactElement {
                   <ul className='grid gap-y-4'>
                     {LINKS_DATA?.map((item, index) => (
                       <HeaderLink
-                        key={item?.name + index + 'Nav'}
+                        key={item?.name[lang] + index + 'Nav'}
                         path={item?.path}
-                        text={item?.name}
-                        isActive={item?.path === pathname}
+                        text={item?.name[lang]}
+                        isActive={
+                          item?.path === pathname.replace(`/${lang}`, '') ||
+                          (item.path === '/' && pathname === `/${lang}`)
+                        }
                       />
                     ))}
+                    <li className='mt-4'>
+                      <LanguageSwitcher />
+                    </li>
                   </ul>
                 </div>
               </div>

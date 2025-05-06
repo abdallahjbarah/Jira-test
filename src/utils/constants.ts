@@ -24,6 +24,15 @@ export const MAX_SIZE_PDF: number = 5 * 1_048_576;
 export const USER_DETAILS: string = 'Bookagri_UserData';
 export const TOKEN_NAME: string = 'Bookagri_Token';
 
+// Internationalization settings
+export enum LocaleValues {
+  EN = 'en',
+  AR = 'ar',
+}
+export const LOCALES = [LocaleValues.EN, LocaleValues.AR] as const;
+export const DEFAULT_LOCALE = LocaleValues.EN as const;
+export type Locale = (typeof LOCALES)[number];
+
 export const ROLES = {
   SUPER_ADMIN: 1,
   PARTNER: 3,
@@ -127,20 +136,26 @@ export const SEO = {
 
 interface LinkData {
   path: string;
-  name: string;
+  name: {
+    en: string;
+    ar: string;
+  };
 }
 
 export const LINKS_DATA: LinkData[] = [
-  { path: '/', name: 'Home' },
-  { path: '/#AboutUs', name: 'About Us' },
-  { path: '/news', name: 'News' },
-  { path: '/gallery', name: 'Gallery' },
-  { path: '/#ContactUsForm', name: 'Contact Us' },
-  { path: '/experiences', name: 'Experiences' },
-  { path: '/events', name: 'Events' },
-  { path: '/stays', name: 'Stays' },
-  { path: '/offers-Packages', name: 'Offers & Packages' },
-  { path: '/products', name: 'Products' },
+  { path: '/', name: { en: 'Home', ar: 'الرئيسية' } },
+  { path: '/#AboutUs', name: { en: 'About Us', ar: 'عننا' } },
+  { path: '/news', name: { en: 'News', ar: 'الأخبار' } },
+  { path: '/gallery', name: { en: 'Gallery', ar: 'المعرض' } },
+  { path: '/#ContactUsForm', name: { en: 'Contact Us', ar: 'تواصل معنا' } },
+  { path: '/experiences', name: { en: 'Experiences', ar: 'التجارب' } },
+  { path: '/events', name: { en: 'Events', ar: 'الأحداث' } },
+  { path: '/stays', name: { en: 'Stays', ar: 'الإقامات' } },
+  {
+    path: '/offers-Packages',
+    name: { en: 'Offers & Packages', ar: 'العروض والباقات' },
+  },
+  { path: '/products', name: { en: 'Products', ar: 'المنتجات' } },
 ];
 
 interface SocialMediaLink {

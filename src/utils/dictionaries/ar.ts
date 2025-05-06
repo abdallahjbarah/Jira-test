@@ -1,0 +1,37 @@
+// Arabic dictionary
+const ar = {
+  home: 'الرئيسية',
+  'about-us': 'من نحن',
+  news: 'الأخبار',
+  gallery: 'معرض الصور',
+  'contact-us': 'اتصل بنا',
+  experiences: 'التجارب',
+  events: 'الفعاليات',
+  stays: 'الإقامات',
+  'offers-packages': 'العروض والباقات',
+  products: 'المنتجات',
+  'page-not-found': 'الصفحة غير موجودة',
+  'go-back': 'العودة',
+  'take-me-home': 'العودة للرئيسية',
+  welcome: 'مرحباً',
+  to: 'في',
+  login: 'تسجيل الدخول',
+  signup: 'تسجيل جديد',
+  email: 'البريد الإلكتروني',
+  password: 'كلمة المرور',
+  'forgot-password': 'نسيت كلمة المرور؟',
+  'dont-have-account': 'ليس لديك حساب؟',
+  or: 'أو',
+  'error-404': 'خطأ 404',
+  'page-not-found-desc':
+    'عفواً، الصفحة التي تبحث عنها غير موجودة. إليك بعض الروابط المفيدة:',
+  signin: 'تسجيل الدخول',
+  'signing-in': 'جاري تسجيل الدخول...',
+  internationalization: 'عرض توضيحي للتدويل',
+  'language-switcher': 'مبدل اللغة',
+  'navigation-items': 'عناصر التنقل',
+  'auth-related-texts': 'نصوص متعلقة بالمصادقة',
+  'all-translations': 'جميع الترجمات المتاحة',
+};
+
+export default ar;
