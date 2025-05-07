@@ -1,12 +1,8 @@
-import InstagramSvg from '@components/svg/footer/InstagramSvg';
-import FacebookSvg from '@components/svg/footer/FacebookSvg';
-import TiktokSvg from '@components/svg/footer/TiktokSvg';
-import LinkedinSvg from '@components/svg/footer/LinkedinSvg';
-import WhatsappSvg from '@components/svg/footer/WhatsappSvg';
-
-// -----------------------------------------------------------------------------------------------------------//
-// ⋆༺𓆩☠︎︎𓆪༻⋆ Do not change the order of the arrays. I repeat, do not change the order of the arrays ⋆༺𓆩☠︎︎𓆪༻⋆ //
-// -----------------------------------------------------------------------------------------------------------//
+import ExperiencesSvg from '@SVGs/shared/experiences-icon.svg';
+import StaysSvg from '@SVGs/shared/stays-icon.svg';
+import EventsSvg from '@SVGs/shared/events-icon.svg';
+import OffersSvg from '@SVGs/shared/diamond.svg';
+import ProductsSvg from '@SVGs/shared/bag-icon.svg';
 
 export const DAY_DURATION: number = 86400000;
 export const DAY_FORMAT: string = 'DD.MM.YYYY';
@@ -199,6 +195,56 @@ export const SEO_KEYWORDS = [
   'rural community interaction',
 ];
 
-// -----------------------------------------------------------------------------------------------------------//
-// ⋆༺𓆩☠︎︎𓆪༻⋆ Do not change the order of the arrays. I repeat, do not change the order of the arrays ⋆༺𓆩☠︎︎𓆪༻⋆ //
-// -----------------------------------------------------------------------------------------------------------//
+export const COLLECTION_STATUS = {
+  EXPERIENCES: 'experiences',
+  STAYS: 'stays',
+  EVENTS: 'events',
+  OFFERS: 'offers',
+  PRODUCTS: 'products',
+} as const;
+
+export interface CollectionStatusItem {
+  value: string;
+  label: {
+    en: string;
+    ar: string;
+  };
+  path: string;
+  icon: string;
+}
+
+export const COLLECTION_STATUS_LIST: CollectionStatusItem[] = [
+  {
+    value: COLLECTION_STATUS.EXPERIENCES,
+    label: { en: 'Experiences', ar: 'التجارب' },
+    path: `/${COLLECTION_STATUS.EXPERIENCES}`,
+    icon: '/SVGs/shared/experiences-icon.svg',
+  },
+  {
+    value: COLLECTION_STATUS.STAYS,
+    label: { en: 'Stays', ar: 'الإقامات' },
+    path: `/${COLLECTION_STATUS.STAYS}`,
+    icon: '/SVGs/shared/stays-icon.svg',
+  },
+  {
+    value: COLLECTION_STATUS.EVENTS,
+    label: { en: 'Events', ar: 'الأحداث' },
+    path: `/${COLLECTION_STATUS.EVENTS}`,
+    icon: '/SVGs/shared/events-icon.svg',
+  },
+  {
+    value: COLLECTION_STATUS.OFFERS,
+    label: { en: 'Offers', ar: 'العروض' },
+    path: `/${COLLECTION_STATUS.OFFERS}`,
+    icon: '/SVGs/shared/diamond.svg',
+  },
+  {
+    value: COLLECTION_STATUS.PRODUCTS,
+    label: { en: 'Products', ar: 'المنتجات' },
+    path: `/${COLLECTION_STATUS.PRODUCTS}`,
+    icon: '/SVGs/shared/bag-icon.svg',
+  },
+];
+
+export type CollectionStatus =
+  (typeof COLLECTION_STATUS)[keyof typeof COLLECTION_STATUS];

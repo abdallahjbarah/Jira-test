@@ -32,7 +32,8 @@
       "@layouts/*": ["./src/layouts/*"],
       "@images/*": ["./public/images/*"],
       "@SVGs/*": ["./public/SVGs/*"],
-      "@lib/*": ["./src/lib/*"]
+      "@lib/*": ["./src/lib/*"],
+      "@contexts/*": ["./src/contexts/*"]
     },
     "baseUrl": "."
   },

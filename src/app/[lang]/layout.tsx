@@ -45,23 +45,22 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children, params }: RootLayoutProps) {
-  console.log(params, 'params.lang');
   return (
     <html lang={params.lang} dir={params.lang === 'ar' ? 'rtl' : 'ltr'}>
       <body>
-        <CustomAuthProvider>
-          <ErrorBoundaryProvider>
-            <ReactQueryProvider>
-              <ReactToastifyProvider>
-                <ReactPublicContextProvider>
-                  <ReactLoadingProvider>
-                    <TranslationProvider>{children}</TranslationProvider>
-                  </ReactLoadingProvider>
-                </ReactPublicContextProvider>
-              </ReactToastifyProvider>
-            </ReactQueryProvider>
-          </ErrorBoundaryProvider>
-        </CustomAuthProvider>
+        <TranslationProvider>
+          <CustomAuthProvider>
+            <ErrorBoundaryProvider>
+              <ReactQueryProvider>
+                <ReactToastifyProvider>
+                  <ReactPublicContextProvider>
+                    <ReactLoadingProvider>{children}</ReactLoadingProvider>
+                  </ReactPublicContextProvider>
+                </ReactToastifyProvider>
+              </ReactQueryProvider>
+            </ErrorBoundaryProvider>
+          </CustomAuthProvider>
+        </TranslationProvider>
       </body>
     </html>
   );
