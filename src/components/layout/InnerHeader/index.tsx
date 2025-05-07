@@ -1,11 +1,13 @@
 import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
-import Image, { StaticImageData } from 'next/image';
+import { COLLECTION_STATUS_LIST } from '@utils/constants';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import CollectionNavItem from '@components/ui/CollectionNavItem';
 
 function InnerHeader(): React.ReactElement {
   return (
-    <header className='relative px-11 py-12'>
+    <header className='relative py-12 container flex items-center justify-between'>
       <Link href={`/`}>
         <Image
           className='w-[11.8125rem] h-[3rem]'
@@ -14,16 +16,12 @@ function InnerHeader(): React.ReactElement {
           alt='Bookagri Logo'
         />
       </Link>
-
-      <nav className='hidden laptopS:flex absolute left-1/2 top-[3rem] mx-auto w-full -translate-x-1/2 transform z-10 container '>
-        <div className='flex justify-between items-center'>
-          <ul className='flex justify-start items-center gap-6 flex-grow'>
-            <li>
-              <Link href={`/`}>Home</Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <div className='flex items-center gap-2'>
+        {COLLECTION_STATUS_LIST.map((item) => (
+          <CollectionNavItem key={item.value} collectionStatus={item} />
+        ))}
+      </div>
+      <div className='w-6 h-6 rounded-full bg-primary_5' />
     </header>
   );
 }

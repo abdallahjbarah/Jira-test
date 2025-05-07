@@ -180,6 +180,13 @@ module.exports = {
         'custom-44': '44px',
       },
     },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '1.5rem',
+        laptopL: '6.5rem',
+      },
+    },
   },
   plugins: [],
 };

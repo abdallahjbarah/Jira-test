@@ -92,14 +92,14 @@ export default function BookagriLogoSvg({
           y2='43.2694'
           gradientUnits='userSpaceOnUse'
         >
-          <stop stop-color='#FFCC01' />
-          <stop offset='0.0751487' stop-color='#FFB305' />
-          <stop offset='0.2122' stop-color='#FF8C08' />
-          <stop offset='0.3543' stop-color='#FF6C09' />
-          <stop offset='0.5004' stop-color='#FF530A' />
-          <stop offset='0.6522' stop-color='#FF420A' />
-          <stop offset='0.8134' stop-color='#FE370A' />
-          <stop offset='1' stop-color='#FE330A' />
+          <stop stopColor='#FFCC01' />
+          <stop offset='0.0751487' stopColor='#FFB305' />
+          <stop offset='0.2122' stopColor='#FF8C08' />
+          <stop offset='0.3543' stopColor='#FF6C09' />
+          <stop offset='0.5004' stopColor='#FF530A' />
+          <stop offset='0.6522' stopColor='#FF420A' />
+          <stop offset='0.8134' stopColor='#FE370A' />
+          <stop offset='1' stopColor='#FE330A' />
         </linearGradient>
         <linearGradient
           id='paint1_linear_2331_10906'
@@ -109,8 +109,8 @@ export default function BookagriLogoSvg({
           y2='21.7641'
           gradientUnits='userSpaceOnUse'
         >
-          <stop offset='0.0490798' stop-color='#459724' />
-          <stop offset='0.6687' stop-color='#87C11C' />
+          <stop offset='0.0490798' stopColor='#459724' />
+          <stop offset='0.6687' stopColor='#87C11C' />
         </linearGradient>
         <linearGradient
           id='paint2_linear_2331_10906'
@@ -120,13 +120,13 @@ export default function BookagriLogoSvg({
           y2='19.784'
           gradientUnits='userSpaceOnUse'
         >
-          <stop stop-color='#FFCC01' />
-          <stop offset='0.1306' stop-color='#FFC603' />
-          <stop offset='0.3014' stop-color='#FFB605' />
-          <stop offset='0.4944' stop-color='#FF9B07' />
-          <stop offset='0.7037' stop-color='#FF7509' />
-          <stop offset='0.9239' stop-color='#FF460A' />
-          <stop offset='1' stop-color='#FE330A' />
+          <stop stopColor='#FFCC01' />
+          <stop offset='0.1306' stopColor='#FFC603' />
+          <stop offset='0.3014' stopColor='#FFB605' />
+          <stop offset='0.4944' stopColor='#FF9B07' />
+          <stop offset='0.7037' stopColor='#FF7509' />
+          <stop offset='0.9239' stopColor='#FF460A' />
+          <stop offset='1' stopColor='#FE330A' />
         </linearGradient>
         <linearGradient
           id='paint3_linear_2331_10906'
@@ -136,8 +136,8 @@ export default function BookagriLogoSvg({
           y2='21.3426'
           gradientUnits='userSpaceOnUse'
         >
-          <stop offset='0.0490798' stop-color='#459724' />
-          <stop offset='0.6687' stop-color='#87C11C' />
+          <stop offset='0.0490798' stopColor='#459724' />
+          <stop offset='0.6687' stopColor='#87C11C' />
         </linearGradient>
         <linearGradient
           id='paint4_linear_2331_10906'
@@ -147,13 +147,13 @@ export default function BookagriLogoSvg({
           y2='35.7097'
           gradientUnits='userSpaceOnUse'
         >
-          <stop stop-color='#FFCC01' />
-          <stop offset='0.1274' stop-color='#FFAC06' />
-          <stop offset='0.3242' stop-color='#FF8109' />
-          <stop offset='0.5149' stop-color='#FF5F0A' />
-          <stop offset='0.6955' stop-color='#FF470A' />
-          <stop offset='0.8617' stop-color='#FE390A' />
-          <stop offset='1' stop-color='#FE330A' />
+          <stop stopColor='#FFCC01' />
+          <stop offset='0.1274' stopColor='#FFAC06' />
+          <stop offset='0.3242' stopColor='#FF8109' />
+          <stop offset='0.5149' stopColor='#FF5F0A' />
+          <stop offset='0.6955' stopColor='#FF470A' />
+          <stop offset='0.8617' stopColor='#FE390A' />
+          <stop offset='1' stopColor='#FE330A' />
         </linearGradient>
         <linearGradient
           id='paint5_linear_2331_10906'
@@ -163,13 +163,13 @@ export default function BookagriLogoSvg({
           y2='36.1483'
           gradientUnits='userSpaceOnUse'
         >
-          <stop stop-color='#FFCC01' />
-          <stop offset='0.1274' stop-color='#FFAC06' />
-          <stop offset='0.3242' stop-color='#FF8109' />
-          <stop offset='0.5149' stop-color='#FF5F0A' />
-          <stop offset='0.6955' stop-color='#FF470A' />
-          <stop offset='0.8617' stop-color='#FE390A' />
-          <stop offset='1' stop-color='#FE330A' />
+          <stop stopColor='#FFCC01' />
+          <stop offset='0.1274' stopColor='#FFAC06' />
+          <stop offset='0.3242' stopColor='#FF8109' />
+          <stop offset='0.5149' stopColor='#FF5F0A' />
+          <stop offset='0.6955' stopColor='#FF470A' />
+          <stop offset='0.8617' stopColor='#FE390A' />
+          <stop offset='1' stopColor='#FE330A' />
         </linearGradient>
         <linearGradient
           id='paint6_linear_2331_10906'
@@ -179,13 +179,13 @@ export default function BookagriLogoSvg({
           y2='36.1561'
           gradientUnits='userSpaceOnUse'
         >
-          <stop stop-color='#FFCC01' />
-          <stop offset='0.1274' stop-color='#FFAC06' />
-          <stop offset='0.3242' stop-color='#FF8109' />
-          <stop offset='0.5149' stop-color='#FF5F0A' />
-          <stop offset='0.6955' stop-color='#FF470A' />
-          <stop offset='0.8617' stop-color='#FE390A' />
-          <stop offset='1' stop-color='#FE330A' />
+          <stop stopColor='#FFCC01' />
+          <stop offset='0.1274' stopColor='#FFAC06' />
+          <stop offset='0.3242' stopColor='#FF8109' />
+          <stop offset='0.5149' stopColor='#FF5F0A' />
+          <stop offset='0.6955' stopColor='#FF470A' />
+          <stop offset='0.8617' stopColor='#FE390A' />
+          <stop offset='1' stopColor='#FE330A' />
         </linearGradient>
         <linearGradient
           id='paint7_linear_2331_10906'
@@ -195,13 +195,13 @@ export default function BookagriLogoSvg({
           y2='35.7091'
           gradientUnits='userSpaceOnUse'
         >
-          <stop stop-color='#FFCC01' />
-          <stop offset='0.1274' stop-color='#FFAC06' />
-          <stop offset='0.3242' stop-color='#FF8109' />
-          <stop offset='0.5149' stop-color='#FF5F0A' />
-          <stop offset='0.6955' stop-color='#FF470A' />
-          <stop offset='0.8617' stop-color='#FE390A' />
-          <stop offset='1' stop-color='#FE330A' />
+          <stop stopColor='#FFCC01' />
+          <stop offset='0.1274' stopColor='#FFAC06' />
+          <stop offset='0.3242' stopColor='#FF8109' />
+          <stop offset='0.5149' stopColor='#FF5F0A' />
+          <stop offset='0.6955' stopColor='#FF470A' />
+          <stop offset='0.8617' stopColor='#FE390A' />
+          <stop offset='1' stopColor='#FE330A' />
         </linearGradient>
         <linearGradient
           id='paint8_linear_2331_10906'
@@ -211,8 +211,8 @@ export default function BookagriLogoSvg({
           y2='16.0925'
           gradientUnits='userSpaceOnUse'
         >
-          <stop offset='0.0490798' stop-color='#459724' />
-          <stop offset='0.6687' stop-color='#87C11C' />
+          <stop offset='0.0490798' stopColor='#459724' />
+          <stop offset='0.6687' stopColor='#87C11C' />
         </linearGradient>
         <linearGradient
           id='paint9_linear_2331_10906'
@@ -222,8 +222,8 @@ export default function BookagriLogoSvg({
           y2='16.0933'
           gradientUnits='userSpaceOnUse'
         >
-          <stop offset='0.0490798' stop-color='#459724' />
-          <stop offset='0.6687' stop-color='#87C11C' />
+          <stop offset='0.0490798' stopColor='#459724' />
+          <stop offset='0.6687' stopColor='#87C11C' />
         </linearGradient>
         <linearGradient
           id='paint10_linear_2331_10906'
@@ -233,8 +233,8 @@ export default function BookagriLogoSvg({
           y2='16.0926'
           gradientUnits='userSpaceOnUse'
         >
-          <stop offset='0.0490798' stop-color='#459724' />
-          <stop offset='0.6687' stop-color='#87C11C' />
+          <stop offset='0.0490798' stopColor='#459724' />
+          <stop offset='0.6687' stopColor='#87C11C' />
         </linearGradient>
         <linearGradient
           id='paint11_linear_2331_10906'
@@ -244,8 +244,8 @@ export default function BookagriLogoSvg({
           y2='9.3698'
           gradientUnits='userSpaceOnUse'
         >
-          <stop stop-color='#87C11C' />
-          <stop offset='0.816' stop-color='#87C11C' />
+          <stop stopColor='#87C11C' />
+          <stop offset='0.816' stopColor='#87C11C' />
         </linearGradient>
         <linearGradient
           id='paint12_linear_2331_10906'
@@ -255,8 +255,8 @@ export default function BookagriLogoSvg({
           y2='16.6253'
           gradientUnits='userSpaceOnUse'
         >
-          <stop offset='0.0490798' stop-color='#459724' />
-          <stop offset='0.6687' stop-color='#87C11C' />
+          <stop offset='0.0490798' stopColor='#459724' />
+          <stop offset='0.6687' stopColor='#87C11C' />
         </linearGradient>
       </defs>
     </svg>

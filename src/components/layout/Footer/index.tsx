@@ -21,7 +21,7 @@ interface LinkData {
 
 export default function Footer(): React.ReactElement {
   const { locale } = useTranslation();
-  console.log(locale, 'locale');
+
   return (
     <footer className='flex min-h-[28.875rem] flex-col items-center justify-between bg-primary_5'>
       <div className='container mx-auto px-4'>
