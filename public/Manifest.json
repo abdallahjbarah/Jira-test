@@ -1,0 +1,10 @@
+{
+  "name": "Bookagri",
+  "short_name": "Bookagri",
+  "description": "Experience authentic agritourism in Jordan with Bookagri. Connect with local farmers, participate in hands-on activities, and enjoy rural stays.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3aab3d",
+  "icons": []
+}

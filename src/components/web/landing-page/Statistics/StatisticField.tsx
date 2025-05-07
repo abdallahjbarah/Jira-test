@@ -1,0 +1,39 @@
+'use client';
+
+import React, { useEffect, useState, ReactNode } from 'react';
+import CountUp from 'react-countup';
+import { useInView } from 'react-intersection-observer';
+
+interface StatisticFieldProps {
+  number: string;
+  title: ReactNode;
+  key?: string | number;
+}
+
+export default function StatisticField({
+  number,
+  title,
+  key,
+}: StatisticFieldProps) {
+  const { ref, inView } = useInView();
+
+  const [counterOn, setCounterOn] = useState(false);
+
+  useEffect(() => {
+    if (inView) setCounterOn(true);
+  }, [inView]);
+
+  return (
+    <div ref={ref} key={key} className='w-[15.625rem] flex flex-col items-center laptopS:items-start'>
+      <div className='text-primary_1 text-custom-40 font-custom-600 leading-custom-48'>
+        {counterOn && (
+          <CountUp start={0} end={parseInt(number)} duration={3} delay={0} />
+        )}
+        +
+      </div>
+      <div className='text-primary_5 text-custom-22 font-custom-400 mt-1 text-center laptopS:text-start'>
+        {title}
+      </div>
+    </div>
+  );
+}

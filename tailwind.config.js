@@ -7,49 +7,48 @@
 
 module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       fontFamily: {
-        "sans": ['GellixRegular', 'sans-serif'],
-        "gellix-Bold": ['GellixBold', 'sans-serif'],
+        sans: ['GellixRegular', 'sans-serif'],
+        'gellix-Bold': ['GellixBold', 'sans-serif'],
       },
       boxShadow: {
         customShadow_1: '0px 8px 30px #0000001A',
       },
       transitionProperty: {
-        'height': 'height',
-        'spacing': 'margin, padding',
-        'overflow': 'overflow'
+        height: 'height',
+        spacing: 'margin, padding',
+        overflow: 'overflow',
       },
-      backgroundImage: {
-      },
+      backgroundImage: {},
       screens: {
-        mobileS: "375px",     // Small mobile devices
-        mobileM: "420px",     // Medium mobile devices, larger phones
-        tabletS: "640px",     // Small tablets
-        tabletM: "768px",     // Medium tablets
-        laptopS: "1024px",    // Small laptops
-        laptopM: "1280px",    // Medium laptops
-        laptopL: "1440px",    // Large laptops/desktops
-        desktop: "1920px",    // Standard desktop screens
+        mobileS: '375px', // Small mobile devices
+        mobileM: '420px', // Medium mobile devices, larger phones
+        tabletS: '640px', // Small tablets
+        tabletM: '768px', // Medium tablets
+        laptopS: '1024px', // Small laptops
+        laptopM: '1280px', // Medium laptops
+        laptopL: '1440px', // Large laptops/desktops
+        desktop: '1920px', // Standard desktop screens
       },
       colors: {
         //$primary
-        primary_1: "#47C409",
-        primary_2: "#FF5F0A",
-        primary_3: "#000",
-        primary_4: "#FFF",
-        primary_5: "#222",
+        primary_1: '#47C409',
+        primary_2: '#FF5F0A',
+        primary_3: '#000',
+        primary_4: '#FFF',
+        primary_5: '#222',
         //secondary
-        secondary_1: "#999",
-        secondary_2: "#F2F2F2",
-        secondary_3: "#EEEEEE",
-        secondary_4: "#CCCCCC",
-        secondary_5: "#F8F8F8",
+        secondary_1: '#999',
+        secondary_2: '#F2F2F2',
+        secondary_3: '#EEEEEE',
+        secondary_4: '#CCCCCC',
+        secondary_5: '#F8F8F8',
       },
       fontSize: {
         'custom-1': '0.0625rem',
@@ -150,37 +149,37 @@ module.exports = {
         'custom-96': '6.0000rem',
         'custom-97': '6.0625rem',
         'custom-98': '6.1250rem',
-        'custom-99': '6.1875rem'
+        'custom-99': '6.1875rem',
       },
       lineHeight: {
-        "custom-20": "1.25rem",
-        "custom-24": "1.5rem",
-        "custom-30": "1.875rem",
-        "custom-40": "2.5rem",
-        "custom-48": "3rem",
-        "custom-56": "3.5rem",
-        "custom-80": "5rem",
-        "custom-112": "7rem",
+        'custom-20': '1.25rem',
+        'custom-24': '1.5rem',
+        'custom-30': '1.875rem',
+        'custom-40': '2.5rem',
+        'custom-48': '3rem',
+        'custom-56': '3.5rem',
+        'custom-80': '5rem',
+        'custom-112': '7rem',
       },
       fontWeight: {
-        "custom-300": 300,
-        "custom-400": 400,
-        "custom-500": 500,
-        "custom-600": 600,
-        "custom-700": 700,
-        "custom-800": 800,
-        "custom-900": 900,
+        'custom-300': 300,
+        'custom-400': 400,
+        'custom-500': 500,
+        'custom-600': 600,
+        'custom-700': 700,
+        'custom-800': 800,
+        'custom-900': 900,
       },
       borderRadius: {
-        "custom-16": "1rem",
-        "custom-20": "1.25rem",
-        "custom-24": "1.5rem",
-        "custom-32": "2rem",
-        "custom-40": "2.5rem",
-        "custom-44": "2.75rem",
-      }
+        'custom-10': '10px',
+        'custom-16': '16px',
+        'custom-20': '20px',
+        'custom-24': '24px',
+        'custom-32': '32px',
+        'custom-40': '40px',
+        'custom-44': '44px',
+      },
     },
   },
-  plugins: [
-  ],
-}
+  plugins: [],
+};
