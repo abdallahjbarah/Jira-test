@@ -1,5 +1,3 @@
-import '@styles/globals.scss';
-
 import CustomAuthProvider from '@providers/CustomAuthProvider';
 import ErrorBoundaryProvider from '@providers/ErrorBoundaryProvider';
 import ReactQueryProvider from '@providers/ReactQueryProvider';
@@ -9,6 +7,7 @@ import ReactLoadingProvider from '@providers/ReactLoadingProvider';
 import { SEO_KEYWORDS } from '@utils/constants';
 import { Locale } from '@utils/constants';
 import { TranslationProvider } from '@/contexts/TranslationContext';
+import '@styles/globals.scss';
 
 export const metadata = {
   title: 'Bookagri - Authentic Agritourism in Jordan',

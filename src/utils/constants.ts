@@ -25,8 +25,8 @@ export enum LocaleValues {
   EN = 'en',
   AR = 'ar',
 }
-export const LOCALES = [LocaleValues.EN, LocaleValues.AR] as const;
-export const DEFAULT_LOCALE = LocaleValues.EN as const;
+export const LOCALES = ['en', 'ar'] as const;
+export const DEFAULT_LOCALE = 'en' as const;
 export type Locale = (typeof LOCALES)[number];
 
 export const ROLES = {

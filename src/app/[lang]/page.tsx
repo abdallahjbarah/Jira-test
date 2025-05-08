@@ -38,9 +38,11 @@ interface HomePageProps {
   };
 }
 
-export default function Home({
-  params: { lang },
-}: HomePageProps): React.ReactElement {
+export function generateStaticParams() {
+  return [{ lang: 'en' }, { lang: 'ar' }];
+}
+
+export default function Home({ params }: HomePageProps): React.ReactElement {
   return (
     <>
       <Head>
