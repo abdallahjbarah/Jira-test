@@ -37,6 +37,17 @@ const en = {
     countLabel: 'You have',
     collection: 'Collection',
   },
+  notifications: {
+    notifications: 'Notifications',
+    today: 'Today',
+    yesterday: 'Yesterday',
+    previousDays: 'Previous Days',
+    markAllAsRead: 'Mark all as read',
+    deleteAll: 'Delete all',
+    markAsRead: 'Mark as read',
+    delete: 'Delete',
+    noNotifications: 'No notifications',
+  },
 };
 
 export default en;
