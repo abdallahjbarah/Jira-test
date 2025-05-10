@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import BgHomePageImg from '@images/home/BgHomePage.jpg';
 import LeafImg from '@images/home/Leaf.png';
 import Image from 'next/image';
@@ -6,7 +6,7 @@ import FilledButton from '@components/ui/buttons/FilledButton';
 import styles from './style.module.scss';
 import { cn } from '@/utils/cn';
 
-export default function Hero({ className }: { className?: string }) {
+function Hero({ className }: { className?: string }) {
   return (
     <section
       className={cn(
@@ -57,3 +57,5 @@ export default function Hero({ className }: { className?: string }) {
     </section>
   );
 }
+
+export default memo(Hero);

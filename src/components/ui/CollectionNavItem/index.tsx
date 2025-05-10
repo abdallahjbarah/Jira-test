@@ -6,7 +6,9 @@ import { CollectionStatusItem } from '@utils/constants';
 import Image from 'next/image';
 import { useTranslation } from '@contexts/TranslationContext';
 import CustomSvg from '@components/ui/CustomSvg';
-
+import { useParams } from 'next/navigation';
+import { cn } from '@/utils/cn';
+import CustomLink from '@components/ui/CustomLink';
 interface CollectionNavItemProps {
   collectionStatus: CollectionStatusItem;
 }
@@ -15,18 +17,33 @@ const CollectionNavItem = ({
   collectionStatus,
 }: CollectionNavItemProps): React.ReactElement => {
   const { locale } = useTranslation();
+  const { collectionStatus: collectionStatusParam } = useParams();
+
+  const isActiveItem = React.useMemo(() => {
+    return collectionStatusParam === collectionStatus.value;
+  }, [collectionStatusParam, collectionStatus.value]);
 
   return (
-    <Link href={collectionStatus.path} className='flex items-center gap-2'>
-      {/* <CustomSvg
-        src={collectionStatus.icon}
-        width={24}
-        height={24}
-        className='text-primary_2'
-        alt={collectionStatus.label[locale]}
-      /> */}
-      <span className=''>{collectionStatus.label[locale]}</span>
-    </Link>
+    <CustomLink
+      path={collectionStatus.path}
+      className={cn(
+        'transition-all duration-300 flex items-center gap-2 text-[#999999] rounded-full px-3 py-1 hover:text-primary_4 hover:bg-primary_2',
+        isActiveItem && 'text-primary_4 bg-primary_2',
+      )}
+    >
+      {collectionStatus.icon && (
+        <CustomSvg
+          src={collectionStatus.icon}
+          width={30}
+          height={30}
+          alt={collectionStatus.label[locale]}
+          color='currentColor'
+        />
+      )}
+      <span className='text-custom-25 leading-none'>
+        {collectionStatus.label[locale]}
+      </span>
+    </CustomLink>
   );
 };
 

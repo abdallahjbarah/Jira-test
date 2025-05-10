@@ -39,7 +39,7 @@ module.exports = {
       colors: {
         //$primary
         primary_1: '#47C409',
-        primary_2: '#FF5F0A',
+        primary_2: '#FE360A',
         primary_3: '#000',
         primary_4: '#FFF',
         primary_5: '#222',
@@ -49,6 +49,24 @@ module.exports = {
         secondary_3: '#EEEEEE',
         secondary_4: '#CCCCCC',
         secondary_5: '#F8F8F8',
+        secondary_6: '#434343',
+        // gray
+        gray_1: '#F5F5F5',
+        gray_2: '#E0E0E0',
+        gray_3: '#999999',
+        gray_4: '#A0A0A0',
+        gray_5: '#808080',
+        //text
+        text_1: '#222222',
+        text_2: '#444444',
+        text_3: '#999999',
+        text_4: '#888888',
+        text_5: '#AAAAAA',
+        text_6: '#CCCCCC',
+        text_7: '#EEEEEE',
+
+        //gold
+        gold_1: '#D2AF21',
       },
       fontSize: {
         'custom-1': '0.0625rem',
@@ -184,7 +202,6 @@ module.exports = {
       center: true,
       padding: {
         DEFAULT: '1.5rem',
-        laptopL: '6.5rem',
       },
     },
   },
