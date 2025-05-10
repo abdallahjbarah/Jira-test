@@ -58,13 +58,8 @@ module.exports = {
         gray_5: '#808080',
         //text
         text_1: '#222222',
-        text_2: '#444444',
+        text_2: '#555555',
         text_3: '#999999',
-        text_4: '#888888',
-        text_5: '#AAAAAA',
-        text_6: '#CCCCCC',
-        text_7: '#EEEEEE',
-
         //gold
         gold_1: '#D2AF21',
       },

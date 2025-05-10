@@ -28,6 +28,15 @@ const ar = {
   signin: 'تسجيل الدخول',
   'signing-in': 'جاري تسجيل الدخول...',
   from: 'من',
+  wishlist: {
+    wishlist: 'الخاصة بك',
+    your: 'قائمة التفضيلات',
+    title: 'إنشاء قائمة التفضيلات!',
+    description: 'أضف تجارب وإقامات وفعاليات ومنتجات اليوم.',
+    create: 'استكشف الآن',
+    countLabel: 'لديك',
+    collection: 'مجموعة',
+  },
 };
 
 export default ar;

@@ -28,6 +28,15 @@ const en = {
   signin: 'Sign In',
   'signing-in': 'Signing in...',
   from: 'From',
+  wishlist: {
+    wishlist: 'Wishlist',
+    your: 'Your',
+    title: 'Create Your Wishlist!',
+    description: 'Start adding experiences, stays, events and products today.',
+    create: 'Explore Now',
+    countLabel: 'You have',
+    collection: 'Collection',
+  },
 };
 
 export default en;

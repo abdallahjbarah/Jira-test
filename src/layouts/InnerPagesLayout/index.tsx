@@ -4,12 +4,16 @@ import InnerHeader from '@/components/layout/InnerHeader';
 
 function InnerPagesLayout({
   children,
+  headerProps,
 }: {
   children: React.ReactNode;
+  headerProps?: {
+    withNavItems?: boolean;
+  };
 }): React.ReactElement {
   return (
     <div>
-      <InnerHeader />
+      <InnerHeader {...headerProps} />
       {children}
       <Footer />
     </div>

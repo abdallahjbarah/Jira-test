@@ -75,7 +75,7 @@ export default function Header(): React.ReactElement {
               ),
           )}
           <li>
-            <LanguageSwitcher />
+            <LanguageSwitcher className='!text-primary_1 hover:!text-primary_2' />
           </li>
         </ul>
       </nav>
@@ -167,7 +167,7 @@ export default function Header(): React.ReactElement {
                       />
                     ))}
                     <li className='mt-4'>
-                      <LanguageSwitcher />
+                      <LanguageSwitcher className='!text-primary_1 ' />
                     </li>
                   </ul>
                 </div>

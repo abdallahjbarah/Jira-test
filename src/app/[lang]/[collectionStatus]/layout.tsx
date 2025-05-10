@@ -3,7 +3,7 @@ import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 
 function CollectionStatusLayout({ children }: { children: React.ReactNode }) {
   return (
-    <InnerPagesLayout>
+    <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main>{children}</main>
     </InnerPagesLayout>
   );
