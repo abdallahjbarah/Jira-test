@@ -6,7 +6,13 @@ import React, { memo } from 'react';
 import CollectionNavItem from '@components/ui/CollectionNavItem';
 import HeaderActions from './HeaderActions';
 
-function InnerHeader(): React.ReactElement {
+interface InnerHeaderProps {
+  withNavItems?: boolean;
+}
+
+function InnerHeader({
+  withNavItems = true,
+}: InnerHeaderProps): React.ReactElement {
   return (
     <header className='relative py-12 container flex items-center justify-between'>
       <Link href={`/`}>
@@ -17,11 +23,13 @@ function InnerHeader(): React.ReactElement {
           alt='Bookagri Logo'
         />
       </Link>
-      <div className='flex items-center gap-2.5'>
-        {COLLECTION_STATUS_LIST.map((item) => (
-          <CollectionNavItem key={item.value} collectionStatus={item} />
-        ))}
-      </div>
+      {withNavItems && (
+        <div className='flex items-center gap-2.5'>
+          {COLLECTION_STATUS_LIST.map((item) => (
+            <CollectionNavItem key={item.value} collectionStatus={item} />
+          ))}
+        </div>
+      )}
       <HeaderActions />
     </header>
   );

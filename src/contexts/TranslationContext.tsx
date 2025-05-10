@@ -9,7 +9,7 @@ interface TranslationContextType {
   locale: Locale;
   t: (key: string) => string;
   changeLocale: (newLocale: Locale) => void;
-  dictionary: Record<string, string>;
+  dictionary: Record<string, any>;
 }
 
 const TranslationContext = createContext<TranslationContextType | undefined>(
@@ -24,7 +24,7 @@ export function TranslationProvider({
   const params = useParams<{ lang: Locale }>();
   const locale = params?.lang || DEFAULT_LOCALE;
   const router = useRouter();
-  const [dictionary, setDictionary] = useState<Record<string, string>>({});
+  const [dictionary, setDictionary] = useState<Record<string, any>>({});
 
   // Load dictionary when locale changes
   useEffect(() => {
@@ -38,6 +38,19 @@ export function TranslationProvider({
 
   // Translation function
   const t = (key: string): string => {
+    // key can be a nested object
+    const nestedKey = key.split('.');
+    if (nestedKey.length > 1) {
+      try {
+        const result = nestedKey.reduce(
+          (acc: any, curr) => acc && acc[curr],
+          dictionary,
+        );
+        return result || key;
+      } catch (error) {
+        return key;
+      }
+    }
     return dictionary[key] || key;
   };
 

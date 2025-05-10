@@ -278,3 +278,11 @@ collectionsData.all = [
   ...collectionsData.offers,
   ...collectionsData.products,
 ];
+
+export const wishlistData: Collection[] = [
+  ...collectionsData.experiences,
+  ...collectionsData.stays,
+  ...collectionsData.events,
+  ...collectionsData.offers,
+  ...collectionsData.products,
+];
