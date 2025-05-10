@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 interface CustomLinkProps {
   path: string;
@@ -14,8 +15,9 @@ export default function CustomLink({
   children,
   ...rest
 }: CustomLinkProps): React.ReactElement {
+  const { lang } = useParams();
   return (
-    <Link href={path} {...rest}>
+    <Link href={`/${lang}${path}`} {...rest}>
       {children}
     </Link>
   );

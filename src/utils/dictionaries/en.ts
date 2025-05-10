@@ -27,11 +27,7 @@ const en = {
     "Sorry, the page you are looking for doesn't exist. Here are some helpful links:",
   signin: 'Sign In',
   'signing-in': 'Signing in...',
-  internationalization: 'Internationalization Demo',
-  'language-switcher': 'Language Switcher',
-  'navigation-items': 'Navigation Items',
-  'auth-related-texts': 'Authentication Related Texts',
-  'all-translations': 'All Available Translations',
+  from: 'From',
 };
 
 export default en;

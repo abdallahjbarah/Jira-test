@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Footer from '@/components/layout/Footer';
 import InnerHeader from '@/components/layout/InnerHeader';
 
-export default function InnerPagesLayout({
+function InnerPagesLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -15,3 +15,5 @@ export default function InnerPagesLayout({
     </div>
   );
 }
+
+export default InnerPagesLayout;

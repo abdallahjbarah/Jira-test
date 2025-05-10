@@ -196,6 +196,7 @@ export const SEO_KEYWORDS = [
 ];
 
 export const COLLECTION_STATUS = {
+  ALL: 'all',
   EXPERIENCES: 'experiences',
   STAYS: 'stays',
   EVENTS: 'events',
@@ -210,10 +211,15 @@ export interface CollectionStatusItem {
     ar: string;
   };
   path: string;
-  icon: string;
+  icon?: string;
 }
 
 export const COLLECTION_STATUS_LIST: CollectionStatusItem[] = [
+  {
+    value: COLLECTION_STATUS.ALL,
+    label: { en: 'All', ar: 'الكل' },
+    path: `/${COLLECTION_STATUS.ALL}`,
+  },
   {
     value: COLLECTION_STATUS.EXPERIENCES,
     label: { en: 'Experiences', ar: 'التجارب' },
@@ -234,7 +240,7 @@ export const COLLECTION_STATUS_LIST: CollectionStatusItem[] = [
   },
   {
     value: COLLECTION_STATUS.OFFERS,
-    label: { en: 'Offers', ar: 'العروض' },
+    label: { en: 'Offers & Packages', ar: 'العروض والباقات' },
     path: `/${COLLECTION_STATUS.OFFERS}`,
     icon: '/SVGs/shared/diamond.svg',
   },

@@ -27,11 +27,7 @@ const ar = {
     'عفواً، الصفحة التي تبحث عنها غير موجودة. إليك بعض الروابط المفيدة:',
   signin: 'تسجيل الدخول',
   'signing-in': 'جاري تسجيل الدخول...',
-  internationalization: 'عرض توضيحي للتدويل',
-  'language-switcher': 'مبدل اللغة',
-  'navigation-items': 'عناصر التنقل',
-  'auth-related-texts': 'نصوص متعلقة بالمصادقة',
-  'all-translations': 'جميع الترجمات المتاحة',
+  from: 'من',
 };
 
 export default ar;

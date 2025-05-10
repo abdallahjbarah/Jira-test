@@ -2,8 +2,9 @@ import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
 import { COLLECTION_STATUS_LIST } from '@utils/constants';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { memo } from 'react';
 import CollectionNavItem from '@components/ui/CollectionNavItem';
+import HeaderActions from './HeaderActions';
 
 function InnerHeader(): React.ReactElement {
   return (
@@ -16,14 +17,14 @@ function InnerHeader(): React.ReactElement {
           alt='Bookagri Logo'
         />
       </Link>
-      <div className='flex items-center gap-2'>
+      <div className='flex items-center gap-2.5'>
         {COLLECTION_STATUS_LIST.map((item) => (
           <CollectionNavItem key={item.value} collectionStatus={item} />
         ))}
       </div>
-      <div className='w-6 h-6 rounded-full bg-primary_5' />
+      <HeaderActions />
     </header>
   );
 }
 
-export default InnerHeader;
+export default memo(InnerHeader);
