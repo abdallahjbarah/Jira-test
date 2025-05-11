@@ -212,6 +212,7 @@ export interface CollectionStatusItem {
   };
   path: string;
   icon?: string;
+  isSoon?: boolean;
 }
 
 export const COLLECTION_STATUS_LIST: CollectionStatusItem[] = [
@@ -249,6 +250,7 @@ export const COLLECTION_STATUS_LIST: CollectionStatusItem[] = [
     label: { en: 'Products', ar: 'المنتجات' },
     path: `/${COLLECTION_STATUS.PRODUCTS}`,
     icon: '/SVGs/shared/bag-icon.svg',
+    isSoon: true,
   },
 ];
 
