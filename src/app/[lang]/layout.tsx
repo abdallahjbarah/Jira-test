@@ -7,6 +7,7 @@ import ReactLoadingProvider from '@providers/ReactLoadingProvider';
 import { SEO_KEYWORDS } from '@utils/constants';
 import { Locale } from '@utils/constants';
 import { TranslationProvider } from '@/contexts/TranslationContext';
+import StyledComponentsRegistry from '@/lib/registry';
 import '@styles/globals.scss';
 
 export const metadata = {
@@ -53,7 +54,11 @@ export default function RootLayout({ children, params }: RootLayoutProps) {
               <ReactQueryProvider>
                 <ReactToastifyProvider>
                   <ReactPublicContextProvider>
-                    <ReactLoadingProvider>{children}</ReactLoadingProvider>
+                    <ReactLoadingProvider>
+                      <StyledComponentsRegistry>
+                        {children}
+                      </StyledComponentsRegistry>
+                    </ReactLoadingProvider>
                   </ReactPublicContextProvider>
                 </ReactToastifyProvider>
               </ReactQueryProvider>

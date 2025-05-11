@@ -37,6 +37,17 @@ const ar = {
     countLabel: 'لديك',
     collection: 'مجموعة',
   },
+  notifications: {
+    notifications: 'الإشعارات',
+    today: 'اليوم',
+    yesterday: 'الأمس',
+    previousDays: 'الأيام السابقة',
+    markAllAsRead: 'تحديد الكل كمقروء',
+    deleteAll: 'حذف الكل',
+    markAsRead: 'تحديد كمقروء',
+    delete: 'حذف',
+    noNotifications: 'لا يوجد إشعارات',
+  },
 };
 
 export default ar;

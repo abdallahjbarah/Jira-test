@@ -1,5 +1,5 @@
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import HeaderNotification from '@/components/shared/HeaderNotification';
+import NotificationBell from '@/components/shared/NotificationBell';
 import ProfileDropdown from '@/components/shared/ProfileDropdown';
 import CustomSvg from '@/components/ui/CustomSvg';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ function HeaderActions(): React.ReactElement {
           alt='heart'
         />
       </Link>
-      <HeaderNotification />
+      <NotificationBell />
       <div className='!text-secondary_6 hover:!text-primary_2 cursor-pointer'>
         <LanguageSwitcher />
       </div>

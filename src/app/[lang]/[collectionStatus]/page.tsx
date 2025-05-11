@@ -7,6 +7,7 @@ import ContactUs from '@/components/web/landing-page/ContactUs';
 import { Locale, COLLECTION_STATUS_LIST } from '@utils/constants';
 import { notFound } from 'next/navigation';
 import CollectionsListing from '@/components/web/collections/CollectionsListing';
+import ComingSoon from '@/components/shared/ComingSoon';
 
 interface CollectionStatusPageProps {
   params: {
@@ -20,8 +21,16 @@ export default function CollectionStatusPage({
 }: CollectionStatusPageProps): React.ReactElement {
   const { collectionStatus } = params;
 
-  if (!COLLECTION_STATUS_LIST.some((item) => item.value === collectionStatus)) {
+  const collectionStatusItem = COLLECTION_STATUS_LIST.find(
+    (item) => item.value === collectionStatus,
+  );
+
+  if (!collectionStatusItem) {
     return notFound();
+  }
+
+  if (collectionStatusItem.isSoon) {
+    return <ComingSoon />;
   }
 
   return (
