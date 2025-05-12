@@ -1,22 +1,38 @@
 'use client';
 import React, { useState } from 'react';
+import { cn } from '@/utils/cn';
+import Counter from '@/components/ui/Counter';
 
 type GuestCategory = 'adults' | 'children' | 'infants';
 
 interface GuestSelectorProps {
+  className?: string;
   onGuestChange?: (guests: {
     adults: number;
     children: number;
     infants: number;
   }) => void;
+  initialValues?: {
+    adults?: number;
+    children?: number;
+    infants?: number;
+  };
+  maxGuests?: number;
 }
 
-const GuestSelector: React.FC<GuestSelectorProps> = ({ onGuestChange }) => {
+const GuestSelector: React.FC<GuestSelectorProps> = ({
+  onGuestChange,
+  className,
+  initialValues,
+  maxGuests,
+}) => {
   const [guests, setGuests] = useState({
-    adults: 3,
-    children: 2,
-    infants: 0,
+    adults: initialValues?.adults ?? 1,
+    children: initialValues?.children ?? 0,
+    infants: initialValues?.infants ?? 0,
   });
+
+  const totalGuests = guests.adults + guests.children;
 
   const handleCountChange = (category: GuestCategory, increment: boolean) => {
     setGuests((prev) => {
@@ -36,79 +52,36 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({ onGuestChange }) => {
   };
 
   return (
-    <div className='bg-white p-6 rounded-3xl shadow-lg w-[330px]'>
+    <div
+      className={cn('bg-white p-6 rounded-3xl shadow-lg w-[330px]', className)}
+    >
       <div className='space-y-6'>
-        {/* Adults */}
-        <div className='flex justify-between items-center'>
-          <div>
-            <h3 className='text-lg font-semibold'>Adults</h3>
-            <p className='text-gray-500 text-sm'>Ages 12 or above</p>
-          </div>
-          <div className='flex items-center gap-3'>
-            <button
-              onClick={() => handleCountChange('adults', false)}
-              className='w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 hover:border-gray-400'
-              disabled={guests.adults === 0}
-            >
-              <span className='text-xl'>-</span>
-            </button>
-            <span className='w-6 text-center'>{guests.adults}</span>
-            <button
-              onClick={() => handleCountChange('adults', true)}
-              className='w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 hover:border-gray-400'
-            >
-              <span className='text-xl'>+</span>
-            </button>
-          </div>
-        </div>
+        <Counter
+          title='Adults'
+          description='Ages 12 or above'
+          value={guests.adults}
+          onIncrement={() => handleCountChange('adults', true)}
+          onDecrement={() => handleCountChange('adults', false)}
+          minValue={1}
+          maxValue={maxGuests ? maxGuests - guests.children : undefined}
+        />
 
-        {/* Children */}
-        <div className='flex justify-between items-center'>
-          <div>
-            <h3 className='text-lg font-semibold'>Children</h3>
-            <p className='text-gray-500 text-sm'>Ages 3 - 11</p>
-          </div>
-          <div className='flex items-center gap-3'>
-            <button
-              onClick={() => handleCountChange('children', false)}
-              className='w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 hover:border-gray-400'
-              disabled={guests.children === 0}
-            >
-              <span className='text-xl'>-</span>
-            </button>
-            <span className='w-6 text-center'>{guests.children}</span>
-            <button
-              onClick={() => handleCountChange('children', true)}
-              className='w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 hover:border-gray-400'
-            >
-              <span className='text-xl'>+</span>
-            </button>
-          </div>
-        </div>
+        <Counter
+          title='Children'
+          description='Ages 3 - 11'
+          value={guests.children}
+          onIncrement={() => handleCountChange('children', true)}
+          onDecrement={() => handleCountChange('children', false)}
+          maxValue={maxGuests ? maxGuests - guests.adults : undefined}
+        />
 
-        {/* Infants */}
-        <div className='flex justify-between items-center'>
-          <div>
-            <h3 className='text-lg font-semibold'>Infants</h3>
-            <p className='text-gray-500 text-sm'>Under 3</p>
-          </div>
-          <div className='flex items-center gap-3'>
-            <button
-              onClick={() => handleCountChange('infants', false)}
-              className='w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 hover:border-gray-400'
-              disabled={guests.infants === 0}
-            >
-              <span className='text-xl'>-</span>
-            </button>
-            <span className='w-6 text-center'>{guests.infants}</span>
-            <button
-              onClick={() => handleCountChange('infants', true)}
-              className='w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 hover:border-gray-400'
-            >
-              <span className='text-xl'>+</span>
-            </button>
-          </div>
-        </div>
+        <Counter
+          title='Infants'
+          description='Under 3'
+          value={guests.infants}
+          onIncrement={() => handleCountChange('infants', true)}
+          onDecrement={() => handleCountChange('infants', false)}
+        />
       </div>
     </div>
   );

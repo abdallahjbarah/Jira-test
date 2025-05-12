@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/utils/cn';
 import React, { useState, useRef, useEffect, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -169,7 +170,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <>
-      <div className={`relative ${className}`}>
+      <div className={cn('relative', className)}>
         <div
           ref={triggerRef}
           onClick={toggleDropdown}
