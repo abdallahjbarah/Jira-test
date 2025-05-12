@@ -5,7 +5,8 @@ import LocationDropdown from '../LocationDropdown';
 import GuestFilterItem from '../GuestFilterItem';
 import DatePickerDropdown from '../DatePickerDropdown';
 import SearchContainer from '../SearchContainer';
-
+import AdvancedFilterDropDown from './AdvancedFilterDropDown';
+import { useParams } from 'next/navigation';
 interface FilterFormValues {
   location: string;
   checkIn: string;
@@ -20,6 +21,8 @@ interface FilterFormValues {
 }
 
 const FilterBar = () => {
+  const { collectionStatus } = useParams();
+
   const methods = useForm<FilterFormValues>({
     defaultValues: {
       location: '',
@@ -127,6 +130,12 @@ const FilterBar = () => {
             />
           </div>
         </div>
+        <AdvancedFilterDropDown
+          className='max-h-screen overflow-y-auto'
+          filterType={
+            collectionStatus as 'experiences' | 'events' | 'stays' | 'offers'
+          }
+        />
       </form>
     </FormProvider>
   );
