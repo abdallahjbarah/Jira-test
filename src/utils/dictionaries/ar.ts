@@ -48,6 +48,28 @@ const ar = {
     delete: 'حذف',
     noNotifications: 'لا يوجد إشعارات',
   },
+  profile: {
+    personalInfo: 'المعلومات الشخصية',
+    editPersonalInfo: 'تعديل المعلومات الشخصية',
+    security: 'الأمان',
+    changePassword: 'تغيير كلمة المرور',
+    myBookings: 'حجوزاتي',
+    bookingSettings: 'إعدادات الحجز',
+    currency: 'العملة',
+    language: 'اللغة',
+    support: 'الدعم',
+    helpCenter: 'مركز المساعدة',
+    contactUs: 'اتصل بنا',
+    faqs: 'الأسئلة الشائعة',
+    haveQuestions: 'هل لديك أي استفسارات؟',
+    aboutBookagri: 'حول بوكاجري',
+    missionVision: 'الرؤية والرسالة',
+    privacyPolicy: 'سياسة الخصوصية',
+    checkPrivacy: 'الاطلاع على سياسة الخصوصية',
+    termsOfService: 'شروط الخدمة',
+    checkTerms: 'الاطلاع على شروط الخدمة',
+    logout: 'تسجيل الخروج',
+  },
 };
 
 export default ar;

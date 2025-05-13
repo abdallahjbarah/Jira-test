@@ -43,6 +43,7 @@ module.exports = {
         primary_3: '#000',
         primary_4: '#FFF',
         primary_5: '#222',
+        primary_6: '#FF4B55',
         //secondary
         secondary_1: '#999',
         secondary_2: '#F2F2F2',
