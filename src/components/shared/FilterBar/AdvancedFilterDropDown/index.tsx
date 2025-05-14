@@ -87,7 +87,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   };
 
   const filterContent = (
-    <div className='bg-white rounded-xl shadow-lg max-w-[997px] w-full p-6 max-h-[500px] overflow-y-auto'>
+    <div className='bg-white rounded-xl shadow-2xl max-w-[997px] w-full p-6 max-h-[500px] overflow-y-auto'>
       <h3 className='text-lg text-center font-semibold'>Filter</h3>
       <hr className='my-4' />
       <FormProvider {...methods}>

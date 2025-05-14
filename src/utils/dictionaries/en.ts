@@ -48,6 +48,28 @@ const en = {
     delete: 'Delete',
     noNotifications: 'No notifications',
   },
+  profile: {
+    personalInfo: 'Personal Information',
+    editPersonalInfo: 'Edit your personal information',
+    security: 'Security',
+    changePassword: 'Change password',
+    myBookings: 'My Bookings',
+    bookingSettings: 'See your booking settings',
+    currency: 'Currency',
+    language: 'Language',
+    support: 'Support',
+    helpCenter: 'Help Center',
+    contactUs: 'Contact us',
+    faqs: 'FAQs',
+    haveQuestions: 'Do you have any questions?',
+    aboutBookagri: 'About Bookagri',
+    missionVision: 'Mission, Vision',
+    privacyPolicy: 'Privacy Policy',
+    checkPrivacy: 'Check our privacy policy',
+    termsOfService: 'Terms of Service',
+    checkTerms: 'Check our terms of service',
+    logout: 'Logout',
+  },
 };
 
 export default en;
