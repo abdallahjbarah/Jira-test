@@ -9,6 +9,7 @@ interface ProfileMenuItemProps {
   icon: string;
   href: string;
   isExternal?: boolean;
+  onClick?: () => void;
 }
 
 const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
@@ -17,6 +18,7 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
   icon,
   href,
   isExternal = false,
+  onClick,
 }) => {
   const content = (
     <div className='flex items-center justify-between'>
@@ -32,6 +34,14 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
       <ChevronRightIcon className='w-4 h-4 text-text_1' />
     </div>
   );
+
+  if (onClick) {
+    return (
+      <div onClick={onClick} className='block cursor-pointer'>
+        {content}
+      </div>
+    );
+  }
 
   if (isExternal) {
     return (

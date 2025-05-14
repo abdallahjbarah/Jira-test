@@ -10,6 +10,106 @@ const en = {
   stays: 'Stays',
   'offers-packages': 'Offers & Packages',
   products: 'Products',
+  'view-all': 'View All',
+  hero: {
+    title: 'Connecting you with',
+    titleSecondLine: 'a world of agritourism',
+    subtitle: 'Book or become a host for agritourism',
+    subtitleSecondLine: 'experiences and rural stays',
+    discoverMore: 'Discover More',
+  },
+  statistics: {
+    agritourismExperiences: 'Agritourism <br/> experiences',
+    yearsOfExperience: 'Years of experience <br/> in tourism',
+    womenEmpowered: 'Women <br/> empowered',
+    tourists: 'Tourists trust <br/> us',
+    yearlyExperiences: 'Yearly experiences <br/> added',
+  },
+  aboutUs: {
+    title: 'About Us',
+    description:
+      'Bookagri was born in 2015 with an idea to connect farmers and farming experiences with local and foreign tourists. Every day, hosts offer unique agritourism experiences and rural stays that make it possible for guests to connect with rural communities in a more authentic way.',
+    vision: {
+      title: 'Vision',
+      description:
+        'Bookagri envisions a leading global interactive platform for agritourism where anyone can belong to any agritourism experience anytime, anywhere using their device.',
+    },
+    mission: {
+      title: 'Mission',
+      description:
+        'Bookagri is on a mission to bring in all agritourism businesses to its platform where everyone can connect with their inner farmer at any village, farm and countryside worldwide.',
+    },
+    readMore: 'Read More',
+  },
+  downloadApp: {
+    subtitle: 'Download the Bookagri app',
+    title: 'Choose your experience, create lifelong memories',
+    description:
+      'The Bookagri app brings together a global community of guests and hosts. You can find your perfect farm or rural stay along with the most fun and interactive agritourism experiences here led by locals besides locally made foods and crafts.',
+    googlePlay: 'Google Play',
+    appStore: 'App Store',
+  },
+  contactUs: {
+    subtitle: 'Contact Us',
+    title: 'Have a question or feedback?',
+    email: {
+      title: 'Email',
+      value: 'info@bookagri.com',
+    },
+    phone: {
+      title: 'Phone',
+      value: '00962-77-2236393',
+    },
+    address: {
+      title: 'Address',
+      value: 'Marj Al-Hamam, Amman, Jordan',
+      zipCode: 'Zip Code: 11733',
+    },
+    socialMedia: {
+      facebook: 'Facebook',
+      linkedin: 'LinkedIn',
+      instagram: 'Instagram',
+      tiktok: 'TikTok',
+      whatsapp: 'WhatsApp',
+    },
+  },
+  contactUsForm: {
+    title: 'Fill The Form',
+    subtitle: 'We listen carefully to your opinions and suggestions',
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    email: 'Email',
+    phone: 'Phone Number',
+    message: 'Type your message here',
+    submit: 'Send Message',
+    successMessage:
+      'Your message has been sent successfully. We will contact you as soon as possible',
+    errorMessage: 'Something went wrong, please try later!',
+  },
+  footer: {
+    pages: 'Pages',
+    contactUs: 'Contact Us',
+    email: {
+      title: 'Email',
+      value: 'info@bookagri.com',
+    },
+    phone: {
+      title: 'Phone',
+      values: [
+        '00962-77-2236393',
+        '00962-77-0504153',
+        '00962-78-7877885',
+        '00962-79-5593907',
+      ],
+    },
+    address: {
+      title: 'Address',
+      value: 'Marj Al-Hamam, Amman, Jordan',
+      zipCode: 'Zip Code: 11733',
+    },
+    hours: '09:00 - 17:00',
+    copyright: 'Copyright © Bookagri.com',
+  },
   'page-not-found': 'Page not found',
   'go-back': 'Go back',
   'take-me-home': 'Take me home',
