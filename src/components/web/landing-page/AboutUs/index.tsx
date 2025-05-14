@@ -1,11 +1,15 @@
+'use client';
 import React from 'react';
 import Image from 'next/image';
 import Vector from '@images/home/Vector.png';
 import VisionSVG from '@SVGs/home/VisionSVG.svg';
 import MissionSvg from '@SVGs/home/MissionSvg.svg';
 import FilledButton from '@components/ui/buttons/FilledButton';
+import { useTranslation } from '@contexts/TranslationContext';
 
 export default function AboutUs(): React.ReactElement {
+  const { t } = useTranslation();
+
   return (
     <section
       id='AboutUs'
@@ -28,14 +32,10 @@ export default function AboutUs(): React.ReactElement {
           {/* About Us */}
           <div>
             <h1 className='text-custom-48 font-custom-800 text-primary_5 font-gellix-Bold'>
-              About Us
+              {t('aboutUs.title')}
             </h1>
             <p className='text-custom-24 font-custom-400 text-secondary_1 mt-6'>
-              Bookagri was born in 2015 with an idea to connect farmers and
-              farming experiences with local and foreign tourists. Every day,
-              hosts offer unique agritourism experiences and rural stays that
-              make it possible for guests to connect with rural communities in a
-              more authentic way.
+              {t('aboutUs.description')}
             </p>
           </div>
 
@@ -48,12 +48,10 @@ export default function AboutUs(): React.ReactElement {
             </div>
             <div>
               <h2 className='text-custom-24 font-custom-800 text-primary_5 font-gellix-Bold'>
-                Vision
+                {t('aboutUs.vision.title')}
               </h2>
               <p className='text-custom-18 font-custom-400 text-secondary_1 mt-2'>
-                Bookagri envisions a leading global interactive platform for
-                agritourism where anyone can belong to any agritourism
-                experience anytime, anywhere using their device.
+                {t('aboutUs.vision.description')}
               </p>
             </div>
           </div>
@@ -67,12 +65,10 @@ export default function AboutUs(): React.ReactElement {
             </div>
             <div>
               <h2 className='text-custom-24 font-custom-800 text-primary_5 font-gellix-Bold'>
-                Mission
+                {t('aboutUs.mission.title')}
               </h2>
               <p className='text-custom-18 font-custom-400 text-secondary_1 mt-2'>
-                Bookagri is on a mission to bring in all agritourism businesses
-                to its platform where everyone can connect with their inner
-                farmer at any village, farm and countryside worldwide.{' '}
+                {t('aboutUs.mission.description')}
               </p>
             </div>
           </div>
@@ -81,7 +77,7 @@ export default function AboutUs(): React.ReactElement {
           <div className=''>
             <FilledButton
               path='#'
-              text='Read More'
+              text={t('aboutUs.readMore')}
               width='w-[11.3125rem]'
               height='h-[4.8125rem]'
               className='mt-5 rounded-custom-16'
