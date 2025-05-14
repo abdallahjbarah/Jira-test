@@ -6,7 +6,7 @@ import Dropdown from '@/components/ui/Dropdown';
 import FilterBarItem from '../FilterBar/FilterBarItem';
 
 interface GuestFilterItemProps {
-  title: {
+  title?: {
     en: string;
     ar: string;
   };
@@ -15,11 +15,13 @@ interface GuestFilterItemProps {
     children: number;
     infants: number;
   }) => void;
+  triggerComponent?: React.ReactNode;
 }
 
 const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
   title,
   onChange,
+  triggerComponent
 }) => {
   const { locale } = useTranslation();
   const [guests, setGuests] = useState({
@@ -73,11 +75,13 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
   return (
     <Dropdown
       trigger={
-        <FilterBarItem
-          title={title}
-          value={getGuestDisplayText()}
-          onClick={() => {}}
-        />
+        triggerComponent || (
+          <FilterBarItem
+            title={title || { en: '', ar: '' }}
+            value={getGuestDisplayText()}
+            onClick={() => {}}
+          />
+        )
       }
       content={dropdownContent}
       position='bottom-left'

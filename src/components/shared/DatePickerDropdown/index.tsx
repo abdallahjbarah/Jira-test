@@ -5,7 +5,7 @@ import FilterBarItem from '../FilterBar/FilterBarItem';
 import DateRangePicker from '../DateRangePicker';
 
 interface DatePickerDropdownProps {
-  title: {
+  title?: {
     en: string;
     ar: string;
   };
@@ -17,6 +17,7 @@ interface DatePickerDropdownProps {
   isCheckout?: boolean;
   checkInDate?: Date;
   value?: string;
+  triggerComponent?: React.ReactNode;
 }
 
 const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
@@ -29,6 +30,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   isCheckout = false,
   checkInDate,
   value,
+  triggerComponent,
 }) => {
   const [selectedDates, setSelectedDates] = useState<Date[]>(
     initialDate ? [initialDate] : [],
@@ -125,11 +127,13 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   return (
     <Dropdown
       trigger={
-        <FilterBarItem
-          title={title}
-          value={getDisplayValue()}
-          onClick={() => {}}
-        />
+        triggerComponent || (
+          <FilterBarItem
+            title={title || { en: '', ar: '' }}
+            value={getDisplayValue()}
+            onClick={() => {}}
+          />
+        )
       }
       content={dropdownContent}
       position='bottom-left'
