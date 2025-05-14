@@ -6,6 +6,7 @@ import { Formik, Form, FormikHelpers } from 'formik';
 import { ResetPasswordSchema } from '@utils/formsSchemas';
 import { toast } from 'react-toastify';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
 
 interface ResetPasswordFormValues {
   password: string;
@@ -18,6 +19,7 @@ export default function ResetPasswordPage(): React.ReactElement {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+  const { t } = useTranslation();
 
   const handleSubmit = async (
     values: ResetPasswordFormValues,
@@ -58,30 +60,28 @@ export default function ResetPasswordPage(): React.ReactElement {
   return (
     <main className='relative flex min-h-screen flex-col items-center bg-white px-4'>
       {/* Reset Password Button Top Right */}
+
       <div className='absolute right-0 top-0'>
-        <div className='h-[65px] w-[240px] overflow-hidden'>
-          <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
-            <span className='text-lg font-medium text-white'>
-              Reset Password
-            </span>
+        <div className='h-[65px] w-[327px] overflow-hidden'>
+          <div className='absolute right-0 top-0 h-[65px] w-[327px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
+            <span className='w-[175px] h-[36px] font-medium text-[25px] leading-[100%] text-white flex items-center justify-center whitespace-nowrap'>Reset Your Password</span>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className='mt-52 w-full max-w-sm space-y-12 px-4 sm:max-w-md'>
+      <div className='mt-52 w-full max-w-[296px] space-y-8'>
         {/* Heading */}
-        <div className='flex items-center justify-center whitespace-nowrap'>
-          <h1 className='text-[#222222] text-[32px] leading-[32px] font-bold'>
+        <div className='flex items-center justify-center'>
+          <h1 className='text-[#222222] font-normal font-bold text-[25px] leading-[32px]'>
             Reset Your&nbsp;
+            <span className='text-[#47C409]'>Password</span>
           </h1>
-          <span className='text-[#47C409] text-[32px] leading-[32px] font-bold'>
-            Password
-          </span>
         </div>
 
+
         {/* Description */}
-        <p className='text-left text-gray-600 mb-8 font-medium'>
+        <p className='text-left text-[#222222] w-[296px] h-[34px] font-normal text-[14px] leading-[100%]'>
           Your new password must be different from previously used passwords
         </p>
 
@@ -98,7 +98,7 @@ export default function ResetPasswordPage(): React.ReactElement {
             {({ values, errors, touched, handleChange, handleBlur }) => (
               <Form className='space-y-12' noValidate>
                 {/* Password Field */}
-                <div className='space-y-8'>
+                <div className='space-y-4'>
                   <div className='relative'>
                     <div className='relative'>
                       <input
@@ -107,26 +107,25 @@ export default function ResetPasswordPage(): React.ReactElement {
                         placeholder='New Password'
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className={`h-14 w-full rounded-lg border ${
-                          touched.password && errors.password
-                            ? 'border-red-500'
-                            : 'border-gray-200'
-                        } bg-white px-4 text-lg font-bold text-gray-900 placeholder:font-medium placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]`}
+                        className={`w-[296px] h-[48px] rounded-lg border ${touched.password && errors.password
+                          ? 'border-red-500'
+                          : 'border-gray-200'
+                          } bg-white px-4 text-lg font-bold text-gray-900 placeholder:w-[144px] placeholder:h-[17.98px] placeholder:font-normal placeholder:font-[400] placeholder:text-[14px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]`}
                       />
                       <button
                         type='button'
                         onClick={() => setShowPassword(!showPassword)}
-                        className='absolute right-4 top-1/2 -translate-y-1/2 text-[#47C409]'
+                        className='absolute right-4 top-1/2 -translate-y-1/2 text-[#47C409] z-10'
                       >
                         {showPassword ? (
-                          <EyeSlashIcon className='h-6 w-6' />
-                        ) : (
                           <EyeIcon className='h-6 w-6' />
+                        ) : (
+                          <EyeSlashIcon className='h-6 w-6' />
                         )}
                       </button>
                     </div>
                     {touched.password && errors.password && (
-                      <div className='absolute -bottom-6 left-0'>
+                      <div className='mt-1'>
                         <p className='text-sm text-red-500 font-medium'>
                           {errors.password}
                         </p>
@@ -143,28 +142,25 @@ export default function ResetPasswordPage(): React.ReactElement {
                         placeholder='Confirm New Password'
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className={`h-14 w-full rounded-lg border ${
-                          touched.confirmPassword && errors.confirmPassword
-                            ? 'border-red-500'
-                            : 'border-gray-200'
-                        } bg-white px-4 text-lg font-bold text-gray-900 placeholder:font-medium placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]`}
+                        className={`w-[296px] h-[48px] rounded-lg border ${touched.confirmPassword && errors.confirmPassword
+                          ? 'border-red-500'
+                          : 'border-gray-200'
+                          } bg-white px-4 text-lg font-bold text-gray-900 placeholder:w-[144px] placeholder:h-[17.98px] placeholder:font-normal placeholder:font-[400] placeholder:text-[14px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]`}
                       />
                       <button
                         type='button'
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                        className='absolute right-4 top-1/2 -translate-y-1/2 text-[#47C409]'
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className='absolute right-4 top-1/2 -translate-y-1/2 text-[#47C409] z-10'
                       >
                         {showConfirmPassword ? (
-                          <EyeSlashIcon className='h-6 w-6' />
-                        ) : (
                           <EyeIcon className='h-6 w-6' />
+                        ) : (
+                          <EyeSlashIcon className='h-6 w-6' />
                         )}
                       </button>
                     </div>
                     {touched.confirmPassword && errors.confirmPassword && (
-                      <div className='absolute -bottom-6 left-0'>
+                      <div className='mt-1'>
                         <p className='text-sm text-red-500 font-medium'>
                           {errors.confirmPassword}
                         </p>
@@ -176,11 +172,10 @@ export default function ResetPasswordPage(): React.ReactElement {
                 <button
                   type='submit'
                   disabled={isLoading}
-                  className={`w-full rounded-lg bg-[#47C409] py-3 text-white font-bold transition-colors ${
-                    isLoading
-                      ? 'cursor-not-allowed opacity-70'
-                      : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
-                  }`}
+                  className={`w-full rounded-lg bg-[#47C409] py-3 text-white font-bold transition-colors ${isLoading
+                    ? 'cursor-not-allowed opacity-70'
+                    : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
+                    }`}
                 >
                   {isLoading ? 'Changing Password...' : 'Change Password'}
                 </button>

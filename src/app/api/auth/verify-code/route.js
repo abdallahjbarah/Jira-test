@@ -1,12 +1,16 @@
 import { NextResponse } from "next/server";
-import { VerificationCodeSchema } from "@utils/formsSchemas";
 
 export async function POST(request) {
     try {
         const body = await request.json();
+        const { code } = body;
 
-        // Validate the request body against the schema
-        await VerificationCodeSchema.validate(body);
+        if (!code || code.length !== 4) {
+            return NextResponse.json(
+                { message: "Invalid verification code" },
+                { status: 400 }
+            );
+        }
 
         // TODO: Replace with actual verification logic
         // This is a mock response for demonstration

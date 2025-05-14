@@ -91,8 +91,10 @@ export const ForgetPasswordEmailSchema = Yup.object().shape({
 
 // Verification Code
 export const VerificationCodeSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Email is required'),
-  code: Yup.number().required('Code is required'),
+  code0: Yup.string().matches(/^[0-9]$/, 'Must be a digit'),
+  code1: Yup.string().matches(/^[0-9]$/, 'Must be a digit'),
+  code2: Yup.string().matches(/^[0-9]$/, 'Must be a digit'),
+  code3: Yup.string().matches(/^[0-9]$/, 'Must be a digit'),
 });
 
 // Reset Password Forget

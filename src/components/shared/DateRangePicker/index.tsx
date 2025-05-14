@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChevronUpIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/utils/cn';
 
 type DateSelectionMode = 'single' | 'range';
@@ -37,6 +37,9 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     selectedDates[0] || new Date(),
   );
 
+  const [showYearPicker, setShowYearPicker] = useState(false);
+  const [showMonthPicker, setShowMonthPicker] = useState(false);
+
   // Get the month name and year for display
   const monthYearString = currentMonth.toLocaleDateString('en-US', {
     month: 'long',
@@ -55,6 +58,38 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     setCurrentMonth(
       new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1),
     );
+  };
+
+  // Generate years for the year picker
+  const generateYears = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    const startYear = currentYear - 100; // Show 100 years back
+    const endYear = currentYear; // Up to current year
+
+    for (let year = startYear; year <= endYear; year++) {
+      years.push(year);
+    }
+    return years;
+  };
+
+  // Handle year selection
+  const handleYearSelect = (year: number) => {
+    setCurrentMonth(new Date(year, currentMonth.getMonth(), 1));
+    setShowYearPicker(false);
+  };
+
+  // Handle month selection
+  const handleMonthSelect = (month: number) => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), month, 1));
+    setShowMonthPicker(false);
+  };
+
+  // Get month names
+  const getMonthNames = () => {
+    return Array.from({ length: 12 }, (_, i) => {
+      return new Date(2000, i, 1).toLocaleString('default', { month: 'long' });
+    });
   };
 
   // Generate days for the current month view
@@ -192,17 +227,23 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   const days = getDaysInMonth();
 
   return (
-    <div
-      className={cn(
-        'bg-white rounded-lg shadow-lg p-4 w-full max-w-[320px]',
-        className,
-      )}
-    >
+    <div className={cn('bg-white rounded-lg shadow-lg p-4 w-full max-w-[320px] relative', className)}>
       {/* Header with month/year and navigation */}
       <div className='flex justify-between items-center mb-4'>
-        <h2 className='text-lg font-medium text-green-600'>
-          {monthYearString}
-        </h2>
+        <div className='flex items-center gap-2'>
+          <button
+            onClick={() => setShowMonthPicker(!showMonthPicker)}
+            className='text-lg font-medium text-green-600 hover:bg-gray-100 px-2 py-1 rounded'
+          >
+            {currentMonth.toLocaleDateString('en-US', { month: 'long' })}
+          </button>
+          <button
+            onClick={() => setShowYearPicker(!showYearPicker)}
+            className='text-lg font-medium text-green-600 hover:bg-gray-100 px-2 py-1 rounded'
+          >
+            {currentMonth.getFullYear()}
+          </button>
+        </div>
         <div className='flex space-x-2'>
           <button
             onClick={prevMonth}
@@ -220,6 +261,60 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Month Picker */}
+      {showMonthPicker && (
+        <div className='absolute top-0 left-0 right-0 z-20 bg-white rounded-lg shadow-lg p-2 max-h-[200px] overflow-y-auto'>
+          <div className='flex justify-between items-center mb-2'>
+            <h3 className='text-sm font-medium text-gray-700'>Select Month</h3>
+            <button
+              onClick={() => setShowMonthPicker(false)}
+              className='p-1 rounded-full hover:bg-gray-100'
+            >
+              <XMarkIcon className='w-4 h-4 text-gray-500' />
+            </button>
+          </div>
+          <div className='grid grid-cols-3 gap-1'>
+            {getMonthNames().map((month, index) => (
+              <button
+                key={month}
+                onClick={() => handleMonthSelect(index)}
+                className={`px-2 py-1 text-sm rounded hover:bg-gray-100 ${index === currentMonth.getMonth() ? 'bg-green-100 text-green-600' : ''
+                  }`}
+              >
+                {month}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Year Picker */}
+      {showYearPicker && (
+        <div className='absolute top-0 left-0 right-0 z-20 bg-white rounded-lg shadow-lg p-2 max-h-[200px] overflow-y-auto'>
+          <div className='flex justify-between items-center mb-2'>
+            <h3 className='text-sm font-medium text-gray-700'>Select Year</h3>
+            <button
+              onClick={() => setShowYearPicker(false)}
+              className='p-1 rounded-full hover:bg-gray-100'
+            >
+              <XMarkIcon className='w-4 h-4 text-gray-500' />
+            </button>
+          </div>
+          <div className='grid grid-cols-4 gap-1'>
+            {generateYears().map((year) => (
+              <button
+                key={year}
+                onClick={() => handleYearSelect(year)}
+                className={`px-2 py-1 text-sm rounded hover:bg-gray-100 ${year === currentMonth.getFullYear() ? 'bg-green-100 text-green-600' : ''
+                  }`}
+              >
+                {year}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Calendar grid */}
       <div className='grid grid-cols-7 gap-1'>
@@ -239,13 +334,12 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             key={index}
             onClick={() => date && handleDateClick(date)}
             disabled={!date || isDateDisabled(date)}
-            className={`relative h-10 w-10 flex items-center justify-center ${
-              !date
-                ? 'invisible'
-                : isDateDisabled(date)
-                  ? 'text-gray-300 cursor-not-allowed'
-                  : ''
-            }`}
+            className={`relative h-10 w-10 flex items-center justify-center ${!date
+              ? 'invisible'
+              : isDateDisabled(date)
+                ? 'text-gray-300 cursor-not-allowed'
+                : ''
+              }`}
           >
             {/* Range background */}
             {date && mode === 'range' && isDateInRange(date) && (
@@ -267,16 +361,15 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
             {/* Date circle */}
             <span
-              className={`relative z-10 flex items-center justify-center h-8 w-8 rounded-full ${
-                date &&
+              className={`relative z-10 flex items-center justify-center h-8 w-8 rounded-full ${date &&
                 (isStartDate(date) ||
                   isEndDate(date) ||
                   (mode === 'single' && isDateSelected(date)))
-                  ? 'bg-black text-white'
-                  : date && !isDateDisabled(date)
-                    ? 'hover:bg-gray-100 text-gray-800'
-                    : ''
-              }`}
+                ? 'bg-black text-white'
+                : date && !isDateDisabled(date)
+                  ? 'hover:bg-gray-100 text-gray-800'
+                  : ''
+                }`}
             >
               {date?.getDate()}
             </span>
