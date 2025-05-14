@@ -147,68 +147,68 @@ export default function SignUpPage(): React.ReactElement {
               isSubmitting,
               handleSubmit,
             }) => (
-                <Form className='space-y-4'>
-                  {/* Name Fields */}
-                  <div className='grid grid-cols-2 gap-4'>
-                    <div>
-                      <input
-                        type='text'
-                        id='firstName'
-                        name='firstName'
-                        autoComplete='given-name'
-                        placeholder='First Name'
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      value={values.firstName}
-                        className='w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:w-[144px] placeholder:h-[17.98px] placeholder:font-normal placeholder:font-[400] placeholder:text-[14px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
-                      />
-                    {touched.firstName && errors.firstName && isSubmitting && (
-                        <p className='mt-1 text-sm text-red-600'>
-                          {errors.firstName}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <input
-                        type='text'
-                        id='lastName'
-                        name='lastName'
-                        autoComplete='family-name'
-                        placeholder='Last Name'
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      value={values.lastName}
-                        className='w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:w-[144px] placeholder:h-[17.98px] placeholder:font-normal placeholder:font-[400] placeholder:text-[14px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
-                      />
-                    {touched.lastName && errors.lastName && isSubmitting && (
-                        <p className='mt-1 text-sm text-red-600'>
-                          {errors.lastName}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Email Field */}
+              <Form className='space-y-4'>
+                {/* Name Fields */}
+                <div className='grid grid-cols-2 gap-4'>
                   <div>
                     <input
-                      type='email'
-                      id='email'
-                      name='email'
-                      autoComplete='email'
-                      placeholder='Email'
+                      type='text'
+                      id='firstName'
+                      name='firstName'
+                      autoComplete='given-name'
+                      placeholder='First Name'
                       onChange={handleChange}
                       onBlur={handleBlur}
-                    value={values.email}
+                      value={values.firstName}
                       className='w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:w-[144px] placeholder:h-[17.98px] placeholder:font-normal placeholder:font-[400] placeholder:text-[14px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
                     />
-                  {touched.email && errors.email && isSubmitting && (
+                    {touched.firstName && errors.firstName && isSubmitting && (
                       <p className='mt-1 text-sm text-red-600'>
-                        {errors.email}
+                        {errors.firstName}
                       </p>
                     )}
                   </div>
+                  <div>
+                    <input
+                      type='text'
+                      id='lastName'
+                      name='lastName'
+                      autoComplete='family-name'
+                      placeholder='Last Name'
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.lastName}
+                      className='w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:w-[144px] placeholder:h-[17.98px] placeholder:font-normal placeholder:font-[400] placeholder:text-[14px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
+                    />
+                    {touched.lastName && errors.lastName && isSubmitting && (
+                      <p className='mt-1 text-sm text-red-600'>
+                        {errors.lastName}
+                      </p>
+                    )}
+                  </div>
+                </div>
 
-                  {/* Phone Number Field */}
+                {/* Email Field */}
+                <div>
+                  <input
+                    type='email'
+                    id='email'
+                    name='email'
+                    autoComplete='email'
+                    placeholder='Email'
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.email}
+                    className='w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:w-[144px] placeholder:h-[17.98px] placeholder:font-normal placeholder:font-[400] placeholder:text-[14px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
+                  />
+                  {touched.email && errors.email && isSubmitting && (
+                    <p className='mt-1 text-sm text-red-600'>
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
+
+                {/* Phone Number Field */}
                 <div className="flex gap-2">
                   <div className="w-[111px]">
                     <button
@@ -231,9 +231,9 @@ export default function SignUpPage(): React.ReactElement {
                         </svg>
                       </div>
                     </button>
-                    </div>
+                  </div>
                   <div className="w-[190px]">
-                      <input
+                    <input
                       type="tel"
                       {...register('phoneNumberLocal', {
                         onChange: (e) => {
@@ -246,47 +246,47 @@ export default function SignUpPage(): React.ReactElement {
                       })}
                       placeholder="Phone Number"
                       className="box-border w-full h-[48px] bg-white border border-[#EEEEEE] rounded-[8px] px-4 text-[14px] font-normal leading-[17px] text-[#555555] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] transform transition-all hover:shadow-md"
-                      />
-                    </div>
+                    />
                   </div>
+                </div>
                 {touched.phoneNumber && errors.phoneNumber && isSubmitting && (
                   <p className="mt-1 text-sm text-red-500">
                     {errors.phoneNumber?.toString()}
+                  </p>
+                )}
+
+                {/* Password Field */}
+                <div className='relative'>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id='password'
+                    name='password'
+                    autoComplete='new-password'
+                    placeholder='Password'
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    className='w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:w-[144px] placeholder:h-[17.98px] placeholder:font-normal placeholder:font-[400] placeholder:text-[14px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
+                  />
+                  <button
+                    type='button'
+                    onClick={() => setShowPassword(!showPassword)}
+                    className='absolute right-3 top-1/2 -translate-y-1/2 transform'
+                  >
+                    {showPassword ? (
+                      <EyeIcon className='h-5 w-5 text-[#47C409]' />
+                    ) : (
+                      <EyeSlashIcon className='h-5 w-5 text-[#47C409]' />
+                    )}
+                  </button>
+                  {touched.password && errors.password && isSubmitting && (
+                    <p className='mt-1 text-sm text-red-600'>
+                      {errors.password}
                     </p>
                   )}
+                </div>
 
-                  {/* Password Field */}
-                  <div className='relative'>
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      id='password'
-                      name='password'
-                      autoComplete='new-password'
-                      placeholder='Password'
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    value={values.password}
-                      className='w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:w-[144px] placeholder:h-[17.98px] placeholder:font-normal placeholder:font-[400] placeholder:text-[14px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
-                    />
-                    <button
-                      type='button'
-                      onClick={() => setShowPassword(!showPassword)}
-                      className='absolute right-3 top-1/2 -translate-y-1/2 transform'
-                    >
-                      {showPassword ? (
-                      <EyeSlashIcon className='h-5 w-5 text-[#47C409]' />
-                      ) : (
-                      <EyeIcon className='h-5 w-5 text-[#47C409]' />
-                      )}
-                    </button>
-                  {touched.password && errors.password && isSubmitting && (
-                      <p className='mt-1 text-sm text-red-600'>
-                        {errors.password}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Terms and Conditions */}
+                {/* Terms and Conditions */}
                 <div className='flex items-center gap-2'>
                   <div className='relative'>
                     <input
@@ -334,32 +334,32 @@ export default function SignUpPage(): React.ReactElement {
                     and{" "}
                     <a href="/usage-agreement" className="text-[#233785] underline hover:text-[#1a2a6d] transition-colors">
                       Usage Agreement
-                      </a>
-                    </label>
-                  </div>
+                    </a>
+                  </label>
+                </div>
                 {touched.agreeToTerms && errors.agreeToTerms && isSubmitting && (
                   <p className="mt-1 text-sm text-red-600 text-center">{errors.agreeToTerms.toString()}</p>
-                  )}
+                )}
 
-                  {/* Submit Button */}
-                  <button
-                    type='submit'
-                    disabled={isLoading || isSubmitting || !values.agreeToTerms}
-                    className={`w-full rounded-lg bg-[#47C409] py-3 text-white transition-colors ${isLoading || isSubmitting || !values.agreeToTerms
-                      ? 'cursor-not-allowed opacity-70'
-                      : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
-                      }`}
-                  >
-                    {isLoading || isSubmitting ? (
-                      <div className='flex items-center justify-center'>
-                        <span className='mr-2'>Creating Account...</span>
-                        <div className='h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent'></div>
-                      </div>
-                    ) : (
-                      'Sign Up'
-                    )}
-                  </button>
-                </Form>
+                {/* Submit Button */}
+                <button
+                  type='submit'
+                  disabled={isLoading || isSubmitting || !values.agreeToTerms}
+                  className={`w-full rounded-lg bg-[#47C409] py-3 text-white transition-colors ${isLoading || isSubmitting || !values.agreeToTerms
+                    ? 'cursor-not-allowed opacity-70'
+                    : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
+                    }`}
+                >
+                  {isLoading || isSubmitting ? (
+                    <div className='flex items-center justify-center'>
+                      <span className='mr-2'>Creating Account...</span>
+                      <div className='h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent'></div>
+                    </div>
+                  ) : (
+                    'Sign Up'
+                  )}
+                </button>
+              </Form>
             )}
           </Formik>
 
@@ -382,9 +382,9 @@ export default function SignUpPage(): React.ReactElement {
             <div className="w-[123px] border-t-[1px] border-solid border-[#EEEEEE]"></div>
             <div className="mx-[16.5px]">
               <span className="w-[17px] bg-white text-[14px] font-normal leading-[17px] text-[#222222]">Or</span>
-              </div>
-            <div className="w-[123px] border-t-[1px] border-solid border-[#EEEEEE]"></div>
             </div>
+            <div className="w-[123px] border-t-[1px] border-solid border-[#EEEEEE]"></div>
+          </div>
 
           {/* Social Login Buttons */}
           <div className="space-y-3 flex flex-col items-center">
@@ -397,30 +397,30 @@ export default function SignUpPage(): React.ReactElement {
               </svg>
               <span>Apple</span>
             </button>
-              <button
+            <button
               type="button"
               className="box-border w-[296px] h-[50.77px] flex items-center justify-center gap-3 rounded-[8px] border border-solid border-[#CCCCCC] bg-white text-[14px] font-bold leading-[17px] text-[#222222] transition-all hover:bg-gray-50 hover:shadow-md hover:scale-[1.02]"
-              >
+            >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                </svg>
-                <span>Google</span>
-              </button>
-              <button
+              </svg>
+              <span>Google</span>
+            </button>
+            <button
               type="button"
               className="box-border w-[296px] h-[50.77px] flex items-center justify-center gap-3 rounded-[8px] border border-solid border-[#CCCCCC] bg-white text-[14px] font-bold leading-[17px] text-[#222222] transition-all hover:bg-gray-50 hover:shadow-md hover:scale-[1.02]"
-              >
+            >
               <svg className="h-6 w-6" viewBox="0 0 320 512" fill="#1877F2">
                 <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" />
-                </svg>
-                <span>Facebook</span>
-              </button>
-            </div>
+              </svg>
+              <span>Facebook</span>
+            </button>
           </div>
         </div>
+      </div>
 
       <CountrySelectionModal
         isOpen={showCountryModal}
