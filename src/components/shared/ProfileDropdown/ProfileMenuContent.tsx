@@ -10,7 +10,7 @@ const ProfileMenuContent: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <div className='bg-white rounded-lg shadow-lg w-72 p-6 border border-solid border-secondary_3 max-h-[44.813rem] overflow-y-auto'>
+    <div className='bg-white rounded-lg shadow-lg w-[22.5rem] p-6 border border-solid border-secondary_3 max-h-[44.813rem] overflow-y-auto'>
       {/* Profile Header */}
       <div className='flex flex-col items-center justify-center mb-6'>
         <div className='w-16 h-16 rounded-full overflow-hidden mb-2 bg-gray-100 flex items-center justify-center'>

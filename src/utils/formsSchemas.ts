@@ -136,3 +136,20 @@ export const ResetPasswordSchema = Yup.object().shape({
     .required('Please confirm your password')
     .oneOf([Yup.ref('password')], 'Passwords must match'),
 });
+
+// Personal Information Schema
+export const personalInfoSchema = Yup.object().shape({
+  firstName: Yup.string().required('First name is required'),
+  lastName: Yup.string().required('Last name is required'),
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  phoneNumber: Yup.string().required('Phone number is required'),
+  birthdate: Yup.date().nullable(),
+  gender: Yup.string().nullable(),
+  nationality: Yup.string().nullable(),
+  location: Yup.string().nullable(),
+});
+
+// Currency Schema
+export const currencySchema = Yup.object().shape({
+  currency: Yup.string().required('Currency is required'),
+});

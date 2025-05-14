@@ -69,6 +69,34 @@ const en = {
     termsOfService: 'Terms of Service',
     checkTerms: 'Check our terms of service',
     logout: 'Logout',
+    // Personal Information form
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    phoneNumber: 'Phone Number',
+    birthdate: 'Birthdate',
+    gender: 'Gender',
+    male: 'Male',
+    female: 'Female',
+    nationality: 'Nationality',
+    location: 'Location',
+    save: 'Save',
+    cancel: 'Cancel',
+    // Security form
+    oldPassword: 'Old Password',
+    newPassword: 'New Password',
+    confirmPassword: 'Confirm Password',
+    changePasswordBtn: 'Change Password',
+    // Currency form
+    selectCurrency: 'Select Currency',
+    currencyDescription: 'Select your preferred currency for displaying prices',
+    currencies: {
+      usd: 'United States Dollar',
+      jod: 'Jordanian Dinar',
+      aud: 'Australian Dollar',
+      brl: 'Brazilian Real',
+      gbp: 'Pound Sterling',
+      eur: 'Euro',
+    },
   },
 };
 

@@ -30,6 +30,7 @@
     "react-loader-spinner": "^6.1.6",
     "react-phone-input-2": "^2.15.1",
     "react-range-slider-input": "^3.2.1",
+    "react-select": "^5.10.1",
     "react-toastify": "^10.0.5",
     "sass": "^1.77.1",
     "styled-components": "^6.1.18",

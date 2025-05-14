@@ -69,6 +69,34 @@ const ar = {
     termsOfService: 'شروط الخدمة',
     checkTerms: 'الاطلاع على شروط الخدمة',
     logout: 'تسجيل الخروج',
+    // Personal Information form
+    firstName: 'الاسم الأول',
+    lastName: 'اسم العائلة',
+    phoneNumber: 'رقم الهاتف',
+    birthdate: 'تاريخ الميلاد',
+    gender: 'الجنس',
+    male: 'ذكر',
+    female: 'أنثى',
+    nationality: 'الجنسية',
+    location: 'الموقع',
+    save: 'حفظ',
+    cancel: 'إلغاء',
+    // Security form
+    oldPassword: 'كلمة المرور القديمة',
+    newPassword: 'كلمة المرور الجديدة',
+    confirmPassword: 'تأكيد كلمة المرور',
+    changePasswordBtn: 'تغيير كلمة المرور',
+    // Currency form
+    selectCurrency: 'اختر العملة',
+    currencyDescription: 'اختر العملة المفضلة لعرض الأسعار',
+    currencies: {
+      usd: 'دولار أمريكي',
+      jod: 'دينار أردني',
+      aud: 'دولار أسترالي',
+      brl: 'ريال برازيلي',
+      gbp: 'جنيه إسترليني',
+      eur: 'يورو',
+    },
   },
 };
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/utils/cn';
 import React from 'react';
 
 interface RadioButtonProps {
@@ -28,22 +29,23 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   };
 
   return (
-    <div className={`flex items-center justify-between ${className}`}>
+    <label
+      className={cn(
+        'flex items-center justify-between cursor-pointer',
+        className,
+      )}
+      htmlFor={id}
+      onClick={handleChange}
+    >
       <div>
-        <label
-          htmlFor={id}
-          className='text-sm text-text_2 cursor-pointer select-none'
-          onClick={handleChange}
-        >
-          {label}
-        </label>
+        <span className='text-sm text-text_2 select-none'>{label}</span>
         {description && (
           <p className='text-xs text-gray_3 mt-1'>{description}</p>
         )}
       </div>
       <div
         onClick={handleChange}
-        className={`relative flex items-center justify-center w-5 h-5 rounded-full outline outline-1 transition-colors cursor-pointer ${
+        className={`relative flex items-center justify-center w-5 h-5 rounded-full outline outline-2 transition-colors cursor-pointer ${
           checked ? 'outline-primary_1' : 'outline-secondary_3'
         }`}
       >
@@ -53,7 +55,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
           <div className='absolute w-3 h-3 rounded-full bg-transparent border border-secondary_3'></div>
         )}
       </div>
-    </div>
+    </label>
   );
 };
 
