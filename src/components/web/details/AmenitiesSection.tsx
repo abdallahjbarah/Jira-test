@@ -2,8 +2,15 @@ import React from 'react';
 import CustomSvg from '@/components/ui/CustomSvg';
 
 interface Amenity {
-  icon: string;
-  title: string;
+  _id: string;
+  nameEn: string;
+  nameAr: string;
+  category: {
+    _id: string;
+    nameEn: string;
+    nameAr: string;
+  }[];
+  iconPath: string;
 }
 
 interface AmenitiesSectionProps {
@@ -22,13 +29,13 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({ amenities }) => (
           key={index}
         >
           <CustomSvg
-            src={amenity.icon}
+            src={'/SVGs/home/Email.svg'}
             width={24}
             height={24}
             color='black'
           />
           <p className='font-custom-400 font-sans text-text_1 text-custom-20'>
-            {amenity.title}
+            {amenity?.nameEn}
           </p>
         </div>
       ))}

@@ -20,7 +20,7 @@ function CollectionCard({
   };
 
   return (
-    <Link href={`/collections/${collection.id}`} className='group block'>
+    <Link href={`/details/${collection.id}`} className='group block'>
       <div className='transition-all duration-300'>
         <div className='relative rounded-custom-16 overflow-hidden'>
           <div className='w-full aspect-square relative overflow-hidden'>

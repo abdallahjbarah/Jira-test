@@ -17,6 +17,12 @@ import SimilarExperiencesSection from '@/components/web/details/SimilarExperienc
 import OverviewSection from '@/components/web/details/OverviewSection';
 import LocationSection from '@/components/web/details/LocationSection';
 import WhatToExpectSection from '@/components/web/details/WhatToExpectSection';
+import ItinerarySection from '@/components/web/details/ItinerarySection';
+import StaysFeature from '@/components/web/details/StaysFeature';
+import StayDetailsSection from '@/components/web/details/StayDetailsSection';
+import NearbySurroundingsSection from '@/components/web/details/NearbySurroundingsSection';
+import HouseRulesSection from '@/components/web/details/HouseRulesSection';
+import SpecialInstructionsAndCancellationSection from '@/components/web/details/SpecialInstructionsAndCancellationSection';
 
 interface DetailsIdProps {
   params: { lang: Locale; id: string };
@@ -71,28 +77,6 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
     },
   ];
 
-  const amenities: {
-    icon: string;
-    title: string;
-  }[] = [
-    {
-      icon: '/SVGs/home/Email.svg',
-      title: 'Wifi',
-    },
-    {
-      icon: '/SVGs/home/Email.svg',
-      title: 'Parking',
-    },
-    {
-      icon: '/SVGs/home/Email.svg',
-      title: 'Cafeteria',
-    },
-    {
-      icon: '/SVGs/home/Email.svg',
-      title: 'Pets Allowed',
-    },
-  ];
-
   const collectionStatus = 'all';
   const { data: collections, isLoading: isCollectionsLoading } =
     useFetchCollections(collectionStatus as CollectionStatus, {
@@ -142,29 +126,27 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
     );
   }
 
-  const { title, location, price, images, rating, bookable } = detailsData.data;
-
-  // Prepare host info data
-  const hosts = [
-    {
-      image: images[2]?.src,
-      name: 'Host Information',
-      languages: 'Rana Ahmad • Hosted in English and Arabic',
-      description:
-        'Lorem ipsum dolor sit amet consectetur. Tellus commodo imperdiet risus venenatis. Diam ultricies venenatis lectus mauris risus id.',
-    },
-    {
-      image: images[2]?.src,
-      name: 'Co-host Information',
-      languages: 'Rana Ahmad • Hosted in English and Arabic',
-      description:
-        'Lorem ipsum dolor sit amet consectetur. Tellus commodo imperdiet risus venenatis. Diam ultricies venenatis lectus mauris risus id.',
-    },
-  ];
+  const {
+    title,
+    location,
+    price,
+    images,
+    bookable,
+    type,
+    checkinTime,
+    checkoutTime,
+    languages,
+    host,
+    coHost,
+    itineraryStops,
+    amenities
+  } = detailsData.data;
 
   // Example overview and what to expect text (replace with real data as needed)
-  const overviewText = 'jksalknlknaskldnsalksnfkldsnflkdsnfkndskfnkldsnfkddasdasdasdaskldjalksjdklasjdlkashlk';
-  const whatToExpectText = 'After breakfast and the easy walk, you can have the best glass of harvested natural rainwater that truly has the properties of natural water (no smell, taste, or color) osurrounding.....';
+  const overviewText =
+    'jksalknlknaskldnsalksnfkldsnflkdsnfkndskfnkldsnfkddasdasdasdaskldjalksjdklasjdlkashlk';
+  const whatToExpectText =
+    'After breakfast and the easy walk, you can have the best glass of harvested natural rainwater that truly has the properties of natural water (no smell, taste, or color) osurrounding.....';
 
   return (
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
@@ -212,61 +194,78 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
               </div>
               <Divider className='w-full my-8' />
               {/* Overview Section */}
-              <OverviewSection overview={overviewText} isExpanded={isExpanded} onToggleExpand={() => setIsExpanded(!isExpanded)} />
-              <Divider className='w-full my-8' />
-              {/* Location Section */}
-              <LocationSection location='Bookagri farmer garden in Balqa' mapImage={images[1]?.src} mapAlt='map' />
-              <Divider className='w-full my-8' />
-              {/* Features Section */}
-              <FeaturesSection features={features} />
+              <OverviewSection
+                overview={overviewText}
+                isExpanded={isExpanded}
+                onToggleExpand={() => setIsExpanded(!isExpanded)}
+              />
+              {type != 'offers' && (
+                <>
+                  <Divider className='w-full my-8' />
+                  {/* Location Section */}
+                  <LocationSection
+                    location='Bookagri farmer garden in Balqa'
+                    latitude={31.431555608636437}
+                    longitude={35.802299612792986}
+                  />
+                </>
+              )}
+              {type === 'offers' && (
+                <>
+                  <Divider className='w-full my-8' />
+                  {/* Itinerary Section */}
+                  <ItinerarySection stops={itineraryStops || []} />
+                </>
+              )}
+              {type != 'stays' && (
+                <>
+                  <Divider className='w-full my-8' />
+                  {/* Features Section */}
+                  <FeaturesSection features={features} />
+                </>
+              )}
+              {type === 'stays' && (
+                <>
+                  <Divider className='w-full my-8' />
+                  <StaysFeature
+                    checkinTime={checkinTime}
+                    checkoutTime={checkoutTime}
+                    languages={languages}
+                  />
+                </>
+              )}
               <Divider className='w-full my-8' />
               {/* Host Info Section */}
-              <HostInfoSection hosts={hosts} />
+              {(host && coHost) && <HostInfoSection hosts={host} coHosts={coHost} />}
               <Divider className='w-full my-8' />
               {/* Amenities Section */}
-              <AmenitiesSection amenities={amenities} />
+              <AmenitiesSection amenities={amenities || []} />
             </div>
             {/* Booking Panel */}
             <BookingPanel price={price.amount} bookable={bookable} />
           </div>
-          <Divider className='w-full my-8' />
-          {/* What to Expect Section */}
-          <WhatToExpectSection description={whatToExpectText} images={images} />
-          <Divider className='w-full my-8' />
-          {/* Special Instructions and Cancellation Policy remain inline for now */}
-          <div className='flex justify-between items-start w-full'>
-            <div className='flex-1'>
-              <h2 className='font-custom-700 font-gellix-Bold text-custom-30 text-text_1 mb-4'>
-                Special Instructions
-              </h2>
-              <div className='mb-2'>
-                <span className='font-custom-700'>Food Allergies:</span>
-                <span className='font-custom-400 ml-2'>
-                  Declare any food allergies in advance.
-                </span>
-              </div>
-              <div className='mb-2'>
-                <span className='font-custom-700'>Medication:</span>
-                <span className='font-custom-400 ml-2'>
-                  Bring personal medication.
-                </span>
-              </div>
-              <div>
-                <span className='font-custom-700'>Attire:</span>
-                <span className='font-custom-400 ml-2'>
-                  Wear comfortable walking shoes and clothes.
-                </span>
-              </div>
-            </div>
-            <div className='flex-1'>
-              <h2 className='font-custom-700 font-gellix-Bold text-custom-30 text-text_1 mb-4'>
-                Cancellation Policy
-              </h2>
-              <p className='font-custom-400 font-sans text-custom-22 text-text_2'>
-                Cancel up to 24 hours before the start time for a full refund
-              </p>
-            </div>
-          </div>
+          {type != 'stays' && (
+            <>
+              <Divider className='w-full my-8' />
+              {/* What to Expect Section */}
+              <WhatToExpectSection
+                description={whatToExpectText}
+                images={images}
+              />
+              <Divider className='w-full my-8' />
+              <SpecialInstructionsAndCancellationSection />
+            </>
+          )}
+          {type === 'stays' && (
+            <>
+              <Divider className='w-full my-8' />
+              <StayDetailsSection details='Experience the comfort of our well-appointed accommodations with modern amenities and thoughtful touches to make your stay memorable.' />
+              <Divider className='w-full my-8' />
+              <NearbySurroundingsSection details='Discover the charm of our location with easy access to local attractions, restaurants, and cultural sites. Enjoy peaceful surroundings while staying connected to everything you need.' />
+              <Divider className='w-full my-8' />
+              <HouseRulesSection rules='Please respect quiet hours from 10 PM to 7 AM. No smoking inside. Pets allowed with prior approval. Keep common areas tidy. Check-in after 3 PM and check-out before 11 AM.' />
+            </>
+          )}
           <Divider className='w-full my-8' />
           {/* Similar Experiences Section */}
           <SimilarExperiencesSection collections={collections?.data || []} />

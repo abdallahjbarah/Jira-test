@@ -2,23 +2,36 @@ import React from 'react';
 import Image from 'next/image';
 
 interface Host {
-  image: string;
-  name: string;
-  languages: string;
+  _id: string;
+  profileImageUrl: string;
+  firstName: string;
+  lastName: string;
   description: string;
 }
 
-interface HostInfoSectionProps {
-  hosts: Host[];
+interface CoHost {
+  firstName: string;
+  lastName: string;
+  description: string;
+  languages: {
+    _id: string;
+    nameAr: string;
+    nameEn: string;
+  }[];
+  image?: string;
 }
 
-const HostInfoSection: React.FC<HostInfoSectionProps> = ({ hosts }) => (
+interface HostInfoSectionProps {
+  hosts?: Host;
+  coHosts?: CoHost;
+}
+
+const HostInfoSection: React.FC<HostInfoSectionProps> = ({ hosts, coHosts }) => (
   <div className='flex flex-col gap-10'>
-    {hosts.map((host, idx) => (
-      <div className='flex gap-4 items-start' key={idx}>
+      <div className='flex gap-4 items-start' >
         <div className='rounded-full w-20 h-20 flex-shrink-0'>
           <Image
-            src={host.image}
+            src={hosts?.profileImageUrl || ''}
             alt='host'
             width={80}
             height={80}
@@ -27,16 +40,35 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({ hosts }) => (
         </div>
         <div className='flex flex-col gap-1 justify-start'>
           <p className='font-custom-700 font-gellix-Bold text-text_1 text-custom-30'>
-            {host.name}
+            Host information
           </p>
           <p className='font-custom-400 font-sems text-text_3 text-custom-28'>
-            {host.languages}
-            <br />
-            {host.description}
+            {hosts?.description}
           </p>
         </div>
       </div>
-    ))}
+      <div className='flex gap-4 items-start' >
+        <div className='rounded-full w-20 h-20 flex-shrink-0'>
+          <Image
+            src={coHosts?.image || ''}
+            alt='host'
+            width={80}
+            height={80}
+            className='w-full h-full object-cover rounded-full'
+          />
+        </div>
+        <div className='flex flex-col gap-1 justify-start'>
+          <p className='font-custom-700 font-gellix-Bold text-text_1 text-custom-30'>
+            Co-Host information
+          </p>
+          <p className='font-custom-400 font-sems text-text_3 text-custom-28'>
+            {coHosts?.firstName} {coHosts?.lastName} • Hosted in {coHosts?.languages.map(language => language.nameEn).join(', ')}
+          </p>
+          <p className='font-custom-400 font-sems text-text_3 text-custom-28'>
+            {coHosts?.description}
+          </p>
+        </div>
+      </div>
   </div>
 );
 
