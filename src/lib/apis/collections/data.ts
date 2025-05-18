@@ -65,6 +65,17 @@ export interface Collection {
     }[];
     iconPath: string;
   }[];
+  schedule?: {
+    startDateTime: number;
+    endDateTime: number;
+    days: {
+      name: string;
+      slots?: { 
+        startTime: string;
+        id: string;
+      }[];
+    }[];
+  };
 }
 
 export const collectionsData: Record<CollectionStatus, Collection[]> = {
@@ -184,6 +195,127 @@ export const collectionsData: Record<CollectionStatus, Collection[]> = {
         iconPath: "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2"
       },
       ],
+      schedule: {
+      startDateTime: 1717200000000,
+      endDateTime: 1767225600000,
+      days: [
+        {
+          name: "Sunday",
+          slots: [
+            {
+              startTime: "1717239600000",
+              id: "898dc8e3-b5d3-489f-9df2-dac4c7528618"
+            },
+            {
+              startTime: "1717205400000",
+              id: "62769391-23cb-4953-8d4f-afc63a2a061e"
+            }
+          ]
+        },
+        {
+          name: "Monday",
+          slots: [
+            {
+              startTime: "1717232400000",
+              id: "d392d113-6285-4e32-97ac-fc6be3ece521"
+            },
+            {
+              startTime: "1717241400000",
+              id: "d7fb83c0-0915-4d0c-9cb5-87fe7bc40249"
+            }
+          ]
+        },
+        {
+          name: "Tuesday",
+          slots: [
+            {
+              startTime: "1717230600000",
+              id: "656270fe-0443-48cf-9499-6b434e1c9532"
+            },
+            {
+              startTime: "1717241400000",
+              id: "4e02047a-38de-43ad-b4f1-833081f31287"
+            },
+            {
+              startTime: "1717250400000",
+              id: "889da248-7561-4e3b-b408-768830ee6dd7"
+            }
+          ]
+        },
+        {
+          name: "Wednesday",
+          slots: [
+            {
+              startTime: "1717230600000",
+              id: "a3f7a225-72b0-40d9-accf-6e5d6072e5a9"
+            },
+            {
+              startTime: "1717239600000",
+              id: "f4c9ae1c-be91-4c15-bf3f-be33ee087234"
+            },
+            {
+              startTime: "1717250400000",
+              id: "e6956b3a-1c6b-40ed-b7cf-a6b8184d04d0"
+            }
+          ]
+        },
+        {
+          name: "Thursday",
+          slots: [
+            {
+              startTime: "1717230600000",
+              id: "aae7c1bc-2191-4af6-8b92-1769f355ee80"
+            },
+            {
+              startTime: "1717239600000",
+              id: "d037635d-febc-4117-b2aa-5758d56732fc"
+            },
+            {
+              startTime: "1717250400000",
+              id: "09b0fb72-9bc5-4d44-85fe-5539a20f9d3d"
+            },
+            {
+              startTime: "1717257600000",
+              id: "7819a838-19db-450e-a3a4-4a291697a86b"
+            }
+          ]
+        },
+        {
+          name: "Friday",
+          slots: [
+            {
+              startTime: "1717230600000",
+              id: "a7a58cb5-fabd-4874-9e4e-f6d33fc2146b"
+            },
+            {
+              startTime: "1717239600000",
+              id: "a52b89be-0ebd-4177-830d-53e90c9378a4"
+            },
+            {
+              startTime: "1717250400000",
+              id: "51a9c275-59cc-4e49-aa4e-f9ca658f7a30"
+            }
+          ]
+        },
+        {
+          name: "Saturday",
+          slots: [
+            {
+              startTime: "1717230600000",
+              id: "ab160deb-afde-4bbf-89d0-3448769368ca"
+            },
+            {
+              startTime: "1717241400000",
+              id: "be58bd31-dd6e-4a4d-a885-0990e2d9554e"
+            },
+            {
+              startTime: "1717250400000",
+              id: "c3eba63a-f51b-4ef6-9310-4d0fcc5a0bea"
+            }
+          ]
+        }
+      ]
+    }
     },
   ],
   stays: [

@@ -23,6 +23,7 @@ import StayDetailsSection from '@/components/web/details/StayDetailsSection';
 import NearbySurroundingsSection from '@/components/web/details/NearbySurroundingsSection';
 import HouseRulesSection from '@/components/web/details/HouseRulesSection';
 import SpecialInstructionsAndCancellationSection from '@/components/web/details/SpecialInstructionsAndCancellationSection';
+import ImageCarousel from '@/components/shared/ImageCarousel';
 
 interface DetailsIdProps {
   params: { lang: Locale; id: string };
@@ -139,7 +140,8 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
     host,
     coHost,
     itineraryStops,
-    amenities
+    amenities,
+    schedule
   } = detailsData.data;
 
   // Example overview and what to expect text (replace with real data as needed)
@@ -152,26 +154,11 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
         <div className='flex flex-col'>
-          <div className='rounded-custom-16 overflow-hidden w-full h-[71.6875rem] relative mb-20'>
-            <Image
-              src={images[0].src}
-              className='w-full h-full object-cover'
-              alt={images[0].alt}
-              fill
-            />
-            <button
-              className='absolute top-3 right-3 z-10 p-6 hover:!text-primary_2'
-              onClick={handleFavoriteToggle}
-            >
-              <CustomSvg
-                src='/SVGs/shared/heart-icon.svg'
-                width={30}
-                height={30}
-                color={isFavorite ? '#FE360A' : '#fff'}
-                className='transition-colors duration-200'
-              />
-            </button>
-          </div>
+          <ImageCarousel
+            images={images}
+            isFavorite={isFavorite}
+            onFavoriteToggle={handleFavoriteToggle}
+          />
           <div className='flex justify-between items-start gap-40'>
             <div className='flex flex-col gap-2 flex-[0.7]'>
               <div className='flex flex-col max-w-[37.5rem]'>
@@ -242,7 +229,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
               <AmenitiesSection amenities={amenities || []} />
             </div>
             {/* Booking Panel */}
-            <BookingPanel price={price.amount} bookable={bookable} />
+            <BookingPanel price={price.amount} bookable={bookable} schedule={schedule} params={params}/>
           </div>
           {type != 'stays' && (
             <>

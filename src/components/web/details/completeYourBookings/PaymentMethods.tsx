@@ -1,0 +1,51 @@
+import RadioButton from '@/components/ui/RadioButton';
+
+interface PaymentMethod {
+  title: string;
+  icon: string;
+  value: string;
+}
+
+interface PaymentMethodsProps {
+  methods: PaymentMethod[];
+  selectedMethod: string;
+  onMethodChange: (value: string) => void;
+}
+
+const PaymentMethods: React.FC<PaymentMethodsProps> = ({
+  methods,
+  selectedMethod,
+  onMethodChange,
+}) => {
+  return (
+    <div className='flex flex-col gap-14'>
+      <h2 className='text-3xl font-custom-700 text-text_1 font-gellix-Bold'>
+        Choose Payment Methods
+      </h2>
+      <div className='flex flex-col gap-4'>
+        {methods.map((method, index) => (
+          <div className='flex justify-between items-center' key={index}>
+            <div className='flex justify-center gap-2 items-center'>
+              <div className='max-w-[56px] min-w-[56px] max-h-[56px] min-h-[56px] rounded-xl bg-secondary_2 flex items-center justify-center'>
+                <img src={method.icon} alt={method.title} className='h-6 w-6' />
+              </div>
+              <h1 className='font-custom-600 text-text_1 font-gellix-Bold text-xl'>
+                {method.title}
+              </h1>
+            </div>
+            <RadioButton
+              id='paymentMethod'
+              name='paymentMethod'
+              label=''
+              value={method.value}
+              checked={selectedMethod === method.value}
+              onChange={() => onMethodChange(method.value)}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default PaymentMethods; 
