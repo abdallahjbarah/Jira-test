@@ -141,7 +141,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
     coHost,
     itineraryStops,
     amenities,
-    schedule
+    schedule,
   } = detailsData.data;
 
   // Example overview and what to expect text (replace with real data as needed)
@@ -154,12 +154,30 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
         <div className='flex flex-col'>
-          <ImageCarousel
-            images={images}
-            isFavorite={isFavorite}
-            onFavoriteToggle={handleFavoriteToggle}
-          />
-          <div className='flex justify-between items-start gap-40'>
+          <div className='relative h-screen'>
+            <ImageCarousel
+              images={images}
+              className='w-full h-full relative'
+              imageHeight='aspect-square'
+              slickProps={{
+                autoplay: false,
+                dots: images.length > 1,
+              }}
+            />
+            <button
+              className='absolute top-[1.875rem] right-[1.875rem] z-20 p-1 hover:!text-primary_2'
+              onClick={handleFavoriteToggle}
+            >
+              <CustomSvg
+                src='/SVGs/shared/heart-icon.svg'
+                width={44}
+                height={44}
+                color={isFavorite ? '#FE360A' : '#fff'}
+                className='transition-colors duration-200'
+              />
+            </button>
+          </div>
+          <div className='flex justify-between items-start gap-40 mt-20'>
             <div className='flex flex-col gap-2 flex-[0.7]'>
               <div className='flex flex-col max-w-[37.5rem]'>
                 <p className='text-text_1 text-custom-30 font-custom-500 font-sans max-w-[37.5rem] text-ellipsis min-w-[12.5rem] break-words line-clamp-2'>
@@ -223,13 +241,20 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
               )}
               <Divider className='w-full my-8' />
               {/* Host Info Section */}
-              {(host && coHost) && <HostInfoSection hosts={host} coHosts={coHost} />}
+              {host && coHost && (
+                <HostInfoSection hosts={host} coHosts={coHost} />
+              )}
               <Divider className='w-full my-8' />
               {/* Amenities Section */}
               <AmenitiesSection amenities={amenities || []} />
             </div>
             {/* Booking Panel */}
-            <BookingPanel price={price.amount} bookable={bookable} schedule={schedule} params={params}/>
+            <BookingPanel
+              price={price.amount}
+              bookable={bookable}
+              schedule={schedule}
+              params={params}
+            />
           </div>
           {type != 'stays' && (
             <>
