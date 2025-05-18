@@ -127,6 +127,7 @@ const ar = {
   signin: 'تسجيل الدخول',
   'signing-in': 'جاري تسجيل الدخول...',
   from: 'من',
+  exploreNow: 'استكشف الآن',
   wishlist: {
     wishlist: 'المفضلة',
     your: 'قائمة',
@@ -196,6 +197,19 @@ const ar = {
       gbp: 'جنيه استرليني',
       eur: 'يورو',
     },
+  },
+  myBookings: {
+    myBookings: 'حجوزاتي',
+    title: 'حجوزاتي',
+    description: 'عرض حجوزاتك وإدارتها',
+    noBookings:
+      'لم تقم بأي حجز حتى الآن! انطلق إلى عالم السياحة الزراعية وابدأ رحلتك.',
+    searchPlaceholder: 'ابحث برقم الحجز',
+  },
+  bookingStatus: {
+    upcoming: 'قادمة',
+    completed: 'مكتملة',
+    cancelled: 'ملغية',
   },
 };
 
