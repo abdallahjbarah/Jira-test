@@ -11,6 +11,7 @@
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.6.1",
     "@heroicons/react": "^2.2.0",
+    "@react-google-maps/api": "^2.20.6",
     "@tanstack/react-query": "^5.74.11",
     "@tanstack/react-query-devtools": "^5.74.11",
     "axios": "^1.6.8",
@@ -30,9 +31,11 @@
     "react-loader-spinner": "^6.1.6",
     "react-phone-input-2": "^2.15.1",
     "react-range-slider-input": "^3.2.1",
+    "react-slick": "^0.30.3",
     "react-select": "^5.10.1",
     "react-toastify": "^10.0.5",
     "sass": "^1.77.1",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.18",
     "tailwind-merge": "^3.2.0",
     "yup": "^1.4.0"
@@ -44,6 +47,7 @@
     "@types/node": "^22.15.3",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "@types/react-slick": "^0.23.13",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",

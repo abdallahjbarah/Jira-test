@@ -5,7 +5,7 @@ import FilterBarItem from '../FilterBar/FilterBarItem';
 import DateRangePicker from '../DateRangePicker';
 
 interface DatePickerDropdownProps {
-  title: {
+  title?: {
     en: string;
     ar: string;
   };
@@ -17,6 +17,18 @@ interface DatePickerDropdownProps {
   isCheckout?: boolean;
   checkInDate?: Date;
   value?: string;
+  triggerComponent?: React.ReactNode;
+  schedule?: {
+    startDateTime: number;
+    endDateTime: number;
+    days: {
+      name: string;
+      slots?: {
+        startTime: string;
+        id: string;
+      }[];
+    }[];
+  };
 }
 
 const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
@@ -29,9 +41,43 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   isCheckout = false,
   checkInDate,
   value,
+  triggerComponent,
+  schedule,
 }) => {
   const [selectedDates, setSelectedDates] = useState<Date[]>(
     initialDate ? [initialDate] : [],
+  );
+
+  // Convert schedule days to numbers and store slots
+  const { enabledDays } = useMemo(() => {
+    if (!schedule?.days) return { enabledDays: [], daySlots: new Map() };
+    
+    const days = schedule.days.map(day => {
+      let dayNumber = -1;
+      switch (day.name) {
+        case 'Sunday': dayNumber = 0; break;
+        case 'Monday': dayNumber = 1; break;
+        case 'Tuesday': dayNumber = 2; break;
+        case 'Wednesday': dayNumber = 3; break;
+        case 'Thursday': dayNumber = 4; break;
+        case 'Friday': dayNumber = 5; break;
+        case 'Saturday': dayNumber = 6; break;
+      }
+      return dayNumber;
+    }).filter(day => day !== -1);
+
+    return { enabledDays: days};
+  }, [schedule]);
+
+  // Convert schedule timestamps to dates
+  const startDate = useMemo(() => 
+    schedule?.startDateTime ? new Date(schedule.startDateTime) : undefined,
+    [schedule]
+  );
+
+  const endDate = useMemo(() => 
+    schedule?.endDateTime ? new Date(schedule.endDateTime) : undefined,
+    [schedule]
   );
 
   // Effect to sync with external value changes (from form)
@@ -94,6 +140,12 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
     setSelectedDates(dates);
 
     if (onChange) {
+      // Get slots for the selected date if available
+      let selectedSlots;
+      if (dates.length > 0) {
+        const dayOfWeek = dates[0].getDay();
+      }
+      
       onChange(getFormattedDateString(dates), dates);
     }
   };
@@ -118,6 +170,9 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
         mode={mode}
         minDate={effectiveMinDate}
         maxDate={maxDate}
+        enabledDays={enabledDays}
+        scheduleStartDate={startDate}
+        scheduleEndDate={endDate}
       />
     </div>
   );
@@ -125,11 +180,13 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   return (
     <Dropdown
       trigger={
-        <FilterBarItem
-          title={title}
-          value={getDisplayValue()}
-          onClick={() => {}}
-        />
+        triggerComponent || (
+          <FilterBarItem
+            title={title || { en: '', ar: '' }}
+            value={getDisplayValue()}
+            onClick={() => {}}
+          />
+        )
       }
       content={dropdownContent}
       position='bottom-left'

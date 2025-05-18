@@ -12,6 +12,9 @@ interface DateRangePickerProps {
   minDate?: Date;
   maxDate?: Date;
   className?: string;
+  enabledDays?: number[];
+  scheduleStartDate?: Date;
+  scheduleEndDate?: Date;
 }
 
 const DateRangePicker: React.FC<DateRangePickerProps> = ({
@@ -21,6 +24,9 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   minDate,
   maxDate,
   className = '',
+  enabledDays = [],
+  scheduleStartDate,
+  scheduleEndDate,
 }) => {
   console.log(selectedDates, 'selectedDatesselectedDates');
 
@@ -131,11 +137,28 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   const isDateDisabled = (date: Date) => {
     if (!date) return false;
 
+    // Get current date plus 2 days
+    const twoDaysFromNow = new Date();
+    twoDaysFromNow.setDate(twoDaysFromNow.getDate() + 2);
+    twoDaysFromNow.setHours(0, 0, 0, 0); // Set to start of day
+
+    // Check if date is within 2 days from now
+    if (date <= twoDaysFromNow) return true;
+
     // Check against min date
-    if (minDate && date <= minDate) return true;
+    if (minDate && date < minDate) return true;
 
     // Check against max date
     if (maxDate && date > maxDate) return true;
+
+    // Check against schedule start and end dates
+    if (scheduleStartDate && date < scheduleStartDate) return true;
+    if (scheduleEndDate && date > scheduleEndDate) return true;
+
+    // Check if the day is enabled
+    if (enabledDays.length > 0 && !enabledDays.includes(date.getDay())) {
+      return true;
+    }
 
     return false;
   };
