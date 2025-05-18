@@ -128,6 +128,7 @@ const en = {
   signin: 'Sign In',
   'signing-in': 'Signing in...',
   from: 'From',
+  exploreNow: 'Explore Now',
   wishlist: {
     wishlist: 'Wishlist',
     your: 'Your',
@@ -197,6 +198,21 @@ const en = {
       gbp: 'Pound Sterling',
       eur: 'Euro',
     },
+  },
+  myBookings: {
+    my: 'My',
+    bookings: 'Bookings',
+    title: 'My Bookings',
+    description: 'You have',
+    descriptionSecondLine: 'completed bookings',
+    noBookings:
+      "You haven't booked anything yet! Dive into the world of agritourism and start your journey.",
+    searchPlaceholder: 'Search by booking ID',
+  },
+  bookingStatus: {
+    upcoming: 'Upcoming',
+    completed: 'Completed',
+    cancelled: 'Cancelled',
   },
 };
 

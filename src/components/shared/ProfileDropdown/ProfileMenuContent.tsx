@@ -54,7 +54,7 @@ const ProfileMenuContent: React.FC = () => {
           label={t('profile.myBookings')}
           sublabel={t('profile.bookingSettings')}
           icon='/SVGs/shared/bookings.svg'
-          href='/profile/bookings'
+          href='/my-bookings'
         />
         <Divider />
 

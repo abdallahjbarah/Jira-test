@@ -15,7 +15,7 @@ function Hero({ className }: { className?: string }) {
     <section
       className={cn(
         styles['bg-linear-gradient'],
-        'relative w-full min-h-screen flex items-end justify-center laptopS:items-end laptopS:justify-start pb-[400px] laptopS:!pb-[calc(100vh-54%)]',
+        'relative w-full min-h-screen flex items-end justify-center laptopS:items-end laptopS:justify-start pb-[400px]',
         className,
       )}
     >

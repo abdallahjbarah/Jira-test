@@ -2,23 +2,28 @@
 
 import React from 'react';
 import Image from 'next/image';
-import Slider from 'react-slick';
+import Slider, { Settings as SlickSettings } from 'react-slick';
 import CustomSvg from '@/components/ui/CustomSvg';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-interface ImageCarouselProps {
+export interface ImageCarouselProps {
   images: { src: string; alt: string }[];
-  onFavoriteToggle: (e: React.MouseEvent) => void;
-  isFavorite: boolean;
+  slickProps?: Partial<SlickSettings>;
+  className?: string;
+  imageClassName?: string;
+  imageHeight?: string;
 }
 
 const ImageCarousel: React.FC<ImageCarouselProps> = ({
   images,
-  onFavoriteToggle,
-  isFavorite,
+  slickProps,
+  className = 'w-full h-full relative',
+  imageClassName = 'object-cover',
+  imageHeight = 'h-full',
 }) => {
-  const settings = {
+  // Default slider settings
+  const defaultSettings: SlickSettings = {
     dots: true,
     infinite: true,
     speed: 500,
@@ -27,19 +32,30 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
     autoplay: true,
     autoplaySpeed: 5000,
     arrows: true,
-    className: 'rounded-custom-16 overflow-hidden relative slick-custom-arrows',
+    className:
+      'rounded-custom-16 overflow-hidden relative slick-custom-arrows h-full',
     customPaging: () => (
-      <div className="w-2 h-2 mx-1 rounded-full bg-white/50 hover:bg-white/80 transition-colors duration-200" />
+      <div className='w-2 h-2 mx-1 rounded-full bg-white/50 hover:bg-white/80 transition-colors duration-200' />
     ),
     appendDots: (dots: React.ReactNode) => (
-      <div style={{ position: 'absolute', bottom: '20px', width: '100%', textAlign: 'center' }}>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          width: '100%',
+          textAlign: 'center',
+        }}
+      >
         <ul style={{ margin: '0' }}> {dots} </ul>
       </div>
     ),
   };
 
+  // Merge default settings with any props passed in
+  const settings = { ...defaultSettings, ...slickProps };
+
   return (
-    <div className="w-full h-[71.6875rem] relative mb-20">
+    <div className={className}>
       <style jsx global>{`
         .slick-custom-arrows .slick-prev,
         .slick-custom-arrows .slick-next {
@@ -50,20 +66,20 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
           z-index: 10;
           transition: background-color 0.3s;
         }
-        
+
         .slick-custom-arrows .slick-prev {
           left: 24px;
         }
-        
+
         .slick-custom-arrows .slick-next {
           right: 24px;
         }
-        
+
         .slick-custom-arrows .slick-prev:hover,
         .slick-custom-arrows .slick-next:hover {
           background: rgba(0, 0, 0, 0.5);
         }
-        
+
         .slick-custom-arrows .slick-prev:before,
         .slick-custom-arrows .slick-next:before {
           font-size: 24px;
@@ -72,32 +88,19 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
       `}</style>
       <Slider {...settings}>
         {images.map((image, index) => (
-          <div key={index} className="relative h-[71.6875rem]">
+          <div key={index} className={`relative ${imageHeight}`}>
             <Image
               src={image.src}
               alt={image.alt}
               fill
-              className="object-cover"
+              className={imageClassName}
               priority={index === 0}
             />
           </div>
         ))}
       </Slider>
-      
-      <button
-        className="absolute top-3 right-3 z-10 p-6 hover:!text-primary_2"
-        onClick={onFavoriteToggle}
-      >
-        <CustomSvg
-          src="/SVGs/shared/heart-icon.svg"
-          width={30}
-          height={30}
-          color={isFavorite ? '#FE360A' : '#fff'}
-          className="transition-colors duration-200"
-        />
-      </button>
     </div>
   );
 };
 
-export default ImageCarousel; 
+export default ImageCarousel;
