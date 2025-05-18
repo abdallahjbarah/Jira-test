@@ -6,11 +6,19 @@ import ProfileDivider from './ProfileDivider';
 import { useTranslation } from '@/contexts/TranslationContext';
 import FilledButton from '@/components/ui/buttons/FilledButton';
 import Divider from '@/components/ui/Divider';
+import FAQModal from '@/components/shared/FAQs';
+import useModal from '@/hooks/useModal';
+
 const ProfileMenuContent: React.FC = () => {
   const { t } = useTranslation();
+  const {
+    isOpen: isFAQModalOpen,
+    openModal: openFAQModal,
+    closeModal: closeFAQModal,
+  } = useModal();
 
   return (
-    <div className='bg-white rounded-lg shadow-lg w-72 p-6 border border-solid border-secondary_3 max-h-[44.813rem] overflow-y-auto'>
+    <div className='bg-white rounded-lg shadow-lg w-[22.5rem] p-6 border border-solid border-secondary_3 max-h-[44.813rem] overflow-y-auto'>
       {/* Profile Header */}
       <div className='flex flex-col items-center justify-center mb-6'>
         <div className='w-16 h-16 rounded-full overflow-hidden mb-2 bg-gray-100 flex items-center justify-center'>
@@ -80,7 +88,8 @@ const ProfileMenuContent: React.FC = () => {
           label={t('profile.faqs')}
           sublabel={t('profile.haveQuestions')}
           icon='/SVGs/shared/faq.svg'
-          href='/faqs'
+          href='#'
+          onClick={openFAQModal}
         />
       </div>
 
@@ -116,6 +125,8 @@ const ProfileMenuContent: React.FC = () => {
           className='text-primary_6 !text-custom-14 flex items-center gap-2 py-2 bg-transparent hover:bg-transparent'
         />
       </div>
+
+      <FAQModal isOpen={isFAQModalOpen} onClose={closeFAQModal} />
     </div>
   );
 };

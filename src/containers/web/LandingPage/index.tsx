@@ -10,7 +10,7 @@ import Statistics from '@components/web/landing-page/Statistics';
 export default function LandingPage(): React.ReactElement {
   return (
     <main>
-      <Hero className='pb-[400px] laptopS:pb-[500px]' />
+      <Hero className='!pb-[400px] laptopS:!pb-[calc(25% - 100vh)]' />
       <Statistics />
       <AboutUs />
       <DiscoverBookagri />

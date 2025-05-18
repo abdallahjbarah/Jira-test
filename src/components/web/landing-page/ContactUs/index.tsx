@@ -1,6 +1,8 @@
+'use client';
 import React from 'react';
 import Image from 'next/image';
 import AboutUsImg from '@images/home/AboutUs.jpg';
+import { useTranslation } from '@contexts/TranslationContext';
 
 // Contact info
 import EmailSVG from '@SVGs/home/Email.svg';
@@ -17,6 +19,8 @@ import { SOCIAL_MEDIA_DATA } from '@utils/constants';
 import Luster_Item from '@components/ui/Luster_Item';
 
 export default function ContactUs(): React.ReactElement {
+  const { t } = useTranslation();
+
   return (
     <section
       id='ContactUs'
@@ -38,10 +42,10 @@ export default function ContactUs(): React.ReactElement {
         <div className='flex flex-col gap-12 max-w-[43.875rem]'>
           <div>
             <h2 className='text-custom-32 font-custom-400 text-primary_1'>
-              Contact Us
+              {t('contactUs.subtitle')}
             </h2>
             <h1 className='text-custom-48 font-custom-800 text-primary_5 font-gellix-Bold'>
-              Have a question or feedback?
+              {t('contactUs.title')}
             </h1>
           </div>
 
@@ -51,15 +55,15 @@ export default function ContactUs(): React.ReactElement {
               <div className='flex gap-4 p-4'>
                 <div className='w-full max-w-[6.4375rem] max-h-[6.4375rem] rounded-custom-20 flex justify-center items-center'>
                   <div className='w-[5.5rem] h-[5.5rem]'>
-                    <Image src={EmailSVG} alt='Email logo' />
+                    <Image src={EmailSVG} alt={t('contactUs.email.title')} />
                   </div>
                 </div>
                 <div>
                   <h2 className='text-custom-24 font-custom-800 text-primary_5 font-gellix-Bold'>
-                    Email
+                    {t('contactUs.email.title')}
                   </h2>
                   <p className='text-custom-18 font-custom-400 text-secondary_1 mt-2'>
-                    info@bookagri.com
+                    {t('contactUs.email.value')}
                   </p>
                 </div>
               </div>
@@ -70,15 +74,15 @@ export default function ContactUs(): React.ReactElement {
               <div className='flex gap-4 p-4'>
                 <div className='w-full max-w-[6.4375rem] max-h-[6.4375rem] rounded-custom-20 flex justify-center items-center'>
                   <div className='w-[5.5rem] h-[5.5rem]'>
-                    <Image src={PhoneSVG} alt='Phone logo' />
+                    <Image src={PhoneSVG} alt={t('contactUs.phone.title')} />
                   </div>
                 </div>
                 <div>
                   <h2 className='text-custom-24 font-custom-800 text-primary_5 font-gellix-Bold'>
-                    Phone
+                    {t('contactUs.phone.title')}
                   </h2>
                   <p className='text-custom-18 font-custom-400 text-secondary_1 mt-2'>
-                    00962-77-2236393
+                    {t('contactUs.phone.value')}
                   </p>
                 </div>
               </div>
@@ -89,16 +93,19 @@ export default function ContactUs(): React.ReactElement {
               <div className='flex gap-4 p-4'>
                 <div className='w-full max-w-[6.4375rem] max-h-[6.4375rem] rounded-custom-20 flex justify-center items-center'>
                   <div className='w-[5.5rem] h-[5.5rem]'>
-                    <Image src={AddressSVG} alt='Address logo' />
+                    <Image
+                      src={AddressSVG}
+                      alt={t('contactUs.address.title')}
+                    />
                   </div>
                 </div>
                 <div>
                   <h2 className='text-custom-24 font-custom-800 text-primary_5 font-gellix-Bold'>
-                    Address
+                    {t('contactUs.address.title')}
                   </h2>
                   <p className='text-custom-18 font-custom-400 text-secondary_1 mt-2'>
-                    Marj Al-Hamam, Amman , Jordan <br />
-                    Zip Code: 11733
+                    {t('contactUs.address.value')} <br />
+                    {t('contactUs.address.zipCode')}
                   </p>
                 </div>
               </div>
@@ -112,7 +119,10 @@ export default function ContactUs(): React.ReactElement {
               target='_blank'
             >
               <Luster_Item className=''>
-                <Image src={FacebookSVG} alt='Facebook logo' />
+                <Image
+                  src={FacebookSVG}
+                  alt={t('contactUs.socialMedia.facebook')}
+                />
               </Luster_Item>
             </a>
             <a
@@ -121,7 +131,10 @@ export default function ContactUs(): React.ReactElement {
               target='_blank'
             >
               <Luster_Item className=''>
-                <Image src={LinkedinSVG} alt='Linkedin logo' />
+                <Image
+                  src={LinkedinSVG}
+                  alt={t('contactUs.socialMedia.linkedin')}
+                />
               </Luster_Item>
             </a>
             <a
@@ -130,7 +143,10 @@ export default function ContactUs(): React.ReactElement {
               target='_blank'
             >
               <Luster_Item className=''>
-                <Image src={InstagramSVG} alt='Instagram logo' />
+                <Image
+                  src={InstagramSVG}
+                  alt={t('contactUs.socialMedia.instagram')}
+                />
               </Luster_Item>
             </a>
             <a
@@ -139,7 +155,10 @@ export default function ContactUs(): React.ReactElement {
               target='_blank'
             >
               <Luster_Item className=''>
-                <Image src={TiktokSVG} alt='Tiktok logo' />
+                <Image
+                  src={TiktokSVG}
+                  alt={t('contactUs.socialMedia.tiktok')}
+                />
               </Luster_Item>
             </a>
             <a
@@ -148,7 +167,10 @@ export default function ContactUs(): React.ReactElement {
               target='_blank'
             >
               <Luster_Item className=''>
-                <Image src={WhatsappSVG} alt='Whatsapp logo' />
+                <Image
+                  src={WhatsappSVG}
+                  alt={t('contactUs.socialMedia.whatsapp')}
+                />
               </Luster_Item>
             </a>
           </div>

@@ -10,6 +10,7 @@ import { usePostContactUs } from '@queries/mutations/postMutations';
 import { contactUsSchema } from '@utils/formsSchemas';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
+import { useTranslation } from '@contexts/TranslationContext';
 
 interface ContactUsFormValues {
   firstName: string;
@@ -21,6 +22,7 @@ interface ContactUsFormValues {
 
 export default function ContactUsForm(): React.ReactElement {
   const { setIsLoading } = usePublicContext();
+  const { t } = useTranslation();
 
   const {
     values,
@@ -52,13 +54,11 @@ export default function ContactUsForm(): React.ReactElement {
     isError: isErrorMutate,
   } = usePostContactUs({
     onSuccess(data) {
-      toast.success(
-        'Your message has been sent successfully. We will contact you as soon as possible',
-      );
+      toast.success(t('contactUsForm.successMessage'));
       resetForm();
     },
     onError(error) {
-      toast.error('Something went wrong, please try later!');
+      toast.error(t('contactUsForm.errorMessage'));
     },
   });
 
@@ -81,10 +81,10 @@ export default function ContactUsForm(): React.ReactElement {
       <div className='container mx-auto py-[15.125rem] flex flex-col laptopS:flex-row w-full justify-center items-center gap-[5rem] px-4 laptopS:px-[8.75rem]'>
         <div className='flex flex-col justify-center max-w-[35.875rem] mt-16 laptopS:mt-0'>
           <h1 className='text-custom-70 font-custom-700 text-primary_5 font-gellix-Bold'>
-            Fill The Form
+            {t('contactUsForm.title')}
           </h1>
           <p className='mt-6 text-custom-32 font-custom-400 text-primary_5'>
-            We listen carefully to your opinions and suggestions
+            {t('contactUsForm.subtitle')}
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export default function ContactUsForm(): React.ReactElement {
               <CustomInput
                 shape={1}
                 className='h-[5rem] w-full px-6'
-                placeholder='First Name'
+                placeholder={t('contactUsForm.firstName')}
                 type='text'
                 id='firstName'
                 name='firstName'
@@ -116,7 +116,7 @@ export default function ContactUsForm(): React.ReactElement {
               <CustomInput
                 shape={1}
                 className='h-[5rem] w-full px-6'
-                placeholder='Last Name'
+                placeholder={t('contactUsForm.lastName')}
                 type='text'
                 id='lastName'
                 name='lastName'
@@ -137,7 +137,7 @@ export default function ContactUsForm(): React.ReactElement {
               <CustomInput
                 shape={1}
                 className='h-[5rem] w-full px-6'
-                placeholder='Email'
+                placeholder={t('contactUsForm.email')}
                 type='email'
                 id='email'
                 name='email'
@@ -156,7 +156,7 @@ export default function ContactUsForm(): React.ReactElement {
               <CustomInput
                 shape={1}
                 className='h-[5rem] w-full px-6'
-                placeholder='Phone Number'
+                placeholder={t('contactUsForm.phone')}
                 type='text'
                 id='phone'
                 name='phone'
@@ -177,7 +177,7 @@ export default function ContactUsForm(): React.ReactElement {
             <CustomTextarea
               shape={1}
               className='h-[15rem] w-full px-4 pt-5'
-              placeholder='Type your message here'
+              placeholder={t('contactUsForm.message')}
               id='message'
               name='message'
               value={values?.message}
@@ -195,7 +195,7 @@ export default function ContactUsForm(): React.ReactElement {
               path='#'
               width='w-[14rem] mt-[2.5rem]'
               height='h-[4.8125rem]'
-              text='Send Message'
+              text={t('contactUsForm.submit')}
               isButton
               buttonType='submit'
               icon={null}

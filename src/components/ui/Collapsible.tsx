@@ -9,6 +9,7 @@ interface CollapsibleProps {
   className?: string;
   titleClassName?: string;
   contentClassName?: string;
+  iconClassName?: string;
 }
 
 const Collapsible: React.FC<CollapsibleProps> = ({
@@ -18,6 +19,7 @@ const Collapsible: React.FC<CollapsibleProps> = ({
   className = '',
   titleClassName = '',
   contentClassName = '',
+  iconClassName = '',
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
@@ -37,9 +39,11 @@ const Collapsible: React.FC<CollapsibleProps> = ({
       >
         <span>{title}</span>
         {isOpen ? (
-          <ChevronUpIcon className='h-4 w-4 text-text_1' />
+          <ChevronUpIcon className={cn('h-4 w-4 text-text_1', iconClassName)} />
         ) : (
-          <ChevronDownIcon className='h-4 w-4 text-text_1' />
+          <ChevronDownIcon
+            className={cn('h-4 w-4 text-text_1', iconClassName)}
+          />
         )}
       </button>
       {isOpen && <div className={cn('mt-3', contentClassName)}>{children}</div>}

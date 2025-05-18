@@ -2,6 +2,7 @@ import React from 'react';
 import Image, { StaticImageData } from 'next/image';
 import CustomLink from '@components/ui/CustomLink';
 import ArrowRight from '@components/svg/shared/ArrowRight';
+import { useTranslation } from '@contexts/TranslationContext';
 
 interface ImageContainerProps {
   image: StaticImageData;
@@ -20,6 +21,8 @@ export default function ImageContainer({
   path,
   className,
 }: ImageContainerProps): React.ReactElement {
+  const { t } = useTranslation();
+
   return (
     <CustomLink className='group' path={path || '#'}>
       <div className='relative rounded-custom-32 overflow-hidden'>
@@ -49,7 +52,7 @@ export default function ImageContainer({
             {title}
           </h2>
           <div className='flex gap-2 items-center text-custom-24 font-medium text-primary_4 group-hover:text-primary_2 transition-all duration-200'>
-            <span>View All</span>
+            <span>{t('view-all') || 'View All'}</span>
             <ArrowRight className='transition-transform fill-primary_4 group-hover:fill-primary_2 group-hover:translate-x-2' />
           </div>
         </div>

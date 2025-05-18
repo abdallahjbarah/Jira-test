@@ -195,6 +195,10 @@ module.exports = {
       },
     },
     container: {
+      // 1640
+      screens: {
+        base: '1640px',
+      },
       center: true,
       padding: {
         DEFAULT: '1.5rem',
