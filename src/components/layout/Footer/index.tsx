@@ -2,7 +2,11 @@
 import React from 'react';
 import CustomLink from '@components/ui/CustomLink';
 import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
-import { LINKS_DATA, SOCIAL_MEDIA_DATA } from '@utils/constants';
+import {
+  COLLECTIONS_LINKS,
+  LINKS_DATA,
+  SOCIAL_MEDIA_DATA,
+} from '@utils/constants';
 import InstagramSvg from '@components/svg/footer/InstagramSvg';
 import TiktokSvg from '@components/svg/footer/TiktokSvg';
 import LinkedinSvg from '@components/svg/footer/LinkedinSvg';
@@ -86,46 +90,40 @@ export default function Footer(): React.ReactElement {
                   {t('footer.pages')}
                 </h2>
                 <ul className='mt-[1.5rem] mb-4 flex w-full flex-col gap-4 tabletM:mt-6'>
-                  {LINKS_DATA?.slice(0, 5)?.map(
-                    (item: LinkData, index: number) => (
-                      <li
-                        key={index}
-                        className='text-custom-18 font-custom-400 text-primary_4'
+                  {LINKS_DATA?.map((item: LinkData, index: number) => (
+                    <li
+                      key={index}
+                      className='text-custom-18 font-custom-400 text-primary_4'
+                    >
+                      <CustomLink
+                        className='transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
+                        path={item?.path}
                       >
-                        <CustomLink
-                          className='transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
-                          path={item?.path}
-                        >
-                          {item?.name[locale]}
-                        </CustomLink>
-                      </li>
-                    ),
-                  )}
+                        {item?.name[locale]}
+                      </CustomLink>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
               <div className='w-[19rem] tabletM:w-[12.5rem] tabletM:me-20'>
                 <ul className='mb-4 flex w-full flex-col gap-4 tabletM:mt-[3.375rem]'>
-                  {LINKS_DATA?.slice(5)?.map(
-                    (item: LinkData, index: number) => (
-                      <li
-                        key={index}
-                        className='text-custom-18 font-custom-400 text-primary_4'
+                  {COLLECTIONS_LINKS?.map((item: LinkData, index: number) => (
+                    <li
+                      key={index}
+                      className='text-custom-18 font-custom-400 text-primary_4'
+                    >
+                      <CustomLink
+                        className='transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
+                        path={item?.path}
                       >
-                        <CustomLink
-                          className='transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
-                          path={item?.path}
-                        >
-                          {item?.name[locale]}
-                        </CustomLink>
-                      </li>
-                    ),
-                  )}
+                        {item?.name[locale]}
+                      </CustomLink>
+                    </li>
+                  ))}
                 </ul>
               </div>
-              {/* End Pages */}
 
-              {/* Contact Us */}
               <div className='w-[19rem] tabletM:w-[12.5rem] tabletM:me-6'>
                 <h2 className='text-custom-20 font-custom-700 text-primary_4'>
                   {t('footer.contactUs')}

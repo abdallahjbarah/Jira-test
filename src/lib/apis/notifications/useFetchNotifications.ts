@@ -1,4 +1,5 @@
 // Notification mock data based on the provided image
+// /notification/list/{userId}
 
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
