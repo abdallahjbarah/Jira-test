@@ -205,7 +205,10 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
 
       {/* Who section */}
       <Collapsible title='Who' defaultOpen={true}>
-        <GuestSelector onGuestChange={handleGuestChange} />
+        <GuestSelector
+          onGuestChange={handleGuestChange}
+          className='shadow-none w-full p-0'
+        />
       </Collapsible>
 
       {/* Search button */}

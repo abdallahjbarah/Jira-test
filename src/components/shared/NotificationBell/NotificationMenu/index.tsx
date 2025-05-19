@@ -255,13 +255,17 @@ function NotificationMenu(): React.ReactElement {
 
   if (isLoading) {
     return (
-      <NotificationContainer>Loading notifications...</NotificationContainer>
+      <NotificationContainer className='p-5'>
+        Loading notifications...
+      </NotificationContainer>
     );
   }
 
   if (error) {
     return (
-      <NotificationContainer>Error loading notifications</NotificationContainer>
+      <NotificationContainer className='p-5'>
+        Error loading notifications
+      </NotificationContainer>
     );
   }
 

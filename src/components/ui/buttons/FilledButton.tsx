@@ -2,16 +2,16 @@ import React, { ReactElement, ReactNode } from 'react';
 import CustomLink from '../CustomLink';
 
 interface FilledButtonProps {
-  path: string;
+  path?: string;
   text: string;
-  icon: ReactNode;
-  width: string;
-  height: string;
+  icon?: ReactNode;
+  width?: string;
+  height?: string;
   iconLeft?: boolean;
   isButton?: boolean;
-  onClick: () => void;
+  onClick?: () => void;
   buttonType: 'button' | 'submit' | 'reset';
-  isDisable: boolean;
+  isDisable?: boolean;
   className?: string;
 }
 
@@ -57,7 +57,7 @@ function FilledButton({
   ) : isDisable ? (
     <div className={`${width} ${height} ${buttonStyles.disabled}`}>{text}</div>
   ) : (
-    <CustomLink path={path}>
+    <CustomLink path={path || ''}>
       <button type='button' className={`${width} ${height} ${buttonClass}`}>
         {iconLeft ? (
           <>

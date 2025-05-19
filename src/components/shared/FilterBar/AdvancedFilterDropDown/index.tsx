@@ -1,0 +1,129 @@
+'use client';
+
+import React from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import Dropdown from '@/components/ui/Dropdown';
+import CustomSvg from '@/components/ui/CustomSvg';
+import FilledButton from '@/components/ui/buttons/FilledButton';
+import ExperiencesFilter from './ExperiencesFilter';
+import EventsFilter from './EventsFilter';
+import StaysFilter from './StaysFilter';
+import OffersFilter from './OffersFilter';
+
+interface AdvancedFilterDropDownProps {
+  filterType?: 'experiences' | 'events' | 'stays' | 'offers';
+  onFilterApply?: (filters: any) => void;
+  className?: string;
+}
+
+const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
+  filterType = 'experiences',
+  onFilterApply,
+  className = '',
+}) => {
+  const methods = useForm({
+    defaultValues: {
+      experienceType: [],
+      eventType: [],
+      packageType: [],
+      timeOfDay: [],
+      duration: [],
+      priceRange: [0, 100] as [number, number],
+      language: [],
+      ageSuitability: [],
+      experienceLevel: [],
+      bookingVerified: false,
+      amenities: [],
+      specialOffers: 'no',
+      bookingOptions: 'allowPets',
+      accessibility: [],
+      includesExperience: 'no',
+      roomsAndBeds: {
+        rooms: 'any',
+        beds: 'any',
+        bathrooms: 'any',
+      },
+    },
+  });
+
+  const { handleSubmit, reset } = methods;
+
+  const onSubmit = (data: any) => {
+    if (onFilterApply) {
+      onFilterApply(data);
+    }
+  };
+
+  const clearAllFilters = () => {
+    reset();
+  };
+
+  // The filter button trigger
+  const filterTrigger = (
+    <div>
+      <CustomSvg
+        src='/SVGs/shared/filter-icon.svg'
+        className='w-[10px] h-[10px] text-text_2'
+        width={57}
+        height={57}
+      />
+    </div>
+  );
+
+  // Filter content based on filter type
+  const getFilterContent = () => {
+    switch (filterType) {
+      case 'experiences':
+        return <ExperiencesFilter />;
+      case 'events':
+        return <EventsFilter />;
+      case 'stays':
+        return <StaysFilter />;
+      case 'offers':
+        return <OffersFilter />;
+      default:
+        return null;
+    }
+  };
+
+  const filterContent = (
+    <div className='bg-white rounded-xl shadow-2xl max-w-[997px] w-full p-6 max-h-[500px] overflow-y-auto'>
+      <h3 className='text-lg text-center font-semibold'>Filter</h3>
+      <hr className='my-4' />
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+          {getFilterContent()}
+          <hr className='my-4' />
+          <div className='pt-4 flex justify-center gap-4'>
+            <button
+              type='button'
+              onClick={clearAllFilters}
+              className='px-6 py-2 underline text-text_2 font-medium rounded-lg  transition-colors text-sm'
+            >
+              Clear all
+            </button>
+
+            <FilledButton
+              text='Show results'
+              buttonType='submit'
+              isButton
+              className='px-6 py-2 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors text-sm '
+            />
+          </div>
+        </form>
+      </FormProvider>
+    </div>
+  );
+
+  return (
+    <Dropdown
+      trigger={filterTrigger}
+      content={filterContent}
+      position='bottom-right'
+      className={className}
+      contentClassName='mt-2'
+    />
+  );
+};
+
+export default AdvancedFilterDropDown;

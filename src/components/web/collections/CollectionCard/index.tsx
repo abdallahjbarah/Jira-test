@@ -1,10 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { Collection } from '@/lib/apis/collections/data';
 import { useTranslation } from '@/contexts/TranslationContext';
 import CustomSvg from '@/components/ui/CustomSvg';
 import Link from 'next/link';
+import ImageCarousel from '@/components/shared/ImageCarousel';
 
 function CollectionCard({
   collection,
@@ -19,37 +19,40 @@ function CollectionCard({
     setIsFavorite(!isFavorite);
   };
 
+  // Prepare the images array for the carousel
+  const carouselImages = collection.images.map((img) => ({
+    src: img.src,
+    alt: img.alt || collection.title[locale],
+  }));
+
   return (
-    <Link href={`/collections/${collection.id}`} className='group block'>
+    <Link href={`/details/${collection.id}`} className='group block'>
       <div className='transition-all duration-300'>
         <div className='relative rounded-custom-16 overflow-hidden'>
           <div className='w-full aspect-square relative overflow-hidden'>
-            <Image
-              src={
-                collection.images.find((img) => img.isMain)?.src ||
-                collection.images[0]?.src
-              }
-              alt={
-                collection.images.find((img) => img.isMain)?.alt ||
-                collection.title[locale]
-              }
-              fill
-              className='object-cover transition-transform group-hover:scale-105 duration-300'
+            <ImageCarousel
+              images={carouselImages}
+              className='w-full h-full relative'
+              imageHeight='aspect-square'
+              slickProps={{
+                autoplay: false,
+                dots: collection.images.length > 1,
+                arrows: false,
+              }}
             />
+            <button
+              className='absolute top-3 right-3 z-20 p-1 hover:!text-primary_2'
+              onClick={handleFavoriteToggle}
+            >
+              <CustomSvg
+                src='/SVGs/shared/heart-icon.svg'
+                width={24}
+                height={24}
+                color={isFavorite ? '#FE360A' : '#fff'}
+                className='transition-colors duration-200'
+              />
+            </button>
           </div>
-
-          <button
-            className='absolute top-3 right-3 z-10 p-1 hover:!text-primary_2'
-            onClick={handleFavoriteToggle}
-          >
-            <CustomSvg
-              src='/SVGs/shared/heart-icon.svg'
-              width={30}
-              height={30}
-              color={isFavorite ? '#FE360A' : '#fff'}
-              className='transition-colors duration-200'
-            />
-          </button>
         </div>
 
         <div className='mt-4'>

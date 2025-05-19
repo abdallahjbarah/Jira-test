@@ -25,3 +25,16 @@ declare namespace NodeJS {
     NODE_ENV: 'development' | 'production' | 'test';
   }
 }
+
+export interface Currency {
+  value: string;
+  label: string;
+  countryCode2: string;
+  countryName: string;
+}
+
+export interface CurrencyOption {
+  value: string;
+  label: string;
+  description: string;
+}

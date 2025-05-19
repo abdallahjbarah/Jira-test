@@ -1,59 +1,29 @@
 import React, { ReactNode } from 'react';
 
-interface StatisticItem {
+export interface StatisticItem {
   number: string;
-  title: ReactNode;
+  titleKey: string;
 }
 
 export const statisticsData: StatisticItem[] = [
   {
     number: '40',
-    title: React.createElement(
-      React.Fragment,
-      null,
-      'Agritourism ',
-      React.createElement('br'),
-      ' experiences',
-    ),
+    titleKey: 'statistics.agritourismExperiences',
   },
   {
     number: '20',
-    title: React.createElement(
-      React.Fragment,
-      null,
-      'Years of experience ',
-      React.createElement('br'),
-      ' in tourism',
-    ),
+    titleKey: 'statistics.yearsOfExperience',
   },
   {
     number: '400',
-    title: React.createElement(
-      React.Fragment,
-      null,
-      'Women ',
-      React.createElement('br'),
-      ' empowered',
-    ),
+    titleKey: 'statistics.womenEmpowered',
   },
   {
     number: '15000',
-    title: React.createElement(
-      React.Fragment,
-      null,
-      'Tourists ',
-      React.createElement('br'),
-      ' trust us',
-    ),
+    titleKey: 'statistics.tourists',
   },
   {
     number: '1000',
-    title: React.createElement(
-      React.Fragment,
-      null,
-      'Yearly experiences ',
-      React.createElement('br'),
-      ' added',
-    ),
+    titleKey: 'statistics.yearlyExperiences',
   },
 ];

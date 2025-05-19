@@ -256,3 +256,328 @@ export const COLLECTION_STATUS_LIST: CollectionStatusItem[] = [
 
 export type CollectionStatus =
   (typeof COLLECTION_STATUS)[keyof typeof COLLECTION_STATUS];
+
+export interface FilterOption {
+  value: string;
+  label: {
+    en: string;
+    ar: string;
+  };
+  icon?: string;
+  description?: {
+    en: string;
+    ar: string;
+  };
+}
+
+// Experience Types
+export const EXPERIENCE_TYPES = {
+  ART_AND_CULTURE: 'art_and_culture',
+  ENTERTAINMENT: 'entertainment',
+  FOOD_AND_DRINK: 'food_and_drink',
+  SPORTS: 'sports',
+} as const;
+
+export const EXPERIENCE_TYPES_LIST: FilterOption[] = [
+  {
+    value: EXPERIENCE_TYPES.ART_AND_CULTURE,
+    label: { en: 'Art and Culture', ar: 'الفن والثقافة' },
+  },
+  {
+    value: EXPERIENCE_TYPES.ENTERTAINMENT,
+    label: { en: 'Entertainment', ar: 'الترفيه' },
+  },
+  {
+    value: EXPERIENCE_TYPES.FOOD_AND_DRINK,
+    label: { en: 'Food and Drink', ar: 'الطعام والشراب' },
+  },
+  {
+    value: EXPERIENCE_TYPES.SPORTS,
+    label: { en: 'Sports', ar: 'الرياضة' },
+  },
+];
+
+// Time of Day
+export const TIME_OF_DAY = {
+  MORNING: 'morning',
+  AFTERNOON: 'afternoon',
+  EVENING: 'evening',
+} as const;
+
+export const TIME_OF_DAY_LIST: FilterOption[] = [
+  {
+    value: TIME_OF_DAY.MORNING,
+    label: { en: 'Morning', ar: 'صباحاً' },
+    description: {
+      en: 'Starts before 12 pm',
+      ar: 'يبدأ قبل الساعة 12 ظهراً',
+    },
+  },
+  {
+    value: TIME_OF_DAY.AFTERNOON,
+    label: { en: 'Afternoon', ar: 'بعد الظهر' },
+    description: {
+      en: 'Starts after 12 pm',
+      ar: 'يبدأ بعد الساعة 12 ظهراً',
+    },
+  },
+  {
+    value: TIME_OF_DAY.EVENING,
+    label: { en: 'Evening', ar: 'مساءً' },
+    description: {
+      en: 'Starts after 5 pm',
+      ar: 'يبدأ بعد الساعة 5 مساءً',
+    },
+  },
+];
+
+// Duration
+export const DURATION_TYPES = {
+  SHORT: 'short',
+  MODERATE: 'moderate',
+  EXTENDED: 'extended',
+  FULL_DAY: 'full_day',
+} as const;
+
+export const DURATION_TYPES_LIST: FilterOption[] = [
+  {
+    value: DURATION_TYPES.SHORT,
+    label: { en: 'Short', ar: 'قصير' },
+  },
+  {
+    value: DURATION_TYPES.MODERATE,
+    label: { en: 'Moderate', ar: 'متوسط' },
+  },
+  {
+    value: DURATION_TYPES.EXTENDED,
+    label: { en: 'Extended', ar: 'ممتد' },
+  },
+  {
+    value: DURATION_TYPES.FULL_DAY,
+    label: { en: 'Full Day', ar: 'يوم كامل' },
+  },
+];
+
+// Language Preferences
+export const LANGUAGE_PREFERENCES = {
+  ENGLISH: 'english',
+  ARABIC: 'arabic',
+  GERMAN: 'german',
+  TURKISH: 'turkish',
+  DEAF_LANGUAGE: 'deaf_language',
+} as const;
+
+export const LANGUAGE_PREFERENCES_LIST: FilterOption[] = [
+  {
+    value: LANGUAGE_PREFERENCES.ENGLISH,
+    label: { en: 'English', ar: 'الإنجليزية' },
+  },
+  {
+    value: LANGUAGE_PREFERENCES.ARABIC,
+    label: { en: 'Arabic', ar: 'العربية' },
+  },
+  {
+    value: LANGUAGE_PREFERENCES.GERMAN,
+    label: { en: 'German', ar: 'الألمانية' },
+  },
+  {
+    value: LANGUAGE_PREFERENCES.TURKISH,
+    label: { en: 'Turkish', ar: 'التركية' },
+  },
+  {
+    value: LANGUAGE_PREFERENCES.DEAF_LANGUAGE,
+    label: { en: 'Deaf Language', ar: 'لغة الإشارة' },
+  },
+];
+
+// Age Suitability
+export const AGE_SUITABILITY = {
+  INFANTS: 'infants',
+  CHILDREN: 'children',
+  ADULTS: 'adults',
+} as const;
+
+export const AGE_SUITABILITY_LIST: FilterOption[] = [
+  {
+    value: AGE_SUITABILITY.INFANTS,
+    label: { en: 'Infants (0-3 years)', ar: 'الرضع (0-3 سنوات)' },
+  },
+  {
+    value: AGE_SUITABILITY.CHILDREN,
+    label: { en: 'Children (4-11 years)', ar: 'الأطفال (4-11 سنة)' },
+  },
+  {
+    value: AGE_SUITABILITY.ADULTS,
+    label: { en: 'Adults (12+ years)', ar: 'البالغين (12+ سنة)' },
+  },
+];
+
+// Experience Level
+export const EXPERIENCE_LEVEL = {
+  EASY: 'easy',
+  MODERATE: 'moderate',
+  DIFFICULT: 'difficult',
+} as const;
+
+export const EXPERIENCE_LEVEL_LIST: FilterOption[] = [
+  {
+    value: EXPERIENCE_LEVEL.EASY,
+    label: { en: 'Easy', ar: 'سهل' },
+  },
+  {
+    value: EXPERIENCE_LEVEL.MODERATE,
+    label: { en: 'Moderate', ar: 'متوسط' },
+  },
+  {
+    value: EXPERIENCE_LEVEL.DIFFICULT,
+    label: { en: 'Difficult', ar: 'صعب' },
+  },
+];
+
+// Available Amenities
+export const AMENITIES = {
+  WIFI: 'wifi',
+  FREE_PARKING: 'free_parking',
+  CAFETERIA: 'cafeteria',
+} as const;
+
+export const AMENITIES_LIST: FilterOption[] = [
+  {
+    value: AMENITIES.WIFI,
+    label: { en: 'WiFi', ar: 'واي فاي' },
+  },
+  {
+    value: AMENITIES.FREE_PARKING,
+    label: { en: 'Free Parking', ar: 'موقف سيارات مجاني' },
+  },
+  {
+    value: AMENITIES.CAFETERIA,
+    label: { en: 'Cafeteria', ar: 'كافتيريا' },
+  },
+];
+
+// Accessibility Features
+export const ACCESSIBILITY_FEATURES = {
+  STEP_FREE_GUEST_ENTRANCE: 'step_free_guest_entrance',
+  GUEST_ENTRANCE_UNDER_32_INCHES: 'guest_entrance_under_32_inches',
+  STEP_FREE_PATH_TO_GUEST_ENTRANCE: 'step_free_path_to_guest_entrance',
+} as const;
+
+export const ACCESSIBILITY_FEATURES_LIST: FilterOption[] = [
+  {
+    value: ACCESSIBILITY_FEATURES.STEP_FREE_GUEST_ENTRANCE,
+    label: { en: 'Step-free guest entrance', ar: 'مدخل للضيوف بدون درج' },
+  },
+  {
+    value: ACCESSIBILITY_FEATURES.GUEST_ENTRANCE_UNDER_32_INCHES,
+    label: {
+      en: 'Guest entrance wider than 32 inches',
+      ar: 'مدخل للضيوف أوسع من 32 بوصة',
+    },
+  },
+  {
+    value: ACCESSIBILITY_FEATURES.STEP_FREE_PATH_TO_GUEST_ENTRANCE,
+    label: {
+      en: 'Step-free path to the guest entrance',
+      ar: 'مسار بدون درج إلى مدخل الضيوف',
+    },
+  },
+];
+
+// Package Types for Offers & Packages
+export const PACKAGE_TYPES = {
+  GROUP_PACKAGE: 'group_package',
+} as const;
+
+export const PACKAGE_TYPES_LIST: FilterOption[] = [
+  {
+    value: PACKAGE_TYPES.GROUP_PACKAGE,
+    label: { en: 'Group Package', ar: 'باقة جماعية' },
+  },
+];
+
+// Package Duration for Offers & Packages
+export const PACKAGE_DURATION = {
+  HALF_DAY: 'half_day',
+  FULL_DAY: 'full_day',
+} as const;
+
+export const PACKAGE_DURATION_LIST: FilterOption[] = [
+  {
+    value: PACKAGE_DURATION.HALF_DAY,
+    label: { en: 'Half Day', ar: 'نصف يوم' },
+  },
+  {
+    value: PACKAGE_DURATION.FULL_DAY,
+    label: { en: 'Full Day', ar: 'يوم كامل' },
+  },
+];
+
+// Booking Options
+export const BOOKING_OPTIONS = {
+  ALLOWS_PETS: 'allows_pets',
+} as const;
+
+export const BOOKING_OPTIONS_LIST: FilterOption[] = [
+  {
+    value: BOOKING_OPTIONS.ALLOWS_PETS,
+    label: { en: 'Allows Pets', ar: 'يسمح بالأرانب' },
+  },
+];
+
+// Filter Configurations for each page type
+export const EXPERIENCES_FILTERS = {
+  EXPERIENCE_TYPE: 'experience_type',
+  PRICE_RANGE: 'price_range',
+  TIME_OF_DAY: 'time_of_day',
+  EXPERIENCE_DURATION: 'experience_duration',
+  LANGUAGE_PREFERENCE: 'language_preference',
+  AGE_SUITABILITY: 'age_suitability',
+  EXPERIENCE_LEVEL: 'experience_level',
+  BOOKING_VERIFIED: 'booking_verified',
+  AVAILABLE_AMENITIES: 'available_amenities',
+  SPECIAL_OFFERS: 'special_offers',
+  BOOKING_OPTIONS: 'booking_options',
+  ACCESSIBILITY_FEATURES: 'accessibility_features',
+} as const;
+
+export const EVENTS_FILTERS = {
+  EVENT_TYPE: 'event_type',
+  PRICE_RANGE: 'price_range',
+  TIME_OF_DAY: 'time_of_day',
+  EVENT_DURATION: 'event_duration',
+  LANGUAGE_PREFERENCE: 'language_preference',
+  AGE_SUITABILITY: 'age_suitability',
+  EXPERIENCE_LEVEL: 'experience_level',
+  BOOKING_VERIFIED: 'booking_verified',
+  AVAILABLE_AMENITIES: 'available_amenities',
+  SPECIAL_OFFERS: 'special_offers',
+  BOOKING_OPTIONS: 'booking_options',
+  ACCESSIBILITY_FEATURES: 'accessibility_features',
+} as const;
+
+export const STAYS_FILTERS = {
+  EVENT_TYPE: 'event_type',
+  INCLUDES_EXPERIENCE: 'includes_experience',
+  ROOMS_AND_BEDS: 'rooms_and_beds',
+  PRICE_RANGE: 'price_range',
+  LANGUAGE_PREFERENCE: 'language_preference',
+  BOOKING_VERIFIED: 'booking_verified',
+  AVAILABLE_AMENITIES: 'available_amenities',
+  SPECIAL_OFFERS: 'special_offers',
+  BOOKING_OPTIONS: 'booking_options',
+  ACCESSIBILITY_FEATURES: 'accessibility_features',
+} as const;
+
+export const OFFERS_PACKAGES_FILTERS = {
+  PACKAGE_TYPE: 'package_type',
+  PRICE_RANGE: 'price_range',
+  TIME_OF_DAY: 'time_of_day',
+  PACKAGE_DURATION: 'package_duration',
+  LANGUAGE_PREFERENCE: 'language_preference',
+  BOOKING_VERIFIED: 'booking_verified',
+  AVAILABLE_AMENITIES: 'available_amenities',
+  SPECIAL_OFFERS: 'special_offers',
+  BOOKING_OPTIONS: 'booking_options',
+  ACCESSIBILITY_FEATURES: 'accessibility_features',
+} as const;

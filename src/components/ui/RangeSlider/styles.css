@@ -1,0 +1,35 @@
+/* Custom styles for the range slider */
+
+.range-slider {
+  height: var(--range-slider-height, 4px);
+  background-color: #e5e7eb; /* gray-200 */
+  border-radius: 9999px;
+}
+
+.range-slider .range-slider__range {
+  background-color: var(--range-slider-connect-bg, #47C409); /* green-500 */
+  border-radius: 9999px;
+}
+
+.range-slider .range-slider__thumb {
+  background-color: var(--range-slider-connect-bg, #47C409);
+  border: 1px solid #d1d5db; /* gray-300 */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.range-slider .range-slider__thumb:hover,
+.range-slider .range-slider__thumb[data-active] {
+  border-color: var(--range-slider-connect-bg, #47C409);
+  box-shadow: 0 0 0 4px var(--range-slider-handle-ring-color, rgba(74, 222, 128, 0.3));
+}
+
+/* Improve touch area for mobile */
+@media (max-width: 768px) {
+  .range-slider .range-slider__thumb {
+    width: 24px;
+    height: 24px;
+  }
+} 

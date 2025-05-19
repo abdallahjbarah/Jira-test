@@ -1,0 +1,85 @@
+import React from 'react';
+import { useTranslation } from '@/contexts/TranslationContext';
+import TabsNavigation, { TabItem } from '@/components/ui/TabsNavigation';
+import { FormProvider, useForm } from 'react-hook-form';
+import SearchBar from '@/components/ui/SearchBar';
+
+interface BookingsFilterProps {
+  onFilterChange: (tabId: string) => void;
+  onSearch: (query: string) => void;
+}
+
+const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
+  const { t } = useTranslation();
+
+  const tabs: TabItem[] = [
+    {
+      id: 'upcoming',
+      label: t('bookingStatus.upcoming') || 'Upcoming',
+      content: (
+        <div className='mt-8'>
+          <p className='text-custom-30 font-custom-500 text-[#000000]'>
+            {t('myBookings.description')} 14{' '}
+            {t('myBookings.descriptionSecondLine')}
+          </p>
+          {/* Upcoming bookings content here */}
+        </div>
+      ),
+    },
+    {
+      id: 'completed',
+      label: t('bookingStatus.completed') || 'Completed',
+      content: (
+        <div className='mt-8'>
+          {/* Completed bookings content here */}
+          <p className='text-custom-30 font-custom-500 text-[#000000]'>
+            {t('myBookings.completedDescription') ||
+              'Your completed bookings will appear here.'}
+          </p>
+        </div>
+      ),
+    },
+    {
+      id: 'cancelled',
+      label: t('bookingStatus.cancelled') || 'Cancelled',
+      content: (
+        <div className='mt-8'>
+          {/* Cancelled bookings content here */}
+          <p className='text-custom-30 font-custom-500 text-[#000000]'>
+            {t('myBookings.cancelledDescription') ||
+              'Your cancelled bookings will appear here.'}
+          </p>
+        </div>
+      ),
+    },
+  ];
+
+  const formMethods = useForm();
+
+  return (
+    <FormProvider {...formMethods}>
+      <div className='flex items-center justify-between flex-col-reverse tabletM:flex-row gap-[1.5rem]'>
+        <TabsNavigation
+          tabs={tabs}
+          defaultActiveTab='upcoming'
+          containerClassName='w-full laptopM:w-auto'
+          showContent={false}
+          onChange={(tabId) => {
+            formMethods.setValue('status', tabId);
+            onFilterChange(tabId);
+          }}
+        />
+
+        <SearchBar
+          placeholder={
+            t('myBookings.searchPlaceholder') || 'Search bookings...'
+          }
+          onSearch={onSearch}
+          className='laptopM:max-w-[19.5rem] w-full'
+        />
+      </div>
+    </FormProvider>
+  );
+};
+
+export default BookingsFilter;

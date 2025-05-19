@@ -125,19 +125,7 @@ export default function ForgotPasswordPage() {
             </div>
           </form>
 
-          {/* Back to Login Link */}
-          <div className="text-center transform transition-all hover:scale-105">
-            <p className="text-[11px] sm:text-[12px] font-normal leading-[14px] text-[#222222] mx-auto">
-              Remember your password?{" "}
-              <button
-                type="button"
-                onClick={() => router.push("/auth/login")}
-                className="text-[11px] sm:text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors"
-              >
-                Login
-              </button>
-            </p>
-          </div>
+
         </div>
       </div>
     </main>

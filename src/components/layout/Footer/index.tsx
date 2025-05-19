@@ -20,7 +20,15 @@ interface LinkData {
 }
 
 export default function Footer(): React.ReactElement {
-  const { locale } = useTranslation();
+  const { locale, t } = useTranslation();
+
+  // Get the phone values from the dictionary
+  const phoneValues = [
+    '00962-77-2236393',
+    '00962-77-0504153',
+    '00962-78-7877885',
+    '00962-79-5593907',
+  ];
 
   return (
     <footer className='flex min-h-[28.875rem] flex-col items-center justify-between bg-primary_5'>
@@ -75,7 +83,7 @@ export default function Footer(): React.ReactElement {
               {/* Pages */}
               <div className='w-[19rem] tabletM:w-[12.5rem] tabletM:me-6'>
                 <h2 className='text-custom-20 font-custom-700 text-primary_4'>
-                  Pages
+                  {t('footer.pages')}
                 </h2>
                 <ul className='mt-[1.5rem] mb-4 flex w-full flex-col gap-4 tabletM:mt-6'>
                   {LINKS_DATA?.slice(0, 5)?.map(
@@ -120,21 +128,26 @@ export default function Footer(): React.ReactElement {
               {/* Contact Us */}
               <div className='w-[19rem] tabletM:w-[12.5rem] tabletM:me-6'>
                 <h2 className='text-custom-20 font-custom-700 text-primary_4'>
-                  Contact Us
+                  {t('footer.contactUs')}
                 </h2>
 
                 <div className='my-[1.5rem] flex w-full flex-col gap-4 tabletM:mt-6'>
                   <div className='text-custom-18 text-primary_4'>
-                    <h2 className='font-custom-700 mb-2'>Email</h2>
-                    <p className='font-custom-400'>info@bookagri.com</p>
+                    <h2 className='font-custom-700 mb-2'>
+                      {t('footer.email.title')}
+                    </h2>
+                    <p className='font-custom-400'>{t('footer.email.value')}</p>
                   </div>
 
                   <div className='text-custom-18 text-primary_4 flex flex-col gap-1'>
-                    <h2 className='font-custom-700 mb-2'>Phone</h2>
-                    <p className='font-custom-400'>00962-77-2236393</p>
-                    <p className='font-custom-400'>00962-77-0504153</p>
-                    <p className='font-custom-400'>00962-78-7877885</p>
-                    <p className='font-custom-400'>00962-79-5593907</p>
+                    <h2 className='font-custom-700 mb-2'>
+                      {t('footer.phone.title')}
+                    </h2>
+                    {phoneValues.map((phone, index) => (
+                      <p key={index} className='font-custom-400'>
+                        {phone}
+                      </p>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -142,15 +155,19 @@ export default function Footer(): React.ReactElement {
               <div className='w-[19rem] tabletM:w-[17.3125rem] text-primary_4 text-custom-18'>
                 <div className='flex w-full flex-col gap-4 tabletM:mt-[3.375rem]'>
                   <div>
-                    <h2 className='font-custom-700 mb-2'>Address</h2>
+                    <h2 className='font-custom-700 mb-2'>
+                      {t('footer.address.title')}
+                    </h2>
                     <p className='font-custom-400'>
-                      Marj Al-Hamam, Amman, Jordan
+                      {t('footer.address.value')}
                     </p>
-                    <p className='font-custom-400'>Zip Code: 11733</p>
+                    <p className='font-custom-400'>
+                      {t('footer.address.zipCode')}
+                    </p>
                   </div>
 
                   <div>
-                    <p className='font-custom-700'>09:00 - 17:00</p>
+                    <p className='font-custom-700'>{t('footer.hours')}</p>
                   </div>
                 </div>
               </div>
@@ -165,7 +182,7 @@ export default function Footer(): React.ReactElement {
         <hr />
         <div className='my-[1.5rem] flex content-end justify-center gap-2'>
           <p className='text-custom-18 font-custom-400 text-primary_4'>
-            Copyright © Bookagri.com
+            {t('footer.copyright')}
           </p>
         </div>
       </div>

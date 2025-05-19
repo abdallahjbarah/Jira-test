@@ -11,6 +11,7 @@ import { getCountries, getCountryCallingCode, CountryCode } from 'libphonenumber
 import { useMutation } from "@tanstack/react-query";
 import { reactQueryClientOptions } from '@configs/reactQueryClientOptions';
 import { ONE_MINUTE_IN_MILLI } from "@utils/constants";
+import Link from 'next/link';
 
 interface SignUpFormValues {
   firstName: string;
@@ -106,20 +107,20 @@ export default function SignUpPage(): React.ReactElement {
   };
 
   return (
-    <main className='relative flex min-h-screen flex-col items-center bg-white px-4 '>
+    <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 md:px-8'>
       {/* Sign Up Button Top Right */}
       <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[240px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
-            <span className='text-lg font-medium text-white'>Sign Up</span>
+            <span className='text-[25px] font-semibold text-white'>Sign Up</span>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className='mt-32 sm:mt-52 w-full max-w-[296px] space-y-8 px-4'>
-        {/* Logo */}
-        <div className='flex items-center justify-center gap-2'>
+      <div className="mt-32 sm:mt-52 w-full max-w-[296px] space-y-8 px-4 sm:px-0">
+        {/* Heading */}
+        <div className="flex flex-col items-center gap-2 animate-fadeIn">
           <h1 className="w-[264px] h-[30px] text-[25px] font-bold whitespace-nowrap text-center">
             <span className="text-[#222222]">Create Your </span>
             <span className="text-[#47C409]">Account</span>
@@ -151,10 +152,10 @@ export default function SignUpPage(): React.ReactElement {
               setFieldValue,
               isSubmitting,
             }) => (
-              <Form className='space-y-4 flex flex-col items-center'>
+              <Form className='space-y-4 flex flex-col items-center w-full'>
                 {/* Name Fields */}
-                <div className='grid grid-cols-2 gap-4 w-full'>
-                  <div>
+                <div className='flex flex-col sm:flex-row gap-4 w-full'>
+                  <div className='flex flex-col items-center w-full'>
                     <input
                       type='text'
                       id='firstName'
@@ -163,7 +164,7 @@ export default function SignUpPage(): React.ReactElement {
                       placeholder='First Name'
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      className='w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
+                      className='w-full h-[48px] rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
                     />
                     {touched.firstName && errors.firstName && (
                       <p className='mt-1 text-sm text-red-600 text-center'>
@@ -171,7 +172,7 @@ export default function SignUpPage(): React.ReactElement {
                       </p>
                     )}
                   </div>
-                  <div>
+                  <div className='flex flex-col items-center w-full'>
                     <input
                       type='text'
                       id='lastName'
@@ -180,7 +181,7 @@ export default function SignUpPage(): React.ReactElement {
                       placeholder='Last Name'
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      className='w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
+                      className='w-full h-[48px] rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
                     />
                     {touched.lastName && errors.lastName && (
                       <p className='mt-1 text-sm text-red-600 text-center'>
@@ -191,7 +192,7 @@ export default function SignUpPage(): React.ReactElement {
                 </div>
 
                 {/* Email Field */}
-                <div className='w-full'>
+                <div className='flex flex-col items-center w-full'>
                   <input
                     type='email'
                     id='email'
@@ -200,7 +201,7 @@ export default function SignUpPage(): React.ReactElement {
                     placeholder='Email'
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className='w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
+                    className='w-[296px] h-[48px] rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
                   />
                   {touched.email && errors.email && (
                     <p className='mt-1 text-sm text-red-600 text-center'>
@@ -313,8 +314,8 @@ export default function SignUpPage(): React.ReactElement {
                 )}
 
                 {/* Password Field */}
-                <div className='w-full'>
-                  <div className='relative'>
+                <div className='flex flex-col items-center w-full'>
+                  <div className="relative w-[296px]">
                     <input
                       type={showPassword ? 'text' : 'password'}
                       id='password'
@@ -323,65 +324,60 @@ export default function SignUpPage(): React.ReactElement {
                       placeholder='Password'
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      className='w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
+                      className='w-[296px] h-[48px] rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
                     />
                     <button
                       type='button'
                       onClick={() => setShowPassword(!showPassword)}
-                      className='absolute right-3 top-1/2 -translate-y-1/2 text-[#47C409] z-10'
+                      className="absolute right-3 top-1/2 -translate-y-1/2"
                     >
                       {showPassword ? (
-                        <EyeIcon className='h-6 w-6' />
+                        <EyeIcon className="h-6 w-6 text-[#47C409]" />
                       ) : (
-                        <EyeSlashIcon className='h-6 w-6' />
+                        <EyeSlashIcon className="h-6 w-6 text-[#47C409]" />
                       )}
                     </button>
                   </div>
                   {touched.password && errors.password && (
-                    <p className='mt-1 text-sm text-red-600 text-center'>
+                    <p className="text-red-500 text-sm mt-1 w-[296px] text-left">
                       {errors.password}
                     </p>
                   )}
                 </div>
 
                 {/* Terms and Conditions */}
-                <div className='w-full'>
-                  <label className='flex items-center gap-2'>
-                    <input
-                      type='checkbox'
-                      id='agreeToTerms'
-                      name='agreeToTerms'
-                      checked={values.agreeToTerms}
-                      onChange={handleChange}
-                      className='h-[20px] w-[20px] rounded border-gray-300 text-[#47C409] focus:ring-[#47C409] appearance-none bg-white border checked:bg-[#47C409] checked:border-[#47C409] relative transition-all after:content-[""] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:w-1.5 after:h-2.5 after:border-r-2 after:border-b-2 after:border-white after:rotate-45 after:opacity-0 checked:after:opacity-100'
-                    />
-                    <span className='w-[208px] h-[28px] text-[12px] font-semibold leading-[14px] text-gray-600'>
-                      Agree to our{' '}
-                      <a href='#' className='text-[#233785] underline hover:text-[#2f49a3]'>
-                        Privacy Policy
-                      </a>{' '}
-                      and{' '}
-                      <a href='#' className='text-[#233785] underline hover:text-[#2f49a3]'>
-                        Usage Agreement
-                      </a>
-                    </span>
+                <div className='flex items-start gap-2 w-[296px]'>
+                  <input
+                    type='checkbox'
+                    id='agreeToTerms'
+                    name='agreeToTerms'
+                    checked={values.agreeToTerms}
+                    onChange={handleChange}
+                    className='h-[20px] w-[20px] rounded border-gray-300 text-[#47C409] focus:ring-[#47C409] appearance-none bg-white border checked:bg-[#47C409] checked:border-[#47C409] relative transition-all after:content-[""] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:w-1.5 after:h-2.5 after:border-r-2 after:border-b-2 after:border-white after:rotate-45 after:opacity-0 checked:after:opacity-100'
+                  />
+                  <label htmlFor='agreeToTerms' className='w-[208px] h-[28px] text-[12px] font-semibold leading-[14px] text-gray-600'>
+                    Agree to our{' '}
+                    <a href='#' className='text-[#233785] underline hover:text-[#2f49a3]'>
+                      Privacy Policy
+                    </a>{' '}
+                    and{' '}
+                    <a href='#' className='text-[#233785] underline hover:text-[#2f49a3]'>
+                      Usage Agreement
+                    </a>
                   </label>
-                  {touched.agreeToTerms && errors.agreeToTerms && (
-                    <p className='mt-1 text-sm text-red-600 text-center'>
-                      {errors.agreeToTerms}
-                    </p>
-                  )}
                 </div>
+                {touched.agreeToTerms && errors.agreeToTerms && (
+                  <p className='mt-1 text-sm text-red-600 text-center'>
+                    {errors.agreeToTerms}
+                  </p>
+                )}
 
                 {/* Submit Button */}
                 <div className='w-full pt-6'>
                   <button
                     type='submit'
                     disabled={isLoading || isSubmitting}
-                    className={`w-full h-[48px] rounded-[8px] bg-[#47C409] text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${isLoading || isSubmitting
-                      ? 'cursor-not-allowed opacity-70'
-                      : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
-                      }`}
+                    className={`w-[296px] h-[48px] rounded-[8px] bg-[#47C409] text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${isLoading || isSubmitting ? 'cursor-not-allowed opacity-70' : ''}`}
                   >
                     {isLoading || isSubmitting ? (
                       <div className="flex items-center justify-center">
@@ -410,6 +406,7 @@ export default function SignUpPage(): React.ReactElement {
               </button>
             </p>
           </div>
+
           {/* Or Divider */}
           <div className="relative mt-12 mb-8 flex items-center justify-center w-full max-w-[296px] mx-auto">
             <div className="w-[123px] border-t-[1px] border-solid border-[#EEEEEE]"></div>

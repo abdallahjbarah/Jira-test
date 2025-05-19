@@ -1,0 +1,68 @@
+'use client';
+import React from 'react';
+import TabsNavigation, { TabItem } from './index';
+
+const BookingsTabs: React.FC = () => {
+  const [activeTab, setActiveTab] = React.useState('upcoming');
+
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+  };
+
+  const tabs: TabItem[] = [
+    {
+      id: 'upcoming',
+      label: 'Upcoming',
+      content: (
+        <div className='p-6'>
+          <h3 className='text-custom-24 font-custom-600 mb-4'>
+            Upcoming Bookings
+          </h3>
+          <p className='text-text_2'>
+            You have upcoming bookings scheduled. Manage your reservations here.
+          </p>
+        </div>
+      ),
+    },
+    {
+      id: 'completed',
+      label: 'Completed',
+      content: (
+        <div className='p-6'>
+          <h3 className='text-custom-24 font-custom-600 mb-4'>
+            Completed Bookings
+          </h3>
+          <p className='text-text_2'>
+            View your history of completed bookings and their details.
+          </p>
+        </div>
+      ),
+    },
+    {
+      id: 'cancelled',
+      label: 'Cancelled',
+      content: (
+        <div className='p-6'>
+          <h3 className='text-custom-24 font-custom-600 mb-4'>
+            Cancelled Bookings
+          </h3>
+          <p className='text-text_2'>
+            These bookings were cancelled. You can review the details here.
+          </p>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className='container py-8'>
+      <TabsNavigation
+        tabs={tabs}
+        defaultActiveTab='upcoming'
+        onChange={handleTabChange}
+      />
+    </div>
+  );
+};
+
+export default BookingsTabs;

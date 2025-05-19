@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import DateRangePicker from '@/components/shared/DateRangePicker';
 
 type GenderOption = 'She' | 'He' | 'Prefer not to say';
 
@@ -12,6 +13,8 @@ export default function WelcomePage(): React.ReactElement {
   const [gender, setGender] = useState<GenderOption | ''>('');
   const [birthDate, setBirthDate] = useState<string>('');
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
 
   useEffect(() => {
     // Get first name from local storage
@@ -35,18 +38,18 @@ export default function WelcomePage(): React.ReactElement {
   };
 
   return (
-    <main className='relative flex min-h-screen flex-col items-center bg-white px-4'>
+    <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 md:px-8'>
       {/* Welcome Button Top Right */}
       <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[240px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
-            <span className='text-lg font-medium text-white'>Welcome</span>
+            <span className='w-[89px] h-[30px] text-[25px] font-semibold text-white'>Sign Up</span>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="mt-32 sm:mt-52 w-full max-w-[296px] space-y-8 px-4">
+      <div className="mt-32 sm:mt-52 w-full max-w-[296px] space-y-8 px-4 sm:px-0">
         {/* Heading */}
         <div className="flex flex-col items-center gap-2 animate-fadeIn">
           <h1 className="w-[178px] h-[38px] text-[32px] font-bold whitespace-nowrap mb-4 text-center">
@@ -122,23 +125,51 @@ export default function WelcomePage(): React.ReactElement {
         </div>
 
         {/* Form Sections */}
-        <div className='space-y-4 flex flex-col items-center'>
+        <div className='space-y-4 flex flex-col items-center w-full'>
           {/* Birthday Section */}
-          <div className='space-y-3 flex flex-col items-center'>
+          <div className='space-y-3 flex flex-col items-center w-full'>
             <label className='w-[296px] h-[17px] text-[14px] font-bold text-black'>
               Let's celebrate your birthday
             </label>
-            <input
-              type='date'
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
-              placeholder='DD/MM/YYYY'
-              className='w-[296px] h-[48px] rounded-lg border border-gray-300 px-4 py-3 focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] text-gray-500 placeholder-gray-400 [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:sepia [&::-webkit-calendar-picker-indicator]:saturate-[10000%] [&::-webkit-calendar-picker-indicator]:hue-rotate-[85deg] [&::-webkit-calendar-picker-indicator]:brightness-[0.8] [&::-webkit-datetime-edit]:uppercase [&::-webkit-datetime-edit-fields-wrapper]:uppercase'
-            />
+            <div className="relative w-[296px]">
+              <input
+                type='date'
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
+                placeholder='DD/MM/YYYY'
+                className='w-[296px] h-[48px] rounded-lg border border-gray-300 px-4 py-3 focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] text-gray-500 placeholder-gray-400 [&::-webkit-calendar-picker-indicator]:hidden'
+              />
+              <div
+                onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer z-10"
+              >
+                <Image
+                  src="/SVGs/shared/calendar-2.svg"
+                  alt="Calendar"
+                  width={24}
+                  height={24}
+                  className="pointer-events-none"
+                />
+              </div>
+              {isDatePickerOpen && (
+                <div className="absolute top-full left-0 mt-2 z-50">
+                  <DateRangePicker
+                    selectedDates={selectedDates}
+                    onChange={(dates) => {
+                      if (dates.length > 0) {
+                        setBirthDate(dates[0].toISOString().split('T')[0]);
+                        setIsDatePickerOpen(false);
+                      }
+                    }}
+                    mode="single"
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Gender Selection */}
-          <div className='space-y-3 flex flex-col items-center'>
+          <div className='space-y-3 flex flex-col items-center w-full'>
             <label className='w-[296px] h-[17px] text-[14px] font-bold text-black'>
               Are you
             </label>
@@ -181,7 +212,7 @@ export default function WelcomePage(): React.ReactElement {
           </div>
 
           {/* Start Exploring Button */}
-          <div className='pt-12'>
+          <div className='pt-12 w-full'>
             <button
               onClick={() => router.push('/dashboard')}
               className='w-[296px] h-[48px] rounded-lg bg-[#47C409] text-white transition-colors hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 flex items-center justify-center'
@@ -193,7 +224,7 @@ export default function WelcomePage(): React.ReactElement {
           </div>
 
           {/* Skip Option */}
-          <div className='text-center pt-1 pb-16'>
+          <div className='text-center pt-1 pb-16 w-full'>
             <button
               onClick={() => router.push('/dashboard')}
               className='text-black underline hover:text-gray-800 transition-colors'

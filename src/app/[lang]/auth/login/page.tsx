@@ -58,20 +58,18 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center bg-white px-4">
+    <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 md:px-8'>
       {/* Login Button Top Right */}
-      <div className="absolute right-0 top-0">
-        <div className="h-[65px] w-[278px] overflow-hidden">
-          <div className="absolute right-0 top-0 h-[65px] w-[278px] rounded-bl-[50px] bg-[#FE360A] flex items-center justify-center transform transition-transform hover:scale-[1.02]">
-            <span className="text-[25px] font-semibold text-white h-[30px] whitespace-nowrap">
-              Login
-            </span>
+      <div className='absolute right-0 top-0'>
+        <div className='h-[65px] w-[240px] overflow-hidden'>
+          <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
+            <span className='text-[25px] font-semibold text-white'>Log in</span>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="mt-32 sm:mt-52 w-full max-w-sm space-y-8 px-4 sm:max-w-md">
+      <div className="mt-32 sm:mt-52 w-full max-w-[296px] space-y-8 px-4 sm:px-0">
         {/* Heading */}
         <div className="flex flex-row items-center justify-center gap-2 animate-fadeIn">
           <h1 className="w-[143px] h-[32px] text-[25px] font-bold leading-[100%] text-center">
@@ -85,69 +83,79 @@ export default function LoginPage() {
         </div>
 
         {/* Form */}
-        <div className="w-full space-y-5 pb-16">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className='w-full space-y-5 pb-16'>
+          <form onSubmit={handleSubmit(onSubmit)} className='space-y-4 flex flex-col items-center w-full'>
             {/* Email Field */}
-            <div className="flex justify-center">
-              <div className="w-full max-w-[296px]">
-                <input
-                  type="email"
-                  {...register('email')}
-                  placeholder="Email"
-                  className="box-border w-full h-[48px] bg-white border border-[#EEEEEE] rounded-[8px] px-4 text-[14px] font-normal leading-[17px] text-[#555555] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] transform transition-all hover:shadow-md"
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600 text-center">{errors.email.message}</p>
-                )}
-              </div>
+            <div className='flex flex-col items-center w-full'>
+              <input
+                type='email'
+                {...register('email')}
+                placeholder='Email / Phone Number'
+                className='w-full h-[48px] rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
+              />
+              {errors.email && (
+                <p className='mt-1 text-sm text-red-600 text-center'>
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             {/* Password Field */}
-            <div className="flex justify-center">
-              <div className="w-full max-w-[296px] relative">
+            <div className='flex flex-col items-center w-full'>
+              <div className="relative w-full">
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   {...register('password')}
-                  placeholder="Password"
-                  className="box-border w-full h-[48px] bg-white border border-[#EEEEEE] rounded-[8px] px-4 text-[14px] font-normal leading-[17px] text-[#555555] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] transform transition-all hover:shadow-md"
+                  placeholder='Password'
+                  className='w-full h-[48px] rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]'
                 />
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-[24px] top-1/2 -translate-y-1/2 text-[#47C409] transform transition-transform hover:scale-110"
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
                 >
                   {showPassword ? (
-                    <EyeIcon className="h-6 w-6" />
+                    <EyeIcon className="h-6 w-6 text-[#47C409]" />
                   ) : (
-                    <EyeSlashIcon className="h-6 w-6" />
+                    <EyeSlashIcon className="h-6 w-6 text-[#47C409]" />
                   )}
                 </button>
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-600 text-center">{errors.password.message}</p>
-                )}
               </div>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1 w-full text-left">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
-            {/* Forgot Password Link */}
-            <div className="flex justify-end w-full max-w-[296px] mx-auto pb-6">
+            {/* Remember Me & Forgot Password */}
+            <div className='flex items-center justify-between w-full'>
+              <label className='flex items-center gap-2'>
+                <input
+                  type='checkbox'
+                  id='rememberMe'
+                  name='rememberMe'
+                  className='h-[20px] w-[20px] rounded border-gray-300 text-[#47C409] focus:ring-[#47C409] appearance-none bg-white border checked:bg-[#47C409] checked:border-[#47C409] relative transition-all after:content-[""] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:w-1.5 after:h-2.5 after:border-r-2 after:border-b-2 after:border-white after:rotate-45 after:opacity-0 checked:after:opacity-100'
+                />
+                <span className='text-[12px] font-semibold leading-[14px] text-gray-600'>
+                  Remember me
+                </span>
+              </label>
               <button
-                type="button"
-                onClick={() => router.push("/auth/forgot-password")}
-                className="text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors"
+                type='button'
+                onClick={() => router.push('/auth/forgot-password')}
+                className='text-[12px] font-semibold leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors'
               >
                 Forgot Password?
               </button>
             </div>
 
-            {/* Login Button */}
-            <div className="flex justify-center">
+            {/* Submit Button */}
+            <div className='w-full pt-6'>
               <button
-                type="submit"
+                type='submit'
                 disabled={isLoading || isSubmitting}
-                className={`w-full max-w-[296px] h-[48px] rounded-[8px] bg-[#47C409] text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${isLoading || isSubmitting
-                  ? 'cursor-not-allowed opacity-70'
-                  : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
-                  }`}
+                className={`w-full h-[48px] rounded-[8px] bg-[#47C409] text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${isLoading || isSubmitting ? 'cursor-not-allowed opacity-70' : ''}`}
               >
                 {isLoading || isSubmitting ? (
                   <div className="flex items-center justify-center">
@@ -162,13 +170,13 @@ export default function LoginPage() {
           </form>
 
           {/* Sign Up Link */}
-          <div className="text-center transform transition-all hover:scale-105">
-            <p className="text-[12px] font-normal leading-[14px] text-[#222222] mx-auto">
-              Don't have an account?{" "}
+          <div className='text-center transform transition-all hover:scale-105'>
+            <p className='text-[12px] font-normal leading-[14px] text-[#222222] mx-auto pb-2'>
+              Don't have an account?{' '}
               <button
-                type="button"
-                onClick={() => router.push("/auth/signup")}
-                className="text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors"
+                type='button'
+                onClick={() => router.push('/auth/signup')}
+                className='text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors'
               >
                 Sign Up
               </button>
