@@ -1,143 +1,138 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Formik, Form, FormikHelpers } from 'formik';
-import { ForgetPasswordEmailSchema } from '@utils/formsSchemas';
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import { reactQueryClientOptions } from '@configs/reactQueryClientOptions';
 
 interface ForgotPasswordFormValues {
   email: string;
 }
 
-export default function ForgotPasswordPage(): React.ReactElement {
+const forgotPasswordSchema = yup.object().shape({
+  email: yup.string().email("Invalid email").required("Email is required"),
+});
+
+export default function ForgotPasswordPage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (
-    values: ForgotPasswordFormValues,
-    { setSubmitting }: FormikHelpers<ForgotPasswordFormValues>,
-  ): Promise<void> => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    }
+  });
+
+  const forgotPasswordMutation = useMutation({
+    mutationFn: async (data: ForgotPasswordFormValues) => {
+      // Your API call here
+      // Example:
+      // return await api.post('/auth/forgot-password', data);
+      return new Promise(resolve => setTimeout(resolve, 1000));
+    },
+    onSuccess: (data) => {
+      // Save email to localStorage
+      localStorage.setItem('forgotPasswordEmail', watch('email'));
+      toast.success("Verification code sent to your email!");
+      router.push(`/auth/verify?email=${encodeURIComponent(watch('email'))}`);
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to send verification code. Please try again.");
+    }
+  });
+
+  const onSubmit: SubmitHandler<ForgotPasswordFormValues> = async (data) => {
     try {
-      setIsLoading(true);
-      const response = await fetch('/api/auth/forgot-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to send verification code');
-      }
-
-      toast.success('Verification code sent successfully!');
-      router.push(`/auth/verify?email=${encodeURIComponent(values.email)}`);
+      await forgotPasswordMutation.mutateAsync(data);
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(
-          error.message || 'Failed to send reset link. Please try again.',
-        );
-      } else {
-        toast.error('Failed to send reset link. Please try again.');
-      }
-    } finally {
-      setIsLoading(false);
-      setSubmitting(false);
+      console.error('Forgot password error:', error);
     }
   };
 
   return (
-    <main className='relative flex min-h-screen flex-col items-center bg-white px-4'>
-      {/* Forget Password Button Top Right */}
-      <div className='absolute right-0 top-0'>
-        <div className='h-[65px] w-[240px] overflow-hidden'>
-          <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
-            <span className='text-lg font-medium text-white'>
-              Forget Password
+    <main className="relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 lg:px-8">
+      {/* Forgot Password Button Top Right */}
+      <div className="absolute right-0 top-0">
+        <div className="h-[65px] w-[200px] sm:w-[278px] overflow-hidden">
+          <div className="absolute right-0 top-0 h-[65px] w-[200px] sm:w-[278px] rounded-bl-[50px] bg-[#FE360A] flex items-center justify-center transform transition-transform hover:scale-[1.02]">
+            <span className="text-[20px] sm:text-[25px] font-semibold text-white h-[30px] whitespace-nowrap">
+              Forgot Password
             </span>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className='mt-52 w-full max-w-sm space-y-8 px-4 sm:max-w-md'>
+      <div className="mt-24 sm:mt-32 md:mt-52 w-full max-w-sm space-y-6 sm:space-y-8 px-4 sm:max-w-md">
         {/* Heading */}
-        <div className='flex items-center justify-center whitespace-nowrap'>
-          <h1 className='text-[#222222] text-[32px] leading-[32px] font-bold'>
-            Forgot Your&nbsp;
+        <div className="flex flex-col items-center gap-2 sm:gap-3 animate-fadeIn">
+          <h1 className="w-full sm:w-[290px] h-auto sm:h-[28px] text-[20px] xs:text-[22px] sm:text-[25px] font-bold whitespace-nowrap mb-4 sm:mb-6 md:mb-8 text-center">
+            <span className="text-[#222222]">Forgot </span>
+            <span className="text-[#47C409]">Password?</span>
           </h1>
-          <span className='text-[#47C409] text-[32px] leading-[32px] font-bold'>
-            Password?
-          </span>
+          <p className="text-[12px] xs:text-[13px] sm:text-[14px] font-normal leading-[16px] sm:leading-[17px] text-[#555555] max-w-[280px] xs:max-w-[296px] text-center px-2 sm:px-0">
+            Enter the email address associated with your account, we will send you a link to reset your password
+          </p>
         </div>
 
-        {/* Description */}
-        <p className='text-left text-gray-600'>
-          Enter the email address associated with your account, we will send you
-          a link to reset your password
-        </p>
-
         {/* Form */}
-        <div className='w-full space-y-6'>
-          <Formik
-            initialValues={{
-              email: '',
-            }}
-            validationSchema={ForgetPasswordEmailSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ values, errors, touched, handleChange, handleBlur }) => (
-              <Form className='space-y-8'>
-                <div className='space-y-1'>
-                  <div className='relative'>
-                    <input
-                      type='email'
-                      name='email'
-                      placeholder='Email'
-                      value={values.email}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={`w-full rounded-lg border ${
-                        touched.email && errors.email
-                          ? 'border-red-500'
-                          : 'border-gray-200'
-                      } bg-white px-4 py-3 text-gray-700 placeholder:font-light placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]`}
-                    />
-                    {touched.email && errors.email && (
-                      <div className='absolute -bottom-6 left-0'>
-                        <p className='text-sm text-red-500'>{errors.email}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
+        <div className="w-full space-y-4 sm:space-y-5 pb-12 sm:pb-16">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Email Field */}
+            <div className="flex justify-center">
+              <div className="w-full max-w-[296px] mb-6 sm:mb-8">
+                <input
+                  type="email"
+                  {...register('email')}
+                  placeholder="Email"
+                  className="box-border w-full h-[44px] sm:h-[48px] bg-white border border-[#EEEEEE] rounded-[8px] px-4 text-[13px] sm:text-[14px] font-normal leading-[17px] text-[#555555] placeholder:text-[13px] sm:placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] transform transition-all hover:shadow-md"
+                />
+                {errors.email && (
+                  <p className="mt-1 text-xs sm:text-sm text-red-600 text-center">{errors.email.message}</p>
+                )}
+              </div>
+            </div>
 
-                <button
-                  type='submit'
-                  disabled={isLoading}
-                  className={`w-full rounded-lg bg-[#47C409] py-3 text-white transition-colors ${
-                    isLoading
-                      ? 'cursor-not-allowed opacity-70'
-                      : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
+            {/* Submit Button */}
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                disabled={isLoading || isSubmitting}
+                className={`w-full max-w-[296px] h-[44px] sm:h-[48px] rounded-[8px] bg-[#47C409] text-[13px] sm:text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${isLoading || isSubmitting
+                  ? 'cursor-not-allowed opacity-70'
+                  : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
                   }`}
-                >
-                  {isLoading ? 'Sending...' : 'Send'}
-                </button>
-              </Form>
-            )}
-          </Formik>
+              >
+                {isLoading || isSubmitting ? (
+                  <div className="flex items-center justify-center">
+                    <span className="mr-2 text-[13px] sm:text-[14px]">Sending Code...</span>
+                    <div className="animate-spin h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                  </div>
+                ) : (
+                  "Send"
+                )}
+              </button>
+            </div>
+          </form>
 
           {/* Back to Login Link */}
-          <div className='text-center'>
-            <p className='text-sm text-gray-600'>
-              Remembered your password?{' '}
+          <div className="text-center transform transition-all hover:scale-105">
+            <p className="text-[11px] sm:text-[12px] font-normal leading-[14px] text-[#222222] mx-auto">
+              Remember your password?{" "}
               <button
-                type='button'
-                onClick={() => router.push('/auth/login')}
-                className='text-[#47C409] hover:text-[#3ba007]'
+                type="button"
+                onClick={() => router.push("/auth/login")}
+                className="text-[11px] sm:text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors"
               >
                 Login
               </button>
@@ -147,4 +142,4 @@ export default function ForgotPasswordPage(): React.ReactElement {
       </div>
     </main>
   );
-}
+} 

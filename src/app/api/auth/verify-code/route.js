@@ -4,9 +4,10 @@ import { VerificationCodeSchema } from "@utils/formsSchemas";
 export async function POST(request) {
     try {
         const body = await request.json();
+        const { code } = body;
 
-        // Validate the request body against the schema
-        await VerificationCodeSchema.validate(body);
+        // Validate the code
+        await VerificationCodeSchema.validate({ code });
 
         // TODO: Replace with actual verification logic
         // This is a mock response for demonstration
@@ -14,6 +15,7 @@ export async function POST(request) {
             message: "Code verified successfully"
         });
     } catch (error) {
+        console.error('Verification error:', error);
         return NextResponse.json(
             { message: error.message || "Invalid verification code" },
             { status: 400 }

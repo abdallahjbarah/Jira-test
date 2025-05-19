@@ -1,25 +1,25 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 type GenderOption = 'She' | 'He' | 'Prefer not to say';
 
 export default function WelcomePage(): React.ReactElement {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [userName, setUserName] = useState<string>('');
+  const [firstName, setFirstName] = useState('');
   const [gender, setGender] = useState<GenderOption | ''>('');
   const [birthDate, setBirthDate] = useState<string>('');
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
   useEffect(() => {
-    const name = searchParams.get('name');
-    if (name) {
-      setUserName(name);
+    // Get first name from local storage
+    const storedFirstName = localStorage.getItem('userFirstName');
+    if (storedFirstName) {
+      setFirstName(storedFirstName);
     }
-  }, [searchParams]);
+  }, []);
 
   const handleImageUpload = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -37,7 +37,7 @@ export default function WelcomePage(): React.ReactElement {
   return (
     <main className='relative flex min-h-screen flex-col items-center bg-white px-4'>
       {/* Welcome Button Top Right */}
-      <div className='absolute right-0 top-0 '>
+      <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[240px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
             <span className='text-lg font-medium text-white'>Welcome</span>
@@ -46,14 +46,16 @@ export default function WelcomePage(): React.ReactElement {
       </div>
 
       {/* Main Content */}
-      <div className='w-full max-w-md space-y-10 px-4 mt-46 sm:mt-48'>
-        {/* Welcome Message */}
-        <div className='text-center space-y-6'>
-          <h1 className='text-4xl font-bold'>
-            <span className='text-[#222222]'>Hello </span>
-            <span className='text-[#47C409]'>{userName}!</span>
+      <div className="mt-32 sm:mt-52 w-full max-w-[296px] space-y-8 px-4">
+        {/* Heading */}
+        <div className="flex flex-col items-center gap-2 animate-fadeIn">
+          <h1 className="w-[178px] h-[38px] text-[32px] font-bold whitespace-nowrap mb-4 text-center">
+            <span className="text-[#222222]">Hello </span>
+            <span className="text-[#47C409]">{firstName}</span>
           </h1>
-          <p className='text-xl text-gray-600'>Tell us more about you :)</p>
+          <p className="text-[14px] font-normal leading-[17px] text-[#555555] text-center">
+            Tell us more about you :)
+          </p>
         </div>
 
         {/* Profile Photo Upload */}
@@ -120,39 +122,38 @@ export default function WelcomePage(): React.ReactElement {
         </div>
 
         {/* Form Sections */}
-        <div className='space-y-8'>
+        <div className='space-y-4 flex flex-col items-center'>
           {/* Birthday Section */}
-          <div className='space-y-3'>
-            <label className='block text-lg font-extrabold text-black'>
+          <div className='space-y-3 flex flex-col items-center'>
+            <label className='w-[296px] h-[17px] text-[14px] font-bold text-black'>
               Let's celebrate your birthday
             </label>
             <input
               type='date'
               value={birthDate}
               onChange={(e) => setBirthDate(e.target.value)}
-              placeholder='dd/mm/yyyy'
-              className='w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] text-gray-500 placeholder-gray-400 [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:sepia [&::-webkit-calendar-picker-indicator]:saturate-[10000%] [&::-webkit-calendar-picker-indicator]:hue-rotate-[85deg] [&::-webkit-calendar-picker-indicator]:brightness-[0.8]'
+              placeholder='DD/MM/YYYY'
+              className='w-[296px] h-[48px] rounded-lg border border-gray-300 px-4 py-3 focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] text-gray-500 placeholder-gray-400 [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:sepia [&::-webkit-calendar-picker-indicator]:saturate-[10000%] [&::-webkit-calendar-picker-indicator]:hue-rotate-[85deg] [&::-webkit-calendar-picker-indicator]:brightness-[0.8] [&::-webkit-datetime-edit]:uppercase [&::-webkit-datetime-edit-fields-wrapper]:uppercase'
             />
           </div>
 
           {/* Gender Selection */}
-          <div className='space-y-3'>
-            <label className='block text-lg font-extrabold text-black'>
+          <div className='space-y-3 flex flex-col items-center'>
+            <label className='w-[296px] h-[17px] text-[14px] font-bold text-black'>
               Are you
             </label>
-            <div className='flex items-center justify-start gap-8'>
+            <div className='flex items-center justify-center gap-4'>
               {(['She', 'He', 'Prefer not to say'] as const).map((option) => (
                 <label
                   key={option}
-                  className='flex items-center gap-3 cursor-pointer'
+                  className='flex items-center gap-2 cursor-pointer'
                   onClick={() => setGender(option)}
                 >
                   <div
-                    className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                      gender === option
-                        ? 'bg-[#47C409]'
-                        : 'bg-gray-100 border-2 border-gray-300'
-                    }`}
+                    className={`w-[24px] h-[24px] rounded-full flex items-center justify-center ${gender === option
+                      ? 'bg-[#47C409]'
+                      : 'bg-gray-100 border-2 border-gray-300'
+                      }`}
                   >
                     {gender === option && (
                       <svg
@@ -171,7 +172,7 @@ export default function WelcomePage(): React.ReactElement {
                       </svg>
                     )}
                   </div>
-                  <span className='text-gray-700 whitespace-nowrap'>
+                  <span className='text-[14px] font-normal leading-[17px] text-gray-700 whitespace-nowrap'>
                     {option}
                   </span>
                 </label>
@@ -180,15 +181,19 @@ export default function WelcomePage(): React.ReactElement {
           </div>
 
           {/* Start Exploring Button */}
-          <button
-            onClick={() => router.push('/dashboard')}
-            className='w-full mt-8 rounded-lg bg-[#47C409] py-4 text-white text-lg font-medium transition-colors hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
-          >
-            Let's Start Exploring
-          </button>
+          <div className='pt-12'>
+            <button
+              onClick={() => router.push('/dashboard')}
+              className='w-[296px] h-[48px] rounded-lg bg-[#47C409] text-white transition-colors hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 flex items-center justify-center'
+            >
+              <span className='w-[128px] h-[17px] text-[14px] font-bold leading-[17px] text-center'>
+                Let's Start Exploring
+              </span>
+            </button>
+          </div>
 
           {/* Skip Option */}
-          <div className='text-center mt-4'>
+          <div className='text-center pt-1 pb-16'>
             <button
               onClick={() => router.push('/dashboard')}
               className='text-black underline hover:text-gray-800 transition-colors'
