@@ -102,7 +102,7 @@ export const CURRENCIES_LIST: CurrencyItem[] = [
 ];
 
 export const SOCIAL_LOGIN_TYPES = {
-  FACEBOOK: 'facebook',
+  APPLE: 'apple',
   GOOGLE: 'google',
 } as const;
 
@@ -144,6 +144,17 @@ export const LINKS_DATA: LinkData[] = [
   { path: '/news', name: { en: 'News', ar: 'الأخبار' } },
   { path: '/gallery', name: { en: 'Gallery', ar: 'المعرض' } },
   { path: '/#ContactUsForm', name: { en: 'Contact Us', ar: 'تواصل معنا' } },
+  {
+    path: '/terms-and-conditions',
+    name: { en: 'Terms & Conditions', ar: 'الشروط والأحكام' },
+  },
+  {
+    path: '/privacy-policy',
+    name: { en: 'Privacy Policy', ar: 'سياسة الخصوصية' },
+  },
+];
+
+export const COLLECTIONS_LINKS: LinkData[] = [
   { path: '/experiences', name: { en: 'Experiences', ar: 'التجارب' } },
   { path: '/events', name: { en: 'Events', ar: 'الأحداث' } },
   { path: '/stays', name: { en: 'Stays', ar: 'الإقامات' } },

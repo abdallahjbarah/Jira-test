@@ -9,3 +9,8 @@ export enum NotificationCategory {
   YESTERDAY = 'yesterday',
   PREVIOUS_DAYS = 'previous-days',
 }
+
+export enum FileFolder {
+  PROFILE = 'profile',
+  PAYMENT_INFO = 'paymentInfo',
+}

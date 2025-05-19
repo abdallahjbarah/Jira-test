@@ -5,7 +5,11 @@ import CustomLink from '@components/ui/CustomLink';
 import HeaderLink from './HeaderLink';
 import { usePathname } from 'next/navigation';
 import BookagriLogoSvg from '@SVGs/shared/BookagriLogoSvg.svg';
-import { DEFAULT_LOCALE, LINKS_DATA } from '@utils/constants';
+import {
+  COLLECTIONS_LINKS,
+  DEFAULT_LOCALE,
+  LINKS_DATA,
+} from '@utils/constants';
 import { useState } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
@@ -25,8 +29,6 @@ export default function Header(): React.ReactElement {
   const pathname = usePathname();
   const params = useParams<{ lang: Locale }>();
   const lang = params.lang || DEFAULT_LOCALE;
-
-  console.log(lang, 'langlanglang');
 
   return (
     <header className='relative'>
@@ -60,7 +62,7 @@ export default function Header(): React.ReactElement {
         </ul>
 
         <ul className='flex justify-end items-center gap-6 flex-grow'>
-          {LINKS_DATA?.slice(5)?.map(
+          {COLLECTIONS_LINKS?.map(
             (item, index) =>
               index != 5 && (
                 <HeaderLink
