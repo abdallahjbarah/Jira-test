@@ -6,9 +6,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useMutation } from "@tanstack/react-query";
 import { reactQueryClientOptions } from '@configs/reactQueryClientOptions';
+import FormInput from '@/components/form/FormInput';
+import Image from "next/image";
 
 interface ResetPasswordFormValues {
   password: string;
@@ -98,54 +99,76 @@ export default function ResetPasswordPage() {
         <div className="w-full space-y-4 sm:space-y-5 pb-12 sm:pb-16">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Password Field */}
-            <div className="flex justify-center">
-              <div className="w-[296px] relative">
-                <input
-                  type={showPassword ? "text" : "password"}
+            <div className='flex flex-col items-center w-full'>
+              <div className='w-full relative'>
+                <FormInput
                   {...register('password')}
-                  placeholder="New Password"
-                  className="box-border w-[296px] h-[48px] bg-white border border-[#EEEEEE] rounded-[8px] px-4 text-[13px] sm:text-[14px] font-normal leading-[16px] sm:leading-[17px] text-[#555555] placeholder:text-[13px] sm:placeholder:text-[14px] placeholder:font-normal placeholder:leading-[16px] sm:placeholder:leading-[17px] placeholder:text-[#555555] placeholder:h-[17px] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] transform transition-all hover:shadow-md"
+                  type={showPassword ? 'text' : 'password'}
+                  label="Password"
+                  error={errors.password?.message}
+                  className="w-full h-[48px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]"
+                  placeholder=""
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-[24px] top-1/2 -translate-y-1/2 text-[#47C409] transform transition-transform hover:scale-110"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#47C409] transform transition-transform hover:scale-110"
                 >
                   {showPassword ? (
-                    <EyeIcon className="h-6 w-6" />
+                    <Image
+                      src="/SVGs/shared/eye.svg"
+                      alt="Show password"
+                      width={24}
+                      height={24}
+                      className="[&>path]:fill-[#47C409]"
+                    />
                   ) : (
-                    <EyeSlashIcon className="h-6 w-6" />
+                    <Image
+                      src="/SVGs/shared/eye-slash.svg"
+                      alt="Hide password"
+                      width={24}
+                      height={24}
+                      className="[&>path]:fill-[#47C409]"
+                    />
                   )}
                 </button>
-                {errors.password && (
-                  <p className="mt-1 text-xs sm:text-sm text-red-600 text-center">{errors.password.message}</p>
-                )}
               </div>
             </div>
 
             {/* Confirm Password Field */}
-            <div className="flex justify-center">
-              <div className="w-[296px] relative mb-12">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
+            <div className='flex flex-col items-center w-full'>
+              <div className='w-full relative'>
+                <FormInput
                   {...register('confirmPassword')}
-                  placeholder="Confirm New Password"
-                  className="box-border w-[296px] h-[48px] bg-white border border-[#EEEEEE] rounded-[8px] px-4 text-[13px] sm:text-[14px] font-normal leading-[16px] sm:leading-[17px] text-[#555555] placeholder:text-[13px] sm:placeholder:text-[14px] placeholder:font-normal placeholder:leading-[16px] sm:placeholder:leading-[17px] placeholder:text-[#555555] placeholder:h-[17px] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] transform transition-all hover:shadow-md"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  label="Confirm Password"
+                  error={errors.confirmPassword?.message}
+                  className="w-full h-[48px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]"
+                  placeholder=""
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-[24px] top-1/2 -translate-y-1/2 text-[#47C409] transform transition-transform hover:scale-110"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#47C409] transform transition-transform hover:scale-110"
                 >
                   {showConfirmPassword ? (
-                    <EyeIcon className="h-6 w-6" />
+                    <Image
+                      src="/SVGs/shared/eye.svg"
+                      alt="Show password"
+                      width={24}
+                      height={24}
+                      className="[&>path]:fill-[#47C409]"
+                    />
                   ) : (
-                    <EyeSlashIcon className="h-6 w-6" />
+                    <Image
+                      src="/SVGs/shared/eye-slash.svg"
+                      alt="Hide password"
+                      width={24}
+                      height={24}
+                      className="[&>path]:fill-[#47C409]"
+                    />
                   )}
                 </button>
-                {errors.confirmPassword && (
-                  <p className="mt-1 text-xs sm:text-sm text-red-600 text-center">{errors.confirmPassword.message}</p>
-                )}
               </div>
             </div>
 

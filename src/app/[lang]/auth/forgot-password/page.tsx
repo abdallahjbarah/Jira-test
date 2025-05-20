@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { reactQueryClientOptions } from '@configs/reactQueryClientOptions';
+import FormInput from '@/components/form/FormInput';
 
 interface ForgotPasswordFormValues {
   email: string;
@@ -89,17 +90,16 @@ export default function ForgotPasswordPage() {
         <div className="w-full space-y-4 sm:space-y-5 pb-12 sm:pb-16">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Email Field */}
-            <div className="flex justify-center">
-              <div className="w-full max-w-[296px] mb-6 sm:mb-8">
-                <input
-                  type="email"
+            <div className='flex flex-col items-center w-full'>
+              <div className='w-[296px]'>
+                <FormInput
                   {...register('email')}
-                  placeholder="Email"
-                  className="box-border w-full h-[44px] sm:h-[48px] bg-white border border-[#EEEEEE] rounded-[8px] px-4 text-[13px] sm:text-[14px] font-normal leading-[17px] text-[#555555] placeholder:text-[13px] sm:placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] transform transition-all hover:shadow-md"
+                  type='email'
+                  label='Email'
+                  error={errors.email?.message}
+                  className='w-[296px] h-[48px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]'
+                  placeholder=""
                 />
-                {errors.email && (
-                  <p className="mt-1 text-xs sm:text-sm text-red-600 text-center">{errors.email.message}</p>
-                )}
               </div>
             </div>
 
