@@ -1,25 +1,29 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import DateRangePicker from '@/components/shared/DateRangePicker';
+import RadioButton from '@/components/ui/RadioButton';
 
 type GenderOption = 'She' | 'He' | 'Prefer not to say';
 
 export default function WelcomePage(): React.ReactElement {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [userName, setUserName] = useState<string>('');
+  const [firstName, setFirstName] = useState('');
   const [gender, setGender] = useState<GenderOption | ''>('');
   const [birthDate, setBirthDate] = useState<string>('');
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
 
   useEffect(() => {
-    const name = searchParams.get('name');
-    if (name) {
-      setUserName(name);
+    // Get first name from local storage
+    const storedFirstName = localStorage.getItem('userFirstName');
+    if (storedFirstName) {
+      setFirstName(storedFirstName);
     }
-  }, [searchParams]);
+  }, []);
 
   const handleImageUpload = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -35,25 +39,27 @@ export default function WelcomePage(): React.ReactElement {
   };
 
   return (
-    <main className='relative flex min-h-screen flex-col items-center bg-white px-4'>
+    <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 md:px-8'>
       {/* Welcome Button Top Right */}
-      <div className='absolute right-0 top-0 '>
+      <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[240px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
-            <span className='text-lg font-medium text-white'>Welcome</span>
+            <span className='text-[25px] font-semibold text-white whitespace-nowrap'>Sign Up</span>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className='w-full max-w-md space-y-10 px-4 mt-46 sm:mt-48'>
-        {/* Welcome Message */}
-        <div className='text-center space-y-6'>
-          <h1 className='text-4xl font-bold'>
-            <span className='text-[#222222]'>Hello </span>
-            <span className='text-[#47C409]'>{userName}!</span>
+      <div className="mt-32 sm:mt-52 w-full max-w-[296px] space-y-8 px-4 sm:px-0">
+        {/* Heading */}
+        <div className="flex flex-col items-center gap-2 animate-fadeIn">
+          <h1 className="w-[178px] h-[38px] text-[32px] font-bold whitespace-nowrap mb-4 text-center">
+            <span className="text-[#222222]">Hello </span>
+            <span className="text-[#47C409]">{firstName}</span>
           </h1>
-          <p className='text-xl text-gray-600'>Tell us more about you :)</p>
+          <p className="text-[14px] font-normal leading-[17px] text-[#555555] text-center">
+            Tell us more about you :)
+          </p>
         </div>
 
         {/* Profile Photo Upload */}
@@ -120,75 +126,85 @@ export default function WelcomePage(): React.ReactElement {
         </div>
 
         {/* Form Sections */}
-        <div className='space-y-8'>
+        <div className='space-y-4 flex flex-col items-center w-full'>
           {/* Birthday Section */}
-          <div className='space-y-3'>
-            <label className='block text-lg font-extrabold text-black'>
+          <div className='space-y-3 flex flex-col items-center w-full'>
+            <label className='w-[296px] h-[17px] text-[14px] font-bold text-black'>
               Let's celebrate your birthday
             </label>
-            <input
-              type='date'
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
-              placeholder='dd/mm/yyyy'
-              className='w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] text-gray-500 placeholder-gray-400 [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:sepia [&::-webkit-calendar-picker-indicator]:saturate-[10000%] [&::-webkit-calendar-picker-indicator]:hue-rotate-[85deg] [&::-webkit-calendar-picker-indicator]:brightness-[0.8]'
-            />
+            <div className="relative w-[296px]">
+              <input
+                type='date'
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
+                placeholder='DD/MM/YYYY'
+                className='w-[296px] h-[48px] rounded-lg border border-gray-300 px-4 py-3 focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] text-gray-500 placeholder-gray-400 [&::-webkit-calendar-picker-indicator]:hidden'
+              />
+              <div
+                onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer z-10"
+              >
+                <Image
+                  src="/SVGs/shared/calendar-2.svg"
+                  alt="Calendar"
+                  width={24}
+                  height={24}
+                  className="pointer-events-none"
+                />
+              </div>
+              {isDatePickerOpen && (
+                <div className="absolute top-full left-0 mt-2 z-50">
+                  <DateRangePicker
+                    selectedDates={selectedDates}
+                    onChange={(dates) => {
+                      if (dates.length > 0) {
+                        setBirthDate(dates[0].toISOString().split('T')[0]);
+                        setIsDatePickerOpen(false);
+                      }
+                    }}
+                    mode="single"
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Gender Selection */}
-          <div className='space-y-3'>
-            <label className='block text-lg font-extrabold text-black'>
+          <div className='space-y-3 flex flex-col items-start w-full'>
+            <label className='w-[296px] h-[17px] text-[14px] font-bold text-black'>
               Are you
             </label>
-            <div className='flex items-center justify-start gap-8'>
+            <div className='flex items-center justify-between w-[296px]'>
               {(['She', 'He', 'Prefer not to say'] as const).map((option) => (
-                <label
-                  key={option}
-                  className='flex items-center gap-3 cursor-pointer'
-                  onClick={() => setGender(option)}
-                >
-                  <div
-                    className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                      gender === option
-                        ? 'bg-[#47C409]'
-                        : 'bg-gray-100 border-2 border-gray-300'
-                    }`}
-                  >
-                    {gender === option && (
-                      <svg
-                        className='w-3 h-3 text-white'
-                        fill='none'
-                        stroke='currentColor'
-                        viewBox='0 0 24 24'
-                        xmlns='http://www.w3.org/2000/svg'
-                      >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth='3'
-                          d='M5 13l4 4L19 7'
-                        />
-                      </svg>
-                    )}
-                  </div>
-                  <span className='text-gray-700 whitespace-nowrap'>
-                    {option}
-                  </span>
-                </label>
+                <div key={option} className="flex items-center">
+                  <RadioButton
+                    id={option}
+                    name="gender"
+                    value={option}
+                    label={option}
+                    checked={gender === option}
+                    onChange={() => setGender(option)}
+                    className="flex-row-reverse gap-[8px]"
+                  />
+                </div>
               ))}
             </div>
           </div>
 
           {/* Start Exploring Button */}
-          <button
-            onClick={() => router.push('/dashboard')}
-            className='w-full mt-8 rounded-lg bg-[#47C409] py-4 text-white text-lg font-medium transition-colors hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
-          >
-            Let's Start Exploring
-          </button>
+          <div className='pt-12 w-full'>
+            <button
+              onClick={() => router.push('/dashboard')}
+              className='w-[296px] h-[48px] rounded-lg bg-[#47C409] text-white transition-colors hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 flex items-center justify-center'
+            >
+              <span className='w-[128px] h-[17px] text-[14px] font-bold leading-[17px] text-center'>
+                Let's Start Exploring
+              </span>
+            </button>
+          </div>
 
           {/* Skip Option */}
-          <div className='text-center mt-4'>
+          <div className='text-center pt-1 pb-16 w-full'>
             <button
               onClick={() => router.push('/dashboard')}
               className='text-black underline hover:text-gray-800 transition-colors'

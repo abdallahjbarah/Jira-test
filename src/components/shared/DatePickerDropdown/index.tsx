@@ -51,33 +51,50 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   // Convert schedule days to numbers and store slots
   const { enabledDays } = useMemo(() => {
     if (!schedule?.days) return { enabledDays: [], daySlots: new Map() };
-    
-    const days = schedule.days.map(day => {
-      let dayNumber = -1;
-      switch (day.name) {
-        case 'Sunday': dayNumber = 0; break;
-        case 'Monday': dayNumber = 1; break;
-        case 'Tuesday': dayNumber = 2; break;
-        case 'Wednesday': dayNumber = 3; break;
-        case 'Thursday': dayNumber = 4; break;
-        case 'Friday': dayNumber = 5; break;
-        case 'Saturday': dayNumber = 6; break;
-      }
-      return dayNumber;
-    }).filter(day => day !== -1);
 
-    return { enabledDays: days};
+    const days = schedule.days
+      .map((day) => {
+        let dayNumber = -1;
+        switch (day.name) {
+          case 'Sunday':
+            dayNumber = 0;
+            break;
+          case 'Monday':
+            dayNumber = 1;
+            break;
+          case 'Tuesday':
+            dayNumber = 2;
+            break;
+          case 'Wednesday':
+            dayNumber = 3;
+            break;
+          case 'Thursday':
+            dayNumber = 4;
+            break;
+          case 'Friday':
+            dayNumber = 5;
+            break;
+          case 'Saturday':
+            dayNumber = 6;
+            break;
+        }
+        return dayNumber;
+      })
+      .filter((day) => day !== -1);
+
+    return { enabledDays: days };
   }, [schedule]);
 
   // Convert schedule timestamps to dates
-  const startDate = useMemo(() => 
-    schedule?.startDateTime ? new Date(schedule.startDateTime) : undefined,
-    [schedule]
+  const startDate = useMemo(
+    () =>
+      schedule?.startDateTime ? new Date(schedule.startDateTime) : undefined,
+    [schedule],
   );
 
-  const endDate = useMemo(() => 
-    schedule?.endDateTime ? new Date(schedule.endDateTime) : undefined,
-    [schedule]
+  const endDate = useMemo(
+    () => (schedule?.endDateTime ? new Date(schedule.endDateTime) : undefined),
+    [schedule],
   );
 
   // Effect to sync with external value changes (from form)
@@ -145,7 +162,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
       if (dates.length > 0) {
         const dayOfWeek = dates[0].getDay();
       }
-      
+
       onChange(getFormattedDateString(dates), dates);
     }
   };
@@ -189,8 +206,6 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
         )
       }
       content={dropdownContent}
-      position='bottom-left'
-      contentClassName='mt-4'
     />
   );
 };

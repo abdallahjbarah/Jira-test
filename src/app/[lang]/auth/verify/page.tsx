@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Formik, Form, FormikHelpers } from 'formik';
 import { VerificationCodeSchema } from '@utils/formsSchemas';
 import { toast } from 'react-toastify';
@@ -15,16 +15,27 @@ interface VerificationFormValues {
 
 export default function VerifyPage(): React.ReactElement {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const emailParam = searchParams.get('email');
-    if (emailParam) {
-      setEmail(emailParam);
+    // Try to get email from localStorage first
+    const storedEmail = localStorage.getItem('forgotPasswordEmail');
+    if (storedEmail) {
+      setEmail(storedEmail);
+    } else {
+      // Fallback to URL parameter if not in localStorage
+      const emailParam = searchParams.get('email');
+      if (emailParam) {
+        const decodedEmail = decodeURIComponent(emailParam);
+        setEmail(decodedEmail);
+        // Also save to localStorage for future use
+        localStorage.setItem('forgotPasswordEmail', decodedEmail);
+      }
     }
-  }, []);
+  }, [searchParams]);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (
     values: VerificationFormValues,
@@ -38,6 +49,11 @@ export default function VerifyPage(): React.ReactElement {
         .map((key) => values[key as keyof VerificationFormValues])
         .join('');
 
+      console.log('Verification attempt:', {
+        code,
+        fullValues: values
+      });
+
       const response = await fetch('/api/auth/verify-code', {
         method: 'POST',
         headers: {
@@ -45,24 +61,33 @@ export default function VerifyPage(): React.ReactElement {
         },
         body: JSON.stringify({
           code,
-          email,
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
+        console.error('API Error Details:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorData: data,
+          requestData: {
+            code
+          }
+        });
         throw new Error(data.message || 'Invalid verification code');
       }
 
       toast.success('Code verified successfully!');
-      router.push(`/auth/reset-password?email=${encodeURIComponent(email)}`);
+      router.push('/auth/reset-password');
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message || 'Verification failed. Please try again.');
-      } else {
-        toast.error('Verification failed. Please try again.');
-      }
+      console.error('Verification Error:', {
+        error,
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
+
+      toast.error(error instanceof Error ? error.message : 'Verification failed. Please try again.');
     } finally {
       setIsLoading(false);
       setSubmitting(false);
@@ -70,35 +95,33 @@ export default function VerifyPage(): React.ReactElement {
   };
 
   return (
-    <main className='relative flex min-h-screen flex-col items-center bg-white px-4'>
+    <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 lg:px-8'>
       {/* Verify Button Top Right */}
       <div className='absolute right-0 top-0'>
-        <div className='h-[65px] w-[240px] overflow-hidden'>
-          <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
-            <span className='text-lg font-medium text-white'>Verify Code</span>
+        <div className='h-[65px] w-[200px] sm:w-[278px] overflow-hidden'>
+          <div className='absolute right-0 top-0 h-[65px] w-[200px] sm:w-[278px] rounded-bl-[50px] bg-[#FE360A] flex items-center justify-center transform transition-transform hover:scale-[1.02]'>
+            <span className='text-[20px] sm:text-[25px] font-semibold text-white h-[30px] whitespace-nowrap'>
+              Verify Code
+            </span>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className='mt-52 w-full max-w-sm space-y-12 px-4 sm:max-w-md'>
+      <div className='mt-24 sm:mt-32 md:mt-52 w-full max-w-[296px] space-y-6 sm:space-y-8 px-4'>
         {/* Heading */}
-        <div className='flex items-center justify-center whitespace-nowrap'>
-          <h1 className='text-[#222222] text-[32px] leading-[32px] font-bold'>
-            Enter&nbsp;
+        <div className='flex flex-col items-center gap-2 sm:gap-3 animate-fadeIn'>
+          <h1 className='w-full sm:w-[191px] h-auto sm:h-[27px] text-[20px] xs:text-[22px] sm:text-[25px] font-bold whitespace-nowrap text-center'>
+            <span className='text-[#222222]'>Verify Your </span>
+            <span className='text-[#47C409]'>Code</span>
           </h1>
-          <span className='text-[#47C409] text-[32px] leading-[32px] font-bold'>
-            Verification Code
-          </span>
+          <p className='text-[12px] xs:text-[13px] sm:text-[14px] mt-3 xs:mt-4 sm:mt-6 font-normal leading-[15px] xs:leading-[16px] sm:leading-[17px] text-[#555555] max-w-[260px] xs:max-w-[280px] sm:max-w-[296px] text-center'>
+            A four-digit code has been sent to your email {email}
+          </p>
         </div>
 
-        {/* Description */}
-        <p className='text-left text-gray-600 mb-8'>
-          Enter the verification code we just sent you on your email address.
-        </p>
-
         {/* Form */}
-        <div className='w-full space-y-12'>
+        <div className='w-full space-y-4 sm:space-y-5 pb-12 sm:pb-16'>
           <Formik
             initialValues={{
               code0: '',
@@ -116,10 +139,10 @@ export default function VerifyPage(): React.ReactElement {
               handleBlur,
               setFieldValue,
             }) => (
-              <Form className='space-y-12' noValidate>
-                <div className='space-y-8'>
+              <Form className='space-y-12 flex flex-col items-center' noValidate>
+                <div className='space-y-4 w-full'>
                   <div className='relative'>
-                    <div className='flex justify-between'>
+                    <div className='flex justify-center gap-3 sm:gap-4'>
                       {[0, 1, 2, 3].map((index) => (
                         <input
                           key={index}
@@ -131,7 +154,7 @@ export default function VerifyPage(): React.ReactElement {
                           name={`code${index}`}
                           value={
                             values[
-                              `code${index}` as keyof VerificationFormValues
+                            `code${index}` as keyof VerificationFormValues
                             ]
                           }
                           onChange={(e) => {
@@ -160,13 +183,20 @@ export default function VerifyPage(): React.ReactElement {
                             }
                           }}
                           onBlur={handleBlur}
-                          className={`h-14 w-14 rounded-lg border border-gray-200 bg-white text-center mb-4 text-2xl font-medium text-[#47C409] placeholder:font-light placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409]`}
+                          className='h-[44px] sm:h-[48px] w-[45px] sm:w-[50px] border-0 border-b-[1px] border-[#EEEEEE] bg-white text-center text-[26px] sm:text-[30px] font-bold text-[#47C409] placeholder:text-[13px] sm:placeholder:text-[14px] placeholder:font-normal placeholder:text-[#555555] focus:border-0 focus:border-b-[1px] focus:border-[#47C409] focus:outline-none focus:ring-0 transform transition-all hover:shadow-md'
+                          placeholder=""
+                          style={{
+                            backgroundImage: values[`code${index}` as keyof VerificationFormValues] ? 'none' : `url('/SVGs/shared/bullet.svg')`,
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            backgroundSize: '10px 10px'
+                          }}
                         />
                       ))}
                     </div>
                     {touched.code0 && errors.code0 && (
-                      <div className='absolute -bottom-6 left-0'>
-                        <p className='text-sm text-red-500'>{errors.code0}</p>
+                      <div className='absolute -bottom-6 left-1/2 -translate-x-1/2 w-full'>
+                        <p className='text-xs sm:text-sm text-red-600 text-center'>{errors.code0}</p>
                       </div>
                     )}
                   </div>
@@ -175,26 +205,32 @@ export default function VerifyPage(): React.ReactElement {
                 <button
                   type='submit'
                   disabled={isLoading || Object.values(values).some((v) => !v)}
-                  className={`w-full rounded-lg bg-[#47C409] py-3 text-white transition-colors ${
-                    isLoading || Object.values(values).some((v) => !v)
-                      ? 'cursor-not-allowed opacity-70'
-                      : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
-                  }`}
+                  className={`w-full h-[44px] sm:h-[48px] rounded-[8px] bg-[#47C409] text-[13px] sm:text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${isLoading || Object.values(values).some((v) => !v)
+                    ? 'cursor-not-allowed opacity-70'
+                    : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
+                    }`}
                 >
-                  {isLoading ? 'Verifying...' : 'Verify'}
+                  {isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <span className="mr-2 text-[13px] sm:text-[14px]">Verifying...</span>
+                      <div className="animate-spin h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                    </div>
+                  ) : (
+                    "Verify"
+                  )}
                 </button>
               </Form>
             )}
           </Formik>
 
           {/* Resend Code Link */}
-          <div className='text-center'>
-            <p className='text-sm text-gray-600'>
+          <div className='text-center transform transition-all hover:scale-105'>
+            <p className='w-full sm:w-[173px] h-[14px] text-[11px] sm:text-[12px] font-normal leading-[14px] text-[#222222] mx-auto'>
               Didn't receive the code?{' '}
               <button
                 type='button'
                 onClick={() => router.push('/auth/forgot-password')}
-                className='text-[#47C409]'
+                className='text-[11px] sm:text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors'
               >
                 Resend
               </button>
