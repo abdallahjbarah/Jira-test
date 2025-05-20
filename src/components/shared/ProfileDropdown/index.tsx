@@ -4,8 +4,21 @@ import Dropdown from '@/components/ui/Dropdown';
 import React from 'react';
 import ProfileTrigger from './ProfileTrigger';
 import ProfileMenuContent from './ProfileMenuContent';
+import useUser from '@/utils/hooks/useUser';
+import CustomLink from '@/components/ui/CustomLink';
+import Link from 'next/link';
 
 function ProfileDropdown(): React.ReactElement {
+  const { isLoggedIn } = useUser();
+
+  if (!isLoggedIn) {
+    return (
+      <CustomLink path='/auth/login'>
+        <ProfileTrigger />
+      </CustomLink>
+    );
+  }
+
   return (
     <Dropdown
       trigger={<ProfileTrigger />}

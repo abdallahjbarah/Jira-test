@@ -7,12 +7,15 @@ export interface LogoutData {
 }
 
 const logout = async (data: LogoutData) => {
-  const response = await api.url('/users/logout').patch(data).json();
+  const response = await api
+    .url('/auth/userSignOut')
+    .patch({ ...data, fcmToken: '' })
+    .text();
   return response;
 };
 
 export const useLogout = (
-  mutationArgs: UseMutationOptions<any, any, LogoutData, any>,
+  mutationArgs?: UseMutationOptions<any, any, LogoutData, any>,
 ) => {
   return useMutation({
     mutationFn: (data: LogoutData) => logout(data),

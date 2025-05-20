@@ -18,7 +18,7 @@ const updateNotification = async (data: UpdateNotificationData) => {
 };
 
 export const useUpdateNotifications = (
-  mutationArgs: UseMutationOptions<any, any, UpdateNotificationData, any>,
+  mutationArgs?: UseMutationOptions<any, any, UpdateNotificationData, any>,
 ) => {
   return useMutation({
     mutationFn: (data: UpdateNotificationData) => updateNotification(data),

@@ -147,6 +147,7 @@ const ar = {
     markAsRead: 'تعليم كمقروء',
     delete: 'حذف',
     noNotifications: 'لا توجد إشعارات',
+    markAsUnread: 'تعليم كغير مقروء',
   },
   profile: {
     personalInfo: 'المعلومات الشخصية',
@@ -178,6 +179,8 @@ const ar = {
     male: 'ذكر',
     female: 'أنثى',
     nationality: 'الجنسية',
+    country: 'الدولة',
+    city: 'المدينة',
     location: 'الموقع',
     save: 'حفظ',
     cancel: 'إلغاء',

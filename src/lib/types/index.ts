@@ -1,3 +1,5 @@
+import { NotificationPaths, Gender } from '../enums';
+
 export interface UserLoginResponse {
   user: User;
   token: string;
@@ -26,6 +28,11 @@ export interface User {
   updatedAt: string;
   __v: number;
   status: number;
+  gender?: Gender;
+  nationality?: string;
+  birthdate?: string;
+  city?: string;
+  country?: string;
 }
 
 export interface Role {
@@ -65,5 +72,41 @@ export interface Policies {
   privacyPolicyEn: string;
   termsConditionsAr: string;
   privacyPolicyAr: string;
+  __v: number;
+}
+
+export interface Notification {
+  _id: string;
+  pathId: string;
+  userId: string;
+  readAt: any;
+  descriptionEn: string;
+  descriptionAr: string;
+  titleEn: string;
+  titleAr: string;
+  typeEn: string;
+  typeAr: string;
+  path: NotificationPaths;
+  createdAt: string;
+  updatedAt: string;
+  status: any;
+}
+
+export interface Country {
+  _id: string;
+  name: string;
+  iso3: string;
+  nationality: string;
+  __v: number;
+}
+
+export interface Faq {
+  _id: string;
+  questionEn: string;
+  questionAr: string;
+  answerEn: string;
+  answerAr: string;
+  createdAt: string;
+  updatedAt: string;
   __v: number;
 }

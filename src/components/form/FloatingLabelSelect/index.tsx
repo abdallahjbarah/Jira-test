@@ -86,6 +86,10 @@ const FloatingLabelSelect: React.FC<FloatingLabelSelectProps> = ({
       ...provided,
       display: 'none',
     }),
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 1000,
+    }),
     ...(styles || {}),
   };
 

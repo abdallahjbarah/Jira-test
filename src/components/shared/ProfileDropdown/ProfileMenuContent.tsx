@@ -8,6 +8,8 @@ import FilledButton from '@/components/ui/buttons/FilledButton';
 import Divider from '@/components/ui/Divider';
 import FAQModal from '@/components/shared/FAQs';
 import useModal from '@/hooks/useModal';
+import useUser from '@/utils/hooks/useUser';
+import ProfileDropDownHeader from './ProfileDropDownHeader';
 
 const ProfileMenuContent: React.FC = () => {
   const { t } = useTranslation();
@@ -17,23 +19,15 @@ const ProfileMenuContent: React.FC = () => {
     closeModal: closeFAQModal,
   } = useModal();
 
+  const { logout, userData } = useUser();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className='bg-white rounded-lg shadow-lg w-[22.5rem] p-6 border border-solid border-secondary_3 max-h-[44.813rem] overflow-y-auto'>
-      {/* Profile Header */}
-      <div className='flex flex-col items-center justify-center mb-6'>
-        <div className='w-16 h-16 rounded-full overflow-hidden mb-2 bg-gray-100 flex items-center justify-center'>
-          <CustomSvg
-            src='/SVGs/shared/profile-2user.svg'
-            width={40}
-            height={40}
-            alt='Profile'
-            className='text-primary_2 ml-[9px]'
-          />
-        </div>
-        <h3 className='text-base font-semibold'>Abeer Alkilany</h3>
-        <p className='text-sm text-gray-500'>a.kilon79@gmail.com</p>
-      </div>
-
+      <ProfileDropDownHeader />
       <div className='space-y-4 '>
         <ProfileMenuItem
           label={t('profile.personalInfo')}
@@ -60,17 +54,9 @@ const ProfileMenuContent: React.FC = () => {
 
         <ProfileMenuItem
           label={t('profile.currency')}
-          sublabel='USD'
+          sublabel={userData?.user.currency}
           icon='/SVGs/shared/currency.svg'
           href='/profile/currency'
-        />
-        <Divider />
-
-        <ProfileMenuItem
-          label={t('profile.language')}
-          sublabel='English'
-          icon='/SVGs/shared/language.svg'
-          href='/profile/language'
         />
       </div>
 
@@ -99,7 +85,7 @@ const ProfileMenuContent: React.FC = () => {
           label={t('about-us')}
           sublabel={t('profile.missionVision')}
           icon='/SVGs/shared/info-circle.svg'
-          href='/about'
+          href='/#AboutUs'
         />
         <Divider />
         <ProfileMenuItem
@@ -113,16 +99,17 @@ const ProfileMenuContent: React.FC = () => {
           label={t('profile.termsOfService')}
           sublabel={t('profile.checkTerms')}
           icon='/SVGs/shared/document-text.svg'
-          href='/terms'
+          href='/terms-and-conditions'
         />
       </div>
 
       <div className='mt-2 px-4 pt-2 border-t border-gray-100'>
         <FilledButton
-          path='/logout'
           text={t('profile.logout')}
           buttonType='button'
           className='text-primary_6 !text-custom-14 flex items-center gap-2 py-2 bg-transparent hover:bg-transparent'
+          onClick={handleLogout}
+          isButton
         />
       </div>
 

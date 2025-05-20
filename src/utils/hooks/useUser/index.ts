@@ -1,81 +1,56 @@
+'use client';
+import React from 'react';
 import { useRouter } from 'next/navigation';
-import { ROLES, USER_DETAILS, Role } from '@utils/constants';
-
-interface UserRole {
-  id: Role;
-  name: string;
-}
-
-interface UserData {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: UserRole;
-  [key: string]: any; // For any additional properties
-}
+import { TOKEN_NAME, USER_DETAILS } from '@utils/constants';
+import { useQueryClient } from '@tanstack/react-query';
+import { UserLoginResponse } from '@/lib/types';
+import { useLogout } from '@/lib/apis/auth/useLogout';
+import { getCookie, removeCookie } from '@/utils/cookies';
+import { useFetchUserQuery } from '@/lib/apis/users/useFetchUser';
 
 interface UseUserReturn {
-  userData: UserData | null;
-  setUserData: (data: UserData) => void;
-  updateUserData: (newUserData: Partial<UserData>) => void;
+  userData: UserLoginResponse | undefined;
   logout: () => void;
-  isAuthenticUser: boolean;
   redirectTo: (path: string) => void;
+  isLoggedIn: boolean | undefined;
 }
 
 export default function useUser(): UseUserReturn {
+  const queryClient = useQueryClient();
+
+  const { data: userData } = useFetchUserQuery();
+
+  const isLoggedIn = React.useMemo(() => {
+    return !!userData?.token;
+  }, [userData]);
+
+  const { mutate: logoutMutate } = useLogout({
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ['user'] });
+      // invalidate user queries
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+      queryClient.removeQueries({ queryKey: ['notifications'] });
+      // queryClient.removeQueries({ queryKey: ['wishlist-items'] });
+      // queryClient.removeQueries({ queryKey: ['cart-items'] });
+
+      removeCookie(TOKEN_NAME);
+    },
+  });
+
   const router = useRouter();
 
-  function getUserSession(): UserData | null {
-    try {
-      const storedUserData = localStorage.getItem(USER_DETAILS);
-      return storedUserData ? JSON.parse(storedUserData) : null;
-    } catch (error) {
-      console.error('Error retrieving user data from localStorage:', error);
-      return null;
-    }
-  }
-
-  function setUserData(data: UserData): void {
-    localStorage.setItem(USER_DETAILS, JSON.stringify(data));
-  }
-
-  function updateUserDataInSession(newUserData: Partial<UserData>): void {
-    try {
-      const userData = getUserSession();
-      if (userData) {
-        const updatedUserData = { ...userData, ...newUserData };
-        localStorage.setItem(USER_DETAILS, JSON.stringify(updatedUserData));
-      }
-    } catch (error) {
-      console.error(`Error updating ${USER_DETAILS} in localStorage:`, error);
-    }
-  }
-
   function logout(): void {
-    localStorage.removeItem(USER_DETAILS);
-    router.push('/');
+    logoutMutate({ token: userData?.token || getCookie(TOKEN_NAME) || '' });
   }
 
   function redirectTo(path: string): void {
     router.push(path);
   }
 
-  function isAuthenticUser(): boolean {
-    const userData = getUserSession();
-    return (
-      Number(userData?.role?.id) === ROLES.SUPER_ADMIN ||
-      Number(userData?.role?.id) === ROLES.PARTNER
-    );
-  }
-
   return {
-    userData: getUserSession(),
-    setUserData,
-    updateUserData: updateUserDataInSession,
+    userData,
     logout,
-    isAuthenticUser: isAuthenticUser(),
     redirectTo,
+    isLoggedIn,
   };
 }

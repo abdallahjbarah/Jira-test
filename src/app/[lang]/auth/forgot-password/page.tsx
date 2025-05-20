@@ -1,26 +1,40 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { toast } from "react-toastify";
-import { useMutation } from "@tanstack/react-query";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { toast } from 'react-toastify';
+import { useMutation } from '@tanstack/react-query';
 import { reactQueryClientOptions } from '@configs/reactQueryClientOptions';
 import FormInput from '@/components/form/FormInput';
+import { useForgetPassword } from '@/lib/apis/users/useForgetPassword';
 
 interface ForgotPasswordFormValues {
   email: string;
 }
 
 const forgotPasswordSchema = yup.object().shape({
-  email: yup.string().email("Invalid email").required("Email is required"),
+  email: yup.string().email('Invalid email').required('Email is required'),
 });
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { mutate: forgotPassword, isPending: isForgotPasswordLoading } =
+    useForgetPassword({
+      onSuccess: () => {
+        toast.success('Verification code sent to your email!');
+        router.push(`/auth/verify?email=${encodeURIComponent(watch('email'))}`);
+      },
+      onError: (error) => {
+        toast.error(
+          error.message ||
+            'Failed to send verification code. Please try again.',
+        );
+      },
+    });
 
   const {
     register,
@@ -30,66 +44,41 @@ export default function ForgotPasswordPage() {
   } = useForm({
     resolver: yupResolver(forgotPasswordSchema),
     defaultValues: {
-      email: "",
-    }
-  });
-
-  const forgotPasswordMutation = useMutation({
-    mutationFn: async (data: ForgotPasswordFormValues) => {
-      // Your API call here
-      // Example:
-      // return await api.post('/auth/forgot-password', data);
-      return new Promise(resolve => setTimeout(resolve, 1000));
+      email: '',
     },
-    onSuccess: (data) => {
-      // Save email to localStorage
-      localStorage.setItem('forgotPasswordEmail', watch('email'));
-      toast.success("Verification code sent to your email!");
-      router.push(`/auth/verify?email=${encodeURIComponent(watch('email'))}`);
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to send verification code. Please try again.");
-    }
   });
 
   const onSubmit: SubmitHandler<ForgotPasswordFormValues> = async (data) => {
-    try {
-      await forgotPasswordMutation.mutateAsync(data);
-    } catch (error) {
-      console.error('Forgot password error:', error);
-    }
+    forgotPassword(data);
   };
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 lg:px-8">
+    <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 lg:px-8'>
       {/* Forgot Password Button Top Right */}
-      <div className="absolute right-0 top-0">
-        <div className="h-[65px] w-[200px] sm:w-[278px] overflow-hidden">
-          <div className="absolute right-0 top-0 h-[65px] w-[200px] sm:w-[278px] rounded-bl-[50px] bg-[#FE360A] flex items-center justify-center transform transition-transform hover:scale-[1.02]">
-            <span className="text-[20px] sm:text-[25px] font-semibold text-white h-[30px] whitespace-nowrap">
+      <div className='absolute right-0 top-0'>
+        <div className='h-[65px] w-[200px] sm:w-[278px] overflow-hidden'>
+          <div className='absolute right-0 top-0 h-[65px] w-[200px] sm:w-[278px] rounded-bl-[50px] bg-[#FE360A] flex items-center justify-center transform transition-transform hover:scale-[1.02]'>
+            <span className='text-[20px] sm:text-[25px] font-semibold text-white h-[30px] whitespace-nowrap'>
               Forgot Password
             </span>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="mt-24 sm:mt-32 md:mt-52 w-full max-w-sm space-y-6 sm:space-y-8 px-4 sm:max-w-md">
-        {/* Heading */}
-        <div className="flex flex-col items-center gap-2 sm:gap-3 animate-fadeIn">
-          <h1 className="w-full sm:w-[290px] h-auto sm:h-[28px] text-[20px] xs:text-[22px] sm:text-[25px] font-bold whitespace-nowrap mb-4 sm:mb-6 md:mb-8 text-center">
-            <span className="text-[#222222]">Forgot </span>
-            <span className="text-[#47C409]">Password?</span>
+      <div className='mt-24 sm:mt-32 md:mt-52 w-full max-w-sm space-y-6 sm:space-y-8 px-4 sm:max-w-md'>
+        <div className='flex flex-col items-center gap-2 sm:gap-3 animate-fadeIn'>
+          <h1 className='w-full sm:w-[290px] h-auto sm:h-[28px] text-[20px] xs:text-[22px] sm:text-[25px] font-bold whitespace-nowrap mb-4 sm:mb-6 md:mb-8 text-center'>
+            <span className='text-[#222222]'>Forgot </span>
+            <span className='text-[#47C409]'>Password?</span>
           </h1>
-          <p className="text-[12px] xs:text-[13px] sm:text-[14px] font-normal leading-[16px] sm:leading-[17px] text-[#555555] max-w-[280px] xs:max-w-[296px] text-center px-2 sm:px-0">
-            Enter the email address associated with your account, we will send you a link to reset your password
+          <p className='text-[12px] xs:text-[13px] sm:text-[14px] font-normal leading-[16px] sm:leading-[17px] text-[#555555] max-w-[280px] xs:max-w-[296px] text-center px-2 sm:px-0'>
+            Enter the email address associated with your account, we will send
+            you a link to reset your password
           </p>
         </div>
 
-        {/* Form */}
-        <div className="w-full space-y-4 sm:space-y-5 pb-12 sm:pb-16">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Email Field */}
+        <div className='w-full space-y-4 sm:space-y-5 pb-12 sm:pb-16'>
+          <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
             <div className='flex flex-col items-center w-full'>
               <div className='w-[296px]'>
                 <FormInput
@@ -98,36 +87,37 @@ export default function ForgotPasswordPage() {
                   label='Email'
                   error={errors.email?.message}
                   className='w-[296px] h-[48px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]'
-                  placeholder=""
+                  placeholder=''
                 />
               </div>
             </div>
 
             {/* Submit Button */}
-            <div className="flex justify-center">
+            <div className='flex justify-center'>
               <button
-                type="submit"
-                disabled={isLoading || isSubmitting}
-                className={`w-full max-w-[296px] h-[44px] sm:h-[48px] rounded-[8px] bg-[#47C409] text-[13px] sm:text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${isLoading || isSubmitting
-                  ? 'cursor-not-allowed opacity-70'
-                  : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
-                  }`}
+                type='submit'
+                disabled={isForgotPasswordLoading || isSubmitting}
+                className={`w-full max-w-[296px] h-[44px] sm:h-[48px] rounded-[8px] bg-[#47C409] text-[13px] sm:text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${
+                  isForgotPasswordLoading || isSubmitting
+                    ? 'cursor-not-allowed opacity-70'
+                    : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
+                }`}
               >
-                {isLoading || isSubmitting ? (
-                  <div className="flex items-center justify-center">
-                    <span className="mr-2 text-[13px] sm:text-[14px]">Sending Code...</span>
-                    <div className="animate-spin h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                {isForgotPasswordLoading || isSubmitting ? (
+                  <div className='flex items-center justify-center'>
+                    <span className='mr-2 text-[13px] sm:text-[14px]'>
+                      Sending Code...
+                    </span>
+                    <div className='animate-spin h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent rounded-full'></div>
                   </div>
                 ) : (
-                  "Send"
+                  'Send'
                 )}
               </button>
             </div>
           </form>
-
-
         </div>
       </div>
     </main>
   );
-} 
+}
