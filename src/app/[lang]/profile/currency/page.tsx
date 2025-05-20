@@ -8,6 +8,11 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import FilledButton from '@/components/ui/buttons/FilledButton';
 import RadioButton from '@/components/ui/RadioButton';
 import { CurrencyOption } from '@/types';
+import useUser from '@/utils/hooks/useUser';
+import { useEditUser } from '@/lib/apis/users/useEditUser';
+import { toast } from 'react-toastify';
+import CircularLoader from '@/components/ui/CircularLoader';
+import { useQueryClient } from '@tanstack/react-query';
 
 type CurrencyFormData = {
   currency: string;
@@ -15,25 +20,41 @@ type CurrencyFormData = {
 
 export default function CurrencyPage() {
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   // Format the currencies to match the image design
   const currencyOptions: CurrencyOption[] = [
     {
-      value: 'usd',
+      value: 'USD',
       label: 'USD - $',
       description: t('profile.currencies.usd'),
     },
-    { value: 'jod', label: 'JOD', description: t('profile.currencies.jod') },
+    { value: 'JOD', label: 'JOD', description: t('profile.currencies.jod') },
     {
-      value: 'aud',
+      value: 'AUD',
       label: 'AUD - $',
       description: t('profile.currencies.aud'),
     },
-    { value: 'brl', label: 'BRL', description: t('profile.currencies.brl') },
-    { value: 'gbp', label: 'GBP', description: t('profile.currencies.gbp') },
-    { value: 'eur', label: 'EUR', description: t('profile.currencies.eur') },
+    { value: 'BRL', label: 'BRL', description: t('profile.currencies.brl') },
+    { value: 'GBP', label: 'GBP', description: t('profile.currencies.gbp') },
+    { value: 'EUR', label: 'EUR', description: t('profile.currencies.eur') },
   ];
+
+  const { userData } = useUser();
+
+  const { mutate: editUser, isPending: isEditing } = useEditUser({
+    onSuccess: (data) => {
+      console.log(data, 'data');
+      // update user data query cache
+      queryClient.setQueryData(['user'], (old: any) => {
+        return {
+          ...old,
+          user: { ...old.user, currency: data.currency },
+        };
+      });
+      toast.success(t('profile.currencyUpdated'));
+    },
+  });
 
   const {
     control,
@@ -42,23 +63,15 @@ export default function CurrencyPage() {
   } = useForm<CurrencyFormData>({
     resolver: yupResolver(currencySchema) as any,
     defaultValues: {
-      currency: 'usd',
+      currency: userData?.user.currency,
     },
   });
 
   const onSubmit = (data: CurrencyFormData) => {
-    setIsLoading(true);
-    try {
-      // API call would go here
-      console.log('Form data:', data);
-      // Show success message
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-    } catch (error) {
-      console.error('Error:', error);
-      setIsLoading(false);
-    }
+    editUser({
+      userId: userData?.user._id,
+      currency: data.currency,
+    });
   };
 
   return (
@@ -101,13 +114,17 @@ export default function CurrencyPage() {
         </div>
 
         <div className='flex justify-center pt-4'>
-          <FilledButton
-            text={t('profile.save')}
-            buttonType='submit'
-            isDisable={isLoading}
-            className='py-3 px-6 text-xl rounded-lg w-full'
-            isButton
-          />
+          {isEditing ? (
+            <CircularLoader size={30} />
+          ) : (
+            <FilledButton
+              text={t('profile.save')}
+              buttonType='submit'
+              isDisable={isEditing}
+              className='py-3 px-6 text-xl rounded-lg w-full'
+              isButton
+            />
+          )}
         </div>
       </form>
     </div>
