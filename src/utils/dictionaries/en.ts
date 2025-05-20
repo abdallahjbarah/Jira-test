@@ -148,6 +148,7 @@ const en = {
     markAsRead: 'Mark as read',
     delete: 'Delete',
     noNotifications: 'No notifications',
+    markAsUnread: 'Mark as unread',
   },
   profile: {
     personalInfo: 'Personal Information',
@@ -179,6 +180,8 @@ const en = {
     male: 'Male',
     female: 'Female',
     nationality: 'Nationality',
+    country: 'Country',
+    city: 'City',
     location: 'Location',
     save: 'Save',
     cancel: 'Cancel',

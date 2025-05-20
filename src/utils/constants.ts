@@ -3,6 +3,7 @@ import StaysSvg from '@SVGs/shared/stays-icon.svg';
 import EventsSvg from '@SVGs/shared/events-icon.svg';
 import OffersSvg from '@SVGs/shared/diamond.svg';
 import ProductsSvg from '@SVGs/shared/bag-icon.svg';
+import { Gender } from '@/lib/enums';
 
 export const DAY_DURATION: number = 86400000;
 export const DAY_FORMAT: string = 'DD.MM.YYYY';
@@ -592,3 +593,14 @@ export const OFFERS_PACKAGES_FILTERS = {
   BOOKING_OPTIONS: 'booking_options',
   ACCESSIBILITY_FEATURES: 'accessibility_features',
 } as const;
+
+export const GENDER_OPTIONS = [
+  {
+    value: Gender.MALE,
+    label: { en: 'Male', ar: 'ذكر' },
+  },
+  {
+    value: Gender.FEMALE,
+    label: { en: 'Female', ar: 'أنثى' },
+  },
+];

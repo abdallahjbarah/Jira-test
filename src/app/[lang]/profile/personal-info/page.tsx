@@ -1,15 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { personalInfoSchema } from '@/utils/formsSchemas';
 import FormInput from '@/components/form/FormInput';
 import { useTranslation } from '@/contexts/TranslationContext';
-import Select from 'react-select';
 import FilledButton from '@/components/ui/buttons/FilledButton';
 import FloatingLabelSelect from '@/components/form/FloatingLabelSelect';
 import ImageUploader from '@/components/form/ImageUploader';
+import useUser from '@/utils/hooks/useUser';
+import { GENDER_OPTIONS } from '@/utils/constants';
+import { useGetCountries } from '@/lib/apis/countries/useFetchCountries';
+import { Country } from '@/lib/types';
+import {
+  City,
+  useFetchCities,
+} from '@/lib/apis/countries/useFetchCountriesCities';
 
 type PersonalInfoFormData = {
   firstName: string;
@@ -17,60 +24,20 @@ type PersonalInfoFormData = {
   email: string;
   phoneNumber: string;
   birthdate: string;
-  gender: string;
-  nationality: string;
-  location: string;
-};
-
-const genderOptions = [
-  { value: 'male', label: 'Male' },
-  { value: 'female', label: 'Female' },
-];
-
-const nationalityOptions = [
-  { value: 'us', label: 'United States' },
-  { value: 'uk', label: 'United Kingdom' },
-  { value: 'ca', label: 'Canada' },
-  { value: 'au', label: 'Australia' },
-  // Add more as needed
-];
-
-const customSelectStyles = {
-  control: (provided: any) => ({
-    ...provided,
-    borderColor: 'var(--secondary-color-2)',
-    borderRadius: '8px',
-    padding: '6px 8px',
-    boxShadow: 'none',
-    '&:hover': {
-      borderColor: 'var(--primary-color)',
-    },
-    '&:focus': {
-      borderColor: 'var(--primary-color)',
-    },
-  }),
-  option: (provided: any, state: any) => ({
-    ...provided,
-    cursor: 'pointer',
-    backgroundColor: state.isSelected
-      ? 'var(--primary-color)'
-      : state.isFocused
-        ? 'rgba(var(--primary-color), 0.1)'
-        : null,
-    color: state.isSelected
-      ? 'var(--quaternary-color)'
-      : 'var(--quinary-color)',
-    '&:hover': {
-      backgroundColor: 'var(--primary-color)',
-      color: 'var(--quaternary-color)',
-    },
-  }),
+  gender: { value: string; label: string };
+  country: { value: string; label: string };
+  nationality: { value: string; label: string };
+  city: { value: string; label: string };
 };
 
 export default function PersonalInfoPage() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const { userData } = useUser();
+  const { data: countries } = useGetCountries();
+
+  console.log(userData, 'userData');
 
   const {
     control,
@@ -79,16 +46,33 @@ export default function PersonalInfoPage() {
   } = useForm<PersonalInfoFormData>({
     resolver: yupResolver(personalInfoSchema) as any,
     defaultValues: {
-      firstName: 'Abeer',
-      lastName: 'Alkilany',
-      email: 'a.kilon79@gmail.com',
-      phoneNumber: '+962 79000000',
-      birthdate: '1994-03-14',
-      gender: 'female',
-      nationality: 'us',
-      location: 'Amman, Jordan',
+      firstName: userData?.user.firstName,
+      lastName: userData?.user.lastName,
+      email: userData?.user.email,
+      phoneNumber: userData?.user.phoneNumber,
+      birthdate: userData?.user.birthdate,
+      gender: {
+        value: userData?.user.gender,
+        label: userData?.user.gender,
+      },
+      nationality: {
+        value: userData?.user.nationality,
+        label: userData?.user.nationality,
+      },
+      country: {
+        value: userData?.user.country,
+        label: userData?.user.country,
+      },
+      city: {
+        value: userData?.user.city,
+        label: userData?.user.city,
+      },
     },
   });
+
+  const countryValue = useWatch({ control, name: 'country' });
+
+  const { data: cities } = useFetchCities(countryValue?.value || '');
 
   const onSubmit = (data: PersonalInfoFormData) => {
     setIsLoading(true);
@@ -212,16 +196,16 @@ export default function PersonalInfoPage() {
                 <FloatingLabelSelect
                   {...field}
                   id='gender'
-                  options={genderOptions}
+                  options={GENDER_OPTIONS.map((option) => ({
+                    ...option,
+                    label: option.label[locale],
+                  }))}
                   label={t('profile.gender')}
                   error={errors.gender?.message}
                   classNamePrefix='react-select'
                   isFilled={!!field.value}
-                  value={genderOptions.find(
-                    (option) => option.value === field.value,
-                  )}
                   onChange={(option: any) =>
-                    field.onChange(option ? option.value : '')
+                    field.onChange(option ? option : '')
                   }
                 />
               )}
@@ -236,24 +220,70 @@ export default function PersonalInfoPage() {
                 <FloatingLabelSelect
                   {...field}
                   id='nationality'
-                  options={nationalityOptions}
+                  options={countries?.map((country: Country) => ({
+                    value: country._id,
+                    label: country.nationality,
+                  }))}
                   label={t('profile.nationality')}
                   error={errors.nationality?.message}
                   classNamePrefix='react-select'
                   isFilled={!!field.value}
-                  value={nationalityOptions.find(
-                    (option) => option.value === field.value,
-                  )}
                   onChange={(option: any) =>
-                    field.onChange(option ? option.value : '')
+                    field.onChange(option ? option : '')
                   }
                 />
               )}
             />
           </div>
 
-          {/* Location */}
           <div>
+            <Controller
+              name='country'
+              control={control}
+              render={({ field }) => (
+                <FloatingLabelSelect
+                  {...field}
+                  id='country'
+                  options={countries?.map((country: Country) => ({
+                    value: country._id,
+                    label: country.name,
+                  }))}
+                  label={t('profile.country')}
+                  error={errors.country?.message}
+                  classNamePrefix='react-select'
+                  isFilled={!!field.value}
+                  onChange={(option: any) => {
+                    field.onChange(option ? option : '');
+                  }}
+                />
+              )}
+            />
+          </div>
+          <div>
+            <Controller
+              name='city'
+              control={control}
+              render={({ field }) => (
+                <FloatingLabelSelect
+                  {...field}
+                  id='city'
+                  options={cities?.map((city: City) => ({
+                    value: city._id,
+                    label: city.name,
+                  }))}
+                  label={t('profile.city')}
+                  error={errors.city?.message}
+                  classNamePrefix='react-select'
+                  isFilled={!!field.value}
+                  onChange={(option: any) =>
+                    field.onChange(option ? option._id : '')
+                  }
+                />
+              )}
+            />
+          </div>
+
+          {/* <div>
             <Controller
               name='location'
               control={control}
@@ -266,7 +296,7 @@ export default function PersonalInfoPage() {
                 />
               )}
             />
-          </div>
+          </div> */}
         </div>
 
         <div className='flex justify-end space-x-4 pt-6'>

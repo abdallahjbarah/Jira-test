@@ -4,12 +4,8 @@ import Modal from '@/components/ui/Modal';
 import Link from 'next/link';
 import { useTranslation } from '@/contexts/TranslationContext';
 import Collapsible from '@/components/ui/Collapsible';
-
-interface FAQ {
-  id: number;
-  title: string;
-  content: string;
-}
+import { useFetchFaqs } from '@/lib/apis/faqs/useFetchFaqs';
+import { reshapeFaqs } from '@/utils/helpers/faqsHelpers';
 
 interface FAQModalProps {
   isOpen: boolean;
@@ -47,67 +43,30 @@ const ContactLink = styled.span`
   font-weight: 500;
 `;
 
-const faqData: FAQ[] = [
-  {
-    id: 1,
-    title: 'Title For FAQ',
-    content:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed',
-  },
-  {
-    id: 2,
-    title: 'Title For FAQ',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget felis vel urna malesuada hendrerit.',
-  },
-  {
-    id: 3,
-    title: 'Title For FAQ',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget felis vel urna malesuada hendrerit.',
-  },
-  {
-    id: 4,
-    title: 'Title For FAQ',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget felis vel urna malesuada hendrerit.',
-  },
-  {
-    id: 5,
-    title: 'Title For FAQ',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget felis vel urna malesuada hendrerit.',
-  },
-  {
-    id: 6,
-    title: 'Title For FAQ',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget felis vel urna malesuada hendrerit.',
-  },
-  {
-    id: 7,
-    title: 'Title For FAQ',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget felis vel urna malesuada hendrerit.',
-  },
-];
-
 const FAQModal: React.FC<FAQModalProps> = ({ isOpen, onClose }) => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const { data: faqData } = useFetchFaqs();
+
+  const reshapedFaqs = reshapeFaqs(faqData);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title='FAQs' width='550px'>
       <div>
         <div className='space-y-4'>
-          {faqData.map((faq) => (
+          {reshapedFaqs?.map((faq) => (
             <Collapsible
-              key={faq.id}
-              title={faq.title}
-              defaultOpen={faq.id === 1}
+              key={faq._id}
+              title={faq.question[locale]}
               className=' py-3 px-[1.625rem] border border-solid border-secondary_3 rounded-lg'
               titleClassName='text-text_1 text-sm font-bold'
+              defaultOpen={false}
             >
-              <p className='text-text_3 text-xs'>{faq.content}</p>
+              <p
+                className='text-text_3 text-xs'
+                dangerouslySetInnerHTML={{
+                  __html: faq.answer[locale],
+                }}
+              />
             </Collapsible>
           ))}
         </div>

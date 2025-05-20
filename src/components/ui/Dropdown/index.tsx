@@ -5,7 +5,7 @@ import React, { useState, useRef, useEffect, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
 interface DropdownProps {
-  trigger: ReactNode;
+  trigger: ReactNode | React.ReactElement;
   content: ReactNode;
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
   className?: string;

@@ -4,13 +4,14 @@ import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 
 export interface EditUserData {
-  userId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  countryCode: string;
-  profileImageUrl: string;
+  userId: string | undefined;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phoneNumber?: string;
+  countryCode?: string;
+  profileImageUrl?: string;
+  [key: string]: string | number | boolean | File | undefined;
 }
 
 const editUser = async (data: EditUserData) => {
@@ -23,7 +24,7 @@ const editUser = async (data: EditUserData) => {
 };
 
 export const useEditUser = (
-  mutationArgs: UseMutationOptions<any, any, EditUserData, any>,
+  mutationArgs?: UseMutationOptions<any, any, EditUserData, any>,
 ) => {
   return useMutation({
     mutationFn: (data: EditUserData) => editUser(data),

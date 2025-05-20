@@ -1,0 +1,50 @@
+'use client';
+
+import React from 'react';
+import { useTranslation } from '@/contexts/TranslationContext';
+import { ActionButton, ActionsContainer } from './styles';
+import { useReadAllNotifications } from '@/lib/apis/notifications/useReadAllNotifications';
+import { useDeleteAllNotifications } from '@/lib/apis/notifications/useDeleteAllNotifications';
+import { useQueryClient } from '@tanstack/react-query';
+
+interface NotificationsActionsProps {}
+
+function NotificationsActions({}: NotificationsActionsProps): React.ReactElement {
+  // Get the unread notifications from the query client
+
+  const { t } = useTranslation();
+  const { mutate: readAllNotifications, isPending: isReadingAllNotifications } =
+    useReadAllNotifications();
+  const {
+    mutate: deleteAllNotifications,
+    isPending: isDeletingAllNotifications,
+  } = useDeleteAllNotifications();
+
+  const handleMarkAllAsRead = () => {
+    readAllNotifications({});
+  };
+
+  const handleDeleteAll = () => {
+    deleteAllNotifications({});
+  };
+
+  return (
+    <ActionsContainer>
+      <ActionButton
+        isDelete
+        onClick={handleDeleteAll}
+        disabled={isDeletingAllNotifications}
+      >
+        {t('notifications.deleteAll')}
+      </ActionButton>
+      <ActionButton
+        onClick={handleMarkAllAsRead}
+        disabled={isReadingAllNotifications}
+      >
+        {t('notifications.markAllAsRead')}
+      </ActionButton>
+    </ActionsContainer>
+  );
+}
+
+export default NotificationsActions;

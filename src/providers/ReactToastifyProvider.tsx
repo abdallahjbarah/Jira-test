@@ -14,15 +14,16 @@ export default function ReactToastifyProvider({
     <>
       {children}
       <ToastContainer
-        position='top-right'
+        position='bottom-center'
         autoClose={3000}
-        hideProgressBar={false}
+        hideProgressBar
         newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        theme='dark'
       />
     </>
   );

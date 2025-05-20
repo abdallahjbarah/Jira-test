@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SignUpSchema } from '@utils/formsSchemas';
 import { toast } from 'react-toastify';
@@ -19,6 +19,8 @@ import { ONE_MINUTE_IN_MILLI } from '@utils/constants';
 import Link from 'next/link';
 import FormInput from '@/components/form/FormInput';
 import Checkbox from '@/components/ui/Checkbox';
+import PasswordInput from '@/components/form/PasswordInput';
+import { useSignup } from '@/lib/apis/auth/useSignup';
 
 interface SignUpFormValues {
   firstName: string;
@@ -40,8 +42,6 @@ interface Country {
 
 export default function SignUpPage(): React.ReactElement {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [showCountryModal, setShowCountryModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -85,6 +85,7 @@ export default function SignUpPage(): React.ReactElement {
     handleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<SignUpFormValues>({
     resolver: yupResolver(SignUpSchema) as any,
@@ -122,12 +123,29 @@ export default function SignUpPage(): React.ReactElement {
     },
   });
 
+  const { mutate: signUpMutate, isPending: isSignUpLoading } = useSignup({
+    onSuccess: () => {
+      toast.success('Account created successfully!');
+      router.push(
+        `/auth/welcome?name=${encodeURIComponent(watch('firstName'))}`,
+      );
+    },
+    onError: (error) => {
+      toast.error(
+        error.message || 'Failed to create account. Please try again.',
+      );
+    },
+  });
+
   const onSubmit: SubmitHandler<SignUpFormValues> = async (data) => {
-    try {
-      await signUpMutation.mutateAsync(data);
-    } catch (error) {
-      console.error('Signup error:', error);
-    }
+    signUpMutate({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      password: data.password,
+      countryCode: data.countryCode,
+    });
   };
 
   return (
@@ -303,37 +321,18 @@ export default function SignUpPage(): React.ReactElement {
             {/* Password Field */}
             <div className='flex flex-col items-center w-full'>
               <div className='w-full relative'>
-                <FormInput
-                  {...register('password')}
-                  type={showPassword ? 'text' : 'password'}
-                  label='Password'
-                  error={errors.password?.message}
-                  className='w-full h-[48px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]'
-                  placeholder=''
-                />
-                <button
-                  type='button'
-                  onClick={() => setShowPassword(!showPassword)}
-                  className='absolute right-3 top-1/2 -translate-y-1/2 text-[#47C409] transform transition-transform hover:scale-110'
-                >
-                  {showPassword ? (
-                    <Image
-                      src='/SVGs/shared/eye.svg'
-                      alt='Show password'
-                      width={24}
-                      height={24}
-                      className='[&>path]:fill-[#47C409]'
-                    />
-                  ) : (
-                    <Image
-                      src='/SVGs/shared/eye-slash.svg'
-                      alt='Hide password'
-                      width={24}
-                      height={24}
-                      className='[&>path]:fill-[#47C409]'
+                <Controller
+                  control={control}
+                  name='password'
+                  render={({ field }) => (
+                    <PasswordInput
+                      {...field}
+                      error={errors.password?.message}
+                      className='w-full h-[48px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]'
+                      label='Password'
                     />
                   )}
-                </button>
+                />
               </div>
             </div>
 
@@ -373,10 +372,10 @@ export default function SignUpPage(): React.ReactElement {
             <div className='w-full pt-6'>
               <button
                 type='submit'
-                disabled={isLoading || isSubmitting}
-                className={`w-full h-[48px] rounded-[8px] bg-[#47C409] text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${isLoading || isSubmitting ? 'cursor-not-allowed opacity-70' : ''}`}
+                disabled={isSignUpLoading || isSubmitting}
+                className={`w-full h-[48px] rounded-[8px] bg-[#47C409] text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${isSignUpLoading || isSubmitting ? 'cursor-not-allowed opacity-70' : ''}`}
               >
-                {isLoading || isSubmitting ? (
+                {isSignUpLoading || isSubmitting ? (
                   <div className='flex items-center justify-center'>
                     <span className='mr-2'>Creating account...</span>
                     <div className='animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full'></div>

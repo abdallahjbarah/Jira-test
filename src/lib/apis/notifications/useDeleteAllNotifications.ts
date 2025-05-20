@@ -1,12 +1,16 @@
-// /notification/delete/{id}
+// DELETE /notification/delete-all
 
-import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 
-const deleteNotification = async (id: string) => {
+const deleteAllNotifications = async () => {
   try {
     // Get the raw response first
-    const response = await api.url(`/notification/delete/${id}`).delete().res();
+    const response = await api.url('/notification/delete-all').delete().res();
 
     // Check if response has JSON content
     const contentType = response.headers.get('content-type');
@@ -22,11 +26,16 @@ const deleteNotification = async (id: string) => {
   }
 };
 
-export const useDeleteNotifications = (
-  mutationArgs?: UseMutationOptions<any, any, string, any>,
+export const useDeleteAllNotifications = (
+  mutationArgs?: UseMutationOptions<any, any, any, any>,
 ) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: (id: string) => deleteNotification(id),
+    mutationFn: deleteAllNotifications,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
     ...mutationArgs,
   });
 };

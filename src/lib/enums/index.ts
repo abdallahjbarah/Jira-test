@@ -14,3 +14,15 @@ export enum FileFolder {
   PROFILE = 'profile',
   PAYMENT_INFO = 'paymentInfo',
 }
+
+export enum NotificationPaths {
+  Bookings = 1,
+  Offers = 2,
+  newUpdates = 2,
+  Thanks = 3,
+}
+
+export enum Gender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+}
