@@ -38,7 +38,7 @@ export default function WelcomePage(): React.ReactElement {
     },
     onError: (error) => {
       console.log(error, 'error');
-      toast.error('Failed to upload profile image');
+      toast.error(t('auth.welcome.profileSetupFailed'));
       setLoading(false);
     },
   });
@@ -55,11 +55,11 @@ export default function WelcomePage(): React.ReactElement {
         };
       });
 
-      toast.success('Profile updated successfully');
+      toast.success(t('auth.welcome.profileSetupSuccess'));
       router.push('/all');
     },
     onError: () => {
-      toast.error('Failed to update profile');
+      toast.error(t('auth.welcome.profileSetupFailed'));
       setLoading(false);
     },
   });
@@ -137,7 +137,7 @@ export default function WelcomePage(): React.ReactElement {
         <div className='h-[65px] w-[240px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
             <span className='text-[25px] font-semibold text-white whitespace-nowrap'>
-              Sign Up
+              {t('auth.welcome.title')}
             </span>
           </div>
         </div>
@@ -148,10 +148,12 @@ export default function WelcomePage(): React.ReactElement {
         {/* Heading */}
         <div className='flex flex-col items-center gap-2 animate-fadeIn'>
           <h1 className='w-[178px] h-[38px] text-[32px] font-bold whitespace-nowrap mb-4 text-center'>
-            <span className='text-[#222222]'>Hello </span>
+            <span className='text-[#222222]'>
+              {t('auth.welcome.welcomeToBookagri')}{' '}
+            </span>
           </h1>
           <p className='text-[14px] font-normal leading-[17px] text-[#555555] text-center'>
-            Tell us more about you :)
+            {t('auth.welcome.description')}
           </p>
         </div>
 
@@ -212,135 +214,146 @@ export default function WelcomePage(): React.ReactElement {
               <input
                 type='file'
                 id='profile-upload'
-                className='hidden'
                 accept='image/*'
+                className='hidden'
                 onChange={handleImageUpload}
               />
             </div>
+            <span className='text-sm text-gray-500'>
+              {t('profile.profileImage')}
+            </span>
           </div>
 
-          {/* Form Sections */}
-          <div className='space-y-4 flex flex-col items-center w-full'>
-            {/* Birthday Section */}
-            <div className='space-y-3 flex flex-col items-center w-full mt-4'>
-              <label className='w-[296px] h-[17px] text-[14px] font-bold text-black'>
-                Let's celebrate your birthday
-              </label>
-              <div className='relative w-[296px]'>
-                <Controller
-                  name='birthDate'
-                  control={control}
-                  rules={{ required: 'Birth date is required' }}
-                  render={({ field, fieldState }) => (
-                    <>
-                      <input
-                        type='date'
-                        {...field}
-                        placeholder='DD/MM/YYYY'
-                        className={`w-[296px] h-[48px] rounded-lg border ${
-                          fieldState.error
-                            ? 'border-red-500'
-                            : 'border-gray-300'
-                        } px-4 py-3 focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] text-gray-500 placeholder-gray-400 [&::-webkit-calendar-picker-indicator]:hidden`}
-                      />
-                      {fieldState.error && (
-                        <p className='text-red-500 text-xs mt-1'>
-                          {fieldState.error.message}
-                        </p>
-                      )}
-                    </>
-                  )}
-                />
-                <div
-                  onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-                  className='absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer z-10'
-                >
-                  <Image
-                    src='/SVGs/shared/calendar-2.svg'
-                    alt='Calendar'
-                    width={24}
-                    height={24}
-                    className='pointer-events-none'
+          {/* Gender Selection */}
+          <div className='mt-8 mb-4'>
+            <div className='flex items-center justify-center'>
+              <div className='w-full px-4 space-y-2'>
+                <p className='text-[12px] font-semibold text-[#555555]'>
+                  {t('profile.gender')}
+                </p>
+                <div className='flex flex-col xs:flex-row gap-6 justify-center mt-1'>
+                  <Controller
+                    control={control}
+                    name='gender'
+                    render={({ field: { onChange, value } }) => (
+                      <>
+                        <RadioButton
+                          id='male'
+                          name='gender'
+                          value={Gender.MALE.toString()}
+                          label={t('profile.male')}
+                          checked={value === Gender.MALE}
+                          onChange={() => onChange(Gender.MALE)}
+                        />
+                        <RadioButton
+                          id='female'
+                          name='gender'
+                          value={Gender.FEMALE.toString()}
+                          label={t('profile.female')}
+                          checked={value === Gender.FEMALE}
+                          onChange={() => onChange(Gender.FEMALE)}
+                        />
+                      </>
+                    )}
                   />
                 </div>
-                {isDatePickerOpen && (
-                  <div className='absolute top-full left-0 mt-2 z-50'>
-                    <DateRangePicker
-                      selectedDates={[]}
-                      onChange={(dates) => {
-                        if (dates.length > 0) {
-                          setValue(
-                            'birthDate',
-                            dates[0].toISOString().split('T')[0],
-                          );
-                          setIsDatePickerOpen(false);
-                        }
-                      }}
-                      mode='single'
-                    />
-                  </div>
-                )}
               </div>
             </div>
+          </div>
 
-            {/* Gender Selection */}
-            <div className='space-y-3 flex flex-col items-start w-full'>
-              <label className='w-[296px] h-[17px] text-[14px] font-bold text-black'>
-                Are you
-              </label>
+          {/* Birthdate Picker */}
+          <div className='mt-8'>
+            <div className='flex flex-col'>
+              <p className='text-[12px] font-semibold text-[#555555] mb-2'>
+                {t('profile.birthdate')}
+              </p>
               <Controller
-                name='gender'
                 control={control}
-                rules={{ required: 'Please select your gender' }}
-                render={({ field, fieldState }) => (
-                  <div className='flex items-center gap-4 w-[296px]'>
-                    {GENDER_OPTIONS.map((option) => (
-                      <div key={option.value} className='flex items-center'>
-                        <RadioButton
-                          id={option.value}
-                          name='gender'
-                          value={option.value}
-                          label={option.label[locale]}
-                          checked={field.value === option.value}
-                          onChange={() => field.onChange(option.value)}
-                          className='flex-row-reverse gap-[8px]'
+                name='birthDate'
+                render={({ field: { onChange, value } }) => (
+                  <DateRangePicker
+                    selectedDates={value ? [new Date(value)] : []}
+                    onChange={(dates) => {
+                      if (dates && dates.length > 0) {
+                        onChange(dates[0].toISOString());
+                        setIsDatePickerOpen(false);
+                      }
+                    }}
+                    mode='single'
+                    isOpen={isDatePickerOpen}
+                    onClose={() => setIsDatePickerOpen(false)}
+                    renderInput={(inputProps: Record<string, any>) => (
+                      <div
+                        onClick={() => setIsDatePickerOpen(true)}
+                        className='relative w-full cursor-pointer'
+                      >
+                        <input
+                          {...inputProps}
+                          placeholder='YYYY-MM-DD'
+                          className='border rounded-lg px-4 py-2 w-full cursor-pointer bg-white'
+                          value={
+                            value
+                              ? new Date(value).toLocaleDateString(
+                                  locale === 'ar' ? 'ar-EG' : 'en-US',
+                                  {
+                                    year: 'numeric',
+                                    month: '2-digit',
+                                    day: '2-digit',
+                                  },
+                                )
+                              : ''
+                          }
+                          readOnly
                         />
+                        <div className='absolute right-3 top-1/2 transform -translate-y-1/2'>
+                          <svg
+                            width='20'
+                            height='20'
+                            viewBox='0 0 20 20'
+                            fill='none'
+                            xmlns='http://www.w3.org/2000/svg'
+                          >
+                            <path
+                              d='M16.6666 3.33337H14.1666V2.50004C14.1666 2.27903 14.0788 2.06707 13.9225 1.91079C13.7662 1.75451 13.5543 1.66671 13.3333 1.66671C13.1123 1.66671 12.9003 1.75451 12.744 1.91079C12.5878 2.06707 12.5 2.27903 12.5 2.50004V3.33337H7.49998V2.50004C7.49998 2.27903 7.41218 2.06707 7.2559 1.91079C7.09962 1.75451 6.88766 1.66671 6.66665 1.66671C6.44563 1.66671 6.23368 1.75451 6.0774 1.91079C5.92112 2.06707 5.83331 2.27903 5.83331 2.50004V3.33337H3.33331C2.89129 3.33337 2.46736 3.5089 2.15479 3.82146C1.84222 4.13403 1.66669 4.55795 1.66669 5.00004V16.6667C1.66669 17.1087 1.84222 17.5327 2.15479 17.8453C2.46736 18.1578 2.89129 18.3334 3.33331 18.3334H16.6666C17.1087 18.3334 17.5326 18.1578 17.8452 17.8453C18.1577 17.5327 18.3333 17.1087 18.3333 16.6667V5.00004C18.3333 4.55801 18.1577 4.13409 17.8452 3.82152C17.5326 3.50895 17.1087 3.33342 16.6666 3.33337ZM16.6666 16.6667H3.33331V8.33337H16.6666V16.6667ZM16.6666 6.66671H3.33331V5.00004H16.6666V6.66671Z'
+                              fill='#555555'
+                            />
+                            <path
+                              d='M8.33333 10.8334H5.83333V13.3334H8.33333V10.8334ZM14.1667 10.8334H11.6667V13.3334H14.1667V10.8334Z'
+                              fill='#555555'
+                            />
+                          </svg>
+                        </div>
                       </div>
-                    ))}
-                    {fieldState.error && (
-                      <p className='text-red-500 text-xs mt-1'>
-                        {fieldState.error.message}
-                      </p>
                     )}
-                  </div>
+                  />
                 )}
               />
-            </div>
-
-            {/* Start Exploring Button */}
-            <div className='pt-12 w-full'>
-              <button
-                type='submit'
-                disabled={loading}
-                className='w-[296px] h-[48px] rounded-lg bg-[#47C409] text-white transition-colors hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed'
-              >
-                <span className='w-[128px] h-[17px] text-[14px] font-bold leading-[17px] text-center'>
-                  {loading ? 'Processing...' : "Let's Start Exploring"}
+              {errors.birthDate && (
+                <span className='text-red-500 text-xs mt-1'>
+                  {errors.birthDate.message}
                 </span>
-              </button>
+              )}
             </div>
+          </div>
 
-            {/* Skip Option */}
-            <div className='text-center pt-1 pb-16 w-full'>
-              <button
-                type='button'
-                onClick={() => router.push('/dashboard')}
-                disabled={loading}
-                className='text-black underline hover:text-gray-800 transition-colors disabled:text-gray-400 disabled:cursor-not-allowed'
-              >
-                Skip
-              </button>
-            </div>
+          {/* Submit Button */}
+          <div className='mt-10'>
+            <button
+              type='submit'
+              disabled={loading}
+              className={`w-full bg-[#47C409] text-white font-bold py-3 rounded-lg transition-all hover:bg-[#3ba007] hover:shadow-lg ${
+                loading ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
+            >
+              {loading ? (
+                <div className='flex items-center justify-center'>
+                  <span className='mr-2'>{t('common.loading')}</span>
+                  <div className='animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full'></div>
+                </div>
+              ) : (
+                t('profile.save')
+              )}
+            </button>
           </div>
         </form>
       </div>

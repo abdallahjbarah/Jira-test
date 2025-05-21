@@ -22,14 +22,14 @@ const forgotPasswordSchema = yup.object().shape({
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
 
   const { mutate: forgotPassword, isPending: isForgotPasswordLoading } =
     useForgetPassword({
       onSuccess: () => {
         toast.success(t('auth.forgotPassword.verificationSent'));
         router.push(
-          `/auth/verify?email=${encodeURIComponent(watch('email'))}&type=forgot-password`,
+          `/${locale}/auth/verify?email=${encodeURIComponent(watch('email'))}&type=forgot-password`,
         );
       },
       onError: (error) => {

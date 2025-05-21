@@ -10,6 +10,8 @@ import useUser from '@/utils/hooks/useUser';
 import { ApprovalStatus } from '@/lib/enums';
 import { setCookie } from '@/utils/cookies';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from '@/contexts/TranslationContext';
+
 interface VerificationFormValues {
   code0: string;
   code1: string;
@@ -23,10 +25,11 @@ export default function VerifyPage(): React.ReactElement {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const type = searchParams.get('type');
+  const { t } = useTranslation();
 
   const { mutate: verifyCode, isPending: isVerifyCodeLoading } = useVerifyCode({
     onSuccess: () => {
-      toast.success('Code verified successfully!');
+      toast.success(t('auth.verify.verifySuccess'));
       if (type === 'forgot-password') {
         router.push(`/auth/reset-password?email=${userEmail}`);
       } else {
@@ -42,7 +45,7 @@ export default function VerifyPage(): React.ReactElement {
       }
     },
     onError: () => {
-      toast.error('Invalid verification code');
+      toast.error(t('auth.verify.verifyFailed'));
     },
   });
 
@@ -72,7 +75,7 @@ export default function VerifyPage(): React.ReactElement {
         <div className='h-[65px] w-[200px] sm:w-[278px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[200px] sm:w-[278px] rounded-bl-[50px] bg-[#FE360A] flex items-center justify-center transform transition-transform hover:scale-[1.02]'>
             <span className='text-[20px] sm:text-[25px] font-semibold text-white h-[30px] whitespace-nowrap'>
-              Verify Code
+              {t('auth.verify.title')}
             </span>
           </div>
         </div>
@@ -81,11 +84,10 @@ export default function VerifyPage(): React.ReactElement {
       <div className='mt-24 sm:mt-32 md:mt-52 w-full max-w-[296px] space-y-6 sm:space-y-8 px-4'>
         <div className='flex flex-col items-center gap-2 sm:gap-3 animate-fadeIn'>
           <h1 className='w-full sm:w-[191px] h-auto sm:h-[27px] text-[20px] xs:text-[22px] sm:text-[25px] font-bold whitespace-nowrap text-center'>
-            <span className='text-[#222222]'>Verify Your </span>
-            <span className='text-[#47C409]'>Code</span>
+            <span className='text-[#222222]'>{t('auth.verify.title')}</span>
           </h1>
           <p className='text-[12px] xs:text-[13px] sm:text-[14px] mt-3 xs:mt-4 sm:mt-6 font-normal leading-[15px] xs:leading-[16px] sm:leading-[17px] text-[#555555] max-w-[260px] xs:max-w-[280px] sm:max-w-[296px] text-center'>
-            A four-digit code has been sent to your email {userEmail}
+            {t('auth.verify.description')} {userEmail}
           </p>
         </div>
 
@@ -193,32 +195,32 @@ export default function VerifyPage(): React.ReactElement {
                   {isVerifyCodeLoading ? (
                     <div className='flex items-center justify-center'>
                       <span className='mr-2 text-[13px] sm:text-[14px]'>
-                        Verifying...
+                        {t('auth.verify.verifying')}
                       </span>
                       <div className='animate-spin h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent rounded-full'></div>
                     </div>
                   ) : (
-                    'Verify'
+                    t('auth.verify.verifyButton')
                   )}
                 </button>
               </Form>
             )}
           </Formik>
 
-          {/* Resend Code Link */}
-          {/* <div className='text-center transform transition-all hover:scale-105'>
-            <p className='w-full sm:w-[173px] h-[14px] text-[11px] sm:text-[12px] font-normal leading-[14px] text-[#222222] mx-auto'>
-              Didn't receive the code?{' '}
-              <button
-                type='button'
-                disabled={isVerifyCodeLoading}
-                onClick={() => router.push('/auth/forgot-password')}
-                className='text-[11px] sm:text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors'
-              >
-                Resend
-              </button>
+          <div className='text-center space-y-2 pt-6'>
+            <p className='text-[12px] sm:text-[13px] font-normal leading-[15px] sm:leading-[16px] text-[#555555]'>
+              {t('auth.verify.didntReceiveCode')}
             </p>
-          </div> */}
+            <button
+              type='button'
+              className='text-[12px] sm:text-[13px] font-bold leading-[15px] sm:leading-[16px] text-[#47C409] hover:text-[#3ba007] transition-colors'
+              onClick={() => {
+                // Resend code logic
+              }}
+            >
+              {t('auth.verify.resendCode')}
+            </button>
+          </div>
         </div>
       </div>
     </main>

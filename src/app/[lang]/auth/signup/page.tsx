@@ -22,6 +22,7 @@ import { TOKEN_NAME } from '@/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { WretchError } from 'wretch';
 import { useTranslation } from '@/contexts/TranslationContext';
+import CustomLink from '@/components/ui/CustomLink';
 
 interface SignUpFormValues {
   firstName: string;
@@ -194,19 +195,19 @@ export default function SignUpPage(): React.ReactElement {
                   label={
                     <span className='text-[12px] font-semibold leading-[14px] text-gray-600'>
                       {t('auth.signup.agreeToTerms')}{' '}
-                      <a
-                        href='#'
+                      <CustomLink
+                        path='/privacy-policy'
                         className='text-[#233785] underline hover:text-[#2f49a3]'
                       >
                         {t('auth.signup.privacyPolicy')}
-                      </a>{' '}
+                      </CustomLink>{' '}
                       {t('auth.signup.and')}{' '}
-                      <a
-                        href='#'
+                      <CustomLink
+                        path='/terms-and-conditions'
                         className='text-[#233785] underline hover:text-[#2f49a3]'
                       >
                         {t('auth.signup.termsConditions')}
-                      </a>
+                      </CustomLink>
                     </span>
                   }
                   checked={signUpForm.watch('agreeToTerms')}
@@ -251,13 +252,14 @@ export default function SignUpPage(): React.ReactElement {
               <div className='text-center transform transition-all hover:scale-105'>
                 <p className='text-[12px] font-normal leading-[14px] text-[#222222] mx-auto pb-2'>
                   {t('auth.signup.alreadyHaveAccount')}{' '}
-                  <button
-                    type='button'
-                    onClick={() => router.push('/auth/login')}
-                    className='text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors'
-                  >
-                    {t('auth.signup.login')}
-                  </button>
+                  <CustomLink path='/auth/login'>
+                    <button
+                      type='button'
+                      className='text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors'
+                    >
+                      {t('auth.signup.login')}
+                    </button>
+                  </CustomLink>
                 </p>
               </div>
             </form>

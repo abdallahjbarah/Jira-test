@@ -15,6 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { TOKEN_NAME } from '@/utils';
 import PasswordInput from '@/components/form/PasswordInput';
 import { useTranslation } from '@/contexts/TranslationContext';
+import CustomLink from '@/components/ui/CustomLink';
 
 interface LoginFormValues {
   email: string;
@@ -125,13 +126,17 @@ export default function LoginPage() {
             </div>
 
             <div className='flex items-center justify-between w-full'>
-              <button
-                type='button'
-                onClick={() => router.push('/auth/forgot-password')}
+              <CustomLink
+                path='/auth/forgot-password'
                 className='text-[12px] font-semibold leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors ml-auto'
               >
-                {t('auth.login.forgotPassword')}
-              </button>
+                <button
+                  type='button'
+                  className='text-[12px] font-semibold leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors ml-auto'
+                >
+                  {t('auth.login.forgotPassword')}
+                </button>
+              </CustomLink>
             </div>
 
             <div className='w-full pt-6'>
@@ -155,13 +160,14 @@ export default function LoginPage() {
           <div className='text-center transform transition-all hover:scale-105'>
             <p className='text-[12px] font-normal leading-[14px] text-[#222222] mx-auto pb-2'>
               {t('auth.login.noAccount')}{' '}
-              <button
-                type='button'
-                onClick={() => router.push('/auth/signup')}
-                className='text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors'
-              >
-                {t('auth.login.signUp')}
-              </button>
+              <CustomLink path='/auth/signup'>
+                <button
+                  type='button'
+                  className='text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors'
+                >
+                  {t('auth.login.signUp')}
+                </button>
+              </CustomLink>
             </p>
           </div>
 

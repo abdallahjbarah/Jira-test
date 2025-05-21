@@ -13,6 +13,7 @@ import Image from 'next/image';
 import PasswordInput from '@/components/form/PasswordInput';
 import { useResetPassword } from '@/lib/apis/users/useResetPassword';
 import { WretchError } from 'wretch';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface ResetPasswordFormValues {
   password: string;
@@ -34,6 +35,7 @@ export default function ResetPasswordPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
+  const { t } = useTranslation();
 
   const {
     handleSubmit,
@@ -50,12 +52,12 @@ export default function ResetPasswordPage() {
   const { mutate: resetPassword, isPending: isResetPasswordLoading } =
     useResetPassword({
       onSuccess: () => {
-        toast.success('Password reset successfully!');
+        toast.success(t('auth.resetPassword.resetSuccess'));
         router.push('/auth/login');
       },
       onError: (error: WretchError) => {
         toast.error(
-          error?.json?.message || 'Failed to reset password. Please try again.',
+          error?.json?.message || t('auth.resetPassword.resetFailed'),
         );
       },
     });
@@ -75,7 +77,7 @@ export default function ResetPasswordPage() {
         <div className='h-[65px] w-[200px] sm:w-[278px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[200px] sm:w-[278px] rounded-bl-[50px] bg-[#FE360A] flex items-center justify-center transform transition-transform hover:scale-[1.02]'>
             <span className='text-[20px] sm:text-[25px] font-semibold text-white h-[30px] whitespace-nowrap'>
-              Reset Password
+              {t('auth.resetPassword.title')}
             </span>
           </div>
         </div>
@@ -86,8 +88,9 @@ export default function ResetPasswordPage() {
         {/* Heading */}
         <div className='flex flex-col items-center gap-2 sm:gap-3 animate-fadeIn'>
           <h1 className='w-[234px] h-[30px] text-[20px] xs:text-[22px] sm:text-[25px] font-bold whitespace-nowrap text-center'>
-            <span className='text-[#222222]'>Reset Your</span>
-            <span className='text-[#47C409]'>Password</span>
+            <span className='text-[#222222]'>
+              {t('auth.resetPassword.title')}
+            </span>
           </h1>
           <p className='text-[12px] xs:text-[13px] sm:text-[14px] w-[260px] xs:w-[280px] font-normal leading-[15px] xs:leading-[16px] sm:leading-[17px] text-[#555555] mt-3 xs:mt-4 sm:mt-6'>
             Your new password must be different from previously used passwords
@@ -105,7 +108,7 @@ export default function ResetPasswordPage() {
                     {...field}
                     error={errors.password?.message}
                     className='w-full h-[48px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]'
-                    label='Password'
+                    label={t('auth.resetPassword.newPassword')}
                   />
                 )}
               />
@@ -120,7 +123,7 @@ export default function ResetPasswordPage() {
                     {...field}
                     error={errors.confirmPassword?.message}
                     className='w-full h-[48px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]'
-                    label='Confirm Password'
+                    label={t('auth.resetPassword.confirmPassword')}
                   />
                 )}
               />
@@ -139,12 +142,12 @@ export default function ResetPasswordPage() {
                 {isResetPasswordLoading || isSubmitting ? (
                   <div className='flex items-center justify-center'>
                     <span className='mr-2 text-[13px] sm:text-[14px]'>
-                      Resetting Password...
+                      {t('auth.resetPassword.resetting')}
                     </span>
                     <div className='animate-spin h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent rounded-full'></div>
                   </div>
                 ) : (
-                  'Reset Password'
+                  t('auth.resetPassword.resetButton')
                 )}
               </button>
             </div>
