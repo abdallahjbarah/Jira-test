@@ -7,6 +7,9 @@ import { changePasswordSchema } from '@/utils/formsSchemas';
 import { useTranslation } from '@/contexts/TranslationContext';
 import FilledButton from '@/components/ui/buttons/FilledButton';
 import PasswordInput from '@/components/form/PasswordInput';
+import { useChangePassword } from '@/lib/apis/users/useChangePassword';
+import useUser from '@/utils/hooks/useUser';
+import { toast } from 'react-toastify';
 
 type ChangePasswordFormData = {
   oldPassword: string;
@@ -16,7 +19,18 @@ type ChangePasswordFormData = {
 
 export default function SecurityPage() {
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { userData } = useUser();
+  const { mutate: changePassword, isPending: isChangePasswordLoading } =
+    useChangePassword({
+      onSuccess: () => {
+        toast.success(t('profile.securityPage.changePasswordSuccess'));
+        reset();
+      },
+      onError: () => {
+        toast.error(t('profile.securityPage.changePasswordError'));
+      },
+    });
 
   const {
     control,
@@ -33,19 +47,11 @@ export default function SecurityPage() {
   });
 
   const onSubmit = (data: ChangePasswordFormData) => {
-    setIsLoading(true);
-    try {
-      // API call would go here
-      console.log('Form data:', data);
-      // Show success message
-      setTimeout(() => {
-        setIsLoading(false);
-        reset();
-      }, 1000);
-    } catch (error) {
-      console.error('Error:', error);
-      setIsLoading(false);
-    }
+    changePassword({
+      userId: userData?.user._id,
+      oldPassword: data.oldPassword,
+      newPassword: data.newPassword,
+    });
   };
 
   return (
@@ -97,7 +103,7 @@ export default function SecurityPage() {
           <FilledButton
             text={t('profile.changePasswordBtn')}
             buttonType='submit'
-            isDisable={isLoading}
+            isDisable={isChangePasswordLoading}
             className='w-full py-3 rounded-lg text-xl'
             isButton
           />

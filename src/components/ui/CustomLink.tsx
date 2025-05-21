@@ -17,7 +17,7 @@ export default function CustomLink({
 }: CustomLinkProps): React.ReactElement {
   const { lang } = useParams();
   return (
-    <Link href={`/${lang}${path}`} {...rest}>
+    <Link prefetch={true} href={`/${lang}${path}`} {...rest}>
       {children}
     </Link>
   );

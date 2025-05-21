@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 
 export type TabItem = {
-  id: string;
+  id: number;
   label: string;
   content?: React.ReactNode;
 };
 
 interface TabsNavigationProps {
   tabs: TabItem[];
-  defaultActiveTab?: string;
-  onChange?: (tabId: string) => void;
+  defaultActiveTab?: number;
+  onChange?: (tabId: number) => void;
   containerClassName?: string;
   tabsContainerClassName?: string;
   contentClassName?: string;
@@ -27,11 +27,11 @@ const TabsNavigation: React.FC<TabsNavigationProps> = ({
   contentClassName,
   showContent = true,
 }) => {
-  const [activeTab, setActiveTab] = useState<string>(
-    defaultActiveTab || (tabs.length > 0 ? tabs[0].id : ''),
+  const [activeTab, setActiveTab] = useState<number>(
+    defaultActiveTab || (tabs.length > 0 ? tabs[0].id : 0),
   );
 
-  const handleTabChange = (tabId: string) => {
+  const handleTabChange = (tabId: number) => {
     setActiveTab(tabId);
     onChange && onChange(tabId);
   };

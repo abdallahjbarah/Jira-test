@@ -50,7 +50,7 @@ export default function Header(): React.ReactElement {
 
         <ul className='flex justify-center items-center flex-shrink-0 mx-auto'>
           <li>
-            <CustomLink path={`/${lang}`}>
+            <CustomLink path={`/`}>
               <Image
                 className='w-[11.8125rem] h-[3rem]'
                 quality={100}
@@ -120,7 +120,7 @@ export default function Header(): React.ReactElement {
               <div className='pt-5 pb-6 px-5'>
                 <div className='flex items-center justify-between'>
                   <div className=''>
-                    <CustomLink path={`/${lang}`}>
+                    <CustomLink path={`/`}>
                       <Image
                         className='w-[11.8125rem] h-[3rem]'
                         quality={100}

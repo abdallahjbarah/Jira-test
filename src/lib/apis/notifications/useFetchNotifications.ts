@@ -60,7 +60,6 @@ export const useFetchInfiniteNotifications = (
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => {
       const limit = filter?.limit || 10;
-      // Only return next page if we got the full page of results
       return lastPage.notifications.length >= limit
         ? pages.length + 1
         : undefined;

@@ -5,6 +5,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Formik, Form, FormikHelpers } from 'formik';
 import { VerificationCodeSchema } from '@utils/formsSchemas';
 import { toast } from 'react-toastify';
+import { useVerifyCode } from '@/lib/apis/users/useVerifyCode';
+import useUser from '@/utils/hooks/useUser';
+import { ApprovalStatus } from '@/lib/enums';
+import { setCookie } from '@/utils/cookies';
+import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface VerificationFormValues {
   code0: string;
@@ -15,112 +21,76 @@ interface VerificationFormValues {
 
 export default function VerifyPage(): React.ReactElement {
   const router = useRouter();
+  const { userData } = useUser();
+  const queryClient = useQueryClient();
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState<string>('');
+  const type = searchParams.get('type');
+  const { t } = useTranslation();
 
-  useEffect(() => {
-    // Try to get email from localStorage first
-    const storedEmail = localStorage.getItem('forgotPasswordEmail');
-    if (storedEmail) {
-      setEmail(storedEmail);
-    } else {
-      // Fallback to URL parameter if not in localStorage
-      const emailParam = searchParams.get('email');
-      if (emailParam) {
-        const decodedEmail = decodeURIComponent(emailParam);
-        setEmail(decodedEmail);
-        // Also save to localStorage for future use
-        localStorage.setItem('forgotPasswordEmail', decodedEmail);
+  const { mutate: verifyCode, isPending: isVerifyCodeLoading } = useVerifyCode({
+    onSuccess: () => {
+      toast.success(t('auth.verify.verifySuccess'));
+      if (type === 'forgot-password') {
+        router.push(`/auth/reset-password?email=${userEmail}`);
+      } else {
+        setCookie('userStatus', ApprovalStatus.ACTIVE.toString());
+        queryClient.setQueryData(['user'], (oldData: any) => {
+          return {
+            ...oldData,
+            user: { ...oldData.user, status: ApprovalStatus.ACTIVE },
+          };
+        });
+
+        router.push('/auth/welcome');
       }
-    }
-  }, [searchParams]);
+    },
+    onError: () => {
+      toast.error(t('auth.verify.verifyFailed'));
+    },
+  });
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const userEmail = React.useMemo(() => {
+    return searchParams.get('email') || userData?.user?.email || '';
+  }, [searchParams, userData]);
 
   const handleSubmit = async (
     values: VerificationFormValues,
     { setSubmitting }: FormikHelpers<VerificationFormValues>,
   ): Promise<void> => {
-    try {
-      setIsLoading(true);
-      const code = Object.keys(values)
-        .filter((key) => key.startsWith('code'))
-        .sort()
-        .map((key) => values[key as keyof VerificationFormValues])
-        .join('');
+    const code = Object.keys(values)
+      .filter((key) => key.startsWith('code'))
+      .sort()
+      .map((key) => values[key as keyof VerificationFormValues])
+      .join('');
 
-      console.log('Verification attempt:', {
-        code,
-        fullValues: values
-      });
-
-      const response = await fetch('/api/auth/verify-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          code,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error('API Error Details:', {
-          status: response.status,
-          statusText: response.statusText,
-          errorData: data,
-          requestData: {
-            code
-          }
-        });
-        throw new Error(data.message || 'Invalid verification code');
-      }
-
-      toast.success('Code verified successfully!');
-      router.push('/auth/reset-password');
-    } catch (error) {
-      console.error('Verification Error:', {
-        error,
-        errorMessage: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
-      });
-
-      toast.error(error instanceof Error ? error.message : 'Verification failed. Please try again.');
-    } finally {
-      setIsLoading(false);
-      setSubmitting(false);
-    }
+    verifyCode({
+      email: userEmail,
+      otp: code,
+    });
   };
 
   return (
     <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 lg:px-8'>
-      {/* Verify Button Top Right */}
       <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[200px] sm:w-[278px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[200px] sm:w-[278px] rounded-bl-[50px] bg-[#FE360A] flex items-center justify-center transform transition-transform hover:scale-[1.02]'>
             <span className='text-[20px] sm:text-[25px] font-semibold text-white h-[30px] whitespace-nowrap'>
-              Verify Code
+              {t('auth.verify.title')}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
       <div className='mt-24 sm:mt-32 md:mt-52 w-full max-w-[296px] space-y-6 sm:space-y-8 px-4'>
-        {/* Heading */}
         <div className='flex flex-col items-center gap-2 sm:gap-3 animate-fadeIn'>
           <h1 className='w-full sm:w-[191px] h-auto sm:h-[27px] text-[20px] xs:text-[22px] sm:text-[25px] font-bold whitespace-nowrap text-center'>
-            <span className='text-[#222222]'>Verify Your </span>
-            <span className='text-[#47C409]'>Code</span>
+            <span className='text-[#222222]'>{t('auth.verify.title')}</span>
           </h1>
           <p className='text-[12px] xs:text-[13px] sm:text-[14px] mt-3 xs:mt-4 sm:mt-6 font-normal leading-[15px] xs:leading-[16px] sm:leading-[17px] text-[#555555] max-w-[260px] xs:max-w-[280px] sm:max-w-[296px] text-center'>
-            A four-digit code has been sent to your email {email}
+            {t('auth.verify.description')} {userEmail}
           </p>
         </div>
 
-        {/* Form */}
         <div className='w-full space-y-4 sm:space-y-5 pb-12 sm:pb-16'>
           <Formik
             initialValues={{
@@ -139,8 +109,11 @@ export default function VerifyPage(): React.ReactElement {
               handleBlur,
               setFieldValue,
             }) => (
-              <Form className='space-y-12 flex flex-col items-center' noValidate>
-                <div className='space-y-4 w-full'>
+              <Form
+                className='space-y-12 flex flex-col items-center'
+                noValidate
+              >
+                <div className='space-y-4 w-full' dir='ltr'>
                   <div className='relative'>
                     <div className='flex justify-center gap-3 sm:gap-4'>
                       {[0, 1, 2, 3].map((index) => (
@@ -154,7 +127,7 @@ export default function VerifyPage(): React.ReactElement {
                           name={`code${index}`}
                           value={
                             values[
-                            `code${index}` as keyof VerificationFormValues
+                              `code${index}` as keyof VerificationFormValues
                             ]
                           }
                           onChange={(e) => {
@@ -184,19 +157,25 @@ export default function VerifyPage(): React.ReactElement {
                           }}
                           onBlur={handleBlur}
                           className='h-[44px] sm:h-[48px] w-[45px] sm:w-[50px] border-0 border-b-[1px] border-[#EEEEEE] bg-white text-center text-[26px] sm:text-[30px] font-bold text-[#47C409] placeholder:text-[13px] sm:placeholder:text-[14px] placeholder:font-normal placeholder:text-[#555555] focus:border-0 focus:border-b-[1px] focus:border-[#47C409] focus:outline-none focus:ring-0 transform transition-all hover:shadow-md'
-                          placeholder=""
+                          placeholder=''
                           style={{
-                            backgroundImage: values[`code${index}` as keyof VerificationFormValues] ? 'none' : `url('/SVGs/shared/bullet.svg')`,
+                            backgroundImage: values[
+                              `code${index}` as keyof VerificationFormValues
+                            ]
+                              ? 'none'
+                              : `url('/SVGs/shared/bullet.svg')`,
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'center',
-                            backgroundSize: '10px 10px'
+                            backgroundSize: '10px 10px',
                           }}
                         />
                       ))}
                     </div>
                     {touched.code0 && errors.code0 && (
                       <div className='absolute -bottom-6 left-1/2 -translate-x-1/2 w-full'>
-                        <p className='text-xs sm:text-sm text-red-600 text-center'>{errors.code0}</p>
+                        <p className='text-xs sm:text-sm text-red-600 text-center'>
+                          {errors.code0}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -204,37 +183,43 @@ export default function VerifyPage(): React.ReactElement {
 
                 <button
                   type='submit'
-                  disabled={isLoading || Object.values(values).some((v) => !v)}
-                  className={`w-full h-[44px] sm:h-[48px] rounded-[8px] bg-[#47C409] text-[13px] sm:text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${isLoading || Object.values(values).some((v) => !v)
-                    ? 'cursor-not-allowed opacity-70'
-                    : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
-                    }`}
+                  disabled={
+                    isVerifyCodeLoading || Object.values(values).some((v) => !v)
+                  }
+                  className={`w-full h-[44px] sm:h-[48px] rounded-[8px] bg-[#47C409] text-[13px] sm:text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${
+                    isVerifyCodeLoading || Object.values(values).some((v) => !v)
+                      ? 'cursor-not-allowed opacity-70'
+                      : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
+                  }`}
                 >
-                  {isLoading ? (
-                    <div className="flex items-center justify-center">
-                      <span className="mr-2 text-[13px] sm:text-[14px]">Verifying...</span>
-                      <div className="animate-spin h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                  {isVerifyCodeLoading ? (
+                    <div className='flex items-center justify-center'>
+                      <span className='mr-2 text-[13px] sm:text-[14px]'>
+                        {t('auth.verify.verifying')}
+                      </span>
+                      <div className='animate-spin h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent rounded-full'></div>
                     </div>
                   ) : (
-                    "Verify"
+                    t('auth.verify.verifyButton')
                   )}
                 </button>
               </Form>
             )}
           </Formik>
 
-          {/* Resend Code Link */}
-          <div className='text-center transform transition-all hover:scale-105'>
-            <p className='w-full sm:w-[173px] h-[14px] text-[11px] sm:text-[12px] font-normal leading-[14px] text-[#222222] mx-auto'>
-              Didn't receive the code?{' '}
-              <button
-                type='button'
-                onClick={() => router.push('/auth/forgot-password')}
-                className='text-[11px] sm:text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors'
-              >
-                Resend
-              </button>
+          <div className='text-center space-y-2 pt-6'>
+            <p className='text-[12px] sm:text-[13px] font-normal leading-[15px] sm:leading-[16px] text-[#555555]'>
+              {t('auth.verify.didntReceiveCode')}
             </p>
+            <button
+              type='button'
+              className='text-[12px] sm:text-[13px] font-bold leading-[15px] sm:leading-[16px] text-[#47C409] hover:text-[#3ba007] transition-colors'
+              onClick={() => {
+                // Resend code logic
+              }}
+            >
+              {t('auth.verify.resendCode')}
+            </button>
           </div>
         </div>
       </div>

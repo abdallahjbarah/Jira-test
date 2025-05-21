@@ -34,7 +34,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
   };
 
   return (
-    <div className='relative'>
+    <div className='relative w-full'>
       <FormInput
         {...registration}
         type={showPassword ? 'text' : 'password'}
