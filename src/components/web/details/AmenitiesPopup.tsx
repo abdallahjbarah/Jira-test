@@ -1,0 +1,91 @@
+import React from 'react';
+import Image from 'next/image';
+import CustomSvg from '@/components/ui/CustomSvg';
+import Divider from '@/components/ui/Divider';
+
+interface Amenity {
+  _id: string;
+  nameEn: string;
+  nameAr: string;
+  category: {
+    _id: string;
+    nameEn: string;
+    nameAr: string;
+  }[];
+  iconPath: string;
+}
+
+interface AmenitiesPopupProps {
+  amenities: Amenity[];
+  onClose: () => void;
+}
+
+const AmenitiesPopup: React.FC<AmenitiesPopupProps> = ({ amenities, onClose }) => {
+  // Group amenities by category
+  const groupedAmenities = amenities.reduce((acc, amenity) => {
+    const categoryId = amenity.category[0]._id;
+    const categoryName = amenity.category[0].nameEn;
+    
+    if (!acc[categoryId]) {
+      acc[categoryId] = {
+        name: categoryName,
+        items: []
+      };
+    }
+    
+    acc[categoryId].items.push(amenity);
+    return acc;
+  }, {} as Record<string, { name: string; items: Amenity[] }>);
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl p-8 max-w-4xl w-full max-h-[80vh] overflow-y-auto relative">
+        <button 
+          onClick={onClose}
+          className="absolute top-6 right-6 p-2"
+        >
+          <CustomSvg
+            src="/SVGs/shared/close-icon.svg"
+            width={24}
+            height={24}
+          />
+        </button>
+        
+        <h2 className="font-custom-700 text-custom-30 text-text_1 mb-8">
+          All Amenities
+        </h2>
+
+        <div className="space-y-8">
+          {Object.values(groupedAmenities).map((category) => (
+            <div key={category.name} className="space-y-6">
+              <h3 className="font-custom-700 text-custom-24 text-text_1 font-gellix-Bold">
+                {category.name}
+              </h3>
+              <div className="flex flex-col gap-6">
+                {category.items.map((amenity) => (
+                  <div
+                    key={amenity._id}
+                    className="flex justify-start items-center gap-2"
+                  >
+                    <Image
+                      src={amenity.iconPath}
+                      alt={amenity.nameEn}
+                      width={50}
+                      height={50}
+                    />
+                    <p className="font-custom-400 text-custom-20 text-text_1 text-center line-clamp-2">
+                      {amenity.nameEn}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <Divider className='w-full my-8' />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AmenitiesPopup; 

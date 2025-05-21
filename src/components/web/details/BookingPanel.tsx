@@ -12,7 +12,7 @@ interface BookingPanelProps {
     id: string;
   };
   price: number;
-  bookable: boolean;
+  bookabl?: boolean;
   schedule?: {
     startDateTime: number;
     endDateTime: number;
@@ -26,7 +26,7 @@ interface BookingPanelProps {
   };
 }
 
-const BookingPanel: React.FC<BookingPanelProps> = ({ price, bookable, schedule, params }) => {
+const BookingPanel: React.FC<BookingPanelProps> = ({ price, schedule, params }) => {
   const router = useRouter();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [availableSlots, setAvailableSlots] = useState<{ startTime: string; id: string }[]>([]);

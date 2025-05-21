@@ -8,7 +8,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 export interface ImageCarouselProps {
-  images: { src: string; alt: string }[];
+  images: string[];
   slickProps?: Partial<SlickSettings>;
   className?: string;
   imageClassName?: string;
@@ -90,8 +90,8 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
         {images.map((image, index) => (
           <div key={index} className={`relative ${imageHeight}`}>
             <Image
-              src={image.src}
-              alt={image.alt}
+              src={image}
+              alt={image}
               fill
               className={imageClassName}
               priority={index === 0}

@@ -6,7 +6,6 @@ import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import { useFetchDetails } from '@/lib/apis/details/useFetchDetails';
 import CircularLoader from '@/components/ui/CircularLoader';
 import CustomSvg from '@/components/ui/CustomSvg';
-import Image from 'next/image';
 import Divider from '@/components/ui/Divider';
 import { useFetchCollections } from '@/lib/apis/collections/useFetchCollections';
 import BookingPanel from '@/components/web/details/BookingPanel';
@@ -128,11 +127,14 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
   }
 
   const {
-    title,
+    name,
     location,
-    price,
+    country,
+    city,
+    longDescription,
+    pricingInformation,
     images,
-    bookable,
+    bookagriBadge,
     type,
     checkinTime,
     checkoutTime,
@@ -142,13 +144,13 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
     itineraryStops,
     amenities,
     schedule,
+    whatToExpect,
+    specialInstructions,
+    cancellationPolicy,
+    stayDetails,
+    stayNearby,
+    stayHouseRules,
   } = detailsData.data;
-
-  // Example overview and what to expect text (replace with real data as needed)
-  const overviewText =
-    'jksalknlknaskldnsalksnfkldsnflkdsnfkndskfnkldsnfkddasdasdasdaskldjalksjdklasjdlkashlk';
-  const whatToExpectText =
-    'After breakfast and the easy walk, you can have the best glass of harvested natural rainwater that truly has the properties of natural water (no smell, taste, or color) osurrounding.....';
 
   return (
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
@@ -181,55 +183,57 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
             <div className='flex flex-col gap-2 flex-[0.7]'>
               <div className='flex flex-col max-w-[37.5rem]'>
                 <p className='text-text_1 text-custom-30 font-custom-500 font-sans max-w-[37.5rem] text-ellipsis min-w-[12.5rem] break-words line-clamp-2'>
-                  {title[params.lang]}
+                  {name}
                 </p>
                 <div className='flex justify-between items-center mt-2'>
                   <p className='font-custom-400 font-sans text-custom-25 text-gray_3'>
-                    {location}
+                    {country?.name + ', ' + city}
                   </p>
                   <div className='text-custom-14 text-right'>
-                    <CustomSvg
-                      src='/SVGs/shared/bookagri-gold.svg'
-                      className='text-gold_1'
-                      width={96}
-                      height={24}
-                    />
+                    {bookagriBadge && (
+                      <CustomSvg
+                        src='/SVGs/shared/bookagri-gold.svg'
+                        className='text-gold_1'
+                        width={96}
+                        height={24}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
               <Divider className='w-full my-8' />
               {/* Overview Section */}
               <OverviewSection
-                overview={overviewText}
+                overview={longDescription}
                 isExpanded={isExpanded}
                 onToggleExpand={() => setIsExpanded(!isExpanded)}
               />
-              {type != 'offers' && (
+              {type != 'Offers & Packages' && (
                 <>
                   <Divider className='w-full my-8' />
                   {/* Location Section */}
                   <LocationSection
-                    location='Bookagri farmer garden in Balqa'
-                    latitude={31.431555608636437}
-                    longitude={35.802299612792986}
+                    location={name + ' in ' + country?.name + ', ' + city}
+                    latitude={location.coordinates[0]}
+                    longitude={location.coordinates[1]}
                   />
                 </>
               )}
-              {type === 'offers' && (
+              {type === 'Offers & Packages' && (
                 <>
                   <Divider className='w-full my-8' />
                   {/* Itinerary Section */}
                   <ItinerarySection stops={itineraryStops || []} />
                 </>
               )}
-              {type != 'stays' && (
+              {type != 'Stay' && (
                 <>
                   <Divider className='w-full my-8' />
                   {/* Features Section */}
                   <FeaturesSection features={features} />
                 </>
               )}
-              {type === 'stays' && (
+              {type === 'Stay' && (
                 <>
                   <Divider className='w-full my-8' />
                   <StaysFeature
@@ -250,37 +254,40 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
             </div>
             {/* Booking Panel */}
             <BookingPanel
-              price={price.amount}
-              bookable={bookable}
+              price={pricingInformation[0]?.price}
+              // bookable={bookable}
               schedule={schedule}
               params={params}
             />
           </div>
-          {type != 'stays' && (
+          {type != 'Stay' && (
             <>
               <Divider className='w-full my-8' />
               {/* What to Expect Section */}
               <WhatToExpectSection
-                description={whatToExpectText}
-                images={images}
+                description={whatToExpect?.description}
+                images={whatToExpect?.images}
               />
               <Divider className='w-full my-8' />
-              <SpecialInstructionsAndCancellationSection />
+              <SpecialInstructionsAndCancellationSection
+                specialInstructions={specialInstructions}
+                cancellationPolicy={cancellationPolicy}
+              />
             </>
           )}
-          {type === 'stays' && (
+          {type === 'Stay' && (
             <>
               <Divider className='w-full my-8' />
-              <StayDetailsSection details='Experience the comfort of our well-appointed accommodations with modern amenities and thoughtful touches to make your stay memorable.' />
+              <StayDetailsSection details={stayDetails?.description} />
               <Divider className='w-full my-8' />
-              <NearbySurroundingsSection details='Discover the charm of our location with easy access to local attractions, restaurants, and cultural sites. Enjoy peaceful surroundings while staying connected to everything you need.' />
+              <NearbySurroundingsSection details={stayNearby} />
               <Divider className='w-full my-8' />
-              <HouseRulesSection rules='Please respect quiet hours from 10 PM to 7 AM. No smoking inside. Pets allowed with prior approval. Keep common areas tidy. Check-in after 3 PM and check-out before 11 AM.' />
+              <HouseRulesSection rules={stayHouseRules} />
             </>
           )}
           <Divider className='w-full my-8' />
           {/* Similar Experiences Section */}
-          <SimilarExperiencesSection collections={collections?.data || []} />
+          {/* <SimilarExperiencesSection collections={collections?.data || []} /> */}
           <Divider className='w-full my-8' />
         </div>
       </main>

@@ -1,5 +1,6 @@
-import React from 'react';
-import CustomSvg from '@/components/ui/CustomSvg';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import AmenitiesPopup from './AmenitiesPopup';
 
 interface Amenity {
   _id: string;
@@ -17,30 +18,49 @@ interface AmenitiesSectionProps {
   amenities: Amenity[];
 }
 
-const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({ amenities }) => (
-  <div className='flex flex-col gap-11'>
-    <p className='font-custom-700 font-gellix-Bold text-text_1 text-custom-30'>
-      Available Amenities
-    </p>
-    <div className='flex gap-24'>
-      {amenities.map((amenity, index) => (
-        <div
-          className='flex flex-col gap-3 items-center'
-          key={index}
+const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({ amenities }) => {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  return (
+    <div className='flex flex-col gap-11'>
+      <div className='flex justify-between items-center w-full'>
+        <p className='font-custom-700 font-gellix-Bold text-text_1 text-custom-30'>
+          Available Amenities
+        </p>
+        <button 
+          className='font-custom-400 font-sans text-text_1 text-custom-20 underline'
+          onClick={() => setIsPopupOpen(true)}
         >
-          <CustomSvg
-            src={'/SVGs/home/Email.svg'}
-            width={24}
-            height={24}
-            color='black'
-          />
-          <p className='font-custom-400 font-sans text-text_1 text-custom-20'>
-            {amenity?.nameEn}
-          </p>
-        </div>
-      ))}
+          See All
+        </button>
+      </div>
+      <div className='flex gap-20'>
+        {amenities.slice(0, 4).map((amenity, index) => (
+          <div
+            className='flex flex-col gap-3 items-center'
+            key={index}
+          >
+            <Image
+              src={amenity?.iconPath}
+              alt={amenity?.nameEn}
+              width={87}
+              height={87}
+            />
+            <p className='font-custom-400 font-sans text-text_1 text-custom-20 line-clamp-1'>
+              {amenity?.nameEn}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {isPopupOpen && (
+        <AmenitiesPopup 
+          amenities={amenities} 
+          onClose={() => setIsPopupOpen(false)} 
+        />
+      )}
     </div>
-  </div>
-);
+  );
+};
 
 export default AmenitiesSection; 

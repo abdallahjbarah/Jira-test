@@ -1,27 +1,20 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '../index'; // Assuming api is setup for potential future API calls
-import { Collection, collectionsData } from '../collections/data'; // Importing Collection type and mock data
+import { Site, SiteByIdResponse } from '@/lib/types';
 
 const fetchDetails = async (
   id: string,
-): Promise<{ data: Collection | undefined }> => {
-  // Simulate API delay for more realistic behavior
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
-  // Find the item by id from the 'all' category in collectionsData
-  const item = collectionsData.all.find((collection) => collection.id === id);
-
-  return {
-    data: item,
-  };
+): Promise<{ data: Site | undefined }> => {
+  const response = await api.url(`/sites/${id}`).get().json<SiteByIdResponse>();
+  return { data: response.site };
 };
 
 export const useFetchDetails = (
   id: string,
   queryOptions?: Omit<UseQueryOptions<
-    { data: Collection | undefined },
+    { data: Site | undefined },
     Error,
-    { data: Collection | undefined },
+    { data: Site | undefined },
     readonly ['details', string]
   >, 'queryKey' | 'queryFn' | 'enabled'>,
 ) => {
