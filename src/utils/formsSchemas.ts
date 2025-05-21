@@ -71,7 +71,6 @@ export const SignUpSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
   password: passwordSchema('Password is required'),
   phoneNumber: Yup.string().required('Phone Number is required'),
-  phoneNumberLocal: Yup.string().required('Phone Number is required'),
   countryCode: Yup.string(),
   agreeToTerms: Yup.boolean()
     .oneOf([true], 'You must accept the terms and conditions')
@@ -143,9 +142,22 @@ export const personalInfoSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
   phoneNumber: Yup.string().required('Phone number is required'),
   birthdate: Yup.date().nullable(),
-  gender: Yup.string().nullable(),
-  nationality: Yup.string().nullable(),
-  location: Yup.string().nullable(),
+  gender: Yup.object().shape({
+    value: Yup.string().required('Gender is required'),
+    label: Yup.string().required('Gender is required'),
+  }),
+  nationality: Yup.object().shape({
+    value: Yup.string().required('Nationality is required'),
+    label: Yup.string().required('Nationality is required'),
+  }),
+  country: Yup.object().shape({
+    value: Yup.string().required('Country is required'),
+    label: Yup.string().required('Country is required'),
+  }),
+  city: Yup.object().shape({
+    value: Yup.string().required('City is required'),
+    label: Yup.string().required('City is required'),
+  }),
 });
 
 // Currency Schema

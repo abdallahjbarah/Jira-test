@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useForm, Controller, useWatch } from 'react-hook-form';
+import { useForm, Controller, useWatch, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { personalInfoSchema } from '@/utils/formsSchemas';
 import FormInput from '@/components/form/FormInput';
@@ -12,11 +12,16 @@ import ImageUploader from '@/components/form/ImageUploader';
 import useUser from '@/utils/hooks/useUser';
 import { GENDER_OPTIONS } from '@/utils/constants';
 import { useGetCountries } from '@/lib/apis/countries/useFetchCountries';
-import { Country } from '@/lib/types';
-import {
-  City,
-  useFetchCities,
-} from '@/lib/apis/countries/useFetchCountriesCities';
+import { Country, City } from '@/lib/types';
+import { useFetchCities } from '@/lib/apis/countries/useFetchCountriesCities';
+import DatePickerInput from '@/components/form/DatePickerInput';
+import { useEditUser } from '@/lib/apis/users/useEditUser';
+import { toast } from 'react-toastify';
+import PhoneNumberInput from '@/components/form/PhoneNumberInput';
+import { CountryCode } from 'libphonenumber-js';
+import { useQueryClient } from '@tanstack/react-query';
+import { useUploadFile } from '@/lib/apis/files/useUploadFile';
+import { FileFolder } from '@/lib/enums';
 
 type PersonalInfoFormData = {
   firstName: string;
@@ -28,22 +33,47 @@ type PersonalInfoFormData = {
   country: { value: string; label: string };
   nationality: { value: string; label: string };
   city: { value: string; label: string };
+  profileImage?: File | null;
 };
 
 export default function PersonalInfoPage() {
   const { t, locale } = useTranslation();
-  const [isLoading, setIsLoading] = useState(false);
-  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const queryClient = useQueryClient();
   const { userData } = useUser();
-  const { data: countries } = useGetCountries();
-
   console.log(userData, 'userData');
+  const { data: countries } = useGetCountries();
+  const { mutate: editUser, isPending: isEditUserLoading } = useEditUser({
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user'], (oldData: any) => {
+        return {
+          ...oldData,
+          user: { ...oldData.user, ...data },
+        };
+      });
+      toast.success(t('profile.updateUser.personalInfoUpdated'));
+    },
+    onError: (error) => {
+      console.log(error, 'error');
+      toast.error(t('profile.updateUser.personalInfoUpdateFailed'));
+    },
+  });
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<PersonalInfoFormData>({
+  const nationalityObject = React.useMemo(() => {
+    return countries?.find(
+      (country: Country) => country._id === userData?.user.nationality,
+    );
+  }, [countries, userData?.user.nationality]);
+
+  const countryValue = userData?.user.country?._id || '';
+  const { data: cities } = useFetchCities(countryValue);
+
+  const cityObject = React.useMemo(() => {
+    return cities?.find(
+      (city: City) => city.id === Number(userData?.user.city),
+    );
+  }, [cities, userData?.user.city]);
+
+  const personalInfoForm = useForm<PersonalInfoFormData>({
     resolver: yupResolver(personalInfoSchema) as any,
     defaultValues: {
       firstName: userData?.user.firstName,
@@ -56,42 +86,77 @@ export default function PersonalInfoPage() {
         label: userData?.user.gender,
       },
       nationality: {
-        value: userData?.user.nationality,
-        label: userData?.user.nationality,
+        value: nationalityObject?._id,
+        label: nationalityObject?.nationality,
       },
       country: {
-        value: userData?.user.country,
-        label: userData?.user.country,
+        value: userData?.user.country?._id,
+        label: userData?.user.country?.name,
       },
       city: {
-        value: userData?.user.city,
-        label: userData?.user.city,
+        value: cityObject?.id?.toString(),
+        label: cityObject?.name,
       },
     },
   });
 
-  const countryValue = useWatch({ control, name: 'country' });
+  const selectedCountry = useWatch({
+    control: personalInfoForm.control,
+    name: 'country',
+  });
 
-  const { data: cities } = useFetchCities(countryValue?.value || '');
+  // Refetch cities when country changes in the form
+  const { data: citiesForSelectedCountry } = useFetchCities(
+    selectedCountry?.value || '',
+  );
+
+  const uploadFileMutation = useUploadFile({
+    onSuccess: (data) => {
+      // Once file is uploaded, the response contains the image URL
+      updateUserWithImage(data);
+    },
+    onError: (error) => {
+      console.log(error, 'error');
+      toast.error('Failed to upload profile image');
+    },
+  });
 
   const onSubmit = (data: PersonalInfoFormData) => {
-    setIsLoading(true);
-    try {
-      // API call would go here
-      console.log('Form data:', data);
-      console.log('Profile image:', profileImage);
-      // Show success message
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-    } catch (error) {
-      console.error('Error:', error);
-      setIsLoading(false);
+    if (data.profileImage) {
+      uploadFileMutation.mutate({
+        file: data.profileImage,
+        folderName: FileFolder.PROFILE,
+      });
+    } else {
+      const { profileImage, ...rest } = data;
+      editUser({
+        userId: userData?.user._id,
+        ...rest,
+        gender: data.gender.value,
+        nationality: data.nationality.value,
+        country: data.country.value,
+        city: data.city.value,
+        birthdate: new Date(data.birthdate).toISOString(),
+      });
     }
   };
 
+  const updateUserWithImage = (imageUrl: string) => {
+    const { profileImage, ...rest } = personalInfoForm.getValues();
+    editUser({
+      userId: userData?.user._id,
+      profileImageUrl: imageUrl,
+      ...rest,
+      gender: rest.gender.value,
+      nationality: rest.nationality.value,
+      country: rest.country.value,
+      city: rest.city.value.toString(),
+      birthdate: new Date(rest.birthdate).toISOString(),
+    });
+  };
+
   const handleImageChange = (file: File) => {
-    setProfileImage(file);
+    personalInfoForm.setValue('profileImage', file);
   };
 
   return (
@@ -99,222 +164,213 @@ export default function PersonalInfoPage() {
       <h2 className='text-xl font-semibold mb-6'>
         {t('profile.personalInfo')}
       </h2>
-      <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-        <div className='flex items-center justify-center mb-8'>
-          <ImageUploader
-            initialImage='/avatar-placeholder.png'
-            onImageChange={handleImageChange}
-            size='md'
-          />
-        </div>
-
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          {/* First Name */}
-          <div>
-            <Controller
-              name='firstName'
-              control={control}
-              render={({ field }) => (
-                <FormInput
-                  {...field}
-                  id='firstName'
-                  label={t('profile.firstName')}
-                  error={errors.firstName?.message}
-                />
-              )}
+      <FormProvider {...personalInfoForm}>
+        <form
+          onSubmit={personalInfoForm.handleSubmit(onSubmit)}
+          className='space-y-4'
+        >
+          <div className='flex items-center justify-center mb-8'>
+            <ImageUploader
+              initialImage={userData?.user.profileImageUrl}
+              onImageChange={handleImageChange}
+              size='md'
             />
           </div>
 
-          {/* Last Name */}
-          <div>
-            <Controller
-              name='lastName'
-              control={control}
-              render={({ field }) => (
-                <FormInput
-                  {...field}
-                  id='lastName'
-                  label={t('profile.lastName')}
-                  error={errors.lastName?.message}
-                />
-              )}
-            />
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            {/* First Name */}
+            <div>
+              <Controller
+                name='firstName'
+                control={personalInfoForm.control}
+                render={({ field }) => (
+                  <FormInput
+                    {...field}
+                    id='firstName'
+                    label={t('profile.firstName')}
+                    error={personalInfoForm.formState.errors.firstName?.message}
+                  />
+                )}
+              />
+            </div>
+
+            {/* Last Name */}
+            <div>
+              <Controller
+                name='lastName'
+                control={personalInfoForm.control}
+                render={({ field }) => (
+                  <FormInput
+                    {...field}
+                    id='lastName'
+                    label={t('profile.lastName')}
+                    error={personalInfoForm.formState.errors.lastName?.message}
+                  />
+                )}
+              />
+            </div>
+
+            {/* Email */}
+            <div>
+              <Controller
+                name='email'
+                control={personalInfoForm.control}
+                render={({ field }) => (
+                  <FormInput
+                    {...field}
+                    id='email'
+                    label={t('email')}
+                    error={personalInfoForm.formState.errors.email?.message}
+                  />
+                )}
+              />
+            </div>
+
+            <div>
+              <PhoneNumberInput
+                phoneFieldName='phoneNumber'
+                phoneLocalFieldName='phoneNumber'
+                countryCodeFieldName='countryCode'
+                error={personalInfoForm.formState.errors.phoneNumber?.message}
+                defaultCountry={userData?.user.countryCode as CountryCode}
+              />
+            </div>
+
+            <div>
+              <Controller
+                name='birthdate'
+                control={personalInfoForm.control}
+                render={({ field }) => (
+                  <DatePickerInput
+                    id='birthdate'
+                    label={t('profile.birthdate')}
+                    error={personalInfoForm.formState.errors.birthdate?.message}
+                    value={field.value}
+                    onChange={field.onChange}
+                    isBirthdate={true}
+                    minDate={new Date('1900-01-01')}
+                  />
+                )}
+              />
+            </div>
+
+            <div>
+              <Controller
+                name='gender'
+                control={personalInfoForm.control}
+                render={({ field }) => (
+                  <FloatingLabelSelect
+                    {...field}
+                    id='gender'
+                    options={GENDER_OPTIONS.map((option) => ({
+                      ...option,
+                      label: option.label[locale],
+                    }))}
+                    label={t('profile.gender')}
+                    error={personalInfoForm.formState.errors.gender?.message}
+                    classNamePrefix='react-select'
+                    isFilled={!!field.value}
+                    onChange={(option: any) =>
+                      field.onChange(option ? option : '')
+                    }
+                  />
+                )}
+              />
+            </div>
+
+            <div>
+              <Controller
+                name='nationality'
+                control={personalInfoForm.control}
+                render={({ field }) => (
+                  <FloatingLabelSelect
+                    {...field}
+                    id='nationality'
+                    options={countries?.map((country: Country) => ({
+                      value: country._id,
+                      label: country.nationality,
+                    }))}
+                    label={t('profile.nationality')}
+                    error={
+                      personalInfoForm.formState.errors.nationality?.message
+                    }
+                    classNamePrefix='react-select'
+                    isFilled={!!field.value}
+                    onChange={(option: any) =>
+                      field.onChange(option ? option : '')
+                    }
+                  />
+                )}
+              />
+            </div>
+
+            <div>
+              <Controller
+                name='country'
+                control={personalInfoForm.control}
+                render={({ field }) => (
+                  <FloatingLabelSelect
+                    {...field}
+                    id='country'
+                    options={countries?.map((country: Country) => ({
+                      value: country._id,
+                      label: country.name,
+                    }))}
+                    label={t('profile.country')}
+                    error={personalInfoForm.formState.errors.country?.message}
+                    classNamePrefix='react-select'
+                    isFilled={!!field.value}
+                    onChange={(option: any) => {
+                      field.onChange(option ? option : '');
+                    }}
+                  />
+                )}
+              />
+            </div>
+            <div>
+              <Controller
+                name='city'
+                control={personalInfoForm.control}
+                render={({ field }) => (
+                  <FloatingLabelSelect
+                    {...field}
+                    id='city'
+                    options={citiesForSelectedCountry?.map((city: City) => ({
+                      value: city.id,
+                      label: city.name,
+                    }))}
+                    label={t('profile.city')}
+                    error={personalInfoForm.formState.errors.city?.message}
+                    classNamePrefix='react-select'
+                    isFilled={!!field.value}
+                    onChange={(option: any) =>
+                      field.onChange(option ? option : '')
+                    }
+                  />
+                )}
+              />
+            </div>
           </div>
 
-          {/* Email */}
-          <div>
-            <Controller
-              name='email'
-              control={control}
-              render={({ field }) => (
-                <FormInput
-                  {...field}
-                  id='email'
-                  label={t('email')}
-                  error={errors.email?.message}
-                />
-              )}
+          <div className='flex justify-end space-x-4 pt-6'>
+            <button
+              type='button'
+              className='px-6 py-2 border border-gray-300 rounded-full text-sm font-medium transition-colors hover:bg-gray-50'
+            >
+              {t('profile.cancel')}
+            </button>
+            <FilledButton
+              text={t('profile.save')}
+              buttonType='submit'
+              isDisable={
+                personalInfoForm.formState.isSubmitting || isEditUserLoading
+              }
+              className='w-[146px] px-6 py-3 rounded-lg text-xl'
+              isButton
             />
           </div>
-
-          <div>
-            <Controller
-              name='phoneNumber'
-              control={control}
-              render={({ field }) => (
-                <FormInput
-                  {...field}
-                  id='phoneNumber'
-                  label={t('profile.phoneNumber')}
-                  error={errors.phoneNumber?.message}
-                />
-              )}
-            />
-          </div>
-
-          <div>
-            <Controller
-              name='birthdate'
-              control={control}
-              render={({ field }) => (
-                <FormInput
-                  {...field}
-                  id='birthdate'
-                  type='date'
-                  label={t('profile.birthdate')}
-                  error={errors.birthdate?.message}
-                />
-              )}
-            />
-          </div>
-
-          <div>
-            <Controller
-              name='gender'
-              control={control}
-              render={({ field }) => (
-                <FloatingLabelSelect
-                  {...field}
-                  id='gender'
-                  options={GENDER_OPTIONS.map((option) => ({
-                    ...option,
-                    label: option.label[locale],
-                  }))}
-                  label={t('profile.gender')}
-                  error={errors.gender?.message}
-                  classNamePrefix='react-select'
-                  isFilled={!!field.value}
-                  onChange={(option: any) =>
-                    field.onChange(option ? option : '')
-                  }
-                />
-              )}
-            />
-          </div>
-
-          <div>
-            <Controller
-              name='nationality'
-              control={control}
-              render={({ field }) => (
-                <FloatingLabelSelect
-                  {...field}
-                  id='nationality'
-                  options={countries?.map((country: Country) => ({
-                    value: country._id,
-                    label: country.nationality,
-                  }))}
-                  label={t('profile.nationality')}
-                  error={errors.nationality?.message}
-                  classNamePrefix='react-select'
-                  isFilled={!!field.value}
-                  onChange={(option: any) =>
-                    field.onChange(option ? option : '')
-                  }
-                />
-              )}
-            />
-          </div>
-
-          <div>
-            <Controller
-              name='country'
-              control={control}
-              render={({ field }) => (
-                <FloatingLabelSelect
-                  {...field}
-                  id='country'
-                  options={countries?.map((country: Country) => ({
-                    value: country._id,
-                    label: country.name,
-                  }))}
-                  label={t('profile.country')}
-                  error={errors.country?.message}
-                  classNamePrefix='react-select'
-                  isFilled={!!field.value}
-                  onChange={(option: any) => {
-                    field.onChange(option ? option : '');
-                  }}
-                />
-              )}
-            />
-          </div>
-          <div>
-            <Controller
-              name='city'
-              control={control}
-              render={({ field }) => (
-                <FloatingLabelSelect
-                  {...field}
-                  id='city'
-                  options={cities?.map((city: City) => ({
-                    value: city._id,
-                    label: city.name,
-                  }))}
-                  label={t('profile.city')}
-                  error={errors.city?.message}
-                  classNamePrefix='react-select'
-                  isFilled={!!field.value}
-                  onChange={(option: any) =>
-                    field.onChange(option ? option._id : '')
-                  }
-                />
-              )}
-            />
-          </div>
-
-          {/* <div>
-            <Controller
-              name='location'
-              control={control}
-              render={({ field }) => (
-                <FormInput
-                  {...field}
-                  id='location'
-                  label={t('profile.location')}
-                  error={errors.location?.message}
-                />
-              )}
-            />
-          </div> */}
-        </div>
-
-        <div className='flex justify-end space-x-4 pt-6'>
-          <button
-            type='button'
-            className='px-6 py-2 border border-gray-300 rounded-full text-sm font-medium transition-colors hover:bg-gray-50'
-          >
-            {t('profile.cancel')}
-          </button>
-          <FilledButton
-            text={t('profile.save')}
-            buttonType='submit'
-            isDisable={isLoading}
-            className='w-[146px] px-6 py-3 rounded-lg text-xl'
-            isButton
-          />
-        </div>
-      </form>
+        </form>
+      </FormProvider>
     </div>
   );
 }

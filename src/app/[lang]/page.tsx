@@ -4,37 +4,43 @@ import PublicLayout from '@layouts/PublicLayout';
 import { SEO_KEYWORDS } from '@utils/constants';
 import Head from 'next/head';
 import { Locale } from '@utils/constants';
-
-export const metadata = {
-  title: 'Bookagri - Authentic Agritourism in Jordan',
-  description:
-    'Experience authentic agritourism in Jordan with Bookagri. Connect with local farmers, participate in hands-on activities, and enjoy rural stays. Book your agricultural adventure today!',
-  keywords: SEO_KEYWORDS,
-  openGraph: {
-    url: 'https://www.bookagri.com/',
-    title: 'Bookagri - Authentic Agritourism in Jordan',
-    description:
-      'Experience authentic agritourism in Jordan with Bookagri. Connect with local farmers, participate in hands-on activities, and enjoy rural stays. Book your agricultural adventure today!',
-    images: [
-      {
-        url: 'https://www.bookagri.com/images/shared/BookagriLogo.png',
-        width: 300,
-        height: 150,
-        alt: 'Bookagri Logo',
-      },
-    ],
-    site_name: 'Bookagri',
-  },
-  twitter: {
-    handle: '@bookagri',
-    site: '@bookagri',
-    cardType: 'summary_large_image',
-  },
-};
+import { getDictionary } from '@/utils/dictionaries';
+import { Metadata } from 'next';
 
 interface HomePageProps {
   params: {
     lang: Locale;
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: HomePageProps): Promise<Metadata> {
+  const dictionary = await getDictionary(params.lang);
+
+  return {
+    title: dictionary.metadata.title,
+    description: dictionary.metadata.description,
+    keywords: SEO_KEYWORDS,
+    openGraph: {
+      url: 'https://www.bookagri.com/',
+      title: dictionary.metadata.title,
+      description: dictionary.metadata.description,
+      images: [
+        {
+          url: 'https://www.bookagri.com/images/shared/BookagriLogo.png',
+          width: 300,
+          height: 150,
+          alt: dictionary.metadata.logoAlt,
+        },
+      ],
+      siteName: dictionary.metadata.siteName,
+    },
+    twitter: {
+      creator: '@bookagri',
+      site: '@bookagri',
+      card: 'summary_large_image',
+    },
   };
 }
 

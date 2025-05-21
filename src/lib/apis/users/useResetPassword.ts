@@ -14,7 +14,7 @@ const resetPassword = async (data: ResetPasswordData) => {
 };
 
 export const useResetPassword = (
-  mutationArgs: UseMutationOptions<any, any, ResetPasswordData, any>,
+  mutationArgs?: UseMutationOptions<any, any, ResetPasswordData, any>,
 ) => {
   return useMutation({
     mutationFn: (data: ResetPasswordData) => resetPassword(data),

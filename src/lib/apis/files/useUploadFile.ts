@@ -14,9 +14,9 @@ const uploadFile = async (data: UploadFileData) => {
   formData.append('file', data.file);
 
   const response = await api
-    .url(`/api/file/uploadImage/${data.folderName}`)
+    .url(`/file/uploadImage/${data.folderName}`)
     .post(formData)
-    .json();
+    .text();
   return response;
 };
 

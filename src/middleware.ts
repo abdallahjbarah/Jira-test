@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
-
+import { TOKEN_NAME } from './utils';
+import { ApprovalStatus } from './lib/enums';
 export const locales = ['en', 'ar'];
 export const defaultLocale = 'en';
 
@@ -35,11 +36,59 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Get the current locale
+  const locale = getLocale(request);
+
+  // Check for user status in cookies and redirect if needed
+  const userStatus = request.cookies.get('userStatus')?.value;
+
+  const isLoggedIn = request.cookies.get(TOKEN_NAME)?.value;
+
+  // Check for each locale if the path starts with /profile
+  const isProfilePath = locales.some((loc) =>
+    pathname.startsWith(`/${loc}/profile`),
+  );
+
+  const isMyBookingsPath = locales.some((loc) =>
+    pathname.startsWith(`/${loc}/my-bookings`),
+  );
+
+  const isWishlistPath = locales.some((loc) =>
+    pathname.startsWith(`/${loc}/wishlist`),
+  );
+
+  // Check if the path is for login or signup
+  const isAuthPath = locales.some(
+    (loc) =>
+      pathname.startsWith(`/${loc}/auth/login`) ||
+      pathname.startsWith(`/${loc}/auth/signup`),
+  );
+
+  // If the user has status 3 and is trying to access profile, redirect to verify page
+  if (
+    userStatus === ApprovalStatus.PENDING.toString() &&
+    (isProfilePath || isMyBookingsPath || isWishlistPath)
+  ) {
+    console.log('redirecting to verify page');
+    return NextResponse.redirect(
+      new URL(`/${locale}/auth/verify${request.nextUrl.search}`, request.url),
+    );
+  }
+
+  // If the user is logged in and trying to access login/signup, redirect to all page
+  if (isLoggedIn && isAuthPath) {
+    return NextResponse.redirect(
+      new URL(`/${locale}/all${request.nextUrl.search}`, request.url),
+    );
+  }
+
   // Redirect if the pathname is missing a locale
   if (pathnameIsMissingLocale) {
-    const locale = getLocale(request);
     return NextResponse.redirect(
-      new URL(`/${locale}${pathname === '/' ? '' : pathname}`, request.url),
+      new URL(
+        `/${locale}${pathname === '/' ? '' : pathname}${request.nextUrl.search}`,
+        request.url,
+      ),
     );
   }
 

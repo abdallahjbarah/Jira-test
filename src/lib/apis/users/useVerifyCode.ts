@@ -4,7 +4,8 @@ import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 
 export interface VerifyCodeData {
-  code: string;
+  email: string;
+  otp: string;
 }
 
 const verifyCode = async (data: VerifyCodeData) => {
@@ -13,7 +14,7 @@ const verifyCode = async (data: VerifyCodeData) => {
 };
 
 export const useVerifyCode = (
-  mutationArgs: UseMutationOptions<any, any, VerifyCodeData, any>,
+  mutationArgs?: UseMutationOptions<any, any, VerifyCodeData, any>,
 ) => {
   return useMutation({
     mutationFn: (data: VerifyCodeData) => verifyCode(data),

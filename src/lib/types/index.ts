@@ -31,8 +31,9 @@ export interface User {
   gender?: Gender;
   nationality?: string;
   birthdate?: string;
-  city?: string;
-  country?: string;
+  city?: string | number;
+  country?: Country;
+  profileImageUrl?: string;
 }
 
 export interface Role {
@@ -109,4 +110,11 @@ export interface Faq {
   createdAt: string;
   updatedAt: string;
   __v: number;
+}
+
+export interface City {
+  id: number;
+  name: string;
+  latitude: string;
+  longitude: string;
 }

@@ -142,7 +142,6 @@ interface LinkData {
 export const LINKS_DATA: LinkData[] = [
   { path: '/', name: { en: 'Home', ar: 'الرئيسية' } },
   { path: '/#AboutUs', name: { en: 'About Us', ar: 'عننا' } },
-  { path: '/news', name: { en: 'News', ar: 'الأخبار' } },
   { path: '/gallery', name: { en: 'Gallery', ar: 'المعرض' } },
   { path: '/#ContactUsForm', name: { en: 'Contact Us', ar: 'تواصل معنا' } },
   {

@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { TOKEN_NAME, USER_DETAILS } from '@utils/constants';
+import { TOKEN_NAME } from '@utils/constants';
 import { useQueryClient } from '@tanstack/react-query';
 import { UserLoginResponse } from '@/lib/types';
 import { useLogout } from '@/lib/apis/auth/useLogout';
@@ -33,7 +33,10 @@ export default function useUser(): UseUserReturn {
       // queryClient.removeQueries({ queryKey: ['wishlist-items'] });
       // queryClient.removeQueries({ queryKey: ['cart-items'] });
 
+      router.push('/auth/login');
+
       removeCookie(TOKEN_NAME);
+      removeCookie('userStatus');
     },
   });
 
