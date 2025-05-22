@@ -293,3 +293,17 @@ export interface PaymentMethod {
   isEnabled: boolean;
   bankDetails?: BankDetails;
 }
+
+export interface AvailabilitySlot {
+  startDateTime: number;
+  endDateTime: number;
+  slotId: string;
+  isFullyBooked: boolean;
+  _id: string;
+}
+
+export interface AvailabilityStaySlot {
+  startDate: number;
+  endDate: number;
+  availabilitiesIds : string[];
+}

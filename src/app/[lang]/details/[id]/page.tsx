@@ -255,9 +255,10 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
             {/* Booking Panel */}
             <BookingPanel
               price={pricingInformation[0]?.price}
-              // bookable={bookable}
               schedule={schedule}
               params={params}
+              type={type}
+              name={name}
             />
           </div>
           {type != 'Stay' && (

@@ -5,6 +5,11 @@ import GuestFilterItem from '@/components/shared/GuestFilterItem';
 import TimeSlotCard from './TimeSlotCard';
 import { useRouter } from 'next/navigation';
 import { Locale } from '@utils/constants';
+import { useFetchAvailabilitySlots } from '@/lib/apis/availabilitiesSlots/useFetchAvailabilitiesSlots';
+import CircularLoader from '@/components/ui/CircularLoader';
+import { useFetchAvailabilityStaySlots } from '@/lib/apis/availabilitiesSlots/useFetchAvailabilitiesStay';
+import { toast } from 'react-toastify';
+import { fetchAllowedGuests } from '@/lib/apis/details/useFetchAllowedGuests';
 
 interface BookingPanelProps {
   params: {
@@ -13,6 +18,8 @@ interface BookingPanelProps {
   };
   price: number;
   bookabl?: boolean;
+  type?: string;
+  name?: string;
   schedule?: {
     startDateTime: number;
     endDateTime: number;
@@ -26,11 +33,67 @@ interface BookingPanelProps {
   };
 }
 
-const BookingPanel: React.FC<BookingPanelProps> = ({ price, schedule, params }) => {
+interface GroupedSlots {
+  [key: string]: {
+    date: Date;
+    slots: Array<{
+      startDateTime: number;
+      endDateTime: number;
+      slotId: string;
+      isFullyBooked: boolean;
+      _id: string;
+    }>;
+  };
+}
+
+const BookingPanel: React.FC<BookingPanelProps> = ({
+  price,
+  schedule,
+  params,
+  type,
+  name
+}) => {
   const router = useRouter();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-  const [availableSlots, setAvailableSlots] = useState<{ startTime: string; id: string }[]>([]);
-  const [selectedSlotId, setSelectedSlotId] = useState<string>();
+  const [searchDates, setSearchDates] = useState<{
+    startDateTime?: number;
+    endDateTime?: number;
+  }>({});
+  const [guests, setGuests] = useState<number>(0);
+
+  const { data: availabilitySlots, isLoading: isLoadingAvailabilitySlots } = type === 'Stay' 
+    ? { data: undefined, isLoading: false }
+    : useFetchAvailabilitySlots({
+        siteId: params.id,
+        ...searchDates,
+      });
+
+  const { data: availabilityStaySlots, isLoading: isLoadingAvailabilityStaySlots } = type === 'Stay'
+    ? useFetchAvailabilityStaySlots({
+        siteId: params.id,
+        ...searchDates,
+      })
+    : { data: undefined, isLoading: false };
+
+  // Group slots by date
+  const groupedSlots = useMemo(() => {
+    if (!availabilitySlots?.data) return {};
+
+    return availabilitySlots.data.reduce((acc: GroupedSlots, slot) => {
+      const date = new Date(slot.startDateTime);
+      const dateKey = date.toDateString();
+
+      if (!acc[dateKey]) {
+        acc[dateKey] = {
+          date: date,
+          slots: [],
+        };
+      }
+
+      acc[dateKey].slots.push(slot);
+      return acc;
+    }, {});
+  }, [availabilitySlots]);
 
   // Calculate minimum date (2 days from now)
   const minDate = useMemo(() => {
@@ -41,7 +104,25 @@ const BookingPanel: React.FC<BookingPanelProps> = ({ price, schedule, params }) 
   }, []);
 
   const handleDateChange = (dateString: string, dates: Date[]) => {
-    setSelectedDates(dates);
+    if (type != 'Stay') {
+      setSelectedDates(dates);
+      if (dates.length === 1) {
+        const startDateTime = dates[0].getTime();
+        const endDateTime = dates[0].getTime() + 24 * 60 * 60 * 1000;
+        setSearchDates({ startDateTime, endDateTime });
+      } else if (dates.length === 2) {
+        const startDateTime = dates[0].getTime();
+        const endDateTime = dates[1].getTime();
+        setSearchDates({ startDateTime, endDateTime });
+      }
+    }else{
+      setSelectedDates(dates);
+       if (dates.length === 2) {
+        const startDateTime = dates[0].getTime();
+        const endDateTime = dates[1].getTime() + 24 * 60 * 60 * 1000;
+        setSearchDates({ startDateTime, endDateTime });
+      }
+    }
   };
 
   // Format the selected dates for display
@@ -51,17 +132,61 @@ const BookingPanel: React.FC<BookingPanelProps> = ({ price, schedule, params }) 
       return selectedDates[0].toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
-        year: 'numeric'
+        year: 'numeric',
       });
     }
     return `${selectedDates[0].toLocaleDateString('en-US', {
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     })} - ${selectedDates[1].toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
-      year: 'numeric'
+      year: 'numeric',
     })}`;
+  };
+
+  // Format time to 12-hour format
+  const formatTime = (timestamp: number) => {
+    return new Date(timestamp).toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+  };
+
+  const getAllowedGuests = async (slotIds?: string[]) => {
+    try {
+      const response = await fetchAllowedGuests({
+        siteId: params.id,
+        adults: guests,
+        children: 0,
+        infants: 0,
+        availabilityIds: type === 'Stay' ? availabilityStaySlots?.data?.availabilitiesIds : slotIds
+      });
+      
+      if (response.data > 0) {
+        router.push(
+          `/${params.lang}/details/${params.id}/completeYourBooking`,
+        );
+      } else {
+        toast.error('The selected number of guests exceeds the allowed limit', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      }
+    } catch (error: any) {
+      console.error('Error checking allowed guests:', error['message']);
+      toast.error(error['message'], {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+    }
   };
 
   return (
@@ -82,41 +207,12 @@ const BookingPanel: React.FC<BookingPanelProps> = ({ price, schedule, params }) 
                 readOnly
               />
             }
-            mode= "range"
+            mode={type === 'stay' ? 'range' : 'both'}
             schedule={schedule}
             onChange={handleDateChange}
             minDate={minDate}
           />
         </div>
-
-        {/* Time Slots - Only show for single date selection */}
-        {selectedDates.length === 1 && availableSlots.length > 0 && (
-          <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium text-gray-700'>Available Times</label>
-            <div className='grid grid-cols-3 gap-2'>
-              {availableSlots.map((slot) => {
-                const slotTime = new Date(parseInt(slot.startTime));
-                return (
-                  <button
-                    key={slot.id}
-                    onClick={() => setSelectedSlotId(slot.id)}
-                    className={`p-2 text-sm rounded-lg border ${
-                      selectedSlotId === slot.id
-                        ? 'bg-primary_1 text-white border-primary_1'
-                        : 'border-gray-300 hover:border-primary_1'
-                    }`}
-                  >
-                    {slotTime.toLocaleTimeString('en-US', {
-                      hour: 'numeric',
-                      minute: '2-digit',
-                      hour12: true,
-                    })}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
 
         <div className='flex flex-col gap-2'>
           <GuestFilterItem
@@ -125,64 +221,109 @@ const BookingPanel: React.FC<BookingPanelProps> = ({ price, schedule, params }) 
                 type='text'
                 className='border border-secondary_3 rounded-custom-10 p-3'
                 label='Guests'
-                defaultValue={1}
+                value={guests}
               />
             }
+            onChange={(guests) => {
+              setGuests(guests.adults + guests.children + guests.infants);
+            }}
           />
         </div>
       </div>
       <div className='flex flex-col gap-2'>
-        <h1 className='text-xl font-custom-700 text-text_1 font-gellix-Bold'>Available Time Slots</h1>
-        <div className='flex flex-col max-h-[550px] overflow-y-auto gap-5'>
-          <p className='text-sm font-custom-400 text-text_1 font-sans'>Thursday, 10 Sep</p>
-          <TimeSlotCard
-            timeRange="09:00 - 11:30 AM"
-            adultPrice={20}
-            childrenPrice={10}
-            onChoose={() => {
-              router.push(`/${params.lang}/details/${params.id}/completeYourBooking`);
-            }}
-          />
-           <TimeSlotCard
-            timeRange="09:00 - 11:30 AM"
-            adultPrice={20}
-            childrenPrice={10}
-            onChoose={() => {
-              // Handle choose action
-              console.log('Time slot chosen');
-            }}
-          />
-           <TimeSlotCard
-            timeRange="09:00 - 11:30 AM"
-            adultPrice={20}
-            childrenPrice={10}
-            onChoose={() => {
-              // Handle choose action
-              console.log('Time slot chosen');
-            }}
-          />
-           <TimeSlotCard
-            timeRange="09:00 - 11:30 AM"
-            adultPrice={20}
-            childrenPrice={10}
-            onChoose={() => {
-              // Handle choose action
-              console.log('Time slot chosen');
-            }}
-          />
-           <TimeSlotCard
-            timeRange="09:00 - 11:30 AM"
-            adultPrice={20}
-            childrenPrice={10}
-            onChoose={() => {
-              // Handle choose action
-              console.log('Time slot chosen');
-            }}
-          />
-        </div>
+        <h1 className='text-xl font-custom-700 text-text_1 font-gellix-Bold'>
+          {type === 'Stay' ? 'Available Stay Slots' : 'Available Time Slots'}
+        </h1>
+        {(type === 'Stay' ? isLoadingAvailabilityStaySlots : isLoadingAvailabilitySlots) ? (
+          <div className='flex justify-center items-center h-[550px]'>
+            <CircularLoader size={50} />
+          </div>
+        ) : type === 'Stay' ? (
+          <div className='flex flex-col max-h-[550px] overflow-y-auto gap-5'>
+            {selectedDates.length === 2 && availabilityStaySlots?.data && (
+              <>
+              <p className='text-sm font-custom-400 text-text_1 font-sans'>
+            {new Date(availabilityStaySlots.data.startDate).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                })} - {new Date(availabilityStaySlots.data.endDate).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric'
+                })}
+                </p>
+              <TimeSlotCard
+                timeRange={`${new Date(availabilityStaySlots.data.startDate).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                })} - ${new Date(availabilityStaySlots.data.endDate).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric'
+                })}`}
+                adultPrice={price}
+                childrenPrice={10}
+                type={type}
+                title={name}
+                onChoose={() => {
+                  if(guests > 0){
+                    getAllowedGuests();
+                  }else{
+                    toast.error('Please select guests', {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                    });
+                  }
+                }}
+              />
+              </>
+            )}
+            {/* {selectedDates.length < 2 && (
+              <div className="text-center text-gray-500 mt-4">
+                Please select check-in and check-out dates to view available slots
+              </div>
+            )} */}
+          </div>
+        ) : (
+          <div className='flex flex-col max-h-[550px] overflow-y-auto gap-5'>
+            {Object.entries(groupedSlots).map(([dateKey, { date, slots }]) => (
+              <div key={dateKey} className='flex flex-col gap-2'>
+                <p className='text-sm font-custom-400 text-text_1 font-sans'>
+                  {date.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'short',
+                  })}
+                </p>
+                {slots.map((slot) => (
+                  <TimeSlotCard
+                    key={slot._id}
+                    timeRange={`${formatTime(slot.startDateTime)} - ${formatTime(slot.endDateTime)}`}
+                    adultPrice={price}
+                    childrenPrice={10}
+                    onChoose={() => {
+                      if(guests > 0){
+                        getAllowedGuests([slot._id]);
+                      }else{
+                        toast.error('Please select guests', {
+                          position: "top-right",
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                        });
+                      }
+                    }}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default BookingPanel; 
+export default BookingPanel;

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/utils/cn';
 
-type DateSelectionMode = 'single' | 'range';
+type DateSelectionMode = 'single' | 'range' | 'both';
 
 interface DateRangePickerProps {
   selectedDates: Date[];
@@ -151,9 +151,15 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     // Check against max date
     if (maxDate && date > maxDate) return true;
 
-    // Check against schedule start and end dates
+    // Check against schedule start date
     if (scheduleStartDate && date < scheduleStartDate) return true;
-    if (scheduleEndDate && date > scheduleEndDate) return true;
+
+    // Disable the exact endDateTime and all dates after it
+    if (scheduleEndDate) {
+      const endDate = new Date(scheduleEndDate);
+      endDate.setHours(0, 0, 0, 0);
+      if (date.getTime() >= endDate.getTime()) return true;
+    }
 
     // Check if the day is enabled
     if (enabledDays.length > 0 && !enabledDays.includes(date.getDay())) {
@@ -179,6 +185,24 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     if (mode === 'single') {
       // Single date selection mode
       newSelectedDates = [date];
+    } else if (mode === 'both') {
+      // Both single and range selection mode
+      if (newSelectedDates.length === 0) {
+        // First click - select single date
+        newSelectedDates = [date];
+      } else if (newSelectedDates.length === 1) {
+        // Second click - if same date, keep as single; if different date, make range
+        if (isSameDate(date, newSelectedDates[0])) {
+          newSelectedDates = [date];
+        } else {
+          newSelectedDates = date < newSelectedDates[0] 
+            ? [date, newSelectedDates[0]] 
+            : [newSelectedDates[0], date];
+        }
+      } else {
+        // Already have two dates - start new selection
+        newSelectedDates = [date];
+      }
     } else {
       // Range selection mode
       if (newSelectedDates.length === 0 || newSelectedDates.length === 2) {
@@ -198,14 +222,8 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     // Update internal state immediately to show visual feedback
     setInternalSelection(newSelectedDates);
 
-    // Only send complete ranges to parent component
-    if (
-      mode === 'single' ||
-      newSelectedDates.length === 2 ||
-      newSelectedDates.length === 0
-    ) {
-      onChange(newSelectedDates);
-    }
+    // Send selection to parent component
+    onChange(newSelectedDates);
   };
 
   // Get days of week with Saturday as first day
@@ -271,20 +289,20 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             }`}
           >
             {/* Range background */}
-            {date && mode === 'range' && isDateInRange(date) && (
+            {date && (mode === 'range' || mode === 'both') && isDateInRange(date) && (
               <div className='absolute inset-0 bg-gray-200'></div>
             )}
 
             {/* Left edge of range */}
             {date &&
-              mode === 'range' &&
+              (mode === 'range' || mode === 'both') &&
               isStartDate(date) &&
               internalSelection.length === 2 && (
                 <div className='absolute inset-0 bg-gray-200 rounded-l-full right-0'></div>
               )}
 
             {/* Right edge of range */}
-            {date && mode === 'range' && isEndDate(date) && (
+            {date && (mode === 'range' || mode === 'both') && isEndDate(date) && (
               <div className='absolute inset-0 bg-gray-200 rounded-r-full left-0'></div>
             )}
 
