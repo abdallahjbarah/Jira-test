@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import React from 'react';
 import CustomSvg from '@/components/ui/CustomSvg';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import CustomLink from '@/components/ui/CustomLink';
 
 interface ProfileMenuItemProps {
   label: string;
@@ -57,9 +57,9 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
   }
 
   return (
-    <Link href={href} className='block'>
+    <CustomLink path={href} className='block'>
       {content}
-    </Link>
+    </CustomLink>
   );
 };
 

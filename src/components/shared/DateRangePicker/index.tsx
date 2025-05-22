@@ -15,6 +15,7 @@ interface DateRangePickerProps {
   enabledDays?: number[];
   scheduleStartDate?: Date;
   scheduleEndDate?: Date;
+  skipFutureDateValidation?: boolean;
 }
 
 const DateRangePicker: React.FC<DateRangePickerProps> = ({
@@ -27,6 +28,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   enabledDays = [],
   scheduleStartDate,
   scheduleEndDate,
+  skipFutureDateValidation = false,
 }) => {
   console.log(selectedDates, 'selectedDatesselectedDates');
 
@@ -142,8 +144,12 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     twoDaysFromNow.setDate(twoDaysFromNow.getDate() + 2);
     twoDaysFromNow.setHours(0, 0, 0, 0); // Set to start of day
 
-    // Check if date is within 2 days from now
-    if (date <= twoDaysFromNow) return true;
+    // Skip the future date validation if skipFutureDateValidation is true
+    // This allows birthdate pickers to select past dates
+    if (!skipFutureDateValidation) {
+      // Check if date is within 2 days from now
+      if (date <= twoDaysFromNow) return true;
+    }
 
     // Check against min date
     if (minDate && date < minDate) return true;

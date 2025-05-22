@@ -14,6 +14,8 @@ import { setCookie } from '@/utils/cookies';
 import { useQueryClient } from '@tanstack/react-query';
 import { TOKEN_NAME } from '@/utils';
 import PasswordInput from '@/components/form/PasswordInput';
+import { useTranslation } from '@/contexts/TranslationContext';
+import CustomLink from '@/components/ui/CustomLink';
 
 interface LoginFormValues {
   email: string;
@@ -27,14 +29,14 @@ const loginSchema = yup.object().shape({
 
 export default function LoginPage() {
   const router = useRouter();
-
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const { mutate: login, isPending } = useUserLogin({
     onSuccess: (data) => {
       setCookie(TOKEN_NAME, data.token);
-      queryClient.setQueryData(['user'], data);
-      toast.success('Logged in successfully!');
+      setCookie('userStatus', data.user.status);
+      toast.success(t('auth.login.loggedInSuccess'));
       router.push('/all');
     },
     onError: (error: WretchError) => {
@@ -66,7 +68,9 @@ export default function LoginPage() {
       <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[240px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
-            <span className='text-[25px] font-semibold text-white'>Log in</span>
+            <span className='text-[25px] font-semibold text-white'>
+              {t('auth.login.title')}
+            </span>
           </div>
         </div>
       </div>
@@ -74,7 +78,7 @@ export default function LoginPage() {
       <div className='mt-32 sm:mt-52 w-full max-w-[296px] space-y-8 px-4 sm:px-0'>
         <div className='flex flex-row items-center justify-center gap-2 animate-fadeIn'>
           <h1 className='w-[143px] h-[32px] text-[25px] font-bold leading-[100%] text-center'>
-            <span className='text-[#222222]'>Welcome to </span>
+            <span className='text-[#222222]'>{t('auth.login.welcomeTo')} </span>
           </h1>
           <img
             src='/images/shared/bookagriCOM.png'
@@ -96,7 +100,7 @@ export default function LoginPage() {
                   <FormInput
                     {...field}
                     type='email'
-                    label='Email / Phone Number'
+                    label={t('auth.login.emailPhone')}
                     error={errors.email?.message}
                     className='w-full h-[48px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]'
                   />
@@ -114,53 +118,25 @@ export default function LoginPage() {
                       {...field}
                       id='password'
                       error={errors.password?.message}
-                      label='Password'
+                      label={t('auth.login.password')}
                     />
                   )}
                 />
-
-                {/* <FormInput
-                  {...register('password')}
-                  type={showPassword ? 'text' : 'password'}
-                  label='Password'
-                  error={errors.password?.message}
-                  className='w-[296px] h-[50.77px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]'
-                  placeholder=''
-                />
-                <button
-                  type='button'
-                  onClick={() => setShowPassword(!showPassword)}
-                  className='absolute right-3 top-1/2 -translate-y-1/2 text-[#47C409] transform transition-transform hover:scale-110'
-                >
-                  {showPassword ? (
-                    <Image
-                      src='/SVGs/shared/eye.svg'
-                      alt='Show password'
-                      width={24}
-                      height={24}
-                      className='[&>path]:fill-[#47C409]'
-                    />
-                  ) : (
-                    <Image
-                      src='/SVGs/shared/eye-slash.svg'
-                      alt='Hide password'
-                      width={24}
-                      height={24}
-                      className='[&>path]:fill-[#47C409]'
-                    />
-                  )}
-                </button> */}
               </div>
             </div>
 
             <div className='flex items-center justify-between w-full'>
-              <button
-                type='button'
-                onClick={() => router.push('/auth/forgot-password')}
+              <CustomLink
+                path='/auth/forgot-password'
                 className='text-[12px] font-semibold leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors ml-auto'
               >
-                Forgot Password?
-              </button>
+                <button
+                  type='button'
+                  className='text-[12px] font-semibold leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors ml-auto'
+                >
+                  {t('auth.login.forgotPassword')}
+                </button>
+              </CustomLink>
             </div>
 
             <div className='w-full pt-6'>
@@ -171,11 +147,11 @@ export default function LoginPage() {
               >
                 {isPending || isSubmitting ? (
                   <div className='flex items-center justify-center'>
-                    <span className='mr-2'>Logging in...</span>
+                    <span className='mr-2'>{t('auth.login.loggingIn')}</span>
                     <div className='animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full'></div>
                   </div>
                 ) : (
-                  'Login'
+                  t('auth.login.loginButton')
                 )}
               </button>
             </div>
@@ -183,14 +159,15 @@ export default function LoginPage() {
 
           <div className='text-center transform transition-all hover:scale-105'>
             <p className='text-[12px] font-normal leading-[14px] text-[#222222] mx-auto pb-2'>
-              Don't have an account?{' '}
-              <button
-                type='button'
-                onClick={() => router.push('/auth/signup')}
-                className='text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors'
-              >
-                Sign Up
-              </button>
+              {t('auth.login.noAccount')}{' '}
+              <CustomLink path='/auth/signup'>
+                <button
+                  type='button'
+                  className='text-[12px] font-normal leading-[14px] text-[#47C409] hover:text-[#3ba007] transition-colors'
+                >
+                  {t('auth.login.signUp')}
+                </button>
+              </CustomLink>
             </p>
           </div>
 
@@ -198,9 +175,9 @@ export default function LoginPage() {
           <div className='relative mt-12 mb-8 flex items-center justify-center w-full max-w-[296px] mx-auto'>
             <div className='w-[123px] border-t-[1px] border-solid border-[#EEEEEE]'></div>
             <div className='mx-[16.5px]'>
-              <span className='w-[17px] bg-white text-[14px] font-normal leading-[17px] text-[#222222]'>
-                Or
-              </span>
+              <p className='text-[12px] font-normal leading-[14px] text-[#222222]'>
+                {t('auth.login.or')}
+              </p>
             </div>
             <div className='w-[123px] border-t-[1px] border-solid border-[#EEEEEE]'></div>
           </div>

@@ -62,7 +62,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         <img
           src={image}
           alt={altText}
-          className='w-full h-full object-cover ml-6'
+          className='w-full h-full object-cover'
           onError={handleImageError}
         />
 

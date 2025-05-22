@@ -6,7 +6,7 @@ export interface ForgetPasswordData {
 }
 
 const forgetPassword = async (data: ForgetPasswordData) => {
-  const response = await api.url('/users/forget').post(data).json();
+  const response = await api.url('/users/forget').post(data).text();
   return response;
 };
 

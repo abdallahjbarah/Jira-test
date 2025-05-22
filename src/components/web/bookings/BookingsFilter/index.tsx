@@ -3,9 +3,10 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import TabsNavigation, { TabItem } from '@/components/ui/TabsNavigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import SearchBar from '@/components/ui/SearchBar';
+import { BookingStatus } from '@/lib/enums';
 
 interface BookingsFilterProps {
-  onFilterChange: (tabId: string) => void;
+  onFilterChange: (tabId: number) => void;
   onSearch: (query: string) => void;
 }
 
@@ -14,7 +15,7 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
 
   const tabs: TabItem[] = [
     {
-      id: 'upcoming',
+      id: BookingStatus.PENDING,
       label: t('bookingStatus.upcoming') || 'Upcoming',
       content: (
         <div className='mt-8'>
@@ -27,7 +28,7 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
       ),
     },
     {
-      id: 'completed',
+      id: BookingStatus.COMPLETED,
       label: t('bookingStatus.completed') || 'Completed',
       content: (
         <div className='mt-8'>
@@ -40,7 +41,7 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
       ),
     },
     {
-      id: 'cancelled',
+      id: BookingStatus.CANCELLED,
       label: t('bookingStatus.cancelled') || 'Cancelled',
       content: (
         <div className='mt-8'>
@@ -61,7 +62,7 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
       <div className='flex items-center justify-between flex-col-reverse tabletM:flex-row gap-[1.5rem]'>
         <TabsNavigation
           tabs={tabs}
-          defaultActiveTab='upcoming'
+          defaultActiveTab={BookingStatus.PENDING}
           containerClassName='w-full laptopM:w-auto'
           showContent={false}
           onChange={(tabId) => {

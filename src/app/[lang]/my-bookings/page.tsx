@@ -3,13 +3,16 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import React from 'react';
 import BookingsFilter from '@/components/web/bookings/BookingsFilter';
-import { CollectionStatus } from '@/utils/constants';
 import { useFetchCollections } from '@/lib/apis/collections/useFetchCollections';
 import Styled from 'styled-components';
 import CollectionCard from '@/components/web/collections/CollectionCard';
 import CircularLoader from '@/components/ui/CircularLoader';
 import Image from 'next/image';
 import FilledButton from '@/components/ui/buttons/FilledButton';
+import { useFetchInfiniteBookings } from '@/lib/apis/bookings/useFetchBookings';
+import { IntersectionObserverTrigger } from '@/components/shared/IntersectionObserverTrigger';
+import { BookingStatus } from '@/lib/enums';
+import debounce from '@/utils/helpers/debounce';
 
 const CollectionsListingContainer = Styled.div`
   display: grid;
@@ -26,21 +29,48 @@ const LoaderContainer = Styled.div`
 
 const MyBookingsPage = () => {
   const { t } = useTranslation();
-
-  const onFilterChange = (tabId: string) => {
-    console.log(tabId);
-  };
-
-  const onSearch = (query: string) => {
-    console.log(query);
-  };
-
-  const { data: collections, isLoading } = useFetchCollections('events', {
-    queryKey: ['collections', 'events'],
-    enabled: true,
+  const [filter, setFilter] = React.useState({
+    skip: 0,
+    limit: 10,
+    status: BookingStatus.PENDING,
+    query: '',
   });
+  const {
+    data: bookingsData,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFetchInfiniteBookings(filter);
 
-  if (!collections?.data?.length && !isLoading) {
+  const onFilterChange = (newStatus: number) => {
+    setFilter({
+      ...filter,
+      status: newStatus,
+      skip: 0,
+    });
+  };
+
+  const onSearch = React.useCallback(
+    debounce((query: string) => {
+      setFilter({
+        ...filter,
+        query: query,
+        skip: 0,
+      });
+    }, 1000),
+    [filter],
+  );
+
+  const bookings = React.useMemo(() => {
+    return bookingsData?.pages.flatMap((page: any) => page.bookings) || [];
+  }, [bookingsData]);
+
+  const totalCount = React.useMemo(() => {
+    return bookingsData?.pages[0].totalCount || 0;
+  }, [bookingsData]);
+
+  if (!bookings?.length && !isLoading) {
     return (
       <InnerPagesLayout headerProps={{ withNavItems: false }}>
         <main className='container pt-[1rem] pb-[3rem] laptopM:pb-[5rem]'>
@@ -54,7 +84,7 @@ const MyBookingsPage = () => {
           </div>
           <div className='mt-[9.625rem] '>
             <h2 className='text-center text-custom-50 font-custom-700 font-gellix-Bold text-text_1 mb-[4rem]'>
-              I Bookagri, Do You!
+              {t('myBookings.slogan')}
             </h2>
             <p className='text-center text-custom-40 font-custom-500 text-text_2 mt-[3.688rem] max-w-[55.438rem] mx-auto'>
               {t('myBookings.noBookings')}
@@ -81,7 +111,7 @@ const MyBookingsPage = () => {
           <span className='text-primary_1'>{t('myBookings.bookings')}</span>
         </h2>
         <p className='text-custom-30 font-custom-500 text-[#000000] mt-[1rem]'>
-          {t('myBookings.description')} 14{' '}
+          {t('myBookings.description')} {totalCount}{' '}
           {t('myBookings.descriptionSecondLine')}
         </p>
 
@@ -93,11 +123,22 @@ const MyBookingsPage = () => {
             <CircularLoader size={50} />
           </LoaderContainer>
         ) : (
-          <CollectionsListingContainer className='mt-[3.438rem]'>
-            {collections?.data.map((collection) => (
-              <CollectionCard key={collection.id} collection={collection} />
-            ))}
-          </CollectionsListingContainer>
+          <>
+            <CollectionsListingContainer className='mt-[3.438rem]'>
+              {bookings.map((booking: any) => (
+                <CollectionCard key={booking.id} collection={booking} />
+              ))}
+            </CollectionsListingContainer>
+            <IntersectionObserverTrigger
+              onIntersect={() => {
+                if (hasNextPage) {
+                  fetchNextPage();
+                }
+              }}
+              enabled={hasNextPage && !isFetchingNextPage}
+              className='h-4'
+            />
+          </>
         )}
       </main>
     </InnerPagesLayout>

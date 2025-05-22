@@ -31,8 +31,9 @@ export interface User {
   gender?: Gender;
   nationality?: string;
   birthdate?: string;
-  city?: string;
-  country?: string;
+  city?: string | number;
+  country?: Country;
+  profileImageUrl?: string;
 }
 
 export interface Role {
@@ -306,4 +307,10 @@ export interface AvailabilityStaySlot {
   startDate: number;
   endDate: number;
   availabilitiesIds : string[];
+}
+export interface City {
+  id: number;
+  name: string;
+  latitude: string;
+  longitude: string;
 }
