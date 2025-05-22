@@ -14,6 +14,7 @@ import {
 import { useState } from 'react';
 import { useFetchPaymentMethods } from '@/lib/apis/paymentMethod/useFetchPaymentMethod';
 import CircularLoader from '@/components/ui/CircularLoader';
+import { useBookingData } from '@/hooks/useBookingData';
 
 interface CompleteYourBookingProps {
   params: { lang: Locale };
@@ -81,6 +82,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   const { data: paymentMethods, isLoading: isPaymentMethodsLoading, isError, error } =
     useFetchPaymentMethods();
 
+    const { bookingData } = useBookingData();
   if (isPaymentMethodsLoading) {
     return (
       <div className='flex justify-center items-center h-screen'>
@@ -98,6 +100,8 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
       </InnerPagesLayout>
     );
   }
+
+  console.log('booking', bookingData)
 
   return (
     <InnerPagesLayout headerProps={{ withNavItems: false }}>

@@ -9,7 +9,8 @@ import { useFetchAvailabilitySlots } from '@/lib/apis/availabilitiesSlots/useFet
 import CircularLoader from '@/components/ui/CircularLoader';
 import { useFetchAvailabilityStaySlots } from '@/lib/apis/availabilitiesSlots/useFetchAvailabilitiesStay';
 import { toast } from 'react-toastify';
-import { fetchAllowedGuests } from '@/lib/apis/details/useFetchAllowedGuests';
+import { fetchAllowedGuests, useFetchAllowedGuests } from '@/lib/apis/details/useFetchAllowedGuests';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface BookingPanelProps {
   params: {
@@ -54,6 +55,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
   name
 }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [searchDates, setSearchDates] = useState<{
     startDateTime?: number;
@@ -110,6 +112,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
         const startDateTime = dates[0].getTime();
         const endDateTime = dates[0].getTime() + 24 * 60 * 60 * 1000;
         setSearchDates({ startDateTime, endDateTime });
+
       } else if (dates.length === 2) {
         const startDateTime = dates[0].getTime();
         const endDateTime = dates[1].getTime();
@@ -165,6 +168,26 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
       });
       
       if (response.data > 0) {
+        // Store booking data in query client
+        queryClient.setQueryData([`bookingData-${params.id}`], {
+          siteId: params.id,
+          guests: {
+            adults: guests,
+            children: 0,
+            infants: 0
+          },
+          dates: selectedDates,
+          price,
+          allowedGuests: response.data,
+          availability: type === 'Stay' ? availabilityStaySlots?.data : {
+            slotIds,
+            startDateTime: searchDates.startDateTime,
+            endDateTime: searchDates.endDateTime
+          },
+          type,
+          name
+        });
+
         router.push(
           `/${params.lang}/details/${params.id}/completeYourBooking`,
         );
@@ -188,6 +211,14 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
       });
     }
   };
+
+  const {data: fetchAllowdData} = useFetchAllowedGuests({
+    siteId: params.id,
+    adults: guests,
+    children: 0,
+    infants: 0,
+    availabilityIds: type === 'Stay' ? availabilityStaySlots?.data?.availabilitiesIds : undefined
+  },)
 
   return (
     <div className='w-full max-w-[30.563rem] h-[55.938rem] bg-white border border-[#F2F2F2] rounded-[1.5rem] shadow-[0_0.25rem_0.25rem_rgba(0,0,0,0.25)] p-[1.5rem] flex flex-col space-y-[1.25rem] overflow-y-auto flex-[0.3]'>

@@ -43,9 +43,9 @@ export const useFetchAllowedGuests = (
   >, 'queryKey' | 'queryFn' | 'enabled'>,
 ) => {
   return useQuery({
-    ...queryOptions,
     queryKey: ['allowedGuests', params.siteId, params] as const,
     queryFn: () => fetchAllowedGuests(params),
-    enabled: !!params.siteId,
+    enabled: !!params.siteId && !!params.availabilityIds,
+    ...queryOptions,
   });
 };
