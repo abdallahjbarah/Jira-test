@@ -10,7 +10,7 @@ interface DatePickerDropdownProps {
     ar: string;
   };
   onChange?: (dateString: string, dates: Date[]) => void;
-  mode?: 'single' | 'range';
+  mode?: 'single' | 'range' | 'both';
   initialDate?: Date;
   minDate?: Date;
   maxDate?: Date;

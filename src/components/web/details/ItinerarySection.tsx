@@ -5,7 +5,7 @@ import CustomSvg from '@/components/ui/CustomSvg';
 export interface ItineraryStop {
   title: string;
   locationURL: string;
-  coordinates: [number, number];
+  // coordinates: [number, number];
   details: string;
   duration: number;
 }

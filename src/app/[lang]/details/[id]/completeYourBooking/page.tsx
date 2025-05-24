@@ -12,6 +12,9 @@ import {
   BookingSummary,
 } from '@/components/web/details/completeYourBookings';
 import { useState } from 'react';
+import { useFetchPaymentMethods } from '@/lib/apis/paymentMethod/useFetchPaymentMethod';
+import CircularLoader from '@/components/ui/CircularLoader';
+import { useBookingData } from '@/hooks/useBookingData';
 
 interface CompleteYourBookingProps {
   params: { lang: Locale };
@@ -24,34 +27,34 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   const [guideChecked, setGuideChecked] = useState(true);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('Cliq');
 
-  const paymentMethods = [
+  const staticPaymentMethods = [
     {
-      title: 'Cliq',
+      name: 'Cliq',
       icon: '/SVGs/shared/payment-icons/cliqIcon.svg',
       value: 'Cliq',
     },
     {
-      title: 'eWallets',
+      name: 'eWallets',
       icon: '/SVGs/shared/payment-icons/eWalletIcon.svg',
       value: 'eWallets',
     },
     {
-      title: 'Bank Transfer',
+      name: 'Bank Transfer',
       icon: '/SVGs/shared/payment-icons/bankTransferIcon.svg',
       value: 'Bank Transfer',
     },
     {
-      title: 'On-site Card Payment',
+      name: 'On-site Card Payment',
       icon: '/SVGs/shared/payment-icons/onSiteCardPaymentIcon.svg',
       value: 'On-site Card Payment',
     },
     {
-      title: 'On-site Cash Payment',
+      name: 'On-site Cash Payment',
       icon: '/SVGs/shared/payment-icons/onSiteCashPaymentIcon.svg',
       value: 'On-site Cash Payment',
     },
     {
-      title: 'Exchange Offices',
+      name: 'Exchange Offices',
       icon: '/SVGs/shared/payment-icons/ExchangeIcon.svg',
       value: 'Exchange Offices',
     },
@@ -75,6 +78,30 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   const handleReadMore = () => {
     // Handle read more click
   };
+
+  const { data: paymentMethods, isLoading: isPaymentMethodsLoading, isError, error } =
+    useFetchPaymentMethods();
+
+    const { bookingData } = useBookingData();
+  if (isPaymentMethodsLoading) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <CircularLoader size={50} />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <InnerPagesLayout headerProps={{ withNavItems: false }}>
+        <main className='container py-[6.25rem]'>
+          <div>Error fetching payment methods: {error?.message}</div>
+        </main>
+      </InnerPagesLayout>
+    );
+  }
+
+  console.log('booking', bookingData)
 
   return (
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
@@ -109,8 +136,10 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 policy='Cancel up to 24 hours before the start time for a full refund'
               />
               <Divider className='w-full my-8' />
+
               <PaymentMethods
-                methods={paymentMethods}
+                methods={paymentMethods?.data || []}
+                staticMethods={staticPaymentMethods}
                 selectedMethod={selectedPaymentMethod}
                 onMethodChange={setSelectedPaymentMethod}
               />
