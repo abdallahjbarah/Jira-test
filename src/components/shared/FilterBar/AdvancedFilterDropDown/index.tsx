@@ -58,7 +58,6 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
     reset();
   };
 
-  // The filter button trigger
   const filterTrigger = (
     <div>
       <CustomSvg

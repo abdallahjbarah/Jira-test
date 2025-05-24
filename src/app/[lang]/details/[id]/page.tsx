@@ -6,7 +6,6 @@ import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import { useFetchDetails } from '@/lib/apis/details/useFetchDetails';
 import CircularLoader from '@/components/ui/CircularLoader';
 import CustomSvg from '@/components/ui/CustomSvg';
-import Image from 'next/image';
 import Divider from '@/components/ui/Divider';
 import { useFetchCollections } from '@/lib/apis/collections/useFetchCollections';
 import BookingPanel from '@/components/web/details/BookingPanel';
@@ -154,7 +153,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
         <div className='flex flex-col'>
-          <div className='relative h-screen'>
+          <div className='relative h-[calc(100vh-20rem)]'>
             <ImageCarousel
               images={images}
               className='w-full h-full relative'

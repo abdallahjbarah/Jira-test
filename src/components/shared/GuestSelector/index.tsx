@@ -27,7 +27,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
   maxGuests,
 }) => {
   const [guests, setGuests] = useState({
-    adults: initialValues?.adults ?? 1,
+    adults: initialValues?.adults ?? 0,
     children: initialValues?.children ?? 0,
     infants: initialValues?.infants ?? 0,
   });

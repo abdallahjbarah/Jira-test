@@ -7,6 +7,28 @@ import FilledButton from '@components/ui/buttons/FilledButton';
 import styles from './style.module.scss';
 import { cn } from '@/utils/cn';
 import { useTranslation } from '@contexts/TranslationContext';
+import Styled from 'styled-components';
+
+const StyledHeroIconWrapper = Styled.div`
+  width: 4.6875rem;
+  height: 3.875rem;
+  position: absolute;
+  top: -3.4375rem;
+  left: -2.1875rem;
+
+  [dir='rtl'] & {
+    left: auto;
+    right: -2.1875rem;
+  }
+
+  @media (max-width: 768px) {
+    left: -1rem;
+    [dir='rtl'] & {
+      right: -1rem;
+    }
+  }
+
+`;
 
 function Hero({ className }: { className?: string }) {
   const { t } = useTranslation();
@@ -34,9 +56,9 @@ function Hero({ className }: { className?: string }) {
       </div>
       <div className='text-white container mx-auto'>
         <div className='relative'>
-          <div className='w-[4.6875rem] h-[3.875rem] absolute top-[-3.4375rem] left-[-1rem] laptopS:left-[-2.1875rem]'>
+          <StyledHeroIconWrapper className='w-[4.6875rem] h-[3.875rem] absolute top-[-3.4375rem] left-[-1rem] laptopS:left-[-2.1875rem]'>
             <Image src={LeafImg} alt='Leaf' priority />
-          </div>
+          </StyledHeroIconWrapper>
           <h1 className='text-custom-45 tabletS:text-custom-70 font-custom-700 font-gellix-Bold'>
             {t('hero.title') || 'Connecting you with'}{' '}
             <br className='hidden laptopS:block' />{' '}

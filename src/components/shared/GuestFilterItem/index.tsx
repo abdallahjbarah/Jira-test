@@ -21,7 +21,7 @@ interface GuestFilterItemProps {
 const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
   title,
   onChange,
-  triggerComponent
+  triggerComponent,
 }) => {
   const { locale } = useTranslation();
   const [guests, setGuests] = useState({
@@ -68,7 +68,7 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
 
   const dropdownContent = (
     <div className='bg-white p-0 rounded-3xl shadow-lg'>
-      <GuestSelector onGuestChange={handleGuestChange} />
+      <GuestSelector onGuestChange={handleGuestChange} initialValues={guests} />
     </div>
   );
 
