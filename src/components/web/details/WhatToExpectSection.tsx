@@ -3,7 +3,7 @@ import ImageGallery from './ImageGallery';
 
 interface WhatToExpectSectionProps {
   description: string;
-  images: { src: string; alt: string }[];
+  images: string[];
 }
 
 const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ description, images }) => (

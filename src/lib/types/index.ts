@@ -112,6 +112,202 @@ export interface Faq {
   __v: number;
 }
 
+export interface SitesResponse {
+  message: string;
+  sites: {
+    data: Site[];
+  };
+  unavailbleDates : string[];
+}
+
+export interface SiteByIdResponse {
+  message: string;
+  site: Site;
+}
+
+export interface Site {
+  _id: string;
+  status: number;
+  site_setup_status: number;
+  type: string;
+  name: string;
+  longDescription: string;
+  location: {
+    type: string;
+    coordinates: number[];
+  };
+  bookagriBadge: boolean;
+  cancellationPolicy: string;
+  cancellationTime: number;
+  specialInstructions: string;
+  host: {
+    _id: string;
+    description: string;
+    firstName: string;
+    lastName: string;
+    profileImageUrl: string;
+  };
+  amenities: {
+    _id: string;
+    nameEn: string;
+    nameAr: string;
+    category: {
+      _id: string;
+      nameEn: string;
+      nameAr: string;
+    }[];
+    iconPath: string;
+  }[];
+  bookOptions: {
+    _id: string;
+    nameEn: string;
+    nameAr: string;
+    iconPath: string;
+  }[];
+  accessibilityFeatures: {
+    _id: string;
+    nameEn: string;
+    nameAr: string;
+  }[];
+  googleLocationLink: string;
+  capacity: number;
+  whatToExpect: {
+    images: string[];
+    description: string;
+  };
+  ageSuitability: number;
+  levelOfDifficulty: string;
+  extras: {
+    nameEn: string;
+    nameAr: string;
+    price: number;
+  }[];
+  city: string;
+  country: {
+    _id: string;
+    name: string;
+  };
+  images: string[];
+  videos: string[];
+  pricingInformation: {
+    discount: number | null;
+    personType: string;
+    price: number;
+    minUnit: number;
+    maxUnit: number;
+  }[];
+  guide: {
+    description: string;
+    languages: string[];
+    price: number;
+    learnMore: string;
+  };
+  guideIsMandatory: boolean;
+  transportation: {
+    description: string;
+    price: number;
+    learnMore: string;
+  };
+  transportationIsMandatory: boolean;
+  languages: {
+    nameAr: string;
+    nameEn: string;
+  }[];
+  experienceTypes: {
+    _id: string;
+    nameEn: string;
+    nameAr: string;
+  }[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  coHost?: {
+    firstName: string;
+    lastName: string;
+    description: string;
+    languages: {
+      _id: string;
+      nameAr: string;
+      nameEn: string;
+    }[];
+    image: string;
+  };
+  mainImage: string;
+  schedule: {
+    startDateTime: number;
+    endDateTime: number;
+    days: {
+      name: string;
+      slots: {
+        startTime: string;
+        id: string;
+      }[];
+    }[];
+  };
+  guideIsIncluded: boolean;
+  transportationIsIncluded: boolean;
+  itineraryStops: {
+    title: string;
+    locationURL: string;
+    details: string;
+    duration: number;
+  }[];
+  duration: number;
+  thingsToKnow: string;
+  airportIsIncluded: boolean;
+  wheelChair: boolean;
+  paymentMethod: string[];
+  accessProvider: boolean;
+  timeOfDay: any[];
+  checkinTime?: string;
+  checkoutTime?: string;
+  stayDetails?: {
+    description: string;
+    numberOfBeds: number;
+    numberOfBedrooms: number;
+    numberOfBathrooms: number;
+  };
+  stayNearby?: string;
+  stayHouseRules?: string;
+  airport?: {
+    description: string;
+    price: number;
+    learnMore: string;
+  };
+}
+
+export interface BankDetails {
+  name: string;
+  IBAN: string;
+  bankName: string;
+  swiftNumber: string;
+  currency: string;
+}
+
+export interface PaymentMethod {
+  _id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  isEnabled: boolean;
+  bankDetails?: BankDetails;
+}
+
+export interface AvailabilitySlot {
+  startDateTime: number;
+  endDateTime: number;
+  slotId: string;
+  isFullyBooked: boolean;
+  _id: string;
+}
+
+export interface AvailabilityStaySlot {
+  startDate: number;
+  endDate: number;
+  availabilitiesIds : string[];
+}
 export interface City {
   id: number;
   name: string;
