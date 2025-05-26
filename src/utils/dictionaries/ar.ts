@@ -1,5 +1,6 @@
 // Arabic dictionary
 const ar = {
+  person: 'شخص',
   home: 'الرئيسية',
   'about-us': 'من نحن',
   news: 'الأخبار',

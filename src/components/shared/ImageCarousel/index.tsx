@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Slider, { Settings as SlickSettings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import ImageWithFallback from '../ImageWithFallback';
 
 export interface ImageCarouselProps {
   images: string[];
@@ -100,12 +101,13 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
       <Slider {...settings}>
         {images.map((image, index) => (
           <div key={index} className={`relative ${imageHeight}`}>
-            <Image
+            <ImageWithFallback
               src={image}
               alt={image}
               fill
               className={imageClassName}
-              priority={index === 0}
+              // priority={index === 0}
+              loading='lazy'
             />
           </div>
         ))}

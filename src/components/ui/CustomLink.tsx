@@ -1,12 +1,13 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import Link, { LinkProps } from 'next/link';
 import { useParams } from 'next/navigation';
 
-interface CustomLinkProps {
-  path: string;
+// add next link props
+interface CustomLinkProps extends Omit<LinkProps, 'href'> {
   children: React.ReactNode;
+  path: string;
   [key: string]: any; // for rest props
 }
 
