@@ -317,3 +317,91 @@ export interface City {
   latitude: string;
   longitude: string;
 }
+
+export interface ExperienceType {
+  _id: string;
+  nameEn: string;
+  nameAr: string;
+  isStayType: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  isUsed: boolean;
+}
+
+export interface PricesRange {
+  minPrice: number;
+  maxPrice: number;
+}
+
+export interface Language {
+  _id: string;
+  nameEn: string;
+  nameAr: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  isUsed: boolean;
+}
+
+export interface Amenity {
+  _id: string;
+  nameEn: string;
+  nameAr: string;
+  category: AmenityCategory[];
+  iconPath: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  isUsed: boolean;
+}
+
+export interface AmenityCategory {
+  _id: string;
+  nameEn: string;
+  nameAr: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface BookOption {
+  _id: string;
+  nameEn: string;
+  nameAr: string;
+  descriptionEn: string;
+  descriptionAr: string;
+  iconPath: string;
+  isStayType: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  isUsed: boolean;
+}
+
+export interface AccessibilityFeature {
+  _id: string;
+  nameEn: string;
+  nameAr: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  isUsed: boolean;
+}
+
+export interface Continent {
+  _id: string;
+  nameEn: string;
+  nameAr: string;
+  countries: ContinentCountry[];
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface ContinentCountry {
+  _id: string;
+  name: string;
+  iso3: string;
+}

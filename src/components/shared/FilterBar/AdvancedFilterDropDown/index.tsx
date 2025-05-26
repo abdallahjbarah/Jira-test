@@ -13,40 +13,30 @@ import OffersFilter from './OffersFilter';
 interface AdvancedFilterDropDownProps {
   filterType?: 'experiences' | 'events' | 'stays' | 'offers';
   onFilterApply?: (filters: any) => void;
+  onFilterClear?: () => void;
   className?: string;
+  defaultValues?: any;
 }
 
 const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   filterType = 'experiences',
   onFilterApply,
+  onFilterClear,
   className = '',
+  defaultValues = {},
 }) => {
   const methods = useForm({
-    defaultValues: {
-      experienceType: [],
-      eventType: [],
-      packageType: [],
-      timeOfDay: [],
-      duration: [],
-      priceRange: [0, 100] as [number, number],
-      language: [],
-      ageSuitability: [],
-      experienceLevel: [],
-      bookingVerified: false,
-      amenities: [],
-      specialOffers: 'no',
-      bookingOptions: 'allowPets',
-      accessibility: [],
-      includesExperience: 'no',
-      roomsAndBeds: {
-        rooms: 'any',
-        beds: 'any',
-        bathrooms: 'any',
-      },
-    },
+    defaultValues: defaultValues,
   });
 
   const { handleSubmit, reset } = methods;
+
+  // Update form values when defaultValues change
+  React.useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset]);
 
   const onSubmit = (data: any) => {
     if (onFilterApply) {
@@ -56,6 +46,9 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
 
   const clearAllFilters = () => {
     reset();
+    if (onFilterClear) {
+      onFilterClear();
+    }
   };
 
   const filterTrigger = (
@@ -81,12 +74,12 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
       case 'offers':
         return <OffersFilter />;
       default:
-        return null;
+        return <ExperiencesFilter />;
     }
   };
 
   const filterContent = (
-    <div className='bg-white rounded-xl shadow-2xl max-w-[997px] w-full p-6 max-h-[500px] overflow-y-auto'>
+    <div className='bg-white rounded-xl shadow-2xl w-full p-6 max-h-[500px] overflow-y-auto'>
       <h3 className='text-lg text-center font-semibold'>Filter</h3>
       <hr className='my-4' />
       <FormProvider {...methods}>
@@ -120,7 +113,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
       content={filterContent}
       position='bottom-right'
       className={className}
-      contentClassName='mt-2'
+      contentClassName='mt-2 shadow-2xl max-w-[500px] w-full'
     />
   );
 };

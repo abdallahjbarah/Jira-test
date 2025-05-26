@@ -6,13 +6,14 @@ import {
   useFetchInfiniteCollections,
 } from '@/lib/apis/collections/useFetchCollections';
 import { COLLECTION_STATUS_LIST, CollectionStatus } from '@/utils/constants';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import CollectionCard from '../CollectionCard';
 import Styled from 'styled-components';
 import CircularLoader from '@/components/ui/CircularLoader';
 import { IntersectionObserverTrigger } from '@/components/shared/IntersectionObserverTrigger';
 import { Site, SitesResponse } from '@/lib/types';
 import { Collection } from '@/lib/apis/collections/data';
+import { buildFiltersFromSearchParams } from '@/utils/helpers/filterHelpers';
 
 const CollectionsListingContainer = Styled.div`
   display: grid;
@@ -27,26 +28,29 @@ const LoaderContainer = Styled.div`
   padding: 40px 0;
 `;
 
-interface CollectionPage {
-  sites: {
-    data: Collection[];
-  };
-}
-
 function CollectionsListing(): React.ReactElement {
   const { collectionStatus } = useParams();
+  const searchParams = useSearchParams();
+
   const collectionObject = COLLECTION_STATUS_LIST.find(
     (collection) => collection.value === collectionStatus,
   );
+
+  // Build filter object from search params using helper
+  const filters = React.useMemo(() => {
+    return buildFiltersFromSearchParams(
+      searchParams,
+      collectionObject?.filterValue,
+    );
+  }, [collectionObject?.filterValue, searchParams]);
+
   const {
     data: collectionsResponse,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useFetchInfiniteCollections({
-    type: collectionObject?.filterValue,
-  });
+  } = useFetchInfiniteCollections(filters);
 
   const collections = React.useMemo(() => {
     return collectionsResponse?.pages?.flatMap(
@@ -54,7 +58,7 @@ function CollectionsListing(): React.ReactElement {
     );
   }, [collectionsResponse]);
 
-  console.log(collections, 'collections');
+  console.log('Collections with filters:', collections, 'filters:', filters);
 
   return (
     <div>

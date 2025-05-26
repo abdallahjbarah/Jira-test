@@ -1,5 +1,7 @@
 // Arabic dictionary
 const ar = {
+  type: 'النوع',
+  experience: 'نوع التجربة',
   person: 'شخص',
   home: 'الرئيسية',
   'about-us': 'من نحن',
@@ -303,6 +305,10 @@ const ar = {
       profileSetupSuccess: 'تم إكمال إعداد الملف الشخصي بنجاح!',
       profileSetupFailed: 'فشل إعداد الملف الشخصي. يرجى المحاولة مرة أخرى.',
     },
+  },
+  filters: {
+    showMore: 'عرض المزيد',
+    showLess: 'عرض أقل',
   },
 };
 

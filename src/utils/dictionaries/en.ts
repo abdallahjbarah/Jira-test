@@ -1,5 +1,7 @@
 // English dictionary
 const en = {
+  type: 'Type',
+  experience: 'Experience Type',
   person: 'person',
   home: 'Home',
   'about-us': 'About Us',
@@ -306,6 +308,10 @@ const en = {
       profileSetupSuccess: 'Profile setup completed successfully!',
       profileSetupFailed: 'Failed to set up profile. Please try again.',
     },
+  },
+  filters: {
+    showMore: 'Show more',
+    showLess: 'Show less',
   },
 };
 

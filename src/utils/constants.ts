@@ -354,7 +354,7 @@ export const DURATION_TYPES = {
   SHORT: 'short',
   MODERATE: 'moderate',
   EXTENDED: 'extended',
-  FULL_DAY: 'full_day',
+  FULL_DAY: 'fullDay',
 } as const;
 
 export const DURATION_TYPES_LIST: FilterOption[] = [

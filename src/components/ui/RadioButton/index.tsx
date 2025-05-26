@@ -8,9 +8,9 @@ interface RadioButtonProps {
   name: string;
   label: string;
   description?: string;
-  value: string;
+  value: string | boolean;
   checked: boolean;
-  onChange: (value: string) => void;
+  onChange: (value: string | boolean) => void;
   className?: string;
 }
 

@@ -6,41 +6,31 @@ import GuestFilterItem from '../GuestFilterItem';
 import DatePickerDropdown from '../DatePickerDropdown';
 import SearchContainer from '../SearchContainer';
 import AdvancedFilterDropDown from './AdvancedFilterDropDown';
-import { useParams } from 'next/navigation';
-interface FilterFormValues {
-  location: string;
-  checkIn: string;
-  checkOut: string;
-  guests: {
-    adults: number;
-    children: number;
-    infants: number;
-  };
-  region: string; // Region for the search
-  type: string; // Type for the search
-}
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
+import {
+  buildSearchParamsFromFilters,
+  CollectionFilter,
+  FilterFormValues,
+  getFormDefaultsFromSearchParams,
+} from '@/utils/helpers/filterHelpers';
 
 const FilterBar = () => {
   const { collectionStatus } = useParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
   const methods = useForm<FilterFormValues>({
-    defaultValues: {
-      location: '',
-      checkIn: '',
-      checkOut: '',
-      guests: {
-        adults: 0,
-        children: 0,
-        infants: 0,
-      },
-      region: '',
-      type: 'all',
-    },
+    defaultValues: getFormDefaultsFromSearchParams(searchParams),
+    mode: 'onChange',
   });
 
   // Watch form values
   const checkInValue = methods.watch('checkIn');
   const checkOutValue = methods.watch('checkOut');
+  const guestsValue = methods.watch('guests');
+  const filtersValue = methods.watch('filters');
 
   // Get check-in date as Date object when needed
   const getCheckInDate = (): Date | undefined => {
@@ -77,6 +67,50 @@ const FilterBar = () => {
     methods.setValue('checkOut', dateString, { shouldValidate: true });
   };
 
+  const onFilterApply = (filters: any) => {
+    // apply filters to the form
+    methods.setValue('filters', filters, { shouldValidate: true });
+  };
+
+  const onFilterClear = () => {
+    methods.setValue('filters', {}, { shouldValidate: true });
+  };
+
+  // Update URL search params and refetch when filters change
+  React.useEffect(() => {
+    const updateSearchParams = () => {
+      // Build filter object from current form values
+      const currentFilters: CollectionFilter = {
+        checkIn: checkInValue,
+        checkOut: checkOutValue,
+        adults: guestsValue.adults,
+        children: guestsValue.children,
+        infants: guestsValue.infants,
+        ...filtersValue, // Spread advanced filters
+      };
+
+      // Use helper to build search params
+      const params = buildSearchParamsFromFilters(currentFilters, searchParams);
+
+      // Update the URL
+      const newUrl = `${window.location.pathname}?${params.toString()}`;
+      router.push(newUrl, { scroll: false });
+    };
+
+    // Debounce the update to avoid too many URL changes
+    const timeoutId = setTimeout(updateSearchParams, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [
+    checkInValue,
+    checkOutValue,
+    guestsValue,
+    filtersValue,
+    router,
+    searchParams,
+    queryClient,
+  ]);
+
   return (
     <FormProvider {...methods}>
       <form
@@ -85,9 +119,11 @@ const FilterBar = () => {
       >
         <div className='bg-primary_1 flex justify-center items-center gap-[20px] mx-auto rounded-full'>
           <LocationDropdown
-            onChange={(value) =>
-              methods.setValue('location', value, { shouldValidate: true })
-            }
+            onChange={onFilterApply}
+            defaultValues={{
+              country: filtersValue?.country || null,
+              city: filtersValue?.city || null,
+            }}
           />
 
           <DatePickerDropdown
@@ -135,6 +171,9 @@ const FilterBar = () => {
           filterType={
             collectionStatus as 'experiences' | 'events' | 'stays' | 'offers'
           }
+          onFilterApply={onFilterApply}
+          onFilterClear={onFilterClear}
+          defaultValues={filtersValue}
         />
       </form>
     </FormProvider>
