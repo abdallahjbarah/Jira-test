@@ -116,8 +116,11 @@ export interface SitesResponse {
   message: string;
   sites: {
     data: Site[];
+    maxPrice: number;
+    minPrice: number;
+    totalCount: number;
   };
-  unavailbleDates : string[];
+  unavailbleDates: string[];
 }
 
 export interface SiteByIdResponse {
@@ -306,7 +309,7 @@ export interface AvailabilitySlot {
 export interface AvailabilityStaySlot {
   startDate: number;
   endDate: number;
-  availabilitiesIds : string[];
+  availabilitiesIds: string[];
 }
 export interface City {
   id: number;

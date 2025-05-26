@@ -195,6 +195,12 @@ module.exports = {
         'custom-44': '44px',
       },
     },
+    keyframes: {
+      pulse: {
+        '0%, 100%': { opacity: '1' },
+        '50%': { opacity: '.5' },
+      },
+    },
     container: {
       // 1640
       screens: {

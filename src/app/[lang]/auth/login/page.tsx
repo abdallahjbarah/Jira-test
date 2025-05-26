@@ -34,6 +34,7 @@ export default function LoginPage() {
 
   const { mutate: login, isPending } = useUserLogin({
     onSuccess: (data) => {
+      queryClient.setQueryData(['user'], data);
       setCookie(TOKEN_NAME, data.token);
       setCookie('userStatus', data.user.status);
       toast.success(t('auth.login.loggedInSuccess'));

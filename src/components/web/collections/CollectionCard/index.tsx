@@ -1,17 +1,20 @@
 'use client';
 import React, { useState } from 'react';
-import { Collection } from '@/lib/apis/collections/data';
 import { useTranslation } from '@/contexts/TranslationContext';
 import CustomSvg from '@/components/ui/CustomSvg';
 import Link from 'next/link';
 import ImageCarousel from '@/components/shared/ImageCarousel';
+import { Site } from '@/lib/types';
+import useCurrency from '@/utils/hooks/useCurrency';
+import CustomLink from '@/components/ui/CustomLink';
 
 function CollectionCard({
   collection,
 }: {
-  collection: Collection;
+  collection: Site;
 }): React.ReactElement {
-  const { locale, t } = useTranslation();
+  const { t } = useTranslation();
+  const { currency } = useCurrency();
   const [isFavorite, setIsFavorite] = useState(false);
 
   const handleFavoriteToggle = (e: React.MouseEvent) => {
@@ -19,19 +22,28 @@ function CollectionCard({
     setIsFavorite(!isFavorite);
   };
 
-  // Prepare the images array for the carousel
-  const carouselImages = collection.images.map((img) => ({
-    src: img.src,
-    alt: img.alt || collection.title[locale],
-  }));
-
   return (
-    <Link href={`/details/${collection.id}`} className='group block'>
+    <CustomLink
+      path={`/details/${collection._id}`}
+      className='group block'
+      onTouchStart={(e: React.TouchEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onTouchEnd={(e: React.TouchEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onTouchMove={(e: React.TouchEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       <div className='transition-all duration-300'>
         <div className='relative rounded-custom-16 overflow-hidden'>
           <div className='w-full aspect-square relative overflow-hidden'>
             <ImageCarousel
-              images={carouselImages}
+              images={collection.images}
               className='w-full h-full relative'
               imageHeight='aspect-square'
               slickProps={{
@@ -58,39 +70,40 @@ function CollectionCard({
         <div className='mt-4'>
           <div className='flex justify-between items-center'>
             <h3 className='text-custom-14 font-custom-500 text-primary_5 line-clamp-1'>
-              {collection.title[locale]}
+              {collection.name}
             </h3>
-            <div className='flex items-center gap-1 text-custom-12 font-custom-400'>
+            {/* <div className='flex items-center gap-1 text-custom-12 font-custom-400'>
               <span className=''>{collection.rating.score}</span>
               <span className='text-secondary_1'>
                 | {collection.rating.count}
               </span>
-            </div>
+            </div> */}
           </div>
 
           <p className='text-custom-12 text-gray_3 mt-1'>
-            {collection.location}
+            {collection?.country?.name}, {collection?.city}
           </p>
 
           <div className='flex justify-between items-center mt-2'>
             <p className='text-custom-14 font-bold text-text_1'>
               {t('from')}{' '}
-              {`${collection.price.currency} ${collection.price.amount}`}
+              {`${collection.pricingInformation[0].price} ${currency}`}
               <span className='text-custom-14 font-custom-400 '>
                 {' '}
-                /{collection.price.per}
+                /{t('person')}
               </span>
             </p>
             <div className='text-custom-14 text-right'>
               <CustomSvg
                 src='/SVGs/shared/bookagri-gold.svg'
                 className='text-gold_1'
+                width={60}
               />
             </div>
           </div>
         </div>
       </div>
-    </Link>
+    </CustomLink>
   );
 }
 

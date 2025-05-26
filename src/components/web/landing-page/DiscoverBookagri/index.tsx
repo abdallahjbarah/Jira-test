@@ -20,6 +20,7 @@ export default function DiscoverBookagri(): React.ReactElement {
             title={t('experiences')}
             alt={t('experiences')}
             className={'h-[25rem] laptopS:h-full w-full'}
+            path='/experiences'
           />
 
           <ImageContainer
@@ -27,6 +28,7 @@ export default function DiscoverBookagri(): React.ReactElement {
             title={t('stays')}
             alt={t('stays')}
             className={'h-[25rem] laptopS:h-full w-full'}
+            path='/stays'
           />
         </div>
 
@@ -36,6 +38,7 @@ export default function DiscoverBookagri(): React.ReactElement {
             title={t('events')}
             alt={t('events')}
             className={'h-[25rem] laptopS:h-full w-full'}
+            path='/events'
           />
 
           <ImageContainer
@@ -43,6 +46,7 @@ export default function DiscoverBookagri(): React.ReactElement {
             title={t('offers-packages')}
             alt={t('offers-packages')}
             className={'h-[25rem] laptopS:h-full w-full'}
+            path='/offers'
           />
         </div>
       </div>
@@ -52,6 +56,7 @@ export default function DiscoverBookagri(): React.ReactElement {
           title={t('products')}
           alt={t('products')}
           className={'h-[25rem] laptopS:max-h-[34rem] laptopS:h-full w-full'}
+          path='/products'
         />
       </div>
     </section>

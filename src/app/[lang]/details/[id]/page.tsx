@@ -156,7 +156,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
         <div className='flex flex-col'>
-          <div className='relative h-screen'>
+          <div className='relative h-[calc(100vh-20rem)]'>
             <ImageCarousel
               images={images.map(img => ({
                 src: img,

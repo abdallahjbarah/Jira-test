@@ -1,5 +1,6 @@
 // English dictionary
 const en = {
+  person: 'person',
   home: 'Home',
   'about-us': 'About Us',
   news: 'News',

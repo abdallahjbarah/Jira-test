@@ -224,6 +224,7 @@ export interface CollectionStatusItem {
   path: string;
   icon?: string;
   isSoon?: boolean;
+  filterValue?: string;
 }
 
 export const COLLECTION_STATUS_LIST: CollectionStatusItem[] = [
@@ -231,30 +232,35 @@ export const COLLECTION_STATUS_LIST: CollectionStatusItem[] = [
     value: COLLECTION_STATUS.ALL,
     label: { en: 'All', ar: 'الكل' },
     path: `/${COLLECTION_STATUS.ALL}`,
+    filterValue: 'all',
   },
   {
     value: COLLECTION_STATUS.EXPERIENCES,
     label: { en: 'Experiences', ar: 'التجارب' },
     path: `/${COLLECTION_STATUS.EXPERIENCES}`,
     icon: '/SVGs/shared/experiences-icon.svg',
+    filterValue: 'Experience',
   },
   {
     value: COLLECTION_STATUS.STAYS,
     label: { en: 'Stays', ar: 'الإقامات' },
     path: `/${COLLECTION_STATUS.STAYS}`,
     icon: '/SVGs/shared/stays-icon.svg',
+    filterValue: 'Stay',
   },
   {
     value: COLLECTION_STATUS.EVENTS,
     label: { en: 'Events', ar: 'الأحداث' },
     path: `/${COLLECTION_STATUS.EVENTS}`,
     icon: '/SVGs/shared/events-icon.svg',
+    filterValue: 'Event',
   },
   {
     value: COLLECTION_STATUS.OFFERS,
     label: { en: 'Offers & Packages', ar: 'العروض والباقات' },
     path: `/${COLLECTION_STATUS.OFFERS}`,
     icon: '/SVGs/shared/diamond.svg',
+    filterValue: 'Offers & Packages',
   },
   {
     value: COLLECTION_STATUS.PRODUCTS,
@@ -262,6 +268,7 @@ export const COLLECTION_STATUS_LIST: CollectionStatusItem[] = [
     path: `/${COLLECTION_STATUS.PRODUCTS}`,
     icon: '/SVGs/shared/bag-icon.svg',
     isSoon: true,
+    filterValue: 'Product',
   },
 ];
 

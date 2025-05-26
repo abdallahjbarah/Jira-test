@@ -1,33 +1,57 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { api } from '../index';
-import { CollectionStatus } from '@/utils/constants';
-import { collectionsData, Collection } from './data';
+import {
+  useInfiniteQuery,
+  useQuery,
+  UseQueryOptions,
+  UseInfiniteQueryOptions,
+} from '@tanstack/react-query';
+import { api } from '@/lib/apis';
+import { Site, SitesResponse } from '@/lib/types';
 
-const fetchCollections = async (
-  collectionStatus: CollectionStatus,
-): Promise<{ data: Collection[] }> => {
-  // Simulate API delay for more realistic behavior
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
-  // Return data from our mock data file instead of making a real API call
-  return {
-    data: collectionsData[collectionStatus] || [],
-  };
+const fetchCollections = async (filter: any): Promise<SitesResponse> => {
+  const response = await api
+    .url('/sites')
+    .query(filter)
+    .get()
+    .json<SitesResponse>();
+  return response;
 };
 
 export const useFetchCollections = (
-  collectionStatus: CollectionStatus,
-  queryOptions: UseQueryOptions<
-    { data: Collection[] },
-    Error,
-    { data: Collection[] },
-    any
-  >,
+  filter: any,
+  queryOptions?: UseQueryOptions<SitesResponse, Error>,
 ) => {
   return useQuery({
     ...queryOptions,
-    queryKey: ['collections', collectionStatus],
-    queryFn: () => fetchCollections(collectionStatus),
-    enabled: !!collectionStatus,
+    queryKey: ['collections', filter],
+    queryFn: () => fetchCollections(filter),
+    enabled: !!filter,
+  });
+};
+
+export const useFetchInfiniteCollections = (
+  filter: any,
+  queryOptions?: UseInfiniteQueryOptions<
+    SitesResponse,
+    Error,
+    {
+      pages: SitesResponse[];
+    },
+    any
+  >,
+) => {
+  return useInfiniteQuery({
+    queryKey: ['collections', filter],
+    queryFn: async ({ pageParam = 1 }) =>
+      fetchCollections({
+        ...filter,
+        skip: Number(pageParam),
+        limit: filter?.limit || 10,
+      }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) => {
+      const limit = filter?.limit || 10;
+      return lastPage.sites.data.length >= limit ? pages.length + 1 : undefined;
+    },
+    ...queryOptions,
   });
 };

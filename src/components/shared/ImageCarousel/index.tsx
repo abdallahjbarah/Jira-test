@@ -1,19 +1,13 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import Slider, { Settings as SlickSettings } from 'react-slick';
-import CustomSvg from '@/components/ui/CustomSvg';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
-interface ImageObject {
-  src: string;
-  alt: string;
-}
+import ImageWithFallback from '../ImageWithFallback';
 
 export interface ImageCarouselProps {
-  images: ImageObject[];
+  images: string[];
   slickProps?: Partial<SlickSettings>;
   className?: string;
   imageClassName?: string;
@@ -40,7 +34,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
     className:
       'rounded-custom-16 overflow-hidden relative slick-custom-arrows h-full',
     customPaging: () => (
-      <div className='w-2 h-2 mx-1 rounded-full bg-white/50 hover:bg-white/80 transition-colors duration-200' />
+      <div className='w-2 h-2 mx-0.5 rounded-full bg-white hover:bg-white/80 transition-colors duration-200' />
     ),
     appendDots: (dots: React.ReactNode) => (
       <div
@@ -90,17 +84,29 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
           font-size: 24px;
           opacity: 1;
         }
+
+        .slick-dots {
+          bottom: 24px;
+        }
+
+        .slick-dots li {
+          width: 8px;
+        }
+
+        .slick-dots li.slick-active {
+          width: back;
+        }
       `}</style>
       <Slider {...settings}>
         {images.map((image, index) => (
           <div key={index} className={`relative ${imageHeight}`}>
-            <Image
-              src={image.src}
-              alt={image.alt}
+            <ImageWithFallback
+              src={image}
+              alt={image}
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className={imageClassName}
-              priority={index === 0}
+              // priority={index === 0}
+              loading='lazy'
             />
           </div>
         ))}
