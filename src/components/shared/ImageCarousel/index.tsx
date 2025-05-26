@@ -7,8 +7,13 @@ import CustomSvg from '@/components/ui/CustomSvg';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+interface ImageObject {
+  src: string;
+  alt: string;
+}
+
 export interface ImageCarouselProps {
-  images: string[];
+  images: ImageObject[];
   slickProps?: Partial<SlickSettings>;
   className?: string;
   imageClassName?: string;
@@ -90,9 +95,10 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
         {images.map((image, index) => (
           <div key={index} className={`relative ${imageHeight}`}>
             <Image
-              src={image}
-              alt={image}
+              src={image.src}
+              alt={image.alt}
               fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className={imageClassName}
               priority={index === 0}
             />

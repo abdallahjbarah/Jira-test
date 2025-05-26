@@ -34,48 +34,48 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
     title: string;
     description: string;
   }[] = [
-    {
-      icon: '/SVGs/shared/details-icons/timeCircle.svg',
-      title: 'Duration',
-      description: '2hrs 30m',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/sun.svg',
-      title: 'Time of Day',
-      description: 'Morning (before 12 pm) - Evening (after 5 pm)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/guideIcon.svg',
-      title: 'Guide (Upon Request)',
-      description: 'Extra fees applied',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
-      title: 'Level of Difficulty',
-      description: 'Easy (relaxed tour, easy walk)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
-      title: 'Age Suitability',
-      description: '3+',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/transportationIcon.svg',
-      title: 'Transportation (Upon Request)',
-      description: 'Extra fees applied',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
-      title: 'Spoken Language',
-      description:
-        'Arabic, English (Download a language translator app to communicate with host!)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
-      title: 'Wheelchair Accessible',
-      description: '',
-    },
-  ];
+      {
+        icon: '/SVGs/shared/details-icons/timeCircle.svg',
+        title: 'Duration',
+        description: '2hrs 30m',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/sun.svg',
+        title: 'Time of Day',
+        description: 'Morning (before 12 pm) - Evening (after 5 pm)',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/guideIcon.svg',
+        title: 'Guide (Upon Request)',
+        description: 'Extra fees applied',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
+        title: 'Level of Difficulty',
+        description: 'Easy (relaxed tour, easy walk)',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
+        title: 'Age Suitability',
+        description: '3+',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/transportationIcon.svg',
+        title: 'Transportation (Upon Request)',
+        description: 'Extra fees applied',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
+        title: 'Spoken Language',
+        description:
+          'Arabic, English (Download a language translator app to communicate with host!)',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
+        title: 'Wheelchair Accessible',
+        description: '',
+      },
+    ];
 
   const collectionStatus = 'all';
   const { data: collections, isLoading: isCollectionsLoading } =
@@ -158,7 +158,10 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
         <div className='flex flex-col'>
           <div className='relative h-screen'>
             <ImageCarousel
-              images={images}
+              images={images.map(img => ({
+                src: img,
+                alt: name
+              }))}
               className='w-full h-full relative'
               imageHeight='aspect-square'
               slickProps={{

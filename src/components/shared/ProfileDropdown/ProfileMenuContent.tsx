@@ -7,6 +7,7 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import FilledButton from '@/components/ui/buttons/FilledButton';
 import Divider from '@/components/ui/Divider';
 import FAQModal from '@/components/shared/FAQs';
+import HelpCenterModal from '@/components/shared/HelpCenter';
 import useModal from '@/hooks/useModal';
 import useUser from '@/utils/hooks/useUser';
 import ProfileDropDownHeader from './ProfileDropDownHeader';
@@ -17,6 +18,12 @@ const ProfileMenuContent: React.FC = () => {
     isOpen: isFAQModalOpen,
     openModal: openFAQModal,
     closeModal: closeFAQModal,
+  } = useModal();
+
+  const {
+    isOpen: isHelpCenterModalOpen,
+    openModal: openHelpCenterModal,
+    closeModal: closeHelpCenterModal,
   } = useModal();
 
   const { logout, userData } = useUser();
@@ -67,7 +74,8 @@ const ProfileMenuContent: React.FC = () => {
           label={t('profile.helpCenter')}
           sublabel={t('profile.contactUs')}
           icon='/SVGs/shared/help.svg'
-          href='/help'
+          href='#'
+          onClick={openHelpCenterModal}
         />
 
         <ProfileMenuItem
@@ -114,6 +122,7 @@ const ProfileMenuContent: React.FC = () => {
       </div>
 
       <FAQModal isOpen={isFAQModalOpen} onClose={closeFAQModal} />
+      <HelpCenterModal isOpen={isHelpCenterModalOpen} onClose={closeHelpCenterModal} />
     </div>
   );
 };
