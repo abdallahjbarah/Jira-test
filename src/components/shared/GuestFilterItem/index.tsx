@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from '@/contexts/TranslationContext';
 import GuestSelector from '../GuestSelector';
 import Dropdown from '@/components/ui/Dropdown';
@@ -16,19 +17,56 @@ interface GuestFilterItemProps {
     infants: number;
   }) => void;
   triggerComponent?: React.ReactNode;
+  initialValues?: {
+    adults: number;
+    children: number;
+    infants: number;
+  };
 }
 
 const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
   title,
   onChange,
   triggerComponent,
+  initialValues,
 }) => {
   const { locale } = useTranslation();
-  const [guests, setGuests] = useState({
-    adults: 0,
-    children: 0,
-    infants: 0,
-  });
+  const formContext = useFormContext();
+
+  // Get initial values from form context if available, otherwise use prop or default
+  const getInitialGuests = () => {
+    if (formContext) {
+      const formGuests = formContext.watch('guests');
+      if (
+        formGuests &&
+        (formGuests.adults > 0 ||
+          formGuests.children > 0 ||
+          formGuests.infants > 0)
+      ) {
+        return formGuests;
+      }
+    }
+    return initialValues || { adults: 0, children: 0, infants: 0 };
+  };
+
+  const [guests, setGuests] = useState(getInitialGuests());
+
+  // Update local state when form context changes
+  useEffect(() => {
+    if (formContext) {
+      const formGuests = formContext.watch('guests');
+      if (formGuests) {
+        setGuests(formGuests);
+      }
+    }
+  }, [formContext]);
+
+  // Update local state when initialValues prop changes
+  useEffect(() => {
+    if (initialValues) {
+      setGuests(initialValues);
+    }
+  }, [initialValues]);
 
   // Format the guest count display text
   const getGuestDisplayText = () => {

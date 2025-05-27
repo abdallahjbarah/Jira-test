@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useForm, Controller, FormProvider } from 'react-hook-form';
 import Dropdown from '@/components/ui/Dropdown';
 import FilterBarItem from '../FilterBar/FilterBarItem';
-import RegionSelector from '../RegionSelector';
+import RegionSelector, { Region } from '../RegionSelector';
 import { useFetchContinent } from '@/lib/apis/shared/useFetchContinent';
 import { useFetchCities } from '@/lib/apis/countries/useFetchCountriesCities';
 import { Continent, City } from '@/lib/types';
@@ -26,22 +26,29 @@ interface LocationDropdownProps {
   defaultValues?: LocationSelectionIds;
 }
 
+// Constants
+const JORDAN_COUNTRY_ID = '65ed90ca0a83c3332cc3277a';
+
 const LocationDropdown: React.FC<LocationDropdownProps> = ({
   onChange,
   defaultValues,
 }) => {
   const { data: continents } = useFetchContinent();
 
-  // Find default continent and city objects from IDs
-  const defaultCountry = defaultValues?.country
-    ? continents?.find((continent) => continent._id === defaultValues.country)
-    : null;
+  // Memoized default country lookup
+  const defaultCountry = useMemo(() => {
+    if (!defaultValues?.country || !continents) return null;
+    return (
+      continents.find((continent) => continent._id === defaultValues.country) ||
+      null
+    );
+  }, [defaultValues?.country, continents]);
 
   // Initialize React Hook Form
   const locationForm = useForm<LocationFormData>({
     defaultValues: {
-      country: defaultCountry || null,
-      city: null, // Will be set after cities are fetched
+      country: defaultCountry,
+      city: null,
     },
     mode: 'onChange',
   });
@@ -57,8 +64,17 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
   const selectedCountry = watch('country');
   const selectedCity = watch('city');
 
+  // Fetch cities only for Jordan continent
   const { data: cities } = useFetchCities(
-    selectedCountry?.countries[0]._id || '',
+    selectedCountry?._id === JORDAN_COUNTRY_ID
+      ? selectedCountry?.countries[0]._id || ''
+      : '',
+  );
+
+  // Check if the selected continent is Jordan
+  const isJordanSelected = useMemo(
+    () => selectedCountry?._id === JORDAN_COUNTRY_ID,
+    [selectedCountry],
   );
 
   // Set default city when cities are loaded and we have a default city ID
@@ -71,40 +87,86 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
     }
   }, [cities, defaultValues?.city, selectedCity, setValue]);
 
-  const onSubmit = () => {
-    // Form submission is handled by individual field changes
-  };
+  // Update default country when continents are loaded
+  useEffect(() => {
+    if (defaultCountry && !selectedCountry) {
+      setValue('country', defaultCountry);
+    }
+  }, [defaultCountry, selectedCountry, setValue]);
 
-  const notifyParent = (country: Continent | null, city: City | null) => {
-    if (onChange) {
-      onChange({
+  // Notify parent component of changes
+  const notifyParent = useCallback(
+    (country: Continent | null, city: City | null) => {
+      onChange?.({
         country: country?._id,
         city: city?.id,
       });
+    },
+    [onChange],
+  );
+
+  // Handle country selection
+  const handleCountrySelect = useCallback(
+    (continent: Continent) => {
+      setValue('country', continent);
+
+      // Clear city if not Jordan, keep city if Jordan
+      const shouldKeepCity = continent._id === JORDAN_COUNTRY_ID;
+      const newCity = shouldKeepCity ? selectedCity : null;
+
+      if (!shouldKeepCity) {
+        setValue('city', null);
+      }
+
+      notifyParent(continent, newCity);
+    },
+    [setValue, selectedCity, notifyParent],
+  );
+
+  // Handle city selection
+  const handleCitySelect = useCallback(
+    (city: City) => {
+      setValue('city', city);
+      notifyParent(selectedCountry, city);
+    },
+    [setValue, selectedCountry, notifyParent],
+  );
+
+  // Handle region selection (for RegionSelector compatibility)
+  const handleRegionSelect = useCallback(
+    (region: Region) => {
+      if (!continents) return;
+
+      const continent = continents.find((c) => c._id === region);
+      if (continent) {
+        handleCountrySelect(continent);
+      }
+    },
+    [continents, handleCountrySelect],
+  );
+
+  // Form submission handler (currently not used)
+  const onSubmit = useCallback(() => {
+    // Form submission is handled by individual field changes
+  }, []);
+
+  // Generate display value for the trigger
+  const displayValue = useMemo(() => {
+    if (selectedCountry && selectedCity) {
+      return `${selectedCountry.nameEn}, ${selectedCity.name}`;
     }
-  };
-
-  const handleCountrySelect = (continent: Continent) => {
-    setValue('country', continent);
-    const newCity =
-      continent?.countries[0]._id !== '65ed90ca0a83c3332cc3277a'
-        ? null
-        : selectedCity;
-    if (continent?.countries[0]._id !== '65ed90ca0a83c3332cc3277a') {
-      setValue('city', null);
+    if (selectedCountry) {
+      return selectedCountry.nameEn;
     }
-    notifyParent(continent, newCity);
-  };
+    return 'Search destinations';
+  }, [selectedCountry, selectedCity]);
 
-  const handleCitySelect = (city: City) => {
-    setValue('city', city);
-    notifyParent(selectedCountry, city);
-  };
-
+  // Dropdown content
   const dropdownContent = (
     <FormProvider {...locationForm}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='bg-white rounded-xl shadow-lg w-[460px] p-6'>
+          {/* Country Selection */}
           <Controller
             name='country'
             control={control}
@@ -112,11 +174,8 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
             render={({ field }) => (
               <div className='mb-6'>
                 <RegionSelector
-                  selectedContinent={field.value}
-                  onSelectContinent={(continent) => {
-                    field.onChange(continent);
-                    handleCountrySelect(continent);
-                  }}
+                  selectedRegion={field.value?._id as Region}
+                  onSelectRegion={handleRegionSelect}
                   continents={continents}
                   className='mb-2'
                 />
@@ -129,16 +188,13 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
             )}
           />
 
-          {selectedCountry?.countries[0]._id === '65ed90ca0a83c3332cc3277a' && (
+          {/* City Selection - Only show for Jordan */}
+          {isJordanSelected && (
             <Controller
               name='city'
               control={control}
               rules={{
-                required:
-                  selectedCountry?.countries[0]._id ===
-                  '65ed90ca0a83c3332cc3277a'
-                    ? 'Please select a city'
-                    : false,
+                required: isJordanSelected ? 'Please select a city' : false,
               }}
               render={({ field }) => (
                 <div className='mb-6'>
@@ -180,13 +236,7 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
       trigger={
         <FilterBarItem
           title={{ en: 'Where', ar: 'الوجهة' }}
-          value={
-            selectedCountry && selectedCity
-              ? `${selectedCountry.nameEn}, ${selectedCity.name}`
-              : selectedCountry
-                ? selectedCountry.nameEn
-                : 'Search destinations'
-          }
+          value={displayValue}
           onClick={() => {}}
         />
       }

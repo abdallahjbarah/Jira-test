@@ -405,3 +405,14 @@ export interface ContinentCountry {
   name: string;
   iso3: string;
 }
+
+export interface FavoriteCollection {
+  _id: string;
+  userId: string;
+  collectionName: string;
+  sites: Site[];
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}

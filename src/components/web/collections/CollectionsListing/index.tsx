@@ -5,7 +5,11 @@ import {
   useFetchCollections,
   useFetchInfiniteCollections,
 } from '@/lib/apis/collections/useFetchCollections';
-import { COLLECTION_STATUS_LIST, CollectionStatus } from '@/utils/constants';
+import {
+  COLLECTION_STATUS,
+  COLLECTION_STATUS_LIST,
+  CollectionStatus,
+} from '@/utils/constants';
 import { useParams, useSearchParams } from 'next/navigation';
 import CollectionCard from '../CollectionCard';
 import Styled from 'styled-components';
@@ -40,7 +44,9 @@ function CollectionsListing(): React.ReactElement {
   const filters = React.useMemo(() => {
     return buildFiltersFromSearchParams(
       searchParams,
-      collectionObject?.filterValue,
+      collectionObject?.filterValue === COLLECTION_STATUS.ALL
+        ? null
+        : collectionObject?.filterValue,
     );
   }, [collectionObject?.filterValue, searchParams]);
 
@@ -58,12 +64,14 @@ function CollectionsListing(): React.ReactElement {
     );
   }, [collectionsResponse]);
 
-  console.log('Collections with filters:', collections, 'filters:', filters);
-
   return (
     <div>
       <CollectionTypeLabel />
-      {isLoading ? (
+      {!collections?.length ? (
+        <div className='text-center text-gray-500 text-lg py-10'>
+          No results found
+        </div>
+      ) : isLoading ? (
         <LoaderContainer>
           <CircularLoader size={50} />
         </LoaderContainer>

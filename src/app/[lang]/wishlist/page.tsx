@@ -4,10 +4,11 @@ import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import React, { memo } from 'react';
 import EmptyWishlistIcon from '@/components/ui/svg/EmptyWishlistIcon';
 import FilledButton from '@/components/ui/buttons/FilledButton';
-import { useFetchWishlist } from '@/lib/apis/wishlist/useFetchWishlist';
 import CircularLoader from '@/components/ui/CircularLoader';
-import CollectionCard from '@/components/web/collections/CollectionCard';
 import Styled from 'styled-components';
+import { useFetchUserFavoriteCollections } from '@/lib/apis/favorites/useFetchUserCollections';
+import FavoriteCollectionCard from '@/components/web/wishlist/FavoriteCollectionCard';
+import CustomLink from '@/components/ui/CustomLink';
 
 const WishlistItemsContainer = Styled.div`
   display: grid;
@@ -17,10 +18,20 @@ const WishlistItemsContainer = Styled.div`
 
 function WishlistPage(): React.ReactElement {
   const { t } = useTranslation();
-  const { data, isLoading } = useFetchWishlist({
-    enabled: true,
-    queryKey: ['wishlist'],
-  });
+  const { data: favoriteCollections, isLoading } =
+    useFetchUserFavoriteCollections({
+      enabled: true,
+      queryKey: ['userFavoriteCollections'],
+    });
+
+  const savedCount = React.useMemo(
+    () =>
+      favoriteCollections?.reduce(
+        (acc, collection) => acc + collection.sites.length,
+        0,
+      ),
+    [favoriteCollections],
+  );
 
   if (isLoading) {
     return (
@@ -30,7 +41,7 @@ function WishlistPage(): React.ReactElement {
     );
   }
 
-  if (!data?.data.length)
+  if (!favoriteCollections?.length)
     return (
       <InnerPagesLayout headerProps={{ withNavItems: false }}>
         <main className='container py-[6.25rem]'>
@@ -69,12 +80,20 @@ function WishlistPage(): React.ReactElement {
         </h2>
         <p className='text-custom-30 font-custom-500 text-[#000000] mt-[7.625rem]'>
           {t('wishlist.countLabel')}{' '}
-          <span className='text-primary_1'>{data?.data.length}</span>{' '}
-          {t('wishlist.collection')}
+          <span className='text-primary_1'>{favoriteCollections?.length}</span>{' '}
+          {t('wishlist.collection')}{' '}
+          <span className='text-primary_1'>{savedCount}</span>{' '}
+          {t('wishlist.saved')}
         </p>
         <WishlistItemsContainer className='mt-[3.563rem]'>
-          {data?.data.map((item) => (
-            <CollectionCard key={item.id} collection={item} />
+          {favoriteCollections?.map((item) => (
+            <CustomLink
+              key={item._id}
+              path={`/wishlist/${item._id}`}
+              className='w-full'
+            >
+              <FavoriteCollectionCard collection={item} />
+            </CustomLink>
           ))}
         </WishlistItemsContainer>
       </main>

@@ -139,6 +139,31 @@ const ar = {
     create: 'استكشف الآن',
     countLabel: 'لديك',
     collection: 'مجموعة',
+    saved: 'محفوظ',
+    delete: 'حذف',
+    edit: 'تعديل',
+    deleteConfirmation: {
+      title: 'حذف المجموعة',
+      message: 'هل أنت متأكد أنك تريد حذف هذه المجموعة؟',
+      confirmText: 'حذف',
+      cancelText: 'إلغاء',
+    },
+    deleteSuccess: 'تم حذف المجموعة بنجاح',
+    editConfirmation: {
+      title: 'تعديل المجموعة',
+      message: 'هل أنت متأكد أنك تريد تعديل هذه المجموعة؟',
+      confirmText: 'تعديل',
+      cancelText: 'إلغاء',
+    },
+    editModal: {
+      title: 'تعديل المجموعة',
+      collectionNameLabel: 'اسم المجموعة',
+      collectionNamePlaceholder: 'أدخل اسم المجموعة',
+      validation: {
+        nameRequired: 'اسم المجموعة مطلوب',
+        nameUnchanged: 'يرجى إدخال اسم مختلف',
+      },
+    },
   },
   notifications: {
     notifications: 'الإشعارات',
@@ -309,6 +334,14 @@ const ar = {
   filters: {
     showMore: 'عرض المزيد',
     showLess: 'عرض أقل',
+  },
+  common: {
+    cancel: 'إلغاء',
+    save: 'حفظ',
+    saving: 'جاري الحفظ...',
+    error: {
+      generic: 'حدث خطأ. يرجى المحاولة مرة أخرى.',
+    },
   },
 };
 

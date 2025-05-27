@@ -170,11 +170,13 @@ interface SocialMediaLink {
 }
 
 export const SOCIAL_MEDIA_DATA: Record<string, SocialMediaLink> = {
-  instagram: { link: '#' },
-  facebook: { link: '#' },
-  tiktok: { link: '#' },
-  linkedin: { link: '#' },
-  whatsapp: { link: '#' },
+  instagram: { link: 'https://www.instagram.com/bookagri' },
+  facebook: { link: 'https://web.facebook.com/bookagrijo' },
+  tiktok: { link: 'https://www.tiktok.com/@bookagri' },
+  linkedin: { link: 'https://www.linkedin.com/company/bookagri' },
+  whatsapp: {
+    link: 'https://api.whatsapp.com/send?phone=962772236393&text&context=AfcxZaaj5CCnBYmpJnZCrXz91a9NWn2QjQMoOofGjyl_fZA5q3JYJuc84UMFCzUiadLxj8JDRHq1SPfLnfRSsZmQrILjK625t8oYSUX7uc87TXCb7H5iA9UW0ltaBGp2KU1hmlbbxmhXlxRcJw&source&app=facebook',
+  },
 };
 
 export const SEO_KEYWORDS = [

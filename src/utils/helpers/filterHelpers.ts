@@ -1,26 +1,20 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
+import { clearObject } from './clearObject';
 
 export interface CollectionFilter {
   type?: string;
-  checkIn?: string;
-  checkOut?: string;
+  checkinTime?: string;
+  checkoutTime?: string;
   adults?: number;
   children?: number;
   infants?: number;
+  country?: string;
+  city?: number;
   [key: string]: any; // For advanced filters
 }
 
 export interface FilterFormValues {
-  checkIn: string;
-  checkOut: string;
-  guests: {
-    adults: number;
-    children: number;
-    infants: number;
-  };
-  region: string;
-  type: string;
-  filters: any;
+  filters: CollectionFilter;
 }
 
 /**
@@ -31,26 +25,30 @@ export interface FilterFormValues {
  */
 export const buildFiltersFromSearchParams = (
   searchParams: ReadonlyURLSearchParams,
-  baseType?: string,
+  baseType?: string | null,
 ): CollectionFilter => {
   const baseFilter: CollectionFilter = {
-    type: baseType,
+    type: baseType ?? undefined,
   };
 
   // Extract individual filter parameters from URL
-  const checkIn = searchParams.get('checkIn');
-  const checkOut = searchParams.get('checkOut');
+  const checkinTime = searchParams.get('checkinTime');
+  const checkoutTime = searchParams.get('checkoutTime');
   const adults = searchParams.get('adults');
   const children = searchParams.get('children');
   const infants = searchParams.get('infants');
+  const country = searchParams.get('country');
+  const city = searchParams.get('city');
   const advancedFilters = searchParams.get('filters');
 
   // Add filters to base filter object if they exist
-  if (checkIn) baseFilter.checkIn = checkIn;
-  if (checkOut) baseFilter.checkOut = checkOut;
+  if (checkinTime) baseFilter.checkinTime = checkinTime;
+  if (checkoutTime) baseFilter.checkoutTime = checkoutTime;
   if (adults) baseFilter.adults = Number(adults);
   if (children) baseFilter.children = Number(children);
   if (infants) baseFilter.infants = Number(infants);
+  if (country) baseFilter.country = country;
+  if (city) baseFilter.city = Number(city);
 
   // Parse and merge advanced filters
   if (advancedFilters) {
@@ -61,8 +59,9 @@ export const buildFiltersFromSearchParams = (
       console.error('Failed to parse advanced filters:', error);
     }
   }
+  console.log('Base filter:', clearObject(baseFilter));
 
-  return baseFilter;
+  return clearObject(baseFilter);
 };
 
 /**
@@ -78,16 +77,16 @@ export const buildSearchParamsFromFilters = (
   const params = new URLSearchParams(currentParams);
 
   // Update individual filter params
-  if (filters.checkIn) {
-    params.set('checkIn', filters.checkIn);
+  if (filters.checkinTime) {
+    params.set('checkinTime', filters.checkinTime);
   } else {
-    params.delete('checkIn');
+    params.delete('checkinTime');
   }
 
-  if (filters.checkOut) {
-    params.set('checkOut', filters.checkOut);
+  if (filters.checkoutTime) {
+    params.set('checkoutTime', filters.checkoutTime);
   } else {
-    params.delete('checkOut');
+    params.delete('checkoutTime');
   }
 
   if (filters.adults && filters.adults > 0) {
@@ -108,14 +107,28 @@ export const buildSearchParamsFromFilters = (
     params.delete('infants');
   }
 
+  if (filters.country) {
+    params.set('country', filters.country);
+  } else {
+    params.delete('country');
+  }
+
+  if (filters.city) {
+    params.set('city', filters.city.toString());
+  } else {
+    params.delete('city');
+  }
+
   // Handle advanced filters
   const advancedFilters = { ...filters };
   delete advancedFilters.type;
-  delete advancedFilters.checkIn;
-  delete advancedFilters.checkOut;
+  delete advancedFilters.checkinTime;
+  delete advancedFilters.checkoutTime;
   delete advancedFilters.adults;
   delete advancedFilters.children;
   delete advancedFilters.infants;
+  delete advancedFilters.country;
+  delete advancedFilters.city;
 
   if (Object.keys(advancedFilters).length > 0) {
     params.set('filters', JSON.stringify(advancedFilters));
@@ -134,18 +147,9 @@ export const buildSearchParamsFromFilters = (
 export const getFormDefaultsFromSearchParams = (
   searchParams: ReadonlyURLSearchParams,
 ): FilterFormValues => {
+  const filters = buildFiltersFromSearchParams(searchParams);
+
   return {
-    checkIn: searchParams.get('checkIn') || '',
-    checkOut: searchParams.get('checkOut') || '',
-    guests: {
-      adults: Number(searchParams.get('adults')) || 0,
-      children: Number(searchParams.get('children')) || 0,
-      infants: Number(searchParams.get('infants')) || 0,
-    },
-    region: searchParams.get('region') || '',
-    type: searchParams.get('type') || 'all',
-    filters: searchParams.get('filters')
-      ? JSON.parse(searchParams.get('filters')!)
-      : {},
+    filters: filters,
   };
 };

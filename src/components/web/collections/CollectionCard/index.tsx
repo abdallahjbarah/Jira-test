@@ -7,6 +7,7 @@ import ImageCarousel from '@/components/shared/ImageCarousel';
 import { Site } from '@/lib/types';
 import useCurrency from '@/utils/hooks/useCurrency';
 import CustomLink from '@/components/ui/CustomLink';
+import useFavorite from '@/utils/hooks/useFavorite';
 
 function CollectionCard({
   collection,
@@ -15,11 +16,19 @@ function CollectionCard({
 }): React.ReactElement {
   const { t } = useTranslation();
   const { currency } = useCurrency();
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { isFavorite, addFavorite, removeFavorite } = useFavorite();
+
+  const isCollectionFavorite = React.useMemo(() => {
+    return isFavorite(collection._id);
+  }, [isFavorite, collection._id]);
 
   const handleFavoriteToggle = (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsFavorite(!isFavorite);
+    if (isCollectionFavorite) {
+      removeFavorite(collection._id);
+    } else {
+      addFavorite(collection._id);
+    }
   };
 
   return (
@@ -57,11 +66,14 @@ function CollectionCard({
               onClick={handleFavoriteToggle}
             >
               <CustomSvg
-                src='/SVGs/shared/heart-icon.svg'
+                src={
+                  isCollectionFavorite
+                    ? '/SVGs/shared/heart-filled.svg'
+                    : '/SVGs/shared/heart-icon.svg'
+                }
                 width={24}
                 height={24}
-                color={isFavorite ? '#FE360A' : '#fff'}
-                className='transition-colors duration-200'
+                className={`transition-colors duration-200 text-white`}
               />
             </button>
           </div>

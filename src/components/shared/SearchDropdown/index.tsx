@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import { useFormContext } from 'react-hook-form';
+import React, { useRef } from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import DateRangePicker from '../DateRangePicker';
 import GuestSelector from '../GuestSelector';
@@ -8,152 +8,80 @@ import RegionSelector, { Region, regions } from '../RegionSelector';
 import Dropdown from '@/components/ui/Dropdown';
 import Collapsible from '@/components/ui/Collapsible';
 import Image from 'next/image';
+import { useFetchContinent } from '@/lib/apis/shared/useFetchContinent';
 
 interface SearchDropdownProps {
   onSubmit?: () => void;
-  formMapping?: {
-    region: string;
-    location: string;
-    type: string;
-    dates: string;
-    guests: string;
-  };
-  useDirectFields?: boolean; // New prop to use direct field names from FilterBar
 }
 
-const SearchDropdown: React.FC<SearchDropdownProps> = ({
-  onSubmit,
-  formMapping,
-  useDirectFields = false,
-}) => {
-  const methods = useFormContext();
-  const [searchInput, setSearchInput] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState<Region>(null);
-  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+const SearchDropdown: React.FC<SearchDropdownProps> = ({ onSubmit }) => {
+  const { data: continents } = useFetchContinent();
+  const { control, setValue, getValues, handleSubmit } = useFormContext();
   const processingDate = useRef(false);
 
-  // Get the field names based on mapping or direct fields
-  const getFieldName = (
-    field: 'region' | 'location' | 'type' | 'dates' | 'guests',
-  ): string => {
-    if (useDirectFields) {
-      // Use direct field names from FilterBar
-      switch (field) {
-        case 'location':
-          return 'location';
-        case 'dates':
-          return 'checkIn'; // Map dates to checkIn for single date mode
-        case 'guests':
-          return 'guests';
-        default:
-          return field;
-      }
-    }
-    return formMapping ? formMapping[field] : field;
-  };
+  // Convert form date values to Date array for DateRangePicker
+  const getSelectedDates = (): Date[] => {
+    const values = getValues();
+    const checkIn = values.checkIn;
+    const checkOut = values.checkOut;
+    const dateArray: Date[] = [];
 
-  // Initialize state based on form values
-  useEffect(() => {
-    const regionField = getFieldName('region');
-    const locationField = getFieldName('location');
-    const datesField = getFieldName('dates');
-
-    const region = methods.getValues(regionField);
-    const location = methods.getValues(locationField);
-    const dates = methods.getValues(datesField);
-
-    if (region) setSelectedRegion(region as Region);
-    if (location) setSearchInput(location);
-    if (dates && dates.includes(',')) {
+    if (checkIn) {
       try {
-        const [start, end] = dates.split(',');
-        setSelectedDates([new Date(start), new Date(end)]);
-        console.log('[start, end]', [start, end]);
+        dateArray.push(new Date(checkIn));
       } catch (e) {
-        console.error('Error parsing dates:', e);
+        console.error('Error parsing checkIn date:', e);
       }
-    } else if (dates) {
+    }
+
+    if (checkOut) {
       try {
-        setSelectedDates([new Date(dates)]);
+        dateArray.push(new Date(checkOut));
       } catch (e) {
-        console.error('Error parsing date:', e);
+        console.error('Error parsing checkOut date:', e);
       }
     }
-  }, [methods, formMapping, useDirectFields]);
 
-  // Handle search input change
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchInput(value);
-    methods.setValue(getFieldName('location'), value, { shouldValidate: true });
+    return dateArray;
   };
 
-  // Handle region selection
-  const handleRegionSelect = (region: Region) => {
-    setSelectedRegion(region);
-    if (region) {
-      methods.setValue(getFieldName('region'), region, {
-        shouldValidate: true,
-      });
-    }
-  };
-
-  // Handle date selection
-  const handleDateChange = (dates: Date[]) => {
+  // Handle date selection for Controller
+  const handleDateChange = (dates: Date[], onChange: (value: any) => void) => {
     if (processingDate.current) return;
     processingDate.current = true;
 
     // Don't reset to a single date if we already have two dates and are receiving one date
-    if (selectedDates.length === 2 && dates.length === 1) {
+    const currentDates = getSelectedDates();
+    if (currentDates.length === 2 && dates.length === 1) {
       // This is likely an intermediate state in date range selection
       // Don't update state here, let the component send the complete range
       processingDate.current = false;
       return;
     }
 
-    setSelectedDates(dates);
-
     if (dates.length > 0) {
-      if (useDirectFields) {
-        // If using direct fields, set checkIn and checkOut separately
-        methods.setValue('checkIn', dates[0].toISOString().split('T')[0], {
+      // Set checkIn and checkOut separately
+      setValue('checkIn', dates[0].toISOString().split('T')[0], {
+        shouldValidate: true,
+      });
+      if (dates.length > 1) {
+        setValue('checkOut', dates[1].toISOString().split('T')[0], {
           shouldValidate: true,
         });
-        if (dates.length > 1) {
-          methods.setValue('checkOut', dates[1].toISOString().split('T')[0], {
-            shouldValidate: true,
-          });
-        }
       } else {
-        // Otherwise use the dates field with comma-separated format
-        const formattedDates = dates
-          .map((date) => date.toISOString().split('T')[0])
-          .join(',');
-
-        methods.setValue(getFieldName('dates'), formattedDates, {
-          shouldValidate: true,
-        });
+        // Clear checkOut if only one date is selected
+        setValue('checkOut', '', { shouldValidate: true });
       }
+      // Call onChange for the primary field (checkIn)
+      onChange(dates[0].toISOString().split('T')[0]);
     } else {
       // Clear the date fields
-      if (useDirectFields) {
-        methods.setValue('checkIn', '', { shouldValidate: true });
-        methods.setValue('checkOut', '', { shouldValidate: true });
-      } else {
-        methods.setValue(getFieldName('dates'), '', { shouldValidate: true });
-      }
+      setValue('checkIn', '', { shouldValidate: true });
+      setValue('checkOut', '', { shouldValidate: true });
+      onChange('');
     }
 
     processingDate.current = false;
-  };
-
-  // Handle guest changes
-  const handleGuestChange = (guests: {
-    adults: number;
-    children: number;
-    infants: number;
-  }) => {
-    methods.setValue(getFieldName('guests'), guests, { shouldValidate: true });
   };
 
   // Handle search submission
@@ -162,7 +90,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
       onSubmit();
     } else {
       // Trigger form submission
-      methods.handleSubmit((data) => {
+      handleSubmit((data) => {
         console.log('Search form submitted:', data);
       })();
     }
@@ -174,40 +102,69 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
       <Collapsible title='Where' defaultOpen={true}>
         <div className='mb-3'>
           <div className='relative'>
-            <input
-              type='text'
-              placeholder='Search...'
-              className='pl-8 pr-4 py-2 w-full border border-gray-300 rounded-lg'
-              value={searchInput}
-              onChange={handleSearchInputChange}
+            <Controller
+              name='location'
+              control={control}
+              defaultValue=''
+              render={({ field }) => (
+                <input
+                  type='text'
+                  placeholder='Search...'
+                  className='pl-8 pr-4 py-2 w-full border border-gray-300 rounded-lg'
+                  value={field.value || ''}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
+                />
+              )}
             />
             <MagnifyingGlassIcon className='absolute left-2 top-2.5 h-5 w-5 text-gray-400' />
           </div>
         </div>
 
         {/* Region Selector */}
-        <RegionSelector
-          selectedRegion={selectedRegion}
-          onSelectRegion={handleRegionSelect}
-          className='mt-4'
+        <Controller
+          name='country'
+          control={control}
+          render={({ field }) => (
+            <RegionSelector
+              continents={continents}
+              selectedRegion={field.value}
+              onSelectRegion={(region) => field.onChange(region)}
+              className='mt-4'
+            />
+          )}
         />
       </Collapsible>
 
       {/* When section */}
       <Collapsible title='When' defaultOpen={true}>
-        <DateRangePicker
-          selectedDates={selectedDates}
-          onChange={handleDateChange}
-          mode={'range'}
-          className='max-w-full p-0 shadow-none'
+        <Controller
+          name='checkIn'
+          control={control}
+          render={({ field }) => (
+            <DateRangePicker
+              selectedDates={getSelectedDates()}
+              onChange={(dates) => handleDateChange(dates, field.onChange)}
+              mode={'range'}
+              className='max-w-full p-0 shadow-none'
+            />
+          )}
         />
       </Collapsible>
 
       {/* Who section */}
       <Collapsible title='Who' defaultOpen={true}>
-        <GuestSelector
-          onGuestChange={handleGuestChange}
-          className='shadow-none w-full p-0'
+        <Controller
+          name='guests'
+          control={control}
+          render={({ field }) => (
+            <GuestSelector
+              onGuestChange={(guests) => field.onChange(guests)}
+              initialValues={field.value}
+              className='shadow-none w-full p-0'
+            />
+          )}
         />
       </Collapsible>
 

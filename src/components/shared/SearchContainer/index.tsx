@@ -51,7 +51,6 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
   });
 
   const handleSubmit = (data: SearchFormValues) => {
-    console.log('Search submitted:', data);
     if (onSubmit) {
       onSubmit(data);
     }

@@ -57,7 +57,7 @@ const en = {
     title: 'Have a question or feedback?',
     email: {
       title: 'Email',
-      value: 'info@bookagri.com',
+      value: 'rudaina.h@hotmail.com',
     },
     phone: {
       title: 'Phone',
@@ -140,6 +140,27 @@ const en = {
     create: 'Explore Now',
     countLabel: 'You have',
     collection: 'Collection',
+    saved: 'Saved',
+    delete: 'Delete',
+    edit: 'Edit',
+    deleteConfirmation: {
+      title: 'Delete Collection',
+      message: 'Are you sure you want to delete this collection?',
+    },
+    deleteSuccess: 'Collection deleted successfully',
+    editConfirmation: {
+      title: 'Edit Collection',
+      message: 'Are you sure you want to edit this collection?',
+    },
+    editModal: {
+      title: 'Edit Collection',
+      collectionNameLabel: 'Collection Name',
+      collectionNamePlaceholder: 'Enter collection name',
+      validation: {
+        nameRequired: 'Collection name is required',
+        nameUnchanged: 'Please enter a different name',
+      },
+    },
   },
   notifications: {
     notifications: 'Notifications',
@@ -312,6 +333,14 @@ const en = {
   filters: {
     showMore: 'Show more',
     showLess: 'Show less',
+  },
+  common: {
+    cancel: 'Cancel',
+    save: 'Save',
+    saving: 'Saving...',
+    error: {
+      generic: 'An error occurred. Please try again.',
+    },
   },
 };
 
