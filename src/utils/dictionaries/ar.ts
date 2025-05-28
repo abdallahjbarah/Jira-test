@@ -304,6 +304,24 @@ const ar = {
       profileSetupFailed: 'فشل إعداد الملف الشخصي. يرجى المحاولة مرة أخرى.',
     },
   },
+  helpCenter: {
+    title: 'مركز المساعدة',
+    needHelp: 'تحتاج مساعدة؟',
+    sendMessage: 'أرسل لنا رسالة وسنرد عليك قريباً!',
+    subject: 'الموضوع',
+    messagePlaceholder: 'اكتب رسالتك هنا!',
+    attachFile: 'إرفاق ملف / لقطة شاشة',
+    save: 'حفظ',
+    checkFAQs: 'يمكنك أيضاً الاطلاع على',
+    faqs: 'الأسئلة الشائعة',
+    inReview: 'قيد المراجعة',
+    reviewStatus: 'حالة المراجعة',
+    websiteReply: 'رد الموقع',
+    thankYouMessage: 'شكراً لرسالتك. لقد استلمنا طلبك وسنرد عليك قريباً.',
+    needHelpButton: 'تحتاج مساعدة',
+    contactUs: 'اتصل بنا',
+    fillFields: 'يرجى ملء جميع الحقول.',
+  },
 };
 
 export default ar;
