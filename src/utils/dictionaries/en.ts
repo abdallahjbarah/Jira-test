@@ -338,9 +338,25 @@ const en = {
     cancel: 'Cancel',
     save: 'Save',
     saving: 'Saving...',
+    add: 'Add',
+    adding: 'Adding...',
+    create: 'Create',
+    creating: 'Creating...',
     error: {
       generic: 'An error occurred. Please try again.',
     },
+  },
+  favorites: {
+    addToCollection: 'Add to Collection',
+    createNewCollection: 'Create New Collection',
+    selectExistingCollection: 'Select Existing Collection',
+    collectionName: 'Collection Name',
+    enterCollectionName: 'Enter collection name',
+    addToSelected: 'Add to Selected Collection',
+    items: 'items',
+    alreadyInFavorites: 'This item is already in your favorites',
+    addedSuccessfully: 'Added to collection successfully!',
+    addError: 'Failed to add to collection. Please try again.',
   },
 };
 

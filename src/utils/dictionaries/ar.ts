@@ -339,9 +339,25 @@ const ar = {
     cancel: 'إلغاء',
     save: 'حفظ',
     saving: 'جاري الحفظ...',
+    add: 'إضافة',
+    adding: 'جاري الإضافة...',
+    create: 'إنشاء',
+    creating: 'جاري الإنشاء...',
     error: {
       generic: 'حدث خطأ. يرجى المحاولة مرة أخرى.',
     },
+  },
+  favorites: {
+    addToCollection: 'إضافة إلى المجموعة',
+    createNewCollection: 'إنشاء مجموعة جديدة',
+    selectExistingCollection: 'اختيار مجموعة موجودة',
+    collectionName: 'اسم المجموعة',
+    enterCollectionName: 'أدخل اسم المجموعة',
+    addToSelected: 'إضافة إلى المجموعة المحددة',
+    items: 'عناصر',
+    alreadyInFavorites: 'هذا العنصر موجود بالفعل في مفضلاتك',
+    addedSuccessfully: 'تمت الإضافة إلى المجموعة بنجاح!',
+    addError: 'فشل في الإضافة إلى المجموعة. يرجى المحاولة مرة أخرى.',
   },
 };
 

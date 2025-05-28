@@ -1,7 +1,13 @@
+import { useAddToCollectionMutate } from '@/lib/apis/favorites/useAddToCollectionMutate';
 import { useFetchUserFavoriteCollections } from '@/lib/apis/favorites/useFetchUserCollections';
 
 const useFavorite = () => {
   const userFavoriteCollectionsQuery = useFetchUserFavoriteCollections();
+  const { mutate: addToCollection } = useAddToCollectionMutate({
+    onSuccess: () => {
+      userFavoriteCollectionsQuery.refetch();
+    },
+  });
 
   const isFavorite = (siteId: string) => {
     return userFavoriteCollectionsQuery.data?.some((collection) =>
@@ -13,9 +19,10 @@ const useFavorite = () => {
     console.log('addFavorite', siteId);
   };
 
-  const removeFavorite = (siteId: string) => {
-    console.log('removeFavorite', siteId);
-  };
+  const removeFavorite = (siteId: string) =>
+    addToCollection({
+      siteId,
+    });
 
   return {
     userFavoriteCollectionsQuery,

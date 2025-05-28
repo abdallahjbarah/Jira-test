@@ -8,15 +8,18 @@ import { Site } from '@/lib/types';
 import useCurrency from '@/utils/hooks/useCurrency';
 import CustomLink from '@/components/ui/CustomLink';
 import useFavorite from '@/utils/hooks/useFavorite';
+import withFavourites from '@/lib/hocs/withFavourites';
 
 function CollectionCard({
   collection,
+  openFavouritesModal,
 }: {
   collection: Site;
+  openFavouritesModal: (site: Site) => void;
 }): React.ReactElement {
   const { t } = useTranslation();
   const { currency } = useCurrency();
-  const { isFavorite, addFavorite, removeFavorite } = useFavorite();
+  const { isFavorite, removeFavorite } = useFavorite();
 
   const isCollectionFavorite = React.useMemo(() => {
     return isFavorite(collection._id);
@@ -27,7 +30,7 @@ function CollectionCard({
     if (isCollectionFavorite) {
       removeFavorite(collection._id);
     } else {
-      addFavorite(collection._id);
+      openFavouritesModal(collection);
     }
   };
 
@@ -119,4 +122,4 @@ function CollectionCard({
   );
 }
 
-export default CollectionCard;
+export default withFavourites(CollectionCard);
