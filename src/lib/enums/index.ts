@@ -13,6 +13,7 @@ export enum NotificationCategory {
 export enum FileFolder {
   PROFILE = 'profile',
   PAYMENT_INFO = 'paymentInfo',
+  TICKETS = 'tickets',
 }
 
 export enum NotificationPaths {

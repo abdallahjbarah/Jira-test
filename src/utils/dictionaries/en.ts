@@ -338,6 +338,7 @@ const en = {
     messagePlaceholder: 'Type your message here!',
     attachFile: 'Attach file / Screenshot',
     save: 'Save',
+    saving: 'Saving...',
     checkFAQs: 'You can also check our',
     faqs: 'FAQs',
     inReview: 'In Review',
@@ -348,6 +349,8 @@ const en = {
     needHelpButton: 'Need Help',
     contactUs: 'Contact Us',
     fillFields: 'Please fill all fields.',
+    errorMessage: 'Failed to create ticket. Please try again.',
+    fileUploadError: 'Failed to upload file. Please try again.',
   },
   filters: {
     showMore: 'Show more',

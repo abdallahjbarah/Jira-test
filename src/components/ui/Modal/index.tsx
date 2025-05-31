@@ -8,6 +8,9 @@ interface ModalProps {
   title?: string;
   children: React.ReactNode;
   width?: string;
+  containerClassName?: string;
+  canClose?: boolean;
+  headerPrefix?: React.ReactNode;
 }
 
 // Styled components defined outside the render method
@@ -45,6 +48,7 @@ const ModalHeader = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 32px;
+  position: relative;
 `;
 
 const ModalTitle = styled.h3`
@@ -52,6 +56,7 @@ const ModalTitle = styled.h3`
   font-size: 1.25rem;
   font-weight: 600;
   text-align: center;
+  padding-bottom: 24px;
 `;
 
 const CloseButton = styled.button`
@@ -71,6 +76,7 @@ const CloseButton = styled.button`
   position: absolute;
   right: 25px;
   top: 25px;
+  z-index: 1000;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
@@ -96,13 +102,18 @@ const Modal: React.FC<ModalProps> = ({
   title,
   children,
   width,
+  containerClassName,
+  canClose = true,
+  headerPrefix,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Handle click outside modal
   const handleOutsideClick = (e: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      onClose();
+      if (canClose) {
+        onClose();
+      }
     }
   };
 
@@ -112,15 +123,22 @@ const Modal: React.FC<ModalProps> = ({
         ref={modalRef}
         width={width}
         onClick={(e) => e.stopPropagation()}
+        className={containerClassName}
       >
-        <CloseButton onClick={onClose}>
-          <CustomSvg
-            src='/SVGs/shared/close-icon.svg'
-            className='w-6 h-6 text-primary_1'
-          />
-        </CloseButton>
+        {canClose && (
+          <CloseButton onClick={onClose}>
+            <CustomSvg
+              src='/SVGs/shared/close-icon.svg'
+              className='w-6 h-6 text-primary_1'
+            />
+          </CloseButton>
+        )}
 
-        <ModalHeader>{title && <ModalTitle>{title}</ModalTitle>}</ModalHeader>
+        <ModalHeader>
+          {headerPrefix && headerPrefix}
+          {title && <ModalTitle>{title}</ModalTitle>}
+          <div className='absolute bottom-0  h-[1px] bg-gray-200 w-[312px] mx-auto'></div>
+        </ModalHeader>
         <ModalContent>{children}</ModalContent>
       </ModalContainer>
     </ModalOverlay>

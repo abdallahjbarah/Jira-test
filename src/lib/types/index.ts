@@ -416,3 +416,23 @@ export interface FavoriteCollection {
   updatedAt: string;
   __v: number;
 }
+
+export interface Ticket {
+  _id: string;
+  subject: string;
+  message: string;
+  attachment: string;
+  userId: UserId;
+  createdAt: string;
+  updatedAt: string;
+  code: string;
+  __v: number;
+}
+
+export interface UserId {
+  _id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+}
