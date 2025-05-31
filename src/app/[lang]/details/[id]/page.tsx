@@ -165,6 +165,10 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
                 autoplay: false,
                 dots: images.length > 1,
               }}
+              imageProps={{
+                src: images[0],
+                fill: true,
+              }}
             />
             <button
               className='absolute top-[1.875rem] right-[1.875rem] z-20 p-1 hover:!text-primary_2'

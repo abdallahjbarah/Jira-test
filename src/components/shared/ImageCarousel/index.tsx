@@ -61,13 +61,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
   }, [slickProps]);
 
   return (
-    <div
-      className={className}
-      onClick={(e) => e.stopPropagation()}
-      onTouchStart={(e) => e.stopPropagation()}
-      onTouchEnd={(e) => e.stopPropagation()}
-      onTouchMove={(e) => e.stopPropagation()}
-    >
+    <div className={className} onClick={(e) => e.stopPropagation()}>
       <style jsx global>{`
         .slick-custom-arrows .slick-prev,
         .slick-custom-arrows .slick-next {
@@ -116,9 +110,6 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             key={index}
             className={`relative ${imageHeight}`}
             onClick={(e) => e.stopPropagation()}
-            onTouchStart={(e) => e.stopPropagation()}
-            onTouchEnd={(e) => e.stopPropagation()}
-            onTouchMove={(e) => e.stopPropagation()}
           >
             <ImageWithFallback
               src={image}

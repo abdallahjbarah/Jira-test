@@ -23,9 +23,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({
           height={30}
           color='black'
         />
-        <p className='font-custom-400 text-text_1 font-sans text-3xl'>
-          {time}
-        </p>
+        <p className='font-custom-400 text-text_1 font-sans text-3xl'>{time}</p>
       </div>
       <div className='flex gap-1 items-center'>
         <CustomSvg
@@ -34,9 +32,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({
           height={30}
           color='black'
         />
-        <p className='font-custom-400 text-text_1 font-sans text-3xl'>
-          {date}
-        </p>
+        <p className='font-custom-400 text-text_1 font-sans text-3xl'>{date}</p>
       </div>
       <div className='flex gap-1 items-center'>
         <CustomSvg
@@ -48,17 +44,17 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({
         <p className='font-custom-400 text-text_1 font-sans text-3xl'>
           {people}
         </p>
-        <Image
+        {/* <Image
           src={'/SVGs/shared/editIcon.svg'}
           alt='edit'
           width={30}
           height={30}
           onClick={onEdit}
           className='cursor-pointer'
-        />
+        /> */}
       </div>
     </div>
   );
 };
 
-export default BookingDetails; 
+export default BookingDetails;
