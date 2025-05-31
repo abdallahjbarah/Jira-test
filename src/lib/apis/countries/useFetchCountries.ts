@@ -9,7 +9,7 @@ const fetchCountries = async (): Promise<Country[]> => {
   return response as Country[];
 };
 
-export const useGetCountries = (
+export const useFetchCountries = (
   queryOptions?: UseQueryOptions<Country[], Error>,
 ) => {
   return useQuery({

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/utils/cn';
 
@@ -30,7 +30,16 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   scheduleEndDate,
   skipFutureDateValidation = false,
 }) => {
-  console.log(selectedDates, 'selectedDatesselectedDates');
+  // Create a normalized date (noon to avoid timezone issues)
+  const createNormalizedDate = useCallback(
+    (year: number, month: number, day: number) => {
+      const date = new Date(year, month, day);
+      // Set to noon to avoid timezone edge cases
+      date.setHours(12, 0, 0, 0);
+      return date;
+    },
+    [],
+  );
 
   // Use internal state to track selection during the range picking process
   const [internalSelection, setInternalSelection] =
@@ -38,8 +47,12 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
   // Sync internal state with props when selectedDates changes from parent
   useEffect(() => {
-    setInternalSelection(selectedDates);
-  }, [selectedDates]);
+    // Normalize incoming dates to avoid timezone issues
+    const normalizedDates = selectedDates.map((date) =>
+      createNormalizedDate(date.getFullYear(), date.getMonth(), date.getDate()),
+    );
+    setInternalSelection(normalizedDates);
+  }, [selectedDates, createNormalizedDate]);
 
   const [currentMonth, setCurrentMonth] = useState<Date>(
     selectedDates[0] || new Date(),
@@ -91,7 +104,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
     // Add the days of the month
     for (let i = 1; i <= lastDay.getDate(); i++) {
-      days.push(new Date(year, month, i));
+      days.push(createNormalizedDate(year, month, i));
     }
 
     return days;
@@ -141,7 +154,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
     // Get current date plus 2 days
     const twoDaysFromNow = new Date();
-    twoDaysFromNow.setDate(twoDaysFromNow.getDate() + 2);
+    twoDaysFromNow.setDate(twoDaysFromNow.getDate());
     twoDaysFromNow.setHours(0, 0, 0, 0); // Set to start of day
 
     // Skip the future date validation if skipFutureDateValidation is true
@@ -186,41 +199,49 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   const handleDateClick = (date: Date) => {
     if (!date || isDateDisabled(date)) return;
 
+    // Normalize the clicked date to avoid timezone issues
+    const normalizedDate = createNormalizedDate(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    );
+
     let newSelectedDates = [...internalSelection];
 
     if (mode === 'single') {
       // Single date selection mode
-      newSelectedDates = [date];
+      newSelectedDates = [normalizedDate];
     } else if (mode === 'both') {
       // Both single and range selection mode
       if (newSelectedDates.length === 0) {
         // First click - select single date
-        newSelectedDates = [date];
+        newSelectedDates = [normalizedDate];
       } else if (newSelectedDates.length === 1) {
         // Second click - if same date, keep as single; if different date, make range
-        if (isSameDate(date, newSelectedDates[0])) {
-          newSelectedDates = [date];
+        if (isSameDate(normalizedDate, newSelectedDates[0])) {
+          newSelectedDates = [normalizedDate];
         } else {
-          newSelectedDates = date < newSelectedDates[0] 
-            ? [date, newSelectedDates[0]] 
-            : [newSelectedDates[0], date];
+          newSelectedDates =
+            normalizedDate < newSelectedDates[0]
+              ? [normalizedDate, newSelectedDates[0]]
+              : [newSelectedDates[0], normalizedDate];
         }
       } else {
         // Already have two dates - start new selection
-        newSelectedDates = [date];
+        newSelectedDates = [normalizedDate];
       }
     } else {
       // Range selection mode
       if (newSelectedDates.length === 0 || newSelectedDates.length === 2) {
         // First date in range or starting a new range
-        newSelectedDates = [date];
+        newSelectedDates = [normalizedDate];
       } else if (newSelectedDates.length === 1) {
         // Second date in range - ensure they're ordered correctly
         const firstDate = newSelectedDates[0];
-        if (date < firstDate) {
-          newSelectedDates = [date, firstDate];
+        if (normalizedDate < firstDate) {
+          newSelectedDates = [normalizedDate, firstDate];
         } else {
-          newSelectedDates = [firstDate, date];
+          newSelectedDates = [firstDate, normalizedDate];
         }
       }
     }
@@ -252,6 +273,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
         </h2>
         <div className='flex space-x-2'>
           <button
+            type='button'
             onClick={prevMonth}
             className='p-1 rounded-full hover:bg-gray-100'
             aria-label='Previous month'
@@ -259,6 +281,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             <ChevronUpIcon className='w-5 h-5' />
           </button>
           <button
+            type='button'
             onClick={nextMonth}
             className='p-1 rounded-full hover:bg-gray-100'
             aria-label='Next month'
@@ -284,6 +307,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
         {days.map((date, index) => (
           <button
             key={index}
+            type='button'
             onClick={() => date && handleDateClick(date)}
             disabled={!date || isDateDisabled(date)}
             className={`relative h-10 w-10 flex items-center justify-center ${
@@ -295,9 +319,11 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             }`}
           >
             {/* Range background */}
-            {date && (mode === 'range' || mode === 'both') && isDateInRange(date) && (
-              <div className='absolute inset-0 bg-gray-200'></div>
-            )}
+            {date &&
+              (mode === 'range' || mode === 'both') &&
+              isDateInRange(date) && (
+                <div className='absolute inset-0 bg-gray-200'></div>
+              )}
 
             {/* Left edge of range */}
             {date &&
@@ -308,9 +334,11 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
               )}
 
             {/* Right edge of range */}
-            {date && (mode === 'range' || mode === 'both') && isEndDate(date) && (
-              <div className='absolute inset-0 bg-gray-200 rounded-r-full left-0'></div>
-            )}
+            {date &&
+              (mode === 'range' || mode === 'both') &&
+              isEndDate(date) && (
+                <div className='absolute inset-0 bg-gray-200 rounded-r-full left-0'></div>
+              )}
 
             {/* Date circle */}
             <span

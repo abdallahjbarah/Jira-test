@@ -39,6 +39,14 @@ function NotificationMenu({
 }: NotificationMenuProps): React.ReactElement {
   const { t, locale } = useTranslation();
 
+  // Memoize the intersection callback to prevent unnecessary re-renders
+  const handleIntersect = React.useCallback(() => {
+    console.log('onIntersect');
+    if (!isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, isFetchingNextPage]);
+
   if (isLoading) {
     return (
       <NotificationContainer className='p-5 flex justify-center items-center'>
@@ -90,12 +98,7 @@ function NotificationMenu({
 
       {hasNextPage && notifications.length > 0 && (
         <IntersectionObserverTrigger
-          onIntersect={() => {
-            console.log('onIntersect');
-            if (!isFetchingNextPage) {
-              fetchNextPage();
-            }
-          }}
+          onIntersect={handleIntersect}
           enabled={hasNextPage && !isFetchingNextPage}
           className='h-4'
         />

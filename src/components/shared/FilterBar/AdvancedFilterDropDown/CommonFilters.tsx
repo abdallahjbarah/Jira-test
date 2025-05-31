@@ -14,9 +14,61 @@ import {
   BOOKING_OPTIONS_LIST,
 } from '@/utils/constants';
 import CustomSvg from '@/components/ui/CustomSvg';
+import { useFetchPricesRange } from '@/lib/apis/shared/useFetchPricesRange';
+import { useFetchLanguages } from '@/lib/apis/shared/useFetchLanguages';
+import { useFetchAmenities } from '@/lib/apis/shared/useFetchAmenities';
+import { useFetchBookOptions } from '@/lib/apis/shared/useFetchBookOptions';
+import { useFetchAccessibilityFeatures } from '@/lib/apis/shared/useFetchAccessibilityFeatures';
 
 const CommonFilters: React.FC = () => {
   const { control } = useFormContext();
+
+  const { data: pricesRange } = useFetchPricesRange();
+  const { data: languages } = useFetchLanguages();
+  const { data: amenities } = useFetchAmenities();
+  const { data: bookOptions } = useFetchBookOptions({
+    isStayType: false,
+  });
+  const { data: accessibilityFeatures } = useFetchAccessibilityFeatures();
+
+  const accessibilityFeaturesList = React.useMemo(() => {
+    return (
+      accessibilityFeatures?.map((accessibilityFeature) => ({
+        value: accessibilityFeature._id,
+        label: {
+          en: accessibilityFeature.nameEn,
+          ar: accessibilityFeature.nameAr,
+        },
+      })) ?? []
+    );
+  }, [accessibilityFeatures]);
+
+  const bookOptionsList = React.useMemo(() => {
+    return (
+      bookOptions?.map((bookOption) => ({
+        value: bookOption._id,
+        label: { en: bookOption.nameEn, ar: bookOption.nameAr },
+      })) ?? []
+    );
+  }, [bookOptions]);
+
+  const languagesList = React.useMemo(() => {
+    return (
+      languages?.map((language) => ({
+        value: language._id,
+        label: { en: language.nameEn, ar: language.nameAr },
+      })) ?? []
+    );
+  }, [languages]);
+
+  const amenitiesList = React.useMemo(() => {
+    return (
+      amenities?.map((amenity) => ({
+        value: amenity._id,
+        label: { en: amenity.nameEn, ar: amenity.nameAr },
+      })) ?? []
+    );
+  }, [amenities]);
 
   return (
     <>
@@ -26,9 +78,9 @@ const CommonFilters: React.FC = () => {
         render={({ field }) => (
           <Collapsible title='Price Range' defaultOpen={true}>
             <RangeSlider
-              min={0}
-              max={100}
-              value={field.value}
+              min={pricesRange?.minPrice ?? 0}
+              max={pricesRange?.maxPrice ?? 100}
+              value={field.value || [0, 100]}
               onChange={field.onChange}
               currency='$'
             />
@@ -37,12 +89,12 @@ const CommonFilters: React.FC = () => {
       />
 
       <Controller
-        name='language'
+        name='languages'
         control={control}
         render={({ field }) => (
           <FilterSection
             title='Language Preference'
-            options={LANGUAGE_PREFERENCES_LIST}
+            options={languagesList}
             selectedValues={field.value}
             onChange={field.onChange}
           />
@@ -50,7 +102,7 @@ const CommonFilters: React.FC = () => {
       />
 
       <Controller
-        name='bookingVerified'
+        name='bookagriBadge'
         control={control}
         render={({ field }) => (
           <Collapsible
@@ -79,7 +131,7 @@ const CommonFilters: React.FC = () => {
         render={({ field }) => (
           <FilterSection
             title='Available Amenities'
-            options={AMENITIES_LIST}
+            options={amenitiesList}
             selectedValues={field.value}
             onChange={field.onChange}
           />
@@ -96,16 +148,16 @@ const CommonFilters: React.FC = () => {
                 id='special-offers-yes'
                 name='specialOffers'
                 label='Yes'
-                value='yes'
-                checked={field.value === 'yes'}
+                value={true}
+                checked={field.value === true}
                 onChange={field.onChange}
               />
               <RadioButton
                 id='special-offers-no'
                 name='specialOffers'
                 label='No'
-                value='no'
-                checked={field.value === 'no'}
+                value={false}
+                checked={field.value === false}
                 onChange={field.onChange}
               />
             </div>
@@ -114,12 +166,12 @@ const CommonFilters: React.FC = () => {
       />
 
       <Controller
-        name='bookingOptions'
+        name='bookOptions'
         control={control}
         render={({ field }) => (
           <FilterSection
             title='Booking Options'
-            options={BOOKING_OPTIONS_LIST}
+            options={bookOptionsList}
             selectedValues={[field.value]}
             onChange={(value) => field.onChange(value[0])}
           />
@@ -127,12 +179,12 @@ const CommonFilters: React.FC = () => {
       />
 
       <Controller
-        name='accessibility'
+        name='accessibilityFeatures'
         control={control}
         render={({ field }) => (
           <FilterSection
             title='Accessibility Features'
-            options={ACCESSIBILITY_FEATURES_LIST}
+            options={accessibilityFeaturesList}
             selectedValues={field.value}
             onChange={field.onChange}
           />

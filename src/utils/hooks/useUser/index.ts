@@ -30,8 +30,10 @@ export default function useUser(): UseUserReturn {
       // invalidate user queries
       queryClient.invalidateQueries({ queryKey: ['user'] });
       queryClient.removeQueries({ queryKey: ['notifications'] });
-      // queryClient.removeQueries({ queryKey: ['wishlist-items'] });
-      // queryClient.removeQueries({ queryKey: ['cart-items'] });
+      queryClient.removeQueries({
+        queryKey: ['userFavoriteCollections'],
+      });
+      queryClient.removeQueries({ queryKey: ['bookingData'] });
 
       router.push('/auth/login');
 

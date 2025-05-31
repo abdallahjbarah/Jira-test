@@ -1,5 +1,7 @@
 // Arabic dictionary
 const ar = {
+  type: 'النوع',
+  experience: 'نوع التجربة',
   person: 'شخص',
   home: 'الرئيسية',
   'about-us': 'من نحن',
@@ -137,6 +139,31 @@ const ar = {
     create: 'استكشف الآن',
     countLabel: 'لديك',
     collection: 'مجموعة',
+    saved: 'محفوظ',
+    delete: 'حذف',
+    edit: 'تعديل',
+    deleteConfirmation: {
+      title: 'حذف المجموعة',
+      message: 'هل أنت متأكد أنك تريد حذف هذه المجموعة؟',
+      confirmText: 'حذف',
+      cancelText: 'إلغاء',
+    },
+    deleteSuccess: 'تم حذف المجموعة بنجاح',
+    editConfirmation: {
+      title: 'تعديل المجموعة',
+      message: 'هل أنت متأكد أنك تريد تعديل هذه المجموعة؟',
+      confirmText: 'تعديل',
+      cancelText: 'إلغاء',
+    },
+    editModal: {
+      title: 'تعديل المجموعة',
+      collectionNameLabel: 'اسم المجموعة',
+      collectionNamePlaceholder: 'أدخل اسم المجموعة',
+      validation: {
+        nameRequired: 'اسم المجموعة مطلوب',
+        nameUnchanged: 'يرجى إدخال اسم مختلف',
+      },
+    },
   },
   notifications: {
     notifications: 'الإشعارات',
@@ -321,6 +348,34 @@ const ar = {
     needHelpButton: 'تحتاج مساعدة',
     contactUs: 'اتصل بنا',
     fillFields: 'يرجى ملء جميع الحقول.',
+  },
+  filters: {
+    showMore: 'عرض المزيد',
+    showLess: 'عرض أقل',
+  },
+  common: {
+    cancel: 'إلغاء',
+    save: 'حفظ',
+    saving: 'جاري الحفظ...',
+    add: 'إضافة',
+    adding: 'جاري الإضافة...',
+    create: 'إنشاء',
+    creating: 'جاري الإنشاء...',
+    error: {
+      generic: 'حدث خطأ. يرجى المحاولة مرة أخرى.',
+    },
+  },
+  favorites: {
+    addToCollection: 'إضافة إلى المجموعة',
+    createNewCollection: 'إنشاء مجموعة جديدة',
+    selectExistingCollection: 'اختيار مجموعة موجودة',
+    collectionName: 'اسم المجموعة',
+    enterCollectionName: 'أدخل اسم المجموعة',
+    addToSelected: 'إضافة إلى المجموعة المحددة',
+    items: 'عناصر',
+    alreadyInFavorites: 'هذا العنصر موجود بالفعل في مفضلاتك',
+    addedSuccessfully: 'تمت الإضافة إلى المجموعة بنجاح!',
+    addError: 'فشل في الإضافة إلى المجموعة. يرجى المحاولة مرة أخرى.',
   },
 };
 

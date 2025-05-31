@@ -11,6 +11,8 @@ interface CheckboxProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   className?: string;
+  checkBoxPosition?: 'left' | 'right';
+  checkBoxClassName?: string;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({
@@ -20,6 +22,8 @@ const Checkbox: React.FC<CheckboxProps> = ({
   checked,
   onChange,
   className = '',
+  checkBoxPosition = 'left',
+  checkBoxClassName = '',
 }) => {
   const handleClick = () => {
     onChange(!checked);
@@ -34,21 +38,40 @@ const Checkbox: React.FC<CheckboxProps> = ({
       htmlFor={id}
       onClick={handleClick}
     >
-      <div
-        onClick={handleClick}
-        className={`flex items-center justify-center w-6 h-6 rounded-lg transition-colors cursor-pointer border-2 border-solid shrink-0 ${checked
-            ? 'bg-primary_1 border-primary_1'
-            : 'bg-white border-secondary_3'
-          }`}
-      >
-        {checked && <CheckIcon className='w-4 h-4 text-white' />}
-      </div>
+      {checkBoxPosition === 'left' && (
+        <div
+          onClick={handleClick}
+          className={cn(
+            'flex items-center justify-center w-6 h-6 rounded-lg transition-colors cursor-pointer border-2 border-solid shrink-0',
+            checkBoxClassName,
+            checked
+              ? 'bg-primary_1 border-primary_1'
+              : 'bg-white border-secondary_3',
+          )}
+        >
+          {checked && <CheckIcon className='w-4 h-4 text-white' />}
+        </div>
+      )}
       <div>
         <div className='text-sm text-text_2'>{label}</div>
         {description && (
           <p className='text-xs text-gray_3 mt-1'>{description}</p>
         )}
       </div>
+      {checkBoxPosition === 'right' && (
+        <div
+          onClick={handleClick}
+          className={cn(
+            'flex items-center justify-center w-6 h-6 rounded-lg transition-colors cursor-pointer border-2 border-solid shrink-0',
+            checkBoxClassName,
+            checked
+              ? 'bg-primary_1 border-primary_1'
+              : 'bg-white border-secondary_3',
+          )}
+        >
+          {checked && <CheckIcon className='w-4 h-4 text-white' />}
+        </div>
+      )}
     </label>
   );
 };

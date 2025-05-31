@@ -6,10 +6,10 @@ import FallbackImage from '@public/images/shared/BookagriLogo.png';
 
 type ImageSource = string | StaticImageData;
 
-type ImageWithFallbackProps = Omit<ImageProps, 'src'> & {
+export interface ImageWithFallbackProps extends Omit<ImageProps, 'src'> {
   src: ImageSource;
   fallbackSrc?: ImageSource;
-};
+}
 
 const ImageShimmer = ({ isLoading }: { isLoading: boolean }) => {
   return (
