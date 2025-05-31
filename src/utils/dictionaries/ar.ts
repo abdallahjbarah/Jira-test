@@ -339,6 +339,7 @@ const ar = {
     messagePlaceholder: 'اكتب رسالتك هنا!',
     attachFile: 'إرفاق ملف / لقطة شاشة',
     save: 'حفظ',
+    saving: 'جاري الحفظ...',
     checkFAQs: 'يمكنك أيضاً الاطلاع على',
     faqs: 'الأسئلة الشائعة',
     inReview: 'قيد المراجعة',
@@ -348,6 +349,8 @@ const ar = {
     needHelpButton: 'تحتاج مساعدة',
     contactUs: 'اتصل بنا',
     fillFields: 'يرجى ملء جميع الحقول.',
+    errorMessage: 'فشل إنشاء التذكرة. يرجى المحاولة مرة أخرى.',
+    fileUploadError: 'فشل رفع الملف. يرجى المحاولة مرة أخرى.',
   },
   filters: {
     showMore: 'عرض المزيد',

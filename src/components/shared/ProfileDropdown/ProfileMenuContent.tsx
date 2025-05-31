@@ -122,7 +122,12 @@ const ProfileMenuContent: React.FC = () => {
       </div>
 
       <FAQModal isOpen={isFAQModalOpen} onClose={closeFAQModal} />
-      <HelpCenterModal isOpen={isHelpCenterModalOpen} onClose={closeHelpCenterModal} />
+      {isHelpCenterModalOpen && (
+        <HelpCenterModal
+          isOpen={isHelpCenterModalOpen}
+          onClose={closeHelpCenterModal}
+        />
+      )}
     </div>
   );
 };

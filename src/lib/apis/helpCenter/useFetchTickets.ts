@@ -2,19 +2,19 @@
 
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
-// import { HelpCenter } from '@/lib/types';
+import { Ticket } from '@/lib/types';
 
-const fetchHelpCenter = async (): Promise<any[]> => {
+const fetchTickets = async (): Promise<Ticket[]> => {
   const response = await api.url('/help-center/guest/all').get().json();
-  return response as any[];
+  return response as Ticket[];
 };
 
-export const useFetchHelpCenter = (
-  queryOptions?: UseQueryOptions<any[], Error>,
+export const useFetchTickets = (
+  queryOptions?: Partial<UseQueryOptions<Ticket[], Error>>,
 ) =>
   useQuery({
     queryKey: ['help-center'],
-    queryFn: fetchHelpCenter,
+    queryFn: fetchTickets,
     refetchOnWindowFocus: false,
     ...queryOptions,
   });
