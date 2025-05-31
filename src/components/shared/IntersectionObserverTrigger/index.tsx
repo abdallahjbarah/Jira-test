@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
+import React from 'react';
 
 interface IntersectionObserverTriggerProps {
   onIntersect: () => void;
@@ -8,38 +9,57 @@ interface IntersectionObserverTriggerProps {
   className?: string;
 }
 
-export const IntersectionObserverTrigger = ({
-  onIntersect,
-  enabled = true,
-  rootMargin = '0px',
-  threshold = 0.1,
-  className = '',
-}: IntersectionObserverTriggerProps) => {
-  const ref = useRef<HTMLDivElement | null>(null);
+export const IntersectionObserverTrigger = React.memo(
+  ({
+    onIntersect,
+    enabled = true,
+    rootMargin = '0px',
+    threshold = 0.1,
+    className = '',
+  }: IntersectionObserverTriggerProps) => {
+    const ref = useRef<HTMLDivElement | null>(null);
+    const observerRef = useRef<IntersectionObserver | null>(null);
 
-  useEffect(() => {
-    if (!enabled) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
+    const handleIntersection = useCallback(
+      ([entry]: IntersectionObserverEntry[]) => {
         if (entry.isIntersecting) {
           onIntersect();
         }
       },
-      { rootMargin, threshold },
+      [onIntersect],
     );
 
-    const current = ref.current;
-    if (current) {
-      observer.observe(current);
-    }
-
-    return () => {
-      if (current) {
-        observer.unobserve(current);
+    useEffect(() => {
+      if (!enabled) {
+        // Clean up existing observer if disabled
+        if (observerRef.current) {
+          observerRef.current.disconnect();
+          observerRef.current = null;
+        }
+        return;
       }
-    };
-  }, [enabled, onIntersect, rootMargin, threshold]);
 
-  return <div ref={ref} className={className} />;
-};
+      // Create new observer
+      observerRef.current = new IntersectionObserver(handleIntersection, {
+        rootMargin,
+        threshold,
+      });
+
+      const currentElement = ref.current;
+      if (currentElement && observerRef.current) {
+        observerRef.current.observe(currentElement);
+      }
+
+      return () => {
+        if (observerRef.current) {
+          observerRef.current.disconnect();
+          observerRef.current = null;
+        }
+      };
+    }, [enabled, handleIntersection, rootMargin, threshold]);
+
+    return <div ref={ref} className={className} />;
+  },
+);
+
+IntersectionObserverTrigger.displayName = 'IntersectionObserverTrigger';

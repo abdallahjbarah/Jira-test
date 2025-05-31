@@ -11,7 +11,7 @@ import FloatingLabelSelect from '@/components/form/FloatingLabelSelect';
 import ImageUploader from '@/components/form/ImageUploader';
 import useUser from '@/utils/hooks/useUser';
 import { GENDER_OPTIONS } from '@/utils/constants';
-import { useGetCountries } from '@/lib/apis/countries/useFetchCountries';
+import { useFetchCountries } from '@/lib/apis/countries/useFetchCountries';
 import { Country, City } from '@/lib/types';
 import { useFetchCities } from '@/lib/apis/countries/useFetchCountriesCities';
 import DatePickerInput from '@/components/form/DatePickerInput';
@@ -41,7 +41,7 @@ export default function PersonalInfoPage() {
   const queryClient = useQueryClient();
   const { userData } = useUser();
   console.log(userData, 'userData');
-  const { data: countries } = useGetCountries();
+  const { data: countries } = useFetchCountries();
   const { mutate: editUser, isPending: isEditUserLoading } = useEditUser({
     onSuccess: (data) => {
       queryClient.setQueryData(['user'], (oldData: any) => {

@@ -27,12 +27,7 @@ export default function Footer(): React.ReactElement {
   const { locale, t } = useTranslation();
 
   // Get the phone values from the dictionary
-  const phoneValues = [
-    '00962-77-2236393',
-    '00962-77-0504153',
-    '00962-78-7877885',
-    '00962-79-5593907',
-  ];
+  const phoneValues = ['00962-77-2236393'];
 
   return (
     <footer className='flex min-h-[28.875rem] flex-col items-center justify-between bg-primary_5'>
@@ -162,10 +157,6 @@ export default function Footer(): React.ReactElement {
                     <p className='font-custom-400'>
                       {t('footer.address.zipCode')}
                     </p>
-                  </div>
-
-                  <div>
-                    <p className='font-custom-700'>{t('footer.hours')}</p>
                   </div>
                 </div>
               </div>

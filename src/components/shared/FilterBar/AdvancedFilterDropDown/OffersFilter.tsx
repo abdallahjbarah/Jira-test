@@ -4,29 +4,15 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import FilterSection from './FilterSection';
 import CommonFilters from './CommonFilters';
-import {
-  PACKAGE_TYPES_LIST,
-  PACKAGE_DURATION_LIST,
-  TIME_OF_DAY_LIST,
-} from '@/utils/constants';
+import { PACKAGE_DURATION_LIST, TIME_OF_DAY_LIST } from '@/utils/constants';
+import CollectionTypeField from './CollectionTypeField';
 
 const OffersFilter: React.FC = () => {
   const { control } = useFormContext();
 
   return (
     <>
-      <Controller
-        name='packageType'
-        control={control}
-        render={({ field }) => (
-          <FilterSection
-            title='Package Type'
-            options={PACKAGE_TYPES_LIST}
-            selectedValues={field.value}
-            onChange={field.onChange}
-          />
-        )}
-      />
+      <CollectionTypeField />
 
       <Controller
         name='timeOfDay'
@@ -42,7 +28,7 @@ const OffersFilter: React.FC = () => {
       />
 
       <Controller
-        name='duration'
+        name='packageDuration'
         control={control}
         render={({ field }) => (
           <FilterSection

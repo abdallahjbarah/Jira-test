@@ -1,5 +1,7 @@
 // English dictionary
 const en = {
+  type: 'Type',
+  experience: 'Experience Type',
   person: 'person',
   home: 'Home',
   'about-us': 'About Us',
@@ -55,7 +57,7 @@ const en = {
     title: 'Have a question or feedback?',
     email: {
       title: 'Email',
-      value: 'info@bookagri.com',
+      value: 'rudaina.h@hotmail.com',
     },
     phone: {
       title: 'Phone',
@@ -138,6 +140,27 @@ const en = {
     create: 'Explore Now',
     countLabel: 'You have',
     collection: 'Collection',
+    saved: 'Saved',
+    delete: 'Delete',
+    edit: 'Edit',
+    deleteConfirmation: {
+      title: 'Delete Collection',
+      message: 'Are you sure you want to delete this collection?',
+    },
+    deleteSuccess: 'Collection deleted successfully',
+    editConfirmation: {
+      title: 'Edit Collection',
+      message: 'Are you sure you want to edit this collection?',
+    },
+    editModal: {
+      title: 'Edit Collection',
+      collectionNameLabel: 'Collection Name',
+      collectionNamePlaceholder: 'Enter collection name',
+      validation: {
+        nameRequired: 'Collection name is required',
+        nameUnchanged: 'Please enter a different name',
+      },
+    },
   },
   notifications: {
     notifications: 'Notifications',
@@ -306,6 +329,34 @@ const en = {
       profileSetupSuccess: 'Profile setup completed successfully!',
       profileSetupFailed: 'Failed to set up profile. Please try again.',
     },
+  },
+  filters: {
+    showMore: 'Show more',
+    showLess: 'Show less',
+  },
+  common: {
+    cancel: 'Cancel',
+    save: 'Save',
+    saving: 'Saving...',
+    add: 'Add',
+    adding: 'Adding...',
+    create: 'Create',
+    creating: 'Creating...',
+    error: {
+      generic: 'An error occurred. Please try again.',
+    },
+  },
+  favorites: {
+    addToCollection: 'Add to Collection',
+    createNewCollection: 'Create New Collection',
+    selectExistingCollection: 'Select Existing Collection',
+    collectionName: 'Collection Name',
+    enterCollectionName: 'Enter collection name',
+    addToSelected: 'Add to Selected Collection',
+    items: 'items',
+    alreadyInFavorites: 'This item is already in your favorites',
+    addedSuccessfully: 'Added to collection successfully!',
+    addError: 'Failed to add to collection. Please try again.',
   },
 };
 

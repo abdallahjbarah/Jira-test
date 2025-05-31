@@ -40,7 +40,7 @@ export const useFetchInfiniteCollections = (
   >,
 ) => {
   return useInfiniteQuery({
-    queryKey: ['collections', filter],
+    queryKey: ['collections-infinite', filter],
     queryFn: async ({ pageParam = 1 }) =>
       fetchCollections({
         ...filter,

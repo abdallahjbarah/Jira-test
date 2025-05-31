@@ -4,7 +4,9 @@ import React from 'react';
 import Slider, { Settings as SlickSettings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import ImageWithFallback from '../ImageWithFallback';
+import ImageWithFallback, {
+  ImageWithFallbackProps,
+} from '../ImageWithFallback';
 
 export interface ImageCarouselProps {
   images: string[];
@@ -12,7 +14,39 @@ export interface ImageCarouselProps {
   className?: string;
   imageClassName?: string;
   imageHeight?: string;
+  imageProps?: ImageWithFallbackProps;
 }
+
+const defaultSettings: SlickSettings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 5000,
+  arrows: true,
+  className:
+    'rounded-custom-16 overflow-hidden relative slick-custom-arrows h-full',
+  customPaging: () => (
+    <div className='w-2 h-2 mx-0.5 rounded-full bg-white hover:bg-white/80 transition-colors duration-200' />
+  ),
+  appendDots: (dots: React.ReactNode) => (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      style={{
+        position: 'absolute',
+        bottom: '20px',
+        width: '100%',
+        textAlign: 'center',
+      }}
+    >
+      <ul style={{ margin: '0' }}> {dots} </ul>
+    </div>
+  ),
+};
 
 const ImageCarousel: React.FC<ImageCarouselProps> = ({
   images,
@@ -20,41 +54,20 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
   className = 'w-full h-full relative',
   imageClassName = 'object-cover',
   imageHeight = 'h-full',
+  imageProps,
 }) => {
-  // Default slider settings
-  const defaultSettings: SlickSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    arrows: true,
-    className:
-      'rounded-custom-16 overflow-hidden relative slick-custom-arrows h-full',
-    customPaging: () => (
-      <div className='w-2 h-2 mx-0.5 rounded-full bg-white hover:bg-white/80 transition-colors duration-200' />
-    ),
-    appendDots: (dots: React.ReactNode) => (
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          width: '100%',
-          textAlign: 'center',
-        }}
-      >
-        <ul style={{ margin: '0' }}> {dots} </ul>
-      </div>
-    ),
-  };
-
-  // Merge default settings with any props passed in
-  const settings = { ...defaultSettings, ...slickProps };
+  const settings = React.useMemo(() => {
+    return { ...defaultSettings, ...slickProps };
+  }, [slickProps]);
 
   return (
-    <div className={className}>
+    <div
+      className={className}
+      onClick={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
+      onTouchEnd={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
+    >
       <style jsx global>{`
         .slick-custom-arrows .slick-prev,
         .slick-custom-arrows .slick-next {
@@ -99,14 +112,22 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
       `}</style>
       <Slider {...settings}>
         {images.map((image, index) => (
-          <div key={index} className={`relative ${imageHeight}`}>
+          <div
+            key={index}
+            className={`relative ${imageHeight}`}
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+          >
             <ImageWithFallback
               src={image}
               alt={image}
-              fill
+              // fill
               className={imageClassName}
               // priority={index === 0}
               loading='lazy'
+              {...imageProps}
             />
           </div>
         ))}
@@ -115,4 +136,4 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
   );
 };
 
-export default ImageCarousel;
+export default React.memo(ImageCarousel);

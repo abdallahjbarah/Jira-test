@@ -70,6 +70,13 @@ const MyBookingsPage = () => {
     return bookingsData?.pages[0].totalCount || 0;
   }, [bookingsData]);
 
+  // Memoize the intersection callback to prevent unnecessary re-renders
+  const handleIntersect = React.useCallback(() => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, fetchNextPage]);
+
   if (!bookings?.length && !isLoading) {
     return (
       <InnerPagesLayout headerProps={{ withNavItems: false }}>
@@ -130,11 +137,7 @@ const MyBookingsPage = () => {
               ))}
             </CollectionsListingContainer>
             <IntersectionObserverTrigger
-              onIntersect={() => {
-                if (hasNextPage) {
-                  fetchNextPage();
-                }
-              }}
+              onIntersect={handleIntersect}
               enabled={hasNextPage && !isFetchingNextPage}
               className='h-4'
             />

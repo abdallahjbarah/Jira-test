@@ -11,24 +11,15 @@ import {
   AGE_SUITABILITY_LIST,
   EXPERIENCE_LEVEL_LIST,
 } from '@/utils/constants';
+import { useFetchExperienceType } from '@/lib/apis/shared/useFetchExperienceType';
+import CollectionTypeField from './CollectionTypeField';
 
 const ExperiencesFilter: React.FC = () => {
   const { control } = useFormContext();
 
   return (
     <>
-      <Controller
-        name='experienceType'
-        control={control}
-        render={({ field }) => (
-          <FilterSection
-            title='Experience Type'
-            options={EXPERIENCE_TYPES_LIST}
-            selectedValues={field.value}
-            onChange={field.onChange}
-          />
-        )}
-      />
+      <CollectionTypeField />
 
       <Controller
         name='timeOfDay'
@@ -70,7 +61,7 @@ const ExperiencesFilter: React.FC = () => {
       />
 
       <Controller
-        name='experienceLevel'
+        name='levelOfDifficulty'
         control={control}
         render={({ field }) => (
           <FilterSection
