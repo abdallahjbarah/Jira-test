@@ -30,8 +30,6 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   scheduleEndDate,
   skipFutureDateValidation = false,
 }) => {
-  console.log(selectedDates, 'selectedDatesselectedDates');
-
   // Create a normalized date (noon to avoid timezone issues)
   const createNormalizedDate = useCallback(
     (year: number, month: number, day: number) => {
@@ -156,7 +154,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
     // Get current date plus 2 days
     const twoDaysFromNow = new Date();
-    twoDaysFromNow.setDate(twoDaysFromNow.getDate() + 2);
+    twoDaysFromNow.setDate(twoDaysFromNow.getDate());
     twoDaysFromNow.setHours(0, 0, 0, 0); // Set to start of day
 
     // Skip the future date validation if skipFutureDateValidation is true
@@ -275,6 +273,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
         </h2>
         <div className='flex space-x-2'>
           <button
+            type='button'
             onClick={prevMonth}
             className='p-1 rounded-full hover:bg-gray-100'
             aria-label='Previous month'
@@ -282,6 +281,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             <ChevronUpIcon className='w-5 h-5' />
           </button>
           <button
+            type='button'
             onClick={nextMonth}
             className='p-1 rounded-full hover:bg-gray-100'
             aria-label='Next month'
@@ -307,6 +307,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
         {days.map((date, index) => (
           <button
             key={index}
+            type='button'
             onClick={() => date && handleDateClick(date)}
             disabled={!date || isDateDisabled(date)}
             className={`relative h-10 w-10 flex items-center justify-center ${

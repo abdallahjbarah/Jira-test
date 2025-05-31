@@ -1,8 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from '@/contexts/TranslationContext';
 import CustomSvg from '@/components/ui/CustomSvg';
-import Link from 'next/link';
 import ImageCarousel from '@/components/shared/ImageCarousel';
 import { Site } from '@/lib/types';
 import useCurrency from '@/utils/hooks/useCurrency';
@@ -25,31 +24,88 @@ function CollectionCard({
     return isFavorite(collection._id);
   }, [isFavorite, collection._id]);
 
-  const handleFavoriteToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (isCollectionFavorite) {
-      removeFavorite(collection._id);
-    } else {
-      openFavouritesModal(collection);
-    }
-  };
+  const handleFavoriteToggle = React.useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      if (isCollectionFavorite) {
+        removeFavorite(collection._id);
+      } else {
+        openFavouritesModal(collection);
+      }
+    },
+    [
+      isCollectionFavorite,
+      removeFavorite,
+      collection._id,
+      collection,
+      openFavouritesModal,
+    ],
+  );
+
+  // Memoize slick props to prevent unnecessary re-renders
+  const slickProps = React.useMemo(
+    () => ({
+      autoplay: false,
+      dots: collection.images.length > 1,
+      arrows: false,
+      infinite: false,
+    }),
+    [collection.images.length],
+  );
+
+  // Memoize image props to prevent unnecessary re-renders
+  const imageProps = React.useMemo(
+    () => ({
+      width: 500,
+      height: 500,
+      src: collection.images[0],
+      className: 'object-cover w-full h-full',
+    }),
+    [collection.images],
+  );
+
+  // Memoize location string
+  const locationString = React.useMemo(() => {
+    return `${collection?.country?.name}, ${collection?.city}`;
+  }, [collection?.country?.name, collection?.city]);
+
+  // Memoize price string
+  const priceString = React.useMemo(() => {
+    const price = collection.pricingInformation[0]?.price;
+    return price ? `${price} ${currency}` : '';
+  }, [collection.pricingInformation, currency]);
+
+  // Memoize heart icon source
+  const heartIconSrc = React.useMemo(() => {
+    return isCollectionFavorite
+      ? '/SVGs/shared/heart-filled.svg'
+      : '/SVGs/shared/heart-icon.svg';
+  }, [isCollectionFavorite]);
+
+  // Memoize touch event handlers to prevent re-creation
+  const touchHandlers = React.useMemo(
+    () => ({
+      onTouchStart: (e: React.TouchEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+      },
+      onTouchEnd: (e: React.TouchEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+      },
+      onTouchMove: (e: React.TouchEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+      },
+    }),
+    [],
+  );
 
   return (
     <CustomLink
       path={`/details/${collection._id}`}
       className='group block'
-      onTouchStart={(e: React.TouchEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-      onTouchEnd={(e: React.TouchEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-      onTouchMove={(e: React.TouchEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
+      {...touchHandlers}
     >
       <div className='transition-all duration-300'>
         <div className='relative rounded-custom-16 overflow-hidden'>
@@ -58,22 +114,15 @@ function CollectionCard({
               images={collection.images}
               className='w-full h-full relative'
               imageHeight='aspect-square'
-              slickProps={{
-                autoplay: false,
-                dots: collection.images.length > 1,
-                arrows: false,
-              }}
+              slickProps={slickProps}
+              imageProps={imageProps}
             />
             <button
               className='absolute top-3 right-3 z-20 p-1 hover:!text-primary_2'
               onClick={handleFavoriteToggle}
             >
               <CustomSvg
-                src={
-                  isCollectionFavorite
-                    ? '/SVGs/shared/heart-filled.svg'
-                    : '/SVGs/shared/heart-icon.svg'
-                }
+                src={heartIconSrc}
                 width={24}
                 height={24}
                 className={`transition-colors duration-200 text-white`}
@@ -95,14 +144,11 @@ function CollectionCard({
             </div> */}
           </div>
 
-          <p className='text-custom-12 text-gray_3 mt-1'>
-            {collection?.country?.name}, {collection?.city}
-          </p>
+          <p className='text-custom-12 text-gray_3 mt-1'>{locationString}</p>
 
           <div className='flex justify-between items-center mt-2'>
             <p className='text-custom-14 font-bold text-text_1'>
-              {t('from')}{' '}
-              {`${collection.pricingInformation[0].price} ${currency}`}
+              {t('from')} {priceString}
               <span className='text-custom-14 font-custom-400 '>
                 {' '}
                 /{t('person')}
@@ -122,4 +168,7 @@ function CollectionCard({
   );
 }
 
-export default withFavourites(CollectionCard);
+// Memoize the component to prevent unnecessary re-renders
+const MemoizedCollectionCard = React.memo(CollectionCard);
+
+export default withFavourites(MemoizedCollectionCard);

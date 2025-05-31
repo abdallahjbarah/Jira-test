@@ -12,11 +12,12 @@ const fetchUserFavoriteCollections = async (): Promise<
 };
 
 export const useFetchUserFavoriteCollections = (
-  queryOptions?: UseQueryOptions<FavoriteCollection[], Error>,
+  queryOptions?: Partial<UseQueryOptions<FavoriteCollection[], Error>>,
 ) =>
   useQuery({
     queryKey: ['userFavoriteCollections'],
     queryFn: fetchUserFavoriteCollections,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
     ...queryOptions,
   });

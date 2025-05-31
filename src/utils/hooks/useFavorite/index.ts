@@ -1,8 +1,13 @@
 import { useAddToCollectionMutate } from '@/lib/apis/favorites/useAddToCollectionMutate';
 import { useFetchUserFavoriteCollections } from '@/lib/apis/favorites/useFetchUserCollections';
+import useUser from '../useUser';
 
 const useFavorite = () => {
-  const userFavoriteCollectionsQuery = useFetchUserFavoriteCollections();
+  const { isLoggedIn } = useUser();
+
+  const userFavoriteCollectionsQuery = useFetchUserFavoriteCollections({
+    enabled: isLoggedIn,
+  });
   const { mutate: addToCollection } = useAddToCollectionMutate({
     onSuccess: () => {
       userFavoriteCollectionsQuery.refetch();

@@ -32,22 +32,35 @@ const LoaderContainer = Styled.div`
   padding: 40px 0;
 `;
 
+// Memoized collection card component to prevent unnecessary re-renders
+const MemoizedCollectionCard = React.memo(CollectionCard);
+
 function CollectionsListing(): React.ReactElement {
   const { collectionStatus } = useParams();
   const searchParams = useSearchParams();
 
-  const collectionObject = COLLECTION_STATUS_LIST.find(
-    (collection) => collection.value === collectionStatus,
+  const collectionObject = React.useMemo(
+    () =>
+      COLLECTION_STATUS_LIST.find(
+        (collection) => collection.value === collectionStatus,
+      ),
+    [collectionStatus],
   );
 
   // Build filter object from search params using helper
   const filters = React.useMemo(() => {
-    return buildFiltersFromSearchParams(
+    const baseFilters = buildFiltersFromSearchParams(
       searchParams,
       collectionObject?.filterValue === COLLECTION_STATUS.ALL
         ? null
         : collectionObject?.filterValue,
     );
+
+    // Increase page size for better performance
+    return {
+      ...baseFilters,
+      limit: 20, // Load more items per page to reduce API calls
+    };
   }, [collectionObject?.filterValue, searchParams]);
 
   const {
@@ -58,45 +71,86 @@ function CollectionsListing(): React.ReactElement {
     isFetchingNextPage,
   } = useFetchInfiniteCollections(filters);
 
+  // Memoize collections array to prevent unnecessary re-renders
   const collections = React.useMemo(() => {
-    return collectionsResponse?.pages?.flatMap(
+    if (!collectionsResponse?.pages) return [];
+    return collectionsResponse.pages.flatMap(
       (page: SitesResponse) => page.sites.data,
     );
-  }, [collectionsResponse]);
+  }, [collectionsResponse?.pages]);
+
+  // Debounced intersection handler to prevent rapid API calls
+  const debouncedFetchNextPage = React.useMemo(() => {
+    let timeoutId: NodeJS.Timeout;
+    return () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      }, 100); // 100ms debounce
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  // Memoize intersection handler to prevent unnecessary re-renders
+  const handleIntersect = React.useCallback(() => {
+    debouncedFetchNextPage();
+  }, [debouncedFetchNextPage]);
+
+  // Memoize the collections grid to prevent unnecessary re-renders
+  const collectionsGrid = React.useMemo(() => {
+    if (!collections?.length) return null;
+
+    return (
+      <CollectionsListingContainer className='mt-[31px]'>
+        {collections.map((collection: Site, index: number) => (
+          <MemoizedCollectionCard key={index} collection={collection} />
+        ))}
+      </CollectionsListingContainer>
+    );
+  }, [collections]);
+
+  // Early return for loading state
+  if (isLoading) {
+    return (
+      <div>
+        <CollectionTypeLabel />
+        <LoaderContainer>
+          <CircularLoader size={50} />
+        </LoaderContainer>
+      </div>
+    );
+  }
+
+  // Early return for empty state
+  if (!collections?.length) {
+    return (
+      <div>
+        <CollectionTypeLabel />
+        <div className='text-center text-gray-500 text-lg py-10'>
+          No results found
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
       <CollectionTypeLabel />
-      {!collections?.length ? (
-        <div className='text-center text-gray-500 text-lg py-10'>
-          No results found
-        </div>
-      ) : isLoading ? (
-        <LoaderContainer>
+      {collectionsGrid}
+      <IntersectionObserverTrigger
+        onIntersect={handleIntersect}
+        enabled={hasNextPage && !isFetchingNextPage}
+        rootMargin='200px' // Load next page when user is 200px away from bottom
+        threshold={0.1} // Trigger when 10% of the element is visible
+      />
+      {isFetchingNextPage && (
+        <div className='flex justify-center items-center py-5'>
           <CircularLoader size={50} />
-        </LoaderContainer>
-      ) : (
-        <>
-          <CollectionsListingContainer className='mt-[31px]'>
-            {collections?.map((collection: Site) => (
-              <CollectionCard key={collection._id} collection={collection} />
-            ))}
-          </CollectionsListingContainer>
-          <IntersectionObserverTrigger
-            onIntersect={() => {
-              fetchNextPage();
-            }}
-            enabled={hasNextPage && !isFetchingNextPage}
-          />
-          {isFetchingNextPage && (
-            <div className='flex justify-center items-center py-5'>
-              <CircularLoader size={50} />
-            </div>
-          )}
-        </>
+        </div>
       )}
     </div>
   );
 }
 
-export default CollectionsListing;
+export default React.memo(CollectionsListing);

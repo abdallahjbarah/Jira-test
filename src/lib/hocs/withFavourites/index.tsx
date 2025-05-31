@@ -11,8 +11,9 @@ import FilledButton from '@/components/ui/buttons/FilledButton';
 import FormInput from '@/components/form/FormInput';
 import { toast } from 'react-toastify';
 import { Site } from '@/lib/types';
+import useUser from '@/utils/hooks/useUser';
+import { useRouter } from 'next/navigation';
 
-// Styled components for the modal content
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -131,8 +132,9 @@ function withFavourites<P extends object>(
     const { t } = useTranslation();
     const { isOpen, openModal, closeModal } = useModal();
     const { isFavorite } = useFavorite();
+    const { isLoggedIn } = useUser();
+    const router = useRouter();
 
-    // Only the necessary state for modal functionality
     const [currentSiteId, setCurrentSiteId] = React.useState<string | null>(
       null,
     );
@@ -147,7 +149,9 @@ function withFavourites<P extends object>(
 
     // Fetch user's favorite collections
     const { data: favoriteCollections, refetch: refetchCollections } =
-      useFetchUserFavoriteCollections();
+      useFetchUserFavoriteCollections({
+        enabled: isLoggedIn,
+      });
 
     // Mutation for adding to collection
     const { mutate: addToCollection } = useAddToCollectionMutate({
@@ -173,7 +177,11 @@ function withFavourites<P extends object>(
     // Function to open the favourites modal
     const openFavouritesModal = React.useCallback(
       (site: Site) => {
-        // Check if already in favorites
+        if (!isLoggedIn) {
+          router.push('/login');
+          return;
+        }
+
         if (isFavorite(site._id)) {
           toast.info(t('favorites.alreadyInFavorites'));
           return;

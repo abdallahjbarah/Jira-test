@@ -4,7 +4,6 @@ import { useForm, FormProvider } from 'react-hook-form';
 import LocationDropdown from '../LocationDropdown';
 import GuestFilterItem from '../GuestFilterItem';
 import DatePickerDropdown from '../DatePickerDropdown';
-import SearchContainer from '../SearchContainer';
 import AdvancedFilterDropDown from './AdvancedFilterDropDown';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
@@ -16,32 +15,28 @@ import {
   getFormDefaultsFromSearchParams,
 } from '@/utils/helpers/filterHelpers';
 import debounce from '@/utils/helpers/debounce';
+import SearchDropdown from '../SearchDropdown';
 
 const FilterBar = () => {
   const { collectionStatus } = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const queryClient = useQueryClient();
 
   const methods = useForm<FilterFormValues>({
     defaultValues: getFormDefaultsFromSearchParams(searchParams),
     mode: 'onChange',
   });
 
-  // Watch form values
   const filtersValue = methods.watch('filters');
 
-  // Track if we're currently syncing from URL to prevent infinite loops
   const [isUrlSync, setIsUrlSync] = React.useState(false);
   const isInitialMount = React.useRef(true);
 
-  // Create debounced function for URL updates
   const debouncedUpdateUrl = React.useMemo(
     () =>
       debounce((filters: CollectionFilter) => {
         const currentUrlFilters = buildFiltersFromSearchParams(searchParams);
 
-        // Only update URL if form state is different from URL state
         if (JSON.stringify(currentUrlFilters) !== JSON.stringify(filters)) {
           console.log('Updating URL from form state:', filters);
           const params = buildSearchParamsFromFilters(filters, searchParams);
@@ -52,7 +47,6 @@ const FilterBar = () => {
     [searchParams, router],
   );
 
-  // Create debounced function for filter updates
   const debouncedFilterUpdate = React.useMemo(
     () =>
       debounce((updatedFilters: CollectionFilter) => {
@@ -61,7 +55,6 @@ const FilterBar = () => {
     [methods],
   );
 
-  // Get check-in date as Date object when needed
   const getCheckInDate = (): Date | undefined => {
     if (!filtersValue?.checkinTime) return undefined;
     try {
@@ -74,10 +67,8 @@ const FilterBar = () => {
 
   const onSubmit = (data: FilterFormValues) => {
     console.log('Form data submitted:', data);
-    // Handle form submission - e.g., redirect to search results page
   };
 
-  // Handle check-in date change
   const handleCheckInChange = (dateString: string, dates: Date[]) => {
     const currentFilters = methods.getValues('filters') || {};
     const updatedFilters = {
@@ -85,7 +76,6 @@ const FilterBar = () => {
       checkinTime: dateString,
     };
 
-    // Clear checkout if it's before the new check-in date
     if (currentFilters.checkoutTime && dates[0]) {
       const checkOut = new Date(currentFilters.checkoutTime);
       if (checkOut < dates[0]) {
@@ -96,9 +86,7 @@ const FilterBar = () => {
     methods.setValue('filters', updatedFilters, { shouldValidate: true });
   };
 
-  // Handle check-out date change
   const handleCheckOutChange = (dateString: string, dates: Date[]) => {
-    console.log('dateString', dateString);
     const currentFilters = methods.getValues('filters') || {};
     const updatedFilters = {
       ...currentFilters,
@@ -107,7 +95,6 @@ const FilterBar = () => {
     methods.setValue('filters', updatedFilters, { shouldValidate: true });
   };
 
-  // Handle location filter changes
   const handleLocationChange = (locationData: {
     country?: string;
     city?: number;
@@ -119,18 +106,15 @@ const FilterBar = () => {
       city: locationData.city || undefined,
     };
 
-    // Remove undefined values to keep the filter object clean
     Object.keys(updatedFilters).forEach((key) => {
       if (updatedFilters[key] === undefined) {
         delete updatedFilters[key];
       }
     });
 
-    // Use debounced update for smoother performance
     debouncedFilterUpdate(updatedFilters);
   };
 
-  // Handle guest count changes
   const handleGuestChange = (guests: {
     adults: number;
     children: number;
@@ -143,20 +127,17 @@ const FilterBar = () => {
       children: guests.children,
       infants: guests.infants,
     };
-    // Use debounced update for smoother performance
+
     debouncedFilterUpdate(updatedFilters);
   };
 
-  // Handle advanced filter changes
   const onFilterApply = (filters: any) => {
-    // Merge new filters with existing ones
     const currentFilters = methods.getValues('filters') || {};
     const mergedFilters = {
       ...currentFilters,
       ...filters,
     };
 
-    // Use debounced update for smoother performance
     debouncedFilterUpdate(mergedFilters);
   };
 
@@ -182,6 +163,16 @@ const FilterBar = () => {
 
     // Use debounced update for smoother performance
     debouncedFilterUpdate(preservedFilters);
+  };
+
+  const handleSearchDropdownSubmit = (data: any) => {
+    const currentFilters = methods.getValues('filters') || {};
+    const mergedFilters = {
+      ...currentFilters,
+      ...data,
+    };
+
+    debouncedFilterUpdate(mergedFilters);
   };
 
   // Sync form state with URL parameters when URL changes (browser navigation)
@@ -264,10 +255,16 @@ const FilterBar = () => {
 
           {/* Search dropdown integrated with the form */}
           <div className='p-[20px]'>
-            <SearchContainer
-              useExternalForm={true}
-              useDirectFields={true} // Use the same fields from the FilterBar form
-              onSubmit={() => methods.handleSubmit(onSubmit)()}
+            <SearchDropdown
+              onSubmit={handleSearchDropdownSubmit}
+              initialValues={{
+                country: filtersValue?.country || '',
+                checkinTime: filtersValue?.checkinTime || '',
+                checkoutTime: filtersValue?.checkoutTime || '',
+                adults: filtersValue?.adults || 0,
+                children: filtersValue?.children || 0,
+                infants: filtersValue?.infants || 0,
+              }}
             />
           </div>
         </div>
