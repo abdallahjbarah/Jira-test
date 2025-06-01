@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import RangeSliderInput from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import './styles.css';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface RangeSliderProps {
   min: number;
@@ -26,6 +27,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   className = '',
   activeColor = 'bg-primary_1',
 }) => {
+  const { t } = useTranslation();
   const [localValue, setLocalValue] = useState<[number, number]>(value);
   const [minInputValue, setMinInputValue] = useState<string>(
     value[0].toString(),
@@ -109,7 +111,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   return (
     <div className={`${className}`}>
       <div className='text-xs text-gray-500 mb-3'>
-        The average price of an experience is {currency} {priceValue}
+        {t('filter.average-price')} {priceValue}
       </div>
 
       {/* Custom styled Range Slider */}
@@ -128,7 +130,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
       {/* Min/Max input fields */}
       <div className='flex justify-between gap-4 mt-6'>
         <label className='w-full border border-secondary_3 border-solid rounded-lg p-2'>
-          <span className='block text-text_3 text-sm mb-1'>Minimum</span>
+          <span className='block text-text_3 text-sm mb-1'>{t('filter.minimum')}</span>
           <div className='relative flex items-center gap-1'>
             <span className='text-text_1'>{currency}</span>
             <input
@@ -140,7 +142,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
           </div>
         </label>
         <label className='w-full border border-secondary_3 border-solid rounded-lg p-2'>
-          <span className='block text-text_3 text-sm mb-1'>Maximum</span>
+          <span className='block text-text_3 text-sm mb-1'>{t('filter.maximum')}</span>
           <div className='relative flex items-center gap-1'>
             <span className='text-text_1'>{currency}</span>
             <input

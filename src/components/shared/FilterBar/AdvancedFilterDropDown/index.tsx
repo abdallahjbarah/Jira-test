@@ -9,6 +9,7 @@ import ExperiencesFilter from './ExperiencesFilter';
 import EventsFilter from './EventsFilter';
 import StaysFilter from './StaysFilter';
 import OffersFilter from './OffersFilter';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface AdvancedFilterDropDownProps {
   filterType?: 'experiences' | 'events' | 'stays' | 'offers';
@@ -25,8 +26,9 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   className = '',
   defaultValues = {},
 }) => {
+  const { t } = useTranslation();
   const methods = useForm({
-    defaultValues: defaultValues,
+    defaultValues,
   });
 
   const { handleSubmit, reset } = methods;
@@ -39,16 +41,12 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   }, [defaultValues, reset]);
 
   const onSubmit = (data: any) => {
-    if (onFilterApply) {
-      onFilterApply(data);
-    }
+    onFilterApply?.(data);
   };
 
   const clearAllFilters = () => {
     reset();
-    if (onFilterClear) {
-      onFilterClear();
-    }
+    onFilterClear?.();
   };
 
   const filterTrigger = (
@@ -80,7 +78,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
 
   const filterContent = (
     <div className='bg-white rounded-xl shadow-2xl w-full p-6 max-h-[500px] overflow-y-auto'>
-      <h3 className='text-lg text-center font-semibold'>Filter</h3>
+      <h3 className='text-lg text-center font-semibold'>{t('filter.filter')}</h3>
       <hr className='my-4' />
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
@@ -92,11 +90,11 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
               onClick={clearAllFilters}
               className='px-6 py-2 underline text-text_2 font-medium rounded-lg  transition-colors text-sm'
             >
-              Clear all
+              {t('filter.clear-all')}
             </button>
 
             <FilledButton
-              text='Show results'
+              text={t('filter.show-results')}
               buttonType='submit'
               isButton
               className='px-6 py-2 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors text-sm '

@@ -13,9 +13,11 @@ import {
 } from '@/utils/constants';
 import { useFetchExperienceType } from '@/lib/apis/shared/useFetchExperienceType';
 import CollectionTypeField from './CollectionTypeField';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 const ExperiencesFilter: React.FC = () => {
   const { control } = useFormContext();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -26,7 +28,7 @@ const ExperiencesFilter: React.FC = () => {
         control={control}
         render={({ field }) => (
           <FilterSection
-            title='Time of Day'
+            title={t('filter.time-of-day')}
             options={TIME_OF_DAY_LIST}
             selectedValues={field.value}
             onChange={field.onChange}
@@ -39,7 +41,7 @@ const ExperiencesFilter: React.FC = () => {
         control={control}
         render={({ field }) => (
           <FilterSection
-            title='Experience Duration'
+            title={t('filter.experience-duration')}
             options={DURATION_TYPES_LIST}
             selectedValues={field.value}
             onChange={field.onChange}
@@ -52,7 +54,7 @@ const ExperiencesFilter: React.FC = () => {
         control={control}
         render={({ field }) => (
           <FilterSection
-            title='Age Suitability'
+            title={t('filter.age-suitability')}
             options={AGE_SUITABILITY_LIST}
             selectedValues={field.value}
             onChange={field.onChange}
@@ -65,7 +67,7 @@ const ExperiencesFilter: React.FC = () => {
         control={control}
         render={({ field }) => (
           <FilterSection
-            title='Experience Level'
+            title={t('filter.experience-level')}
             options={EXPERIENCE_LEVEL_LIST}
             selectedValues={field.value}
             onChange={field.onChange}

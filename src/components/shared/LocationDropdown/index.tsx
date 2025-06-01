@@ -8,6 +8,7 @@ import RegionSelector, { Region } from '../RegionSelector';
 import { useFetchContinent } from '@/lib/apis/shared/useFetchContinent';
 import { useFetchCities } from '@/lib/apis/countries/useFetchCountriesCities';
 import { Continent, City } from '@/lib/types';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 // Form data interface
 interface LocationFormData {
@@ -33,6 +34,7 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
   onChange,
   defaultValues,
 }) => {
+  const { t } = useTranslation();
   const { data: continents } = useFetchContinent();
 
   // Memoized default country lookup
@@ -158,8 +160,8 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
     if (selectedCountry) {
       return selectedCountry.nameEn;
     }
-    return 'Search destinations';
-  }, [selectedCountry, selectedCity]);
+    return t('search-destinations');
+  }, [selectedCountry, selectedCity, t]);
 
   // Dropdown content
   const dropdownContent = (
@@ -207,11 +209,10 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
                           field.onChange(city);
                           handleCitySelect(city);
                         }}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          field.value?.id === city.id
-                            ? 'bg-red-500 text-white'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${field.value?.id === city.id
+                          ? 'bg-red-500 text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
                       >
                         {city.name}
                       </button>
@@ -235,9 +236,9 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
     <Dropdown
       trigger={
         <FilterBarItem
-          title={{ en: 'Where', ar: 'الوجهة' }}
+          title={{ en: t('where'), ar: t('where') }}
           value={displayValue}
-          onClick={() => {}}
+          onClick={() => { }}
         />
       }
       content={dropdownContent}

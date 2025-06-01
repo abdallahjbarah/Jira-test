@@ -141,9 +141,9 @@ interface LinkData {
 
 export const LINKS_DATA: LinkData[] = [
   { path: '/', name: { en: 'Home', ar: 'الرئيسية' } },
-  { path: '/#AboutUs', name: { en: 'About Us', ar: 'عننا' } },
-  { path: '/gallery', name: { en: 'Gallery', ar: 'المعرض' } },
-  { path: '/#ContactUsForm', name: { en: 'Contact Us', ar: 'تواصل معنا' } },
+  { path: '/#AboutUs', name: { en: 'About Us', ar: 'من نحن' } },
+  { path: '/gallery', name: { en: 'Gallery', ar: 'معرض الصور' } },
+  { path: '/#ContactUsForm', name: { en: 'Contact Us', ar: 'اتصل بنا' } },
   {
     path: '/terms-and-conditions',
     name: { en: 'Terms & Conditions', ar: 'الشروط والأحكام' },
@@ -156,7 +156,7 @@ export const LINKS_DATA: LinkData[] = [
 
 export const COLLECTIONS_LINKS: LinkData[] = [
   { path: '/experiences', name: { en: 'Experiences', ar: 'التجارب' } },
-  { path: '/events', name: { en: 'Events', ar: 'الأحداث' } },
+  { path: '/events', name: { en: 'Events', ar: 'الفعاليات' } },
   { path: '/stays', name: { en: 'Stays', ar: 'الإقامات' } },
   {
     path: '/offers-Packages',
@@ -252,7 +252,7 @@ export const COLLECTION_STATUS_LIST: CollectionStatusItem[] = [
   },
   {
     value: COLLECTION_STATUS.EVENTS,
-    label: { en: 'Events', ar: 'الأحداث' },
+    label: { en: 'Events', ar: 'الفعاليات' },
     path: `/${COLLECTION_STATUS.EVENTS}`,
     icon: '/SVGs/shared/events-icon.svg',
     filterValue: 'Event',

@@ -6,9 +6,11 @@ import FilterSection from './FilterSection';
 import CommonFilters from './CommonFilters';
 import { PACKAGE_DURATION_LIST, TIME_OF_DAY_LIST } from '@/utils/constants';
 import CollectionTypeField from './CollectionTypeField';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 const OffersFilter: React.FC = () => {
   const { control } = useFormContext();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -19,7 +21,7 @@ const OffersFilter: React.FC = () => {
         control={control}
         render={({ field }) => (
           <FilterSection
-            title='Time of Day'
+            title={t('filter.time-of-day')}
             options={TIME_OF_DAY_LIST}
             selectedValues={field.value}
             onChange={field.onChange}
@@ -32,7 +34,7 @@ const OffersFilter: React.FC = () => {
         control={control}
         render={({ field }) => (
           <FilterSection
-            title='Package Duration'
+            title={t('filter.package-duration')}
             options={PACKAGE_DURATION_LIST}
             selectedValues={field.value}
             onChange={field.onChange}

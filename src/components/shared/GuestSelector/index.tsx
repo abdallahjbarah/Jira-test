@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { cn } from '@/utils/cn';
 import Counter from '@/components/ui/Counter';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 type GuestCategory = 'adults' | 'children' | 'infants';
 
@@ -26,6 +27,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
   initialValues,
   maxGuests,
 }) => {
+  const { t } = useTranslation();
   const [guests, setGuests] = useState({
     adults: initialValues?.adults ?? 0,
     children: initialValues?.children ?? 0,
@@ -57,7 +59,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
     >
       <div className='space-y-6'>
         <Counter
-          title='Adults'
+          title={t('guests.adults')}
           description='Ages 12 or above'
           value={guests.adults}
           onIncrement={() => handleCountChange('adults', true)}
@@ -67,7 +69,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
         />
 
         <Counter
-          title='Children'
+          title={t('guests.children')}
           description='Ages 3 - 11'
           value={guests.children}
           onIncrement={() => handleCountChange('children', true)}
@@ -76,7 +78,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
         />
 
         <Counter
-          title='Infants'
+          title={t('guests.infants')}
           description='Under 3'
           value={guests.infants}
           onIncrement={() => handleCountChange('infants', true)}
