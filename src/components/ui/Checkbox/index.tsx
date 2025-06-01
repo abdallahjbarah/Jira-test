@@ -13,6 +13,7 @@ interface CheckboxProps {
   className?: string;
   checkBoxPosition?: 'left' | 'right';
   checkBoxClassName?: string;
+  disabled?: boolean;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({
@@ -24,6 +25,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   className = '',
   checkBoxPosition = 'left',
   checkBoxClassName = '',
+  disabled = false,
 }) => {
   const handleClick = () => {
     onChange(!checked);
@@ -33,6 +35,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
     <label
       className={cn(
         'flex items-start gap-2 cursor-pointer select-none',
+        disabled && 'cursor-not-allowed opacity-50',
         className,
       )}
       htmlFor={id}

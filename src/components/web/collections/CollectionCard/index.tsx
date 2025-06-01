@@ -12,9 +12,11 @@ import withFavourites from '@/lib/hocs/withFavourites';
 function CollectionCard({
   collection,
   openFavouritesModal,
+  path,
 }: {
   collection: Site;
   openFavouritesModal: (site: Site) => void;
+  path?: string;
 }): React.ReactElement {
   const { t } = useTranslation();
   const { currency } = useCurrency();
@@ -75,7 +77,6 @@ function CollectionCard({
     return price ? `${price} ${currency}` : '';
   }, [collection.pricingInformation, currency]);
 
-  // Memoize heart icon source
   const heartIconSrc = React.useMemo(() => {
     return isCollectionFavorite
       ? '/SVGs/shared/heart-filled.svg'
@@ -103,7 +104,7 @@ function CollectionCard({
 
   return (
     <CustomLink
-      path={`/details/${collection._id}`}
+      path={path || `/details/${collection._id}`}
       className='group block'
       {...touchHandlers}
     >

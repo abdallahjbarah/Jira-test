@@ -75,7 +75,7 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
           placeholder={
             t('myBookings.searchPlaceholder') || 'Search bookings...'
           }
-          onSearch={onSearch}
+          onChange={onSearch}
           className='laptopM:max-w-[19.5rem] w-full'
         />
       </div>
