@@ -13,6 +13,7 @@ import { useFetchInfiniteBookings } from '@/lib/apis/bookings/useFetchBookings';
 import { IntersectionObserverTrigger } from '@/components/shared/IntersectionObserverTrigger';
 import { BookingStatus } from '@/lib/enums';
 import debounce from '@/utils/helpers/debounce';
+import { Booking } from '@/lib/types';
 
 const CollectionsListingContainer = Styled.div`
   display: grid;
@@ -29,12 +30,18 @@ const LoaderContainer = Styled.div`
 
 const MyBookingsPage = () => {
   const { t } = useTranslation();
-  const [filter, setFilter] = React.useState({
+  const [filter, setFilter] = React.useState<{
+    skip: number;
+    limit: number;
+    status: BookingStatus;
+    search: string;
+  }>({
     skip: 0,
     limit: 10,
     status: BookingStatus.PENDING,
-    query: '',
+    search: '',
   });
+
   const {
     data: bookingsData,
     isLoading,
@@ -55,10 +62,10 @@ const MyBookingsPage = () => {
     debounce((query: string) => {
       setFilter({
         ...filter,
-        query: query,
+        search: query,
         skip: 0,
       });
-    }, 1000),
+    }, 500),
     [filter],
   );
 
@@ -77,38 +84,38 @@ const MyBookingsPage = () => {
     }
   }, [hasNextPage, fetchNextPage]);
 
-  if (!bookings?.length && !isLoading) {
-    return (
-      <InnerPagesLayout headerProps={{ withNavItems: false }}>
-        <main className='container pt-[1rem] pb-[3rem] laptopM:pb-[5rem]'>
-          <div className='relative w-full h-[500px]'>
-            <Image
-              src='/SVGs/shared/bookings-empty.svg'
-              alt='bookings'
-              layout='fill'
-              objectFit='contain'
-            />
-          </div>
-          <div className='mt-[9.625rem] '>
-            <h2 className='text-center text-custom-50 font-custom-700 font-gellix-Bold text-text_1 mb-[4rem]'>
-              {t('myBookings.slogan')}
-            </h2>
-            <p className='text-center text-custom-40 font-custom-500 text-text_2 mt-[3.688rem] max-w-[55.438rem] mx-auto'>
-              {t('myBookings.noBookings')}
-            </p>
-            <div className='flex items-center justify-center'>
-              <FilledButton
-                path='/all'
-                text={t('exploreNow')}
-                className='py-3 px-6 text-xl rounded-lg mt-[4.563rem] min-w-[16.875rem]'
-                buttonType='button'
-              />
-            </div>
-          </div>
-        </main>
-      </InnerPagesLayout>
-    );
-  }
+  // if (!totalCount && !isLoading) {
+  //   return (
+  //     <InnerPagesLayout headerProps={{ withNavItems: false }}>
+  //       <main className='container pt-[1rem] pb-[3rem] laptopM:pb-[5rem]'>
+  //         <div className='relative w-full h-[500px]'>
+  //           <Image
+  //             src='/SVGs/shared/bookings-empty.svg'
+  //             alt='bookings'
+  //             layout='fill'
+  //             objectFit='contain'
+  //           />
+  //         </div>
+  //         <div className='mt-[9.625rem] '>
+  //           <h2 className='text-center text-custom-50 font-custom-700 font-gellix-Bold text-text_1 mb-[4rem]'>
+  //             {t('myBookings.slogan')}
+  //           </h2>
+  //           <p className='text-center text-custom-40 font-custom-500 text-text_2 mt-[3.688rem] max-w-[55.438rem] mx-auto'>
+  //             {t('myBookings.noBookings')}
+  //           </p>
+  //           <div className='flex items-center justify-center'>
+  //             <FilledButton
+  //               path='/all'
+  //               text={t('exploreNow')}
+  //               className='py-3 px-6 text-xl rounded-lg mt-[4.563rem] min-w-[16.875rem]'
+  //               buttonType='button'
+  //             />
+  //           </div>
+  //         </div>
+  //       </main>
+  //     </InnerPagesLayout>
+  //   );
+  // }
 
   return (
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
@@ -125,6 +132,13 @@ const MyBookingsPage = () => {
         <div className='mt-[2rem]'>
           <BookingsFilter onFilterChange={onFilterChange} onSearch={onSearch} />
         </div>
+        {totalCount === 0 && !isLoading && (
+          <div className=' mt-[2rem]'>
+            <span className='text-custom-24 text-text_1'>
+              {t('myBookings.noBookings')}
+            </span>
+          </div>
+        )}
         {isLoading ? (
           <LoaderContainer>
             <CircularLoader size={50} />
@@ -132,8 +146,12 @@ const MyBookingsPage = () => {
         ) : (
           <>
             <CollectionsListingContainer className='mt-[3.438rem]'>
-              {bookings.map((booking: any) => (
-                <CollectionCard key={booking.id} collection={booking} />
+              {bookings.map((booking: Booking) => (
+                <CollectionCard
+                  path={`/my-bookings/${booking?._id}`}
+                  key={booking._id}
+                  collection={booking?.siteId}
+                />
               ))}
             </CollectionsListingContainer>
             <IntersectionObserverTrigger

@@ -612,3 +612,40 @@ export const GENDER_OPTIONS = [
     label: { en: 'Female', ar: 'أنثى' },
   },
 ];
+
+export const staticPaymentMethods: {
+  name: string;
+  icon: string;
+  value: string;
+}[] = [
+  {
+    name: 'Cliq',
+    icon: '/SVGs/shared/payment-icons/cliqIcon.svg',
+    value: 'Cliq',
+  },
+  {
+    name: 'eWallets',
+    icon: '/SVGs/shared/payment-icons/eWalletIcon.svg',
+    value: 'eWallets',
+  },
+  {
+    name: 'Bank Transfer',
+    icon: '/SVGs/shared/payment-icons/bankTransferIcon.svg',
+    value: 'Bank Transfer',
+  },
+  {
+    name: 'On-site Card Payment',
+    icon: '/SVGs/shared/payment-icons/onSiteCardPaymentIcon.svg',
+    value: 'On-site Card Payment',
+  },
+  {
+    name: 'On-site Cash Payment',
+    icon: '/SVGs/shared/payment-icons/onSiteCashPaymentIcon.svg',
+    value: 'On-site Cash Payment',
+  },
+  {
+    name: 'Exchange Offices',
+    icon: '/SVGs/shared/payment-icons/ExchangeIcon.svg',
+    value: 'Exchange Offices',
+  },
+];

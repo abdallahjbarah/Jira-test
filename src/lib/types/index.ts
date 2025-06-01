@@ -279,6 +279,14 @@ export interface Site {
   };
 }
 
+export type PricingInformation = {
+  discount: number | null;
+  personType: string;
+  price: number;
+  minUnit: number;
+  maxUnit: number;
+};
+
 export interface BankDetails {
   name: string;
   IBAN: string;
@@ -435,4 +443,34 @@ export interface UserId {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+}
+
+export interface Booking {
+  _id: string;
+  status: number;
+  siteId: Site;
+  availabilityId: string[];
+  userId: any;
+  totalPrice: number;
+  paymentMethod: string;
+  startDateTime: number;
+  endDateTime: number;
+  guests: Guests;
+  hasGuide: boolean;
+  hasTransportation: boolean;
+  hasAirport: boolean;
+  attachment: string;
+  remindedAt: any;
+  thankedAt: any;
+  createdAt: string;
+  updatedAt: string;
+  code: string;
+  paymentReference: string;
+  __v: number;
+}
+
+export interface Guests {
+  adults: number;
+  children: number;
+  infants: number;
 }

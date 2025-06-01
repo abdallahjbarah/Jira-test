@@ -22,6 +22,7 @@ interface GuestFilterItemProps {
     children: number;
     infants: number;
   };
+  allowedGuestsField?: string[];
 }
 
 const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
@@ -29,6 +30,7 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
   onChange,
   triggerComponent,
   initialValues,
+  allowedGuestsField = ['adults', 'children', 'infants'],
 }) => {
   const { locale } = useTranslation();
   const formContext = useFormContext();
@@ -106,7 +108,11 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
 
   const dropdownContent = (
     <div className='bg-white p-0 rounded-3xl shadow-lg'>
-      <GuestSelector onGuestChange={handleGuestChange} initialValues={guests} />
+      <GuestSelector
+        onGuestChange={handleGuestChange}
+        initialValues={guests}
+        allowedGuestsField={allowedGuestsField}
+      />
     </div>
   );
 

@@ -380,6 +380,15 @@ const ar = {
     addedSuccessfully: 'تمت الإضافة إلى المجموعة بنجاح!',
     addError: 'فشل في الإضافة إلى المجموعة. يرجى المحاولة مرة أخرى.',
   },
+  booking: {
+    financialReceipt: {
+      error: 'يرجى رفع إيصال المالي',
+      success: 'تم إنشاء الحجز بنجاح!',
+    },
+    paymentMethod: {
+      error: 'يرجى اختيار طريقة الدفع',
+    },
+  },
 };
 
 export default ar;

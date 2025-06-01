@@ -18,6 +18,7 @@ interface GuestSelectorProps {
     infants?: number;
   };
   maxGuests?: number;
+  allowedGuestsField?: string[];
 }
 
 const GuestSelector: React.FC<GuestSelectorProps> = ({
@@ -25,6 +26,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
   className,
   initialValues,
   maxGuests,
+  allowedGuestsField = ['adults', 'children', 'infants'],
 }) => {
   const [guests, setGuests] = useState({
     adults: initialValues?.adults ?? 0,
@@ -56,32 +58,38 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
       className={cn('bg-white p-6 rounded-3xl shadow-lg w-[330px]', className)}
     >
       <div className='space-y-6'>
-        <Counter
-          title='Adults'
-          description='Ages 12 or above'
-          value={guests.adults}
-          onIncrement={() => handleCountChange('adults', true)}
-          onDecrement={() => handleCountChange('adults', false)}
-          minValue={1}
-          maxValue={maxGuests ? maxGuests - guests.children : undefined}
-        />
+        {allowedGuestsField?.includes('adults') && (
+          <Counter
+            title='Adults'
+            description='Ages 12 or above'
+            value={guests.adults}
+            onIncrement={() => handleCountChange('adults', true)}
+            onDecrement={() => handleCountChange('adults', false)}
+            minValue={1}
+            maxValue={maxGuests ? maxGuests - guests.children : undefined}
+          />
+        )}
 
-        <Counter
-          title='Children'
-          description='Ages 3 - 11'
-          value={guests.children}
-          onIncrement={() => handleCountChange('children', true)}
-          onDecrement={() => handleCountChange('children', false)}
-          maxValue={maxGuests ? maxGuests - guests.adults : undefined}
-        />
+        {allowedGuestsField?.includes('children') && (
+          <Counter
+            title='Children'
+            description='Ages 3 - 11'
+            value={guests.children}
+            onIncrement={() => handleCountChange('children', true)}
+            onDecrement={() => handleCountChange('children', false)}
+            maxValue={maxGuests ? maxGuests - guests.adults : undefined}
+          />
+        )}
 
-        <Counter
-          title='Infants'
-          description='Under 3'
-          value={guests.infants}
-          onIncrement={() => handleCountChange('infants', true)}
-          onDecrement={() => handleCountChange('infants', false)}
-        />
+        {allowedGuestsField?.includes('infants') && (
+          <Counter
+            title='Infants'
+            description='Under 3'
+            value={guests.infants}
+            onIncrement={() => handleCountChange('infants', true)}
+            onDecrement={() => handleCountChange('infants', false)}
+          />
+        )}
       </div>
     </div>
   );
