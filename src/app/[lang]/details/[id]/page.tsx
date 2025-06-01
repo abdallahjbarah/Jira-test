@@ -12,7 +12,6 @@ import BookingPanel from '@/components/web/details/BookingPanel';
 import FeaturesSection from '@/components/web/details/FeaturesSection';
 import AmenitiesSection from '@/components/web/details/AmenitiesSection';
 import HostInfoSection from '@/components/web/details/HostInfoSection';
-import SimilarExperiencesSection from '@/components/web/details/SimilarExperiencesSection';
 import OverviewSection from '@/components/web/details/OverviewSection';
 import LocationSection from '@/components/web/details/LocationSection';
 import WhatToExpectSection from '@/components/web/details/WhatToExpectSection';
@@ -23,12 +22,19 @@ import NearbySurroundingsSection from '@/components/web/details/NearbySurroundin
 import HouseRulesSection from '@/components/web/details/HouseRulesSection';
 import SpecialInstructionsAndCancellationSection from '@/components/web/details/SpecialInstructionsAndCancellationSection';
 import ImageCarousel from '@/components/shared/ImageCarousel';
+import withFavourites from '@/lib/hocs/withFavourites';
+import useFavorite from '@/utils/hooks/useFavorite';
+import { Site } from '@/lib/types';
 
 interface DetailsIdProps {
   params: { lang: Locale; id: string };
+  openFavouritesModal: (detailsData: Site) => void;
 }
 
-const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
+const DetailsId: React.FC<DetailsIdProps> = ({
+  params,
+  openFavouritesModal,
+}) => {
   const features: {
     icon: string;
     title: string;
@@ -90,13 +96,27 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
     error,
   } = useFetchDetails(params.id);
 
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const { isFavorite, removeFavorite } = useFavorite();
 
+  const isCollectionFavorite = React.useMemo(() => {
+    return isFavorite(params.id);
+  }, [isFavorite, params.id]);
+
+  const [isExpanded, setIsExpanded] = useState(false);
   const handleFavoriteToggle = (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsFavorite(!isFavorite);
+    if (isCollectionFavorite) {
+      removeFavorite(params.id);
+    } else {
+      openFavouritesModal(detailsData?.data as Site);
+    }
   };
+
+  const heartIconSrc = React.useMemo(() => {
+    return isCollectionFavorite
+      ? '/SVGs/shared/heart-filled.svg'
+      : '/SVGs/shared/heart-icon.svg';
+  }, [isCollectionFavorite]);
 
   if (isLoading) {
     return (
@@ -175,11 +195,10 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
               onClick={handleFavoriteToggle}
             >
               <CustomSvg
-                src='/SVGs/shared/heart-icon.svg'
+                src={heartIconSrc}
                 width={44}
                 height={44}
-                color={isFavorite ? '#FE360A' : '#fff'}
-                className='transition-colors duration-200'
+                className='transition-colors duration-200 text-white'
               />
             </button>
           </div>
@@ -258,6 +277,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
             </div>
             {/* Booking Panel */}
             <BookingPanel
+              pricingInformation={pricingInformation}
               price={pricingInformation[0]?.price}
               schedule={schedule}
               params={params}
@@ -268,7 +288,6 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
           {type != 'Stay' && (
             <>
               <Divider className='w-full my-8' />
-              {/* What to Expect Section */}
               <WhatToExpectSection
                 description={whatToExpect?.description}
                 images={whatToExpect?.images}
@@ -300,4 +319,4 @@ const DetailsId: React.FC<DetailsIdProps> = ({ params }) => {
   );
 };
 
-export default DetailsId;
+export default withFavourites(DetailsId);

@@ -18,6 +18,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (value: string) => {
+    console.log(value, 'value');
     setSearchQuery(value);
     onSearch?.(value);
   };
@@ -33,7 +34,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
         placeholder={placeholder}
         value={searchQuery}
         onChange={handleChange}
-        onSearch={handleSearch}
         className='w-full'
       />
     </div>

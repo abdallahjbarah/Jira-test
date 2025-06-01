@@ -380,6 +380,15 @@ const en = {
     addedSuccessfully: 'Added to collection successfully!',
     addError: 'Failed to add to collection. Please try again.',
   },
+  booking: {
+    financialReceipt: {
+      error: 'Please upload a financial receipt',
+      success: 'Booking created successfully!',
+    },
+    paymentMethod: {
+      error: 'Please select a payment method',
+    },
+  },
 };
 
 export default en;

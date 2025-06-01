@@ -1,39 +1,44 @@
 import RadioButton from '@/components/ui/RadioButton';
 import { PaymentMethod } from '@/lib/types';
+import { staticPaymentMethods } from '@/utils/constants';
+import React from 'react';
 
 interface PaymentMethodWithIcon extends PaymentMethod {
   icon?: string;
   value?: string;
 }
 
-interface StaticPaymentMethod {
-  name: string;
-  icon: string;
-  value: string;
-}
-
 interface PaymentMethodsProps {
-  methods: PaymentMethodWithIcon[];
-  staticMethods?: StaticPaymentMethod[];
+  methods: PaymentMethod[] | undefined;
   selectedMethod: string;
   onMethodChange: (value: string) => void;
 }
 
 const PaymentMethods: React.FC<PaymentMethodsProps> = ({
   methods,
-  staticMethods = [],
   selectedMethod,
   onMethodChange,
 }) => {
-  // Combine API methods with static methods
-  const allMethods = [
-    ...methods.map(method => ({
-      ...method,
-      value: method.value || method.name, // Use name as fallback if value is not provided
-      icon: method.icon || `/SVGs/shared/payment-icons/${method.name.toLowerCase().replace(/\s+/g, '')}Icon.svg`
-    })),
-    ...staticMethods
-  ];
+  const allMethods: PaymentMethodWithIcon[] =
+    methods?.map((method) => {
+      const staticMethod = staticPaymentMethods.find(
+        (staticMethod) => staticMethod.name === method.name,
+      );
+      return {
+        ...method,
+        value: method._id,
+        icon:
+          staticMethod?.icon ||
+          `/SVGs/shared/payment-icons/${method.name.toLowerCase().replace(/\s+/g, '')}Icon.svg`,
+      };
+    }) || [];
+
+  // if payment method is not selected select the first enabled method useing useeffect
+  React.useEffect(() => {
+    if (!selectedMethod) {
+      onMethodChange(allMethods[0].value || '');
+    }
+  }, [selectedMethod, onMethodChange, allMethods]);
 
   return (
     <div className='flex flex-col gap-14'>
@@ -41,29 +46,43 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
         Choose Payment Methods
       </h2>
       <div className='flex flex-col gap-4'>
-        {allMethods.map((method, index) => (
-          <div className='flex justify-between items-center' key={index}>
-            <div className='flex justify-center gap-2 items-center'>
+        {allMethods.map((method: PaymentMethodWithIcon, index: number) => (
+          <label
+            className='flex justify-between items-center cursor-pointer'
+            key={index}
+            onClick={() => onMethodChange(method.value || '')}
+          >
+            <div className='flex justify-center gap-2 items-start'>
               <div className='max-w-[56px] min-w-[56px] max-h-[56px] min-h-[56px] rounded-xl bg-secondary_2 flex items-center justify-center'>
                 <img src={method.icon} alt={method.name} className='h-6 w-6' />
               </div>
-              <h1 className='font-custom-600 text-text_1 font-gellix-Bold text-xl'>
-                {method.name}
-              </h1>
+              <div>
+                <h1 className='font-custom-600 text-text_1 font-gellix-Bold text-xl'>
+                  {method.name}
+                </h1>
+                {method.description && (
+                  <p
+                    className='text-gray_3 text-sm'
+                    dangerouslySetInnerHTML={{
+                      __html: method.description,
+                    }}
+                  />
+                )}
+              </div>
             </div>
             <RadioButton
               id='paymentMethod'
               name='paymentMethod'
               label=''
-              value={method.value}
+              value={method.value || ''}
               checked={selectedMethod === method.value}
-              onChange={() => onMethodChange(method.value)}
+              onChange={() => onMethodChange(method.value || '')}
             />
-          </div>
+          </label>
         ))}
       </div>
     </div>
   );
 };
 
-export default PaymentMethods; 
+export default PaymentMethods;
