@@ -106,7 +106,6 @@ function CollectionCard({
     <CustomLink
       path={path || `/details/${collection._id}`}
       className='group block'
-      {...touchHandlers}
     >
       <div className='transition-all duration-300'>
         <div className='relative rounded-custom-16 overflow-hidden'>

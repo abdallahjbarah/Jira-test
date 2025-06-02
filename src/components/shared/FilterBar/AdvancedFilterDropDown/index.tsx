@@ -53,9 +53,9 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
     <div>
       <CustomSvg
         src='/SVGs/shared/filter-icon.svg'
-        className='w-[10px] h-[10px] text-text_2'
-        width={57}
-        height={57}
+        className='!w-[57px] !h-[57px] text-text_2 block'
+        width='100%'
+        height='100%'
       />
     </div>
   );
@@ -78,7 +78,9 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
 
   const filterContent = (
     <div className='bg-white rounded-xl shadow-2xl w-full p-6 max-h-[500px] overflow-y-auto'>
-      <h3 className='text-lg text-center font-semibold'>{t('filter.filter')}</h3>
+      <h3 className='text-lg text-center font-semibold'>
+        {t('filter.filter')}
+      </h3>
       <hr className='my-4' />
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>

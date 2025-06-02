@@ -144,14 +144,6 @@ export const LINKS_DATA: LinkData[] = [
   { path: '/#AboutUs', name: { en: 'About Us', ar: 'من نحن' } },
   { path: '/gallery', name: { en: 'Gallery', ar: 'معرض الصور' } },
   { path: '/#ContactUsForm', name: { en: 'Contact Us', ar: 'اتصل بنا' } },
-  {
-    path: '/terms-and-conditions',
-    name: { en: 'Terms & Conditions', ar: 'الشروط والأحكام' },
-  },
-  {
-    path: '/privacy-policy',
-    name: { en: 'Privacy Policy', ar: 'سياسة الخصوصية' },
-  },
 ];
 
 export const COLLECTIONS_LINKS: LinkData[] = [

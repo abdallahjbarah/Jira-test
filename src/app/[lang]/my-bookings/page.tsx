@@ -124,7 +124,7 @@ const MyBookingsPage = () => {
           {t('myBookings.my')}{' '}
           <span className='text-primary_1'>{t('myBookings.bookings')}</span>
         </h2>
-        <p className='text-custom-30 font-custom-500 text-[#000000] mt-[1rem]'>
+        <p className='text-custom-20 laptopM:text-custom-30 font-custom-500 text-[#000000] mt-[1rem]'>
           {t('myBookings.description')} {totalCount}{' '}
           {t('myBookings.descriptionSecondLine')}
         </p>

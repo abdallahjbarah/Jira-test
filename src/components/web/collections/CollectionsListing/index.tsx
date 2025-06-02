@@ -43,15 +43,17 @@ const MapToggleWidget = Styled.div`
   display: flex;
   align-items: center;
   gap: 25px;
+
   &:hover {
     box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
     transform: translateY(-50%) rotate(270deg) scale(1.05);
   }
 
   @media (max-width: 768px) {
-    right: 16px;
-    padding: 10px;
+    transform: translateY(-50%) rotate(270deg) scale(0.6);
+    right: -77px;
   }
+
 `;
 
 // Memoized collection card component to prevent unnecessary re-renders
@@ -158,7 +160,6 @@ function CollectionsListing(): React.ReactElement {
     );
   }
 
-  // Early return for empty state
   if (!collections?.length) {
     return (
       <div>
@@ -172,7 +173,6 @@ function CollectionsListing(): React.ReactElement {
 
   return (
     <div className='relative'>
-      {/* Map Toggle Widget */}
       {!isMapView && (
         <MapToggleWidget onClick={handleMapToggle} title='Show Map View'>
           <CustomSvg
@@ -186,7 +186,6 @@ function CollectionsListing(): React.ReactElement {
         </MapToggleWidget>
       )}
 
-      {/* Content */}
       {isMapView ? (
         <>
           <CollectionTypeLabel />

@@ -34,7 +34,7 @@ export default function Header(): React.ReactElement {
     <header className='relative'>
       <nav className='hidden laptopS:flex absolute left-1/2 top-[3rem] mx-auto w-full -translate-x-1/2 transform z-10 container '>
         <div className='flex justify-between items-center'></div>
-        <ul className='flex justify-start items-center gap-6 flex-grow'>
+        <ul className='flex justify-start items-center gap-3 laptopM:gap-6 flex-grow'>
           {LINKS_DATA?.slice(0, 5)?.map((item: LinkData, index: number) => (
             <HeaderLink
               key={index}
@@ -61,7 +61,7 @@ export default function Header(): React.ReactElement {
           </li>
         </ul>
 
-        <ul className='flex justify-end items-center gap-6 flex-grow'>
+        <ul className='flex justify-end items-center gap-2 laptopM:gap-6 flex-grow'>
           {COLLECTIONS_LINKS?.map(
             (item, index) =>
               index != 5 && (

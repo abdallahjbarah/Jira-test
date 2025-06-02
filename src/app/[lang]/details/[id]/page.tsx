@@ -176,7 +176,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
         <div className='flex flex-col'>
-          <div className='relative h-[calc(100vh-20rem)]'>
+          <div className='relative laptopM:h-[calc(100vh-20rem)]'>
             <ImageCarousel
               images={images}
               className='w-full h-full relative'
@@ -202,9 +202,9 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               />
             </button>
           </div>
-          <div className='flex justify-between items-start gap-40 mt-20'>
+          <div className='flex justify-between laptopM:flex-row flex-col items-start gap-40 mt-20'>
             <div className='flex flex-col gap-2 flex-[0.7]'>
-              <div className='flex flex-col max-w-[37.5rem]'>
+              <div className='flex flex-col laptopM:max-w-[37.5rem]'>
                 <p className='text-text_1 text-custom-30 font-custom-500 font-sans max-w-[37.5rem] text-ellipsis min-w-[12.5rem] break-words line-clamp-2'>
                   {name}
                 </p>
@@ -266,16 +266,16 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                   />
                 </>
               )}
-              <Divider className='w-full my-8' />
               {/* Host Info Section */}
               {host && coHost && (
-                <HostInfoSection hosts={host} coHosts={coHost} />
+                <>
+                  <Divider className='w-full my-8' />
+                  <HostInfoSection hosts={host} coHosts={coHost} />
+                </>
               )}
               <Divider className='w-full my-8' />
-              {/* Amenities Section */}
               <AmenitiesSection amenities={amenities || []} />
             </div>
-            {/* Booking Panel */}
             <BookingPanel
               pricingInformation={pricingInformation}
               price={pricingInformation[0]?.price}

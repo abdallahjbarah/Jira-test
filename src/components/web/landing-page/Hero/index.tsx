@@ -30,14 +30,20 @@ const StyledHeroIconWrapper = Styled.div`
 
 `;
 
-function Hero({ className }: { className?: string }) {
+function Hero({
+  className,
+  contentClassName,
+}: {
+  className?: string;
+  contentClassName?: string;
+}) {
   const { t } = useTranslation();
 
   return (
     <section
       className={cn(
         styles['bg-linear-gradient'],
-        'relative w-full min-h-screen flex items-end justify-center laptopS:items-end laptopS:justify-start pb-[400px]',
+        'relative w-full min-h-screen flex items-end justify-center laptopS:items-end laptopS:justify-start',
         className,
       )}
     >
@@ -54,17 +60,17 @@ function Hero({ className }: { className?: string }) {
           quality={100}
         />
       </div>
-      <div className='text-white container mx-auto'>
+      <div className={cn('text-white container mx-auto', contentClassName)}>
         <div className='relative'>
           <StyledHeroIconWrapper className='w-[4.6875rem] h-[3.875rem] absolute top-[-3.4375rem] left-[-1rem] laptopS:left-[-2.1875rem]'>
             <Image src={LeafImg} alt='Leaf' priority />
           </StyledHeroIconWrapper>
-          <h1 className='text-custom-45 tabletS:text-custom-70 font-custom-700 font-gellix-Bold'>
+          <h1 className='text-custom-30 laptopS:text-custom-45 tabletS:text-custom-70 font-custom-700 font-gellix-Bold'>
             {t('hero.title') || 'Connecting you with'}{' '}
             <br className='hidden laptopS:block' />{' '}
             {t('hero.titleSecondLine') || 'a world of agritourism'}
           </h1>
-          <h2 className='text-custom-30 tabletS:text-custom-32 font-custom-400 mt-4'>
+          <h2 className='text-custom-22 tabletS:text-custom-32 font-custom-400 mt-4'>
             {t('hero.subtitle') || 'Book or become a host for agritourism'}{' '}
             <br className='hidden laptopS:block' />{' '}
             {t('hero.subtitleSecondLine') || 'experiences and rural stays'}

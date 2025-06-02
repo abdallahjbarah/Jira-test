@@ -23,8 +23,6 @@ import ImageCarousel from '@/components/shared/ImageCarousel';
 import withFavourites from '@/lib/hocs/withFavourites';
 import useFavorite from '@/utils/hooks/useFavorite';
 import { Site } from '@/lib/types';
-import { useTranslation } from '@/contexts/TranslationContext';
-import { BookingStatus } from '@/lib/enums';
 import BookingStatusSection from '@/components/web/details/BookingStatusSection';
 
 interface MyBookingsPageProps {
@@ -36,8 +34,6 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
   params,
   openFavouritesModal,
 }) => {
-  const { t } = useTranslation();
-
   const features: {
     icon: string;
     title: string;
@@ -115,36 +111,6 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
       : '/SVGs/shared/heart-icon.svg';
   }, [isCollectionFavorite]);
 
-  const getStatusLabel = (status: number) => {
-    switch (status) {
-      case BookingStatus.PENDING:
-        return t('bookingStatus.pending');
-      case BookingStatus.CANCELLED:
-        return t('bookingStatus.cancelled');
-      case BookingStatus.COMPLETED:
-        return t('bookingStatus.completed');
-      default:
-        return t('bookingStatus.pending');
-    }
-  };
-
-  const getStatusColor = (status: number) => {
-    switch (status) {
-      case BookingStatus.PENDING:
-        return 'bg-yellow-50 text-yellow-700 border border-yellow-200';
-      case BookingStatus.CANCELLED:
-        return 'bg-gray-50 text-gray-700 border border-gray-200';
-      case BookingStatus.COMPLETED:
-        return 'bg-green-50 text-green-700 border border-green-200';
-      default:
-        return 'bg-yellow-50 text-yellow-700 border border-yellow-200';
-    }
-  };
-
-  const canCancel = (status: number) => {
-    return status === BookingStatus.PENDING;
-  };
-
   if (isLoading) {
     return (
       <div className='flex justify-center items-center h-screen'>
@@ -179,7 +145,6 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
     country,
     city,
     longDescription,
-    pricingInformation,
     images,
     bookagriBadge,
     type,
@@ -190,7 +155,6 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
     coHost,
     itineraryStops,
     amenities,
-    schedule,
     whatToExpect,
     specialInstructions,
     cancellationPolicy,
@@ -203,7 +167,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
         <div className='flex flex-col'>
-          <div className='relative h-[calc(100vh-20rem)]'>
+          <div className='relative  laptopM:h-[calc(100vh-15rem)]'>
             <ImageCarousel
               images={images}
               className='w-full h-full relative'
@@ -233,11 +197,11 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
           <div className='flex  items-start mt-20'>
             <div className='flex flex-col gap-2 max-w-[60rem] w-full'>
               <div className='flex flex-col'>
-                <p className='text-text_1 text-custom-30 font-custom-500 font-sans text-ellipsis min-w-[12.5rem] break-words line-clamp-2'>
+                <p className='text-text_1 text-custom-22 laptopM:text-custom-30 font-custom-500 font-sans text-ellipsis min-w-[12.5rem] break-words line-clamp-2'>
                   {name}
                 </p>
                 <div className='flex justify-between items-center mt-2'>
-                  <p className='font-custom-400 font-sans text-custom-25 text-gray_3'>
+                  <p className='font-custom-400 font-sans text-custom-20 laptopM:text-custom-25 text-gray_3'>
                     {country?.name + ', ' + city}
                   </p>
                   <div className='text-custom-14 text-right'>
@@ -254,7 +218,6 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                 <BookingStatusSection detailsData={detailsData} />
               </div>
               <Divider className='w-full my-8' />
-              {/* Overview Section */}
               <OverviewSection
                 overview={longDescription}
                 isExpanded={isExpanded}
@@ -263,7 +226,6 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
               {type != 'Offers & Packages' && (
                 <>
                   <Divider className='w-full my-8' />
-                  {/* Location Section */}
                   <LocationSection
                     location={name + ' in ' + country?.name + ', ' + city}
                     latitude={location.coordinates[0]}

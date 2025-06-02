@@ -13,7 +13,7 @@ function CollectionStatusLayout({
     <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main>
         {params?.collectionStatus !== 'products' && (
-          <div className='container mb-[68px] flex items-center justify-center'>
+          <div className='container mb-[30px] laptopM:mb-[68px] flex items-center justify-center'>
             <FilterBar />
           </div>
         )}
