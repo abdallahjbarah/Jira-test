@@ -16,11 +16,13 @@ import {
 } from '@/utils/helpers/filterHelpers';
 import debounce from '@/utils/helpers/debounce';
 import SearchDropdown from '../SearchDropdown';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 const FilterBar = () => {
   const { collectionStatus } = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   const methods = useForm<FilterFormValues>({
     defaultValues: getFormDefaultsFromSearchParams(searchParams),
@@ -221,7 +223,7 @@ const FilterBar = () => {
           />
 
           <DatePickerDropdown
-            title={{ en: 'Check-in', ar: 'الوجهة' }}
+            title={{ en: t('check-in'), ar: t('check-in') }}
             onChange={handleCheckInChange}
             mode='single'
             minDate={new Date()}
@@ -234,17 +236,17 @@ const FilterBar = () => {
           />
 
           <DatePickerDropdown
-            title={{ en: 'Check-out', ar: 'الوجهة' }}
+            title={{ en: t('check-out'), ar: t('check-out') }}
             onChange={handleCheckOutChange}
             mode='single'
             isCheckout={true}
             checkInDate={getCheckInDate()}
-            minDate={new Date()} // Can't select dates in the past
+            minDate={new Date()}
             value={filtersValue?.checkoutTime || ''}
           />
 
           <GuestFilterItem
-            title={{ en: 'Guests', ar: 'الضيوف' }}
+            title={{ en: t('add-guests'), ar: t('add-guests') }}
             onChange={handleGuestChange}
             initialValues={{
               adults: filtersValue?.adults || 0,

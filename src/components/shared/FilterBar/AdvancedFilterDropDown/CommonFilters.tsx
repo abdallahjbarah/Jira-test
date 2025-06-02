@@ -19,9 +19,11 @@ import { useFetchLanguages } from '@/lib/apis/shared/useFetchLanguages';
 import { useFetchAmenities } from '@/lib/apis/shared/useFetchAmenities';
 import { useFetchBookOptions } from '@/lib/apis/shared/useFetchBookOptions';
 import { useFetchAccessibilityFeatures } from '@/lib/apis/shared/useFetchAccessibilityFeatures';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 const CommonFilters: React.FC = () => {
   const { control } = useFormContext();
+  const { t } = useTranslation();
 
   const { data: pricesRange } = useFetchPricesRange();
   const { data: languages } = useFetchLanguages();
@@ -76,7 +78,7 @@ const CommonFilters: React.FC = () => {
         name='priceRange'
         control={control}
         render={({ field }) => (
-          <Collapsible title='Price Range' defaultOpen={true}>
+          <Collapsible title={t('filter.price-range')} defaultOpen={true}>
             <RangeSlider
               min={pricesRange?.minPrice ?? 0}
               max={pricesRange?.maxPrice ?? 100}
@@ -93,7 +95,7 @@ const CommonFilters: React.FC = () => {
         control={control}
         render={({ field }) => (
           <FilterSection
-            title='Language Preference'
+            title={t('filter.language-preference')}
             options={languagesList}
             selectedValues={field.value}
             onChange={field.onChange}
@@ -106,7 +108,7 @@ const CommonFilters: React.FC = () => {
         control={control}
         render={({ field }) => (
           <Collapsible
-            title='Booking! Verified'
+            title={t('filter.booking-verified')}
             defaultOpen={true}
             titleClassName='text-text_2 !font-custom-700'
           >
@@ -130,7 +132,7 @@ const CommonFilters: React.FC = () => {
         control={control}
         render={({ field }) => (
           <FilterSection
-            title='Available Amenities'
+            title={t('filter.available-amenities')}
             options={amenitiesList}
             selectedValues={field.value}
             onChange={field.onChange}
@@ -142,38 +144,39 @@ const CommonFilters: React.FC = () => {
         name='specialOffers'
         control={control}
         render={({ field }) => (
-          <Collapsible title='Special Offers' defaultOpen={true}>
-            <div className='space-y-3'>
+          <Collapsible title={t('filter.special-offers')} defaultOpen={true}>
+            <div className="space-y-3">
               <RadioButton
-                id='special-offers-yes'
-                name='specialOffers'
-                label='Yes'
+                id="special-offers-yes"
+                name="specialOffers"
+                label={t('filter.yes')}
                 value={true}
                 checked={field.value === true}
                 onChange={field.onChange}
               />
               <RadioButton
-                id='special-offers-no'
-                name='specialOffers'
-                label='No'
+                id="special-offers-no"
+                name="specialOffers"
+                label={t('filter.no')}
                 value={false}
                 checked={field.value === false}
                 onChange={field.onChange}
               />
             </div>
           </Collapsible>
+
         )}
       />
 
       <Controller
-        name='bookOptions'
+        name='bookingOptions'
         control={control}
         render={({ field }) => (
           <FilterSection
-            title='Booking Options'
+            title={t('filter.booking-options')}
             options={bookOptionsList}
-            selectedValues={[field.value]}
-            onChange={(value) => field.onChange(value[0])}
+            selectedValues={field.value}
+            onChange={field.onChange}
           />
         )}
       />
@@ -183,7 +186,7 @@ const CommonFilters: React.FC = () => {
         control={control}
         render={({ field }) => (
           <FilterSection
-            title='Accessibility Features'
+            title={t('filter.accessibility-features')}
             options={accessibilityFeaturesList}
             selectedValues={field.value}
             onChange={field.onChange}

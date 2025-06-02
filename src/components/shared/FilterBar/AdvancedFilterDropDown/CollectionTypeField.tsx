@@ -34,7 +34,9 @@ const CollectionTypeField: React.FC = () => {
     if (collectionStatusObject?.value === COLLECTION_STATUS.ALL) {
       return t('experience');
     }
-    return `${collectionStatusObject?.label[locale] ?? ''} ${t('type')}`;
+    return locale === 'ar'
+      ? `${t('type')} ${collectionStatusObject?.label[locale] ?? ''}`
+      : `${collectionStatusObject?.label[locale] ?? ''} ${t('type')}`;
   }, [collectionStatusObject, locale, t]);
 
   return (

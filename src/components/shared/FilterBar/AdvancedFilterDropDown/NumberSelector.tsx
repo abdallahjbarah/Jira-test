@@ -1,11 +1,12 @@
 'use client';
 
 import React from 'react';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface NumberSelectorProps {
   title: string;
-  value: string | number;
-  onChange: (value: string | number) => void;
+  value: number | 'any' | '8+';
+  onChange: (value: number | 'any' | '8+') => void;
   maxNumber?: number;
 }
 
@@ -15,6 +16,7 @@ const NumberSelector: React.FC<NumberSelectorProps> = ({
   onChange,
   maxNumber = 7,
 }) => {
+  const { t } = useTranslation();
   const numbers = Array.from({ length: maxNumber }, (_, i) => i + 1);
 
   return (
@@ -27,7 +29,7 @@ const NumberSelector: React.FC<NumberSelectorProps> = ({
             ${value === 'any' ? 'bg-primary_2 text-white' : 'bg-gray-100 text-gray-700'}`}
           onClick={() => onChange('any')}
         >
-          Any
+          {t('filter.any')}
         </button>
         {numbers.map((num) => (
           <button

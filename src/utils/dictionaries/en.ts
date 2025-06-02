@@ -21,6 +21,16 @@ const en = {
     subtitleSecondLine: 'experiences and rural stays',
     discoverMore: 'Discover More',
   },
+  guests: {
+    adults: 'Adults',
+    adultsDescription: 'Ages 12 or above',
+    children: 'Children',
+    childrenDescription: 'Ages 3 - 11',
+    infants: 'Infants',
+    infantsDescription: 'Under 3',
+    from: 'From',
+    perPerson: 'Person',
+  },
   statistics: {
     agritourismExperiences: 'Agritourism <br/> experiences',
     yearsOfExperience: 'Years of experience <br/> in tourism',
@@ -380,6 +390,34 @@ const en = {
     addedSuccessfully: 'Added to collection successfully!',
     addError: 'Failed to add to collection. Please try again.',
   },
+  filter: {
+    'time-of-day': 'Time of Day',
+    'experience-duration': 'Experience Duration',
+    'age-suitability': 'Age Suitability',
+    'experience-level': 'Experience Level',
+    'price-range': 'Price Range',
+    'average-price': 'The average price of an experience is $',
+    minimum: 'Minimum',
+    maximum: 'Maximum',
+    'language-preference': 'Language Preference',
+    'show-more': 'Show more',
+    'booking-verified': 'Booking! Verified',
+    'available-amenities': 'Available Amenities',
+    'special-offers': 'Special Offers',
+    'booking-options': 'Booking Options',
+    'accessibility-features': 'Accessibility Features',
+    yes: 'Yes',
+    no: 'No',
+    filter: 'Filter',
+    'clear-all': 'Clear all',
+    'show-results': 'Show results',
+    any: 'Any',
+    'includes-experience': 'Includes Experience',
+    bedrooms: 'Bedrooms',
+    beds: 'Beds',
+    bathrooms: 'Bathrooms',
+    'package-duration': 'Package Duration',
+  },
   booking: {
     financialReceipt: {
       error: 'Please upload a financial receipt',
@@ -388,6 +426,52 @@ const en = {
     paymentMethod: {
       error: 'Please select a payment method',
     },
+  },
+  search: {
+    'check-in': 'Check-in',
+    'check-out': 'Check-out',
+    'add-date': 'Add date',
+    'add-guests': 'Add guests',
+    'search_for_country': 'Search for a country...',
+    'search': 'Search',
+    'when': 'When',
+    'who': 'Who',
+    'where': 'Where'
+  },
+  datePicker: {
+    'add_date': 'Add date',
+    months: {
+      january: 'January',
+      february: 'February',
+      march: 'March',
+      april: 'April',
+      may: 'May',
+      june: 'June',
+      july: 'July',
+      august: 'August',
+      september: 'September',
+      october: 'October',
+      november: 'November',
+      december: 'December'
+    },
+    days: {
+      saturday: 'Saturday',
+      sunday: 'Sunday',
+      monday: 'Monday',
+      tuesday: 'Tuesday',
+      wednesday: 'Wednesday',
+      thursday: 'Thursday',
+      friday: 'Friday'
+    },
+    dayAbbreviations: {
+      sa: 'Sa',
+      su: 'Su',
+      mo: 'Mo',
+      tu: 'Tu',
+      we: 'We',
+      th: 'Th',
+      fr: 'Fr'
+    }
   },
 };
 

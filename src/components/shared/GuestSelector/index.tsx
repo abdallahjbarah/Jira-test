@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { cn } from '@/utils/cn';
 import Counter from '@/components/ui/Counter';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 type GuestCategory = 'adults' | 'children' | 'infants';
 
@@ -28,6 +29,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
   maxGuests,
   allowedGuestsField = ['adults', 'children', 'infants'],
 }) => {
+  const { t } = useTranslation();
   const [guests, setGuests] = useState({
     adults: initialValues?.adults ?? 0,
     children: initialValues?.children ?? 0,
@@ -60,8 +62,8 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
       <div className='space-y-6'>
         {allowedGuestsField?.includes('adults') && (
           <Counter
-            title='Adults'
-            description='Ages 12 or above'
+            title={t('guests.adults')}
+            description={t('guests.adultsDescription')}
             value={guests.adults}
             onIncrement={() => handleCountChange('adults', true)}
             onDecrement={() => handleCountChange('adults', false)}
@@ -72,8 +74,8 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
 
         {allowedGuestsField?.includes('children') && (
           <Counter
-            title='Children'
-            description='Ages 3 - 11'
+            title={t('guests.children')}
+            description={t('guests.childrenDescription')}
             value={guests.children}
             onIncrement={() => handleCountChange('children', true)}
             onDecrement={() => handleCountChange('children', false)}
@@ -83,8 +85,8 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
 
         {allowedGuestsField?.includes('infants') && (
           <Counter
-            title='Infants'
-            description='Under 3'
+            title={t('guests.infants')}
+            description={t('guests.infantsDescription')}
             value={guests.infants}
             onIncrement={() => handleCountChange('infants', true)}
             onDecrement={() => handleCountChange('infants', false)}

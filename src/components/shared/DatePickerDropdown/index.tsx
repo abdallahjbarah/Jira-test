@@ -3,6 +3,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import Dropdown from '@/components/ui/Dropdown';
 import FilterBarItem from '../FilterBar/FilterBarItem';
 import DateRangePicker from '../DateRangePicker';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface DatePickerDropdownProps {
   title?: {
@@ -44,6 +45,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   triggerComponent,
   schedule,
 }) => {
+  const { t, locale } = useTranslation();
   const [selectedDates, setSelectedDates] = useState<Date[]>(
     initialDate ? [initialDate] : [],
   );
@@ -132,23 +134,26 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   // Format the date for display
   const getDisplayValue = () => {
     if (selectedDates.length === 0) {
-      return 'Add date';
+      return t('datePicker.add_date');
     }
 
     if (selectedDates.length === 1) {
-      return selectedDates[0].toLocaleDateString('en-US', {
+      return selectedDates[0].toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US', {
         month: 'short',
         day: 'numeric',
+        year: 'numeric'
       });
     }
 
     // Range format
-    return `${selectedDates[0].toLocaleDateString('en-US', {
+    return `${selectedDates[0].toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US', {
       month: 'short',
       day: 'numeric',
-    })} - ${selectedDates[1].toLocaleDateString('en-US', {
+      year: 'numeric'
+    })} - ${selectedDates[1].toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US', {
       month: 'short',
       day: 'numeric',
+      year: 'numeric'
     })}`;
   };
 
@@ -201,7 +206,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
           <FilterBarItem
             title={title || { en: '', ar: '' }}
             value={getDisplayValue()}
-            onClick={() => {}}
+            onClick={() => { }}
           />
         )
       }
