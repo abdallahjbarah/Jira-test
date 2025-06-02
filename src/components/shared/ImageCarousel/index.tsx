@@ -106,11 +106,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
       `}</style>
       <Slider {...settings}>
         {images.map((image, index) => (
-          <div
-            key={index}
-            className={`relative ${imageHeight}`}
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div key={index} className={`relative ${imageHeight}`}>
             <ImageWithFallback
               src={image}
               alt={image}

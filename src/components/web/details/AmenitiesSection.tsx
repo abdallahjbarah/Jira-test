@@ -24,22 +24,19 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({ amenities }) => {
   return (
     <div className='flex flex-col gap-11'>
       <div className='flex justify-between items-center w-full'>
-        <p className='font-custom-700 font-gellix-Bold text-text_1 text-custom-30'>
+        <p className='font-custom-700 text-text_1 text-custom-22 laptopM:text-custom-30'>
           Available Amenities
         </p>
-        <button 
+        <button
           className='font-custom-400 font-sans text-text_1 text-custom-20 underline'
           onClick={() => setIsPopupOpen(true)}
         >
           See All
         </button>
       </div>
-      <div className='flex gap-20'>
+      <div className='flex laptopM:flex-row flex-col gap-20'>
         {amenities.slice(0, 4).map((amenity, index) => (
-          <div
-            className='flex flex-col gap-3 items-center'
-            key={index}
-          >
+          <div className='flex flex-col gap-3 items-center' key={index}>
             <Image
               src={amenity?.iconPath}
               alt={amenity?.nameEn}
@@ -54,13 +51,13 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({ amenities }) => {
       </div>
 
       {isPopupOpen && (
-        <AmenitiesPopup 
-          amenities={amenities} 
-          onClose={() => setIsPopupOpen(false)} 
+        <AmenitiesPopup
+          amenities={amenities}
+          onClose={() => setIsPopupOpen(false)}
         />
       )}
     </div>
   );
 };
 
-export default AmenitiesSection; 
+export default AmenitiesSection;

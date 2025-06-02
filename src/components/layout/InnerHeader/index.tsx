@@ -1,7 +1,6 @@
 import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
 import { COLLECTION_STATUS_LIST } from '@utils/constants';
 import Image from 'next/image';
-import Link from 'next/link';
 import React, { memo } from 'react';
 import CollectionNavItem from '@components/ui/CollectionNavItem';
 import HeaderActions from './HeaderActions';
@@ -25,7 +24,7 @@ function InnerHeader({
         />
       </CustomLink>
       {withNavItems && (
-        <div className='flex items-center gap-2.5'>
+        <div className='hidden laptopM:flex items-center gap-2.5'>
           {COLLECTION_STATUS_LIST.map((item) => (
             <CollectionNavItem key={item.value} collectionStatus={item} />
           ))}

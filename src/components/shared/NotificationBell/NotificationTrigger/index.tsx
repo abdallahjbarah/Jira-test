@@ -16,8 +16,9 @@ const NotificationTrigger = ({
     >
       <CustomSvg
         src='/SVGs/shared/notifications-icon.svg'
-        width={33}
-        height={33}
+        className='!w-[25px] !h-[25px] laptopM:!w-[33px] laptopM:!h-[33px] block'
+        width='100%'
+        height='100%'
         alt='notifications'
       />
       {!!unreadNotificationsCount && (

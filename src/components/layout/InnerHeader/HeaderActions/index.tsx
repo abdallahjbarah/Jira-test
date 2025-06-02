@@ -11,7 +11,7 @@ function HeaderActions(): React.ReactElement {
   const { isLoggedIn } = useUser();
 
   return (
-    <div className='flex items-center gap-[22px]'>
+    <div className='flex items-center gap-[10px] laptopM:gap-[22px]'>
       {isLoggedIn && (
         <>
           <Link
@@ -20,8 +20,9 @@ function HeaderActions(): React.ReactElement {
           >
             <CustomSvg
               src='/SVGs/shared/heart-icon.svg'
-              width={33}
-              height={33}
+              className='!w-[25px] !h-[25px] laptopM:!w-[33px] laptopM:!h-[33px] block'
+              width='100%'
+              height='100%'
               alt='heart'
             />
           </Link>

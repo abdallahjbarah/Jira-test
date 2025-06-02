@@ -211,9 +211,9 @@ const FilterBar = () => {
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
-        className='flex items-center gap-[25px]'
+        className='flex items-center gap-[10px] laptopM:gap-[25px] w-full tabletM:w-auto'
       >
-        <div className='bg-primary_1 flex justify-center items-center gap-[20px] mx-auto rounded-full'>
+        <div className='bg-primary_1 hidden flex-col tabletM:flex-row justify-center items-center gap-[10px] laptopM:gap-[20px] mx-auto tabletM:rounded-full w-full tabletM:flex'>
           <LocationDropdown
             onChange={handleLocationChange}
             defaultValues={{

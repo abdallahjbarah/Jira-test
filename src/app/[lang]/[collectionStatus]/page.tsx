@@ -35,7 +35,7 @@ export default function CollectionStatusPage({
 
   return (
     <>
-      <Hero className='min-h-[30.313rem] laptopS:pb-[22px]' />
+      <Hero className='min-h-[30.313rem]' contentClassName='py-[1.375rem]' />
       <div className='container py-[29px]'>
         <CollectionsListing />
       </div>

@@ -30,13 +30,13 @@ const LocationSection: React.FC<LocationSectionProps> = ({
 
   return (
     <div className='flex flex-col gap-4'>
-      <h1 className='font-custom-700 font-gellix-Bold text-text_1 text-custom-30'>
+      <h1 className='font-custom-700 text-text_1 text-custom-22 laptopM:text-custom-30'>
         Location
       </h1>
-      <p className='font-custom-400 font-sans text-text_1 text-custom-30'>
+      <p className='font-custom-400 font-sans text-text_1 text-custom-20 laptopM:text-custom-30'>
         {location}
       </p>
-      <p className='font-custom-400 font-sans text-text_3 text-custom-25'>
+      <p className='font-custom-400 font-sans text-text_3 text-custom-20 laptopM:text-custom-25'>
         Exact location will be available prior to one day
       </p>
       <div onClick={handleMapClick} style={{ cursor: 'pointer' }}>
