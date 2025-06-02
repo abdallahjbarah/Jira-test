@@ -67,6 +67,14 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       : '/SVGs/shared/heart-icon.svg';
   }, [isCollectionFavorite]);
 
+  // Calculate number of nights from availability data
+  const numberOfNights = React.useMemo(() => {
+    if (bookingData?.availability?.availabilitiesIds) {
+      return bookingData.availability.availabilitiesIds.length;
+    }
+    return 1; // Default to 1 night
+  }, [bookingData?.availability?.availabilitiesIds]);
+
   // Calculate dynamic price breakdown based on booking data and site pricing information
   const dynamicPriceBreakdown = React.useMemo(() => {
     if (!bookingData?.guests || !siteInfo?.pricingInformation) {
@@ -76,10 +84,18 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     const breakdown = calculatePriceBreakdown(
       siteInfo.pricingInformation,
       bookingData.guests,
+      siteInfo.extras, // Include extras from siteInfo
+      numberOfNights, // Include number of nights
     );
 
-    return formatPriceBreakdownForDisplay(breakdown, currency, true, 0);
-  }, [bookingData?.guests, siteInfo?.pricingInformation, currency]);
+    return formatPriceBreakdownForDisplay(breakdown, currency, numberOfNights);
+  }, [
+    bookingData?.guests,
+    siteInfo?.pricingInformation,
+    siteInfo?.extras,
+    currency,
+    numberOfNights,
+  ]);
 
   // Calculate dynamic total amount including tax
   const dynamicTotalAmount = React.useMemo(() => {
@@ -90,11 +106,19 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     const breakdown = calculatePriceBreakdown(
       siteInfo.pricingInformation,
       bookingData.guests,
+      siteInfo.extras, // Include extras from siteInfo
+      numberOfNights, // Include number of nights
     );
 
-    const grandTotal = calculateGrandTotal(breakdown, 0);
+    const grandTotal = calculateGrandTotal(breakdown);
     return `${currency} ${grandTotal.toFixed(0)}`;
-  }, [bookingData?.guests, siteInfo?.pricingInformation, currency]);
+  }, [
+    bookingData?.guests,
+    siteInfo?.pricingInformation,
+    siteInfo?.extras,
+    currency,
+    numberOfNights,
+  ]);
 
   return (
     <div className='flex flex-col gap-16 flex-1 items-end'>

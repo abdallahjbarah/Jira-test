@@ -180,11 +180,7 @@ export interface Site {
   };
   ageSuitability: number;
   levelOfDifficulty: string;
-  extras: {
-    nameEn: string;
-    nameAr: string;
-    price: number;
-  }[];
+  extras: Extra[];
   city: string;
   country: {
     _id: string;
@@ -278,6 +274,12 @@ export interface Site {
     learnMore: string;
   };
 }
+
+export type Extra = {
+  nameEn: string;
+  nameAr: string;
+  price: number;
+};
 
 export type PricingInformation = {
   discount: number | null;
@@ -473,4 +475,18 @@ export interface Guests {
   adults: number;
   children: number;
   infants: number;
+}
+
+export interface BookingDetails {
+  canCancel: boolean;
+  booking: Booking;
+}
+
+export interface CancelReason {
+  _id: string;
+  reasonEn: string;
+  reasonAr: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }

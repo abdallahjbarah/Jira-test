@@ -35,7 +35,9 @@ const Dropdown: React.FC<DropdownProps> = ({
     return () => setMounted(false);
   }, []);
 
-  const toggleDropdown = () => {
+  const toggleDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
     setIsOpen(!isOpen);
   };
 

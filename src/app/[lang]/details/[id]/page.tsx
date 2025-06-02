@@ -288,6 +288,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
           {type != 'Stay' && (
             <>
               <Divider className='w-full my-8' />
+
               <WhatToExpectSection
                 description={whatToExpect?.description}
                 images={whatToExpect?.images}
@@ -309,10 +310,10 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               <HouseRulesSection rules={stayHouseRules} />
             </>
           )}
-          <Divider className='w-full my-8' />
+          {/* <Divider className='w-full my-8' /> */}
           {/* Similar Experiences Section */}
           {/* <SimilarExperiencesSection collections={collections?.data || []} /> */}
-          <Divider className='w-full my-8' />
+          {/* <Divider className='w-full my-8' /> */}
         </div>
       </main>
     </InnerPagesLayout>

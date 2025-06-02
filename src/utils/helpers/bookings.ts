@@ -12,6 +12,12 @@ interface GuestData {
   infants?: number;
 }
 
+interface Extra {
+  nameEn: string;
+  nameAr: string;
+  price: number;
+}
+
 interface PriceBreakdownItem {
   label: string;
   amount: number;
@@ -20,11 +26,14 @@ interface PriceBreakdownItem {
   guestCount: number;
   isFree: boolean;
   pricePerPerson: number;
+  type?: 'guest' | 'extra' | 'nights';
 }
 
 export const calculatePriceBreakdown = (
   pricingInformation: PricingInfo[],
   guests: GuestData,
+  extras?: Extra[],
+  numberOfNights?: number,
 ): PriceBreakdownItem[] => {
   const breakdown: PriceBreakdownItem[] = [];
 
@@ -57,8 +66,9 @@ export const calculatePriceBreakdown = (
       finalPricePerPerson = originalPrice - (originalPrice * discount) / 100;
     }
 
-    // Calculate total amount for this guest type
-    const totalAmount = finalPricePerPerson * guestCount;
+    // Calculate total amount for this guest type, considering number of nights
+    const nights = numberOfNights || 1;
+    const totalAmount = finalPricePerPerson * guestCount * nights;
 
     breakdown.push({
       label: `${guestType.charAt(0).toUpperCase() + guestType.slice(1)} (${guestCount})`,
@@ -68,8 +78,43 @@ export const calculatePriceBreakdown = (
       guestCount: guestCount,
       isFree: isFree,
       pricePerPerson: finalPricePerPerson,
+      type: 'guest',
     });
   });
+
+  // Add number of nights as a separate item if more than 1 night
+  if (numberOfNights && numberOfNights > 1) {
+    breakdown.push({
+      label: `Number of nights`,
+      amount: 0,
+      originalPrice: 0,
+      discount: null,
+      guestCount: numberOfNights,
+      isFree: false,
+      pricePerPerson: 0,
+      type: 'nights',
+    });
+  }
+
+  // Process extras if provided
+  if (extras && extras.length > 0) {
+    extras.forEach((extra) => {
+      const nights = numberOfNights || 1;
+      const totalAmount = extra.price * nights;
+      const isFree = extra.price === 0;
+
+      breakdown.push({
+        label: extra.nameEn,
+        amount: totalAmount,
+        originalPrice: extra.price,
+        discount: null,
+        guestCount: 1,
+        isFree: isFree,
+        pricePerPerson: extra.price,
+        type: 'extra',
+      });
+    });
+  }
 
   return breakdown;
 };
@@ -90,10 +135,24 @@ export const calculateTax = (
 export const formatPriceBreakdownForDisplay = (
   breakdown: PriceBreakdownItem[],
   currency: string = 'JOD',
-  includeTax: boolean = true,
-  taxRate: number = 0.05,
+  numberOfNights?: number,
 ): Array<{ label: string; amount: string; discount?: string }> => {
   const formattedBreakdown = breakdown.map((item) => {
+    if (item.type === 'nights') {
+      return {
+        label: item.label,
+        amount: `${item.guestCount}`,
+      };
+    }
+
+    if (item.type === 'extra') {
+      const result: { label: string; amount: string; discount?: string } = {
+        label: item.label,
+        amount: item.isFree ? 'Free' : `${currency} ${item.amount.toFixed(0)}`,
+      };
+      return result;
+    }
+
     const guestTypeName = item.label.split(' (')[0].toLowerCase();
 
     if (item.isFree) {
@@ -115,25 +174,11 @@ export const formatPriceBreakdownForDisplay = (
     return result;
   });
 
-  // Add tax if requested
-  if (includeTax) {
-    const subtotal = calculateTotalAmount(breakdown);
-    const tax = calculateTax(subtotal, taxRate);
-
-    formattedBreakdown.push({
-      label: 'Tax',
-      amount: `${currency} ${tax.toFixed(0)}`,
-    });
-  }
-
   return formattedBreakdown;
 };
 
 export const calculateGrandTotal = (
   breakdown: PriceBreakdownItem[],
-  taxRate: number = 0.05,
 ): number => {
-  const subtotal = calculateTotalAmount(breakdown);
-  const tax = calculateTax(subtotal, taxRate);
-  return subtotal + tax;
+  return calculateTotalAmount(breakdown);
 };

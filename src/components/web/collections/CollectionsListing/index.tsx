@@ -1,23 +1,18 @@
 'use client';
-import React from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import CollectionTypeLabel from '../CollectionTypeLabel';
-import {
-  useFetchCollections,
-  useFetchInfiniteCollections,
-} from '@/lib/apis/collections/useFetchCollections';
-import {
-  COLLECTION_STATUS,
-  COLLECTION_STATUS_LIST,
-  CollectionStatus,
-} from '@/utils/constants';
+import MapView from '../MapView';
+import { useFetchInfiniteCollections } from '@/lib/apis/collections/useFetchCollections';
+import { COLLECTION_STATUS, COLLECTION_STATUS_LIST } from '@/utils/constants';
 import { useParams, useSearchParams } from 'next/navigation';
 import CollectionCard from '../CollectionCard';
 import Styled from 'styled-components';
 import CircularLoader from '@/components/ui/CircularLoader';
 import { IntersectionObserverTrigger } from '@/components/shared/IntersectionObserverTrigger';
 import { Site, SitesResponse } from '@/lib/types';
-import { Collection } from '@/lib/apis/collections/data';
 import { buildFiltersFromSearchParams } from '@/utils/helpers/filterHelpers';
+import CustomSvg from '@/components/ui/CustomSvg';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 const CollectionsListingContainer = Styled.div`
   display: grid;
@@ -32,12 +27,41 @@ const LoaderContainer = Styled.div`
   padding: 40px 0;
 `;
 
+const MapToggleWidget = Styled.div`
+  position: fixed;
+  right: -62px;
+  top: 50%;
+  transform: translateY(-50%) rotate(270deg);
+  z-index: 1000;
+  background: var(--secondary-color);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 12px 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  &:hover {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(-50%) rotate(270deg) scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    right: 16px;
+    padding: 10px;
+  }
+`;
+
 // Memoized collection card component to prevent unnecessary re-renders
 const MemoizedCollectionCard = React.memo(CollectionCard);
 
 function CollectionsListing(): React.ReactElement {
   const { collectionStatus } = useParams();
   const searchParams = useSearchParams();
+  const [isMapView, setIsMapView] = useState(false);
+  const { t } = useTranslation();
 
   const collectionObject = React.useMemo(
     () =>
@@ -56,12 +80,11 @@ function CollectionsListing(): React.ReactElement {
         : collectionObject?.filterValue,
     );
 
-    // Increase page size for better performance
     return {
       ...baseFilters,
-      limit: 20, // Load more items per page to reduce API calls
+      limit: isMapView ? 100 : 20, // Load more items for map view
     };
-  }, [collectionObject?.filterValue, searchParams]);
+  }, [collectionObject?.filterValue, searchParams, isMapView]);
 
   const {
     data: collectionsResponse,
@@ -79,6 +102,16 @@ function CollectionsListing(): React.ReactElement {
     );
   }, [collectionsResponse?.pages]);
 
+  // Handle map toggle
+  const handleMapToggle = useCallback(() => {
+    setIsMapView(!isMapView);
+  }, [isMapView]);
+
+  // Handle back to list from map view
+  const handleBackToList = useCallback(() => {
+    setIsMapView(false);
+  }, []);
+
   // Debounced intersection handler to prevent rapid API calls
   const debouncedFetchNextPage = React.useMemo(() => {
     let timeoutId: NodeJS.Timeout;
@@ -88,7 +121,7 @@ function CollectionsListing(): React.ReactElement {
         if (hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
-      }, 100); // 100ms debounce
+      }, 100);
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
@@ -104,7 +137,10 @@ function CollectionsListing(): React.ReactElement {
     return (
       <CollectionsListingContainer className='mt-[31px]'>
         {collections.map((collection: Site, index: number) => (
-          <MemoizedCollectionCard key={index} collection={collection} />
+          <MemoizedCollectionCard
+            key={collection._id || index}
+            collection={collection}
+          />
         ))}
       </CollectionsListingContainer>
     );
@@ -135,19 +171,49 @@ function CollectionsListing(): React.ReactElement {
   }
 
   return (
-    <div>
-      <CollectionTypeLabel />
-      {collectionsGrid}
-      <IntersectionObserverTrigger
-        onIntersect={handleIntersect}
-        enabled={hasNextPage && !isFetchingNextPage}
-        rootMargin='200px' // Load next page when user is 200px away from bottom
-        threshold={0.1} // Trigger when 10% of the element is visible
-      />
-      {isFetchingNextPage && (
-        <div className='flex justify-center items-center py-5'>
-          <CircularLoader size={50} />
-        </div>
+    <div className='relative'>
+      {/* Map Toggle Widget */}
+      {!isMapView && (
+        <MapToggleWidget onClick={handleMapToggle} title='Show Map View'>
+          <CustomSvg
+            src='/SVGs/shared/map-icon.svg'
+            className='text-white'
+            width={45}
+            height={45}
+            alt='Map Icon'
+          />
+          <span className='text-white text-custom-30'>{t('map')}</span>
+        </MapToggleWidget>
+      )}
+
+      {/* Content */}
+      {isMapView ? (
+        <>
+          <CollectionTypeLabel />
+          <div className='mt-[31px]'>
+            <MapView
+              collections={collections}
+              isLoading={isLoading}
+              onBackToList={handleBackToList}
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <CollectionTypeLabel />
+          {collectionsGrid}
+          <IntersectionObserverTrigger
+            onIntersect={handleIntersect}
+            enabled={hasNextPage && !isFetchingNextPage}
+            rootMargin='200px'
+            threshold={0.1}
+          />
+          {isFetchingNextPage && (
+            <div className='flex justify-center items-center py-5'>
+              <CircularLoader size={50} />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

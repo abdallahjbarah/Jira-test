@@ -10,8 +10,8 @@ const NotificationTrigger = ({
 }) => {
   return (
     <div
-      className={`relative text-secondary_6 hover:text-primary_2 ${
-        isOpen ? 'text-primary_2' : ''
+      className={`relative text-secondary_6 hover:text-primary_6 ${
+        isOpen ? 'text-primary_6' : ''
       }`}
     >
       <CustomSvg
@@ -21,7 +21,7 @@ const NotificationTrigger = ({
         alt='notifications'
       />
       {!!unreadNotificationsCount && (
-        <div className='absolute -top-1/2 translate-y-1/2 -right-1/2 -translate-x-1/2 w-[21px] h-[21px] bg-primary_2 rounded-full border border-white border-solid flex items-center justify-center'>
+        <div className='absolute -top-1/2 translate-y-1/2 -right-1/2 -translate-x-1/2 w-[21px] h-[21px] bg-primary_6 rounded-full border border-white border-solid flex items-center justify-center'>
           <span className='text-white text-custom-10 font-custom-600 leading-[1px]'>
             {unreadNotificationsCount}
           </span>

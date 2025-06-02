@@ -41,10 +41,9 @@ const ExpandableTextSection: React.FC<ExpandableTextSectionProps> = ({
       <div
         className={`font-custom-400 text-text_1 font-sans text-xl ${contentClassName}`}
       >
-        <div dangerouslySetInnerHTML={{ __html: displayContent }} />
+        <p dangerouslySetInnerHTML={{ __html: displayContent }} />
         {shouldShowReadMore && (
           <>
-            {' '}
             <button
               onClick={toggleExpanded}
               type='button'

@@ -1,5 +1,6 @@
 // English dictionary
 const en = {
+  map: 'MAP',
   type: 'Type',
   experience: 'Experience Type',
   person: 'person',
@@ -256,9 +257,18 @@ const en = {
     slogan: 'I Bookagri, Do You!',
   },
   bookingStatus: {
-    upcoming: 'Upcoming',
-    completed: 'Completed',
+    pending: 'Pending',
+    approved: 'Approved',
+    declined: 'Declined',
     cancelled: 'Cancelled',
+    refunded: 'Refunded',
+    completed: 'Completed',
+    refundRequested: 'Refund Requested',
+    // Legacy status labels for compatibility
+    upcoming: 'Upcoming',
+    cancel: 'Cancel',
+    cancelBooking: 'Cancel Booking',
+    bookingStatus: 'Booking Status',
   },
   metadata: {
     title: 'Bookagri - Authentic Agritourism in Jordan',
@@ -432,14 +442,14 @@ const en = {
     'check-out': 'Check-out',
     'add-date': 'Add date',
     'add-guests': 'Add guests',
-    'search_for_country': 'Search for a country...',
-    'search': 'Search',
-    'when': 'When',
-    'who': 'Who',
-    'where': 'Where'
+    search_for_country: 'Search for a country...',
+    search: 'Search',
+    when: 'When',
+    who: 'Who',
+    where: 'Where',
   },
   datePicker: {
-    'add_date': 'Add date',
+    add_date: 'Add date',
     months: {
       january: 'January',
       february: 'February',
@@ -452,7 +462,7 @@ const en = {
       september: 'September',
       october: 'October',
       november: 'November',
-      december: 'December'
+      december: 'December',
     },
     days: {
       saturday: 'Saturday',
@@ -461,7 +471,7 @@ const en = {
       tuesday: 'Tuesday',
       wednesday: 'Wednesday',
       thursday: 'Thursday',
-      friday: 'Friday'
+      friday: 'Friday',
     },
     dayAbbreviations: {
       sa: 'Sa',
@@ -470,8 +480,8 @@ const en = {
       tu: 'Tu',
       we: 'We',
       th: 'Th',
-      fr: 'Fr'
-    }
+      fr: 'Fr',
+    },
   },
 };
 

@@ -70,7 +70,7 @@ function Hero({ className }: { className?: string }) {
             {t('hero.subtitleSecondLine') || 'experiences and rural stays'}
           </h2>
           <FilledButton
-            path='/'
+            path='/all'
             text={t('hero.discoverMore') || 'Discover More'}
             width='w-[13.67rem]'
             height='h-[4.8125rem]'

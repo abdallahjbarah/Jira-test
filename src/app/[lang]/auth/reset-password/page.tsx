@@ -1,15 +1,9 @@
 'use client';
-
-import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-import { useMutation } from '@tanstack/react-query';
-import { reactQueryClientOptions } from '@configs/reactQueryClientOptions';
-import FormInput from '@/components/form/FormInput';
-import Image from 'next/image';
 import PasswordInput from '@/components/form/PasswordInput';
 import { useResetPassword } from '@/lib/apis/users/useResetPassword';
 import { WretchError } from 'wretch';
