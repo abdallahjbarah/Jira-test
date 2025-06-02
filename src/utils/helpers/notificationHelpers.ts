@@ -110,7 +110,7 @@ export const getNotificationPath = (
 
   switch (path) {
     case NotificationPaths.Bookings:
-      return `/my-bookings`;
+      return `/my-bookings/${notification.pathId}`;
     case NotificationPaths.Offers:
       return `/offers`;
     case NotificationPaths.newUpdates:

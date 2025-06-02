@@ -126,7 +126,7 @@ const Modal: React.FC<ModalProps> = ({
         className={containerClassName}
       >
         {canClose && (
-          <CloseButton onClick={onClose}>
+          <CloseButton type='button' onClick={onClose}>
             <CustomSvg
               src='/SVGs/shared/close-icon.svg'
               className='w-6 h-6 text-primary_1'

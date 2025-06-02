@@ -16,6 +16,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { PricingInformation } from '@/lib/types';
 import { useBookingData } from '@/hooks/useBookingData';
+import { WretchError } from 'wretch';
 
 interface BookingPanelProps {
   params: {
@@ -147,14 +148,12 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
           pauseOnHover: true,
         });
       }
-    } catch (error: any) {
-      console.error('Error checking allowed guests:', error['message']);
-      toast.error(error['message'], {
+    } catch (error: unknown) {
+      const wretchError = error as WretchError;
+      toast.error(wretchError.json.message, {
         position: 'top-right',
         autoClose: 5000,
-        hideProgressBar: false,
         closeOnClick: true,
-        pauseOnHover: true,
       });
     }
   };
