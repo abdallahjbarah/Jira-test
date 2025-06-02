@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/utils/cn';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 type DateSelectionMode = 'single' | 'range' | 'both';
 
@@ -30,6 +31,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   scheduleEndDate,
   skipFutureDateValidation = false,
 }) => {
+  const { t, locale } = useTranslation();
   // Create a normalized date (noon to avoid timezone issues)
   const createNormalizedDate = useCallback(
     (year: number, month: number, day: number) => {
@@ -59,9 +61,10 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   );
 
   // Get the month name and year for display
-  const monthYearString = currentMonth.toLocaleDateString('en-US', {
+  const monthYearString = currentMonth.toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US', {
     month: 'long',
     year: 'numeric',
+    calendar: 'gregory' // Force Gregorian calendar
   });
 
   // Navigate to previous month
@@ -253,8 +256,16 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     onChange(newSelectedDates);
   };
 
-  // Get days of week with Saturday as first day
-  const daysOfWeek = ['Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr'];
+  // Get days of week with translations
+  const daysOfWeek = [
+    t('datePicker.dayAbbreviations.sa'),
+    t('datePicker.dayAbbreviations.su'),
+    t('datePicker.dayAbbreviations.mo'),
+    t('datePicker.dayAbbreviations.tu'),
+    t('datePicker.dayAbbreviations.we'),
+    t('datePicker.dayAbbreviations.th'),
+    t('datePicker.dayAbbreviations.fr'),
+  ];
 
   // Generate the calendar grid
   const days = getDaysInMonth();
@@ -310,13 +321,12 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             type='button'
             onClick={() => date && handleDateClick(date)}
             disabled={!date || isDateDisabled(date)}
-            className={`relative h-10 w-10 flex items-center justify-center ${
-              !date
-                ? 'invisible'
-                : isDateDisabled(date)
-                  ? 'text-gray-300 cursor-not-allowed'
-                  : ''
-            }`}
+            className={`relative h-10 w-10 flex items-center justify-center ${!date
+              ? 'invisible'
+              : isDateDisabled(date)
+                ? 'text-gray-300 cursor-not-allowed'
+                : ''
+              }`}
           >
             {/* Range background */}
             {date &&
@@ -342,16 +352,15 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
             {/* Date circle */}
             <span
-              className={`relative z-10 flex items-center justify-center h-8 w-8 rounded-full ${
-                date &&
+              className={`relative z-10 flex items-center justify-center h-8 w-8 rounded-full ${date &&
                 (isStartDate(date) ||
                   isEndDate(date) ||
                   (mode === 'single' && isDateSelected(date)))
-                  ? 'bg-black text-white'
-                  : date && !isDateDisabled(date)
-                    ? 'hover:bg-gray-100 text-gray-800'
-                    : ''
-              }`}
+                ? 'bg-black text-white'
+                : date && !isDateDisabled(date)
+                  ? 'hover:bg-gray-100 text-gray-800'
+                  : ''
+                }`}
             >
               {date?.getDate()}
             </span>

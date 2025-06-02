@@ -427,6 +427,52 @@ const en = {
       error: 'Please select a payment method',
     },
   },
+  search: {
+    'check-in': 'Check-in',
+    'check-out': 'Check-out',
+    'add-date': 'Add date',
+    'add-guests': 'Add guests',
+    'search_for_country': 'Search for a country...',
+    'search': 'Search',
+    'when': 'When',
+    'who': 'Who',
+    'where': 'Where'
+  },
+  datePicker: {
+    'add_date': 'Add date',
+    months: {
+      january: 'January',
+      february: 'February',
+      march: 'March',
+      april: 'April',
+      may: 'May',
+      june: 'June',
+      july: 'July',
+      august: 'August',
+      september: 'September',
+      october: 'October',
+      november: 'November',
+      december: 'December'
+    },
+    days: {
+      saturday: 'Saturday',
+      sunday: 'Sunday',
+      monday: 'Monday',
+      tuesday: 'Tuesday',
+      wednesday: 'Wednesday',
+      thursday: 'Thursday',
+      friday: 'Friday'
+    },
+    dayAbbreviations: {
+      sa: 'Sa',
+      su: 'Su',
+      mo: 'Mo',
+      tu: 'Tu',
+      we: 'We',
+      th: 'Th',
+      fr: 'Fr'
+    }
+  },
 };
 
 export default en;

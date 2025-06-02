@@ -32,7 +32,7 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
   initialValues,
   allowedGuestsField = ['adults', 'children', 'infants'],
 }) => {
-  const { locale } = useTranslation();
+  const { t, locale } = useTranslation();
   const formContext = useFormContext();
 
   // Get initial values from form context if available, otherwise use prop or default
@@ -73,22 +73,22 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
   // Format the guest count display text
   const getGuestDisplayText = () => {
     const total = guests.adults + guests.children + guests.infants;
-    if (total === 0) return 'Add guests';
+    if (total === 0) return t('search.add-guests');
 
     const guestParts = [];
     if (guests.adults > 0) {
       guestParts.push(
-        `${guests.adults} adult${guests.adults !== 1 ? 's' : ''}`,
+        `${guests.adults} ${t('guests.adults')}`,
       );
     }
     if (guests.children > 0) {
       guestParts.push(
-        `${guests.children} child${guests.children !== 1 ? 'ren' : ''}`,
+        `${guests.children} ${t('guests.children')}`,
       );
     }
     if (guests.infants > 0) {
       guestParts.push(
-        `${guests.infants} infant${guests.infants !== 1 ? 's' : ''}`,
+        `${guests.infants} ${t('guests.infants')}`,
       );
     }
 
@@ -123,7 +123,7 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
           <FilterBarItem
             title={title || { en: '', ar: '' }}
             value={getGuestDisplayText()}
-            onClick={() => {}}
+            onClick={() => { }}
           />
         )
       }

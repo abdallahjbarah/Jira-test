@@ -430,7 +430,7 @@ const ar = {
     bedrooms: 'غرف النوم',
     beds: 'الأسرة',
     bathrooms: 'الحمامات',
-    packageDuration: 'مدة الباقة',
+    'package-duration': 'مدة الباقة',
   },
   booking: {
     financialReceipt: {
@@ -440,6 +440,52 @@ const ar = {
     paymentMethod: {
       error: 'يرجى اختيار طريقة الدفع',
     },
+  },
+  search: {
+    'check-in': 'تسجيل الوصول',
+    'check-out': 'تسجيل المغادرة',
+    'add-date': 'إضافة تاريخ',
+    'add-guests': 'إضافة ضيوف',
+    'search_for_country': 'ابحث عن دولة...',
+    'search': 'بحث',
+    'when': 'متى',
+    'who': 'من',
+    'where': 'الوجهة'
+  },
+  datePicker: {
+    'add_date': 'إضافة تاريخ',
+    months: {
+      january: 'يناير',
+      february: 'فبراير',
+      march: 'مارس',
+      april: 'أبريل',
+      may: 'مايو',
+      june: 'يونيو',
+      july: 'يوليو',
+      august: 'أغسطس',
+      september: 'سبتمبر',
+      october: 'أكتوبر',
+      november: 'نوفمبر',
+      december: 'ديسمبر'
+    },
+    days: {
+      saturday: 'السبت',
+      sunday: 'الأحد',
+      monday: 'الاثنين',
+      tuesday: 'الثلاثاء',
+      wednesday: 'الأربعاء',
+      thursday: 'الخميس',
+      friday: 'الجمعة'
+    },
+    dayAbbreviations: {
+      sa: 'سبت',
+      su: 'أحد',
+      mo: 'اثنين',
+      tu: 'ثلاثاء',
+      we: 'أربعاء',
+      th: 'خميس',
+      fr: 'جمعة'
+    }
   },
 };
 

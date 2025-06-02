@@ -5,6 +5,7 @@ import GuestSelector from '../GuestSelector';
 import RegionSelector from '../RegionSelector';
 import CountrySelector from '../CountrySelector';
 import Collapsible from '@/components/ui/Collapsible';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface SearchFormData {
   location: string | null;
@@ -33,6 +34,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
   onSubmit,
   initialValues = {},
 }) => {
+  const { t } = useTranslation();
   const methods = useForm<SearchFormData>({
     defaultValues: {
       location: initialValues.country || null,
@@ -128,7 +130,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
       <form onSubmit={methods.handleSubmit(onFormSubmit)}>
         <div className='bg-white rounded-xl shadow-lg w-[600px] p-6 space-y-2'>
           <Collapsible
-            title='Where'
+            title={t('search.where')}
             defaultOpen={true}
             titleClassName='!text-custom-24'
             contentClassName='!mt-6'
@@ -144,7 +146,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
                       field.onChange(country);
                       methods.setValue('country', country);
                     }}
-                    placeholder='Search for a country...'
+                    placeholder={t('search.search_for_country')}
                   />
                 )}
               />
@@ -168,7 +170,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
           </Collapsible>
 
           <Collapsible
-            title='When'
+            title={t('search.when')}
             defaultOpen={true}
             titleClassName='!text-custom-24'
             contentClassName='!mt-6'
@@ -188,7 +190,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
           </Collapsible>
 
           <Collapsible
-            title='Who'
+            title={t('search.who')}
             defaultOpen={true}
             titleClassName='!text-custom-24'
             contentClassName='!mt-6'
@@ -211,7 +213,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
               type='submit'
               className='w-full py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors'
             >
-              Search
+              {t('search.search')}
             </button>
           </div>
         </div>
