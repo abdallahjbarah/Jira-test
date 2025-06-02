@@ -8,7 +8,8 @@ import CustomTextarea from '@components/ui/custom-inputs/CustomTextarea';
 import { usePublicContext } from '@providers/ReactPublicContextProvider';
 import { usePostContactUs } from '@queries/mutations/postMutations';
 import { contactUsSchema } from '@utils/formsSchemas';
-import { useFormik } from 'formik';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { toast } from 'react-toastify';
 import { useTranslation } from '@contexts/TranslationContext';
 
@@ -25,28 +26,24 @@ export default function ContactUsForm(): React.ReactElement {
   const { t } = useTranslation();
 
   const {
-    values,
-    errors,
-    touched,
-    handleBlur,
-    handleChange,
+    register,
     handleSubmit,
-    setFieldValue,
-    setFieldTouched,
-    isValid,
-    resetForm,
-    setValues,
-  } = useFormik<ContactUsFormValues>({
-    initialValues: {
+    formState: { errors, isValid },
+    reset,
+    watch,
+  } = useForm<ContactUsFormValues>({
+    defaultValues: {
       firstName: '',
       lastName: '',
       email: '',
       phone: '',
       message: '',
     },
-    validationSchema: contactUsSchema,
-    onSubmit: onSubmit,
+    resolver: yupResolver(contactUsSchema),
+    mode: 'onBlur',
   });
+
+  const values = watch();
 
   const {
     mutate,
@@ -55,7 +52,7 @@ export default function ContactUsForm(): React.ReactElement {
   } = usePostContactUs({
     onSuccess(data) {
       toast.success(t('contactUsForm.successMessage'));
-      resetForm();
+      reset();
     },
     onError(error) {
       toast.error(t('contactUsForm.errorMessage'));
@@ -66,15 +63,15 @@ export default function ContactUsForm(): React.ReactElement {
     setIsLoading(isLoadingMutate);
   }, [isLoadingMutate, setIsLoading]);
 
-  function onSubmit(): void {
+  const onSubmit = (data: ContactUsFormValues): void => {
     mutate({
-      firstName: values?.firstName,
-      lastName: values?.lastName,
-      email: values?.email,
-      phone: values?.phone?.toString(),
-      message: values?.message,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phone: data.phone?.toString(),
+      message: data.message,
     });
-  }
+  };
 
   return (
     <div id='ContactUsForm' className='bg-secondary_2'>
@@ -89,7 +86,7 @@ export default function ContactUsForm(): React.ReactElement {
         </div>
 
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className='flex w-full max-w-[61.6875rem] flex-col gap-6'
         >
           <div className='w-full flex flex-col laptopS:flex-row gap-8'>
@@ -100,16 +97,14 @@ export default function ContactUsForm(): React.ReactElement {
                 placeholder={t('contactUsForm.firstName')}
                 type='text'
                 id='firstName'
-                name='firstName'
-                value={values?.firstName}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                value={values.firstName}
+                {...register('firstName')}
                 pattern='.*'
               />
               <ErrorFormik
-                isError={!!errors?.firstName}
-                isTouched={!!touched?.firstName}
-                error={errors?.firstName || ''}
+                isError={!!errors.firstName}
+                isTouched={true}
+                error={errors.firstName?.message || ''}
               />
             </div>
             <div className='w-full'>
@@ -119,16 +114,14 @@ export default function ContactUsForm(): React.ReactElement {
                 placeholder={t('contactUsForm.lastName')}
                 type='text'
                 id='lastName'
-                name='lastName'
-                value={values?.lastName}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                value={values.lastName}
+                {...register('lastName')}
                 pattern='.*'
               />
               <ErrorFormik
-                isError={!!errors?.lastName}
-                isTouched={!!touched?.lastName}
-                error={errors?.lastName || ''}
+                isError={!!errors.lastName}
+                isTouched={true}
+                error={errors.lastName?.message || ''}
               />
             </div>
           </div>
@@ -140,16 +133,14 @@ export default function ContactUsForm(): React.ReactElement {
                 placeholder={t('contactUsForm.email')}
                 type='email'
                 id='email'
-                name='email'
-                value={values?.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                value={values.email}
+                {...register('email')}
                 pattern='.*'
               />
               <ErrorFormik
-                isError={!!errors?.email}
-                isTouched={!!touched?.email}
-                error={errors?.email || ''}
+                isError={!!errors.email}
+                isTouched={true}
+                error={errors.email?.message || ''}
               />
             </div>
             <div className='w-full'>
@@ -159,16 +150,14 @@ export default function ContactUsForm(): React.ReactElement {
                 placeholder={t('contactUsForm.phone')}
                 type='text'
                 id='phone'
-                name='phone'
-                value={values?.phone}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                value={values.phone}
+                {...register('phone')}
                 pattern='.*'
               />
               <ErrorFormik
-                isError={!!errors?.phone}
-                isTouched={!!touched?.phone}
-                error={errors?.phone || ''}
+                isError={!!errors.phone}
+                isTouched={true}
+                error={errors.phone?.message || ''}
               />
             </div>
           </div>
@@ -179,15 +168,13 @@ export default function ContactUsForm(): React.ReactElement {
               className='h-[15rem] w-full px-4 pt-5'
               placeholder={t('contactUsForm.message')}
               id='message'
-              name='message'
-              value={values?.message}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              value={values.message}
+              {...register('message')}
             />
             <ErrorFormik
-              isError={!!errors?.message}
-              isTouched={!!touched?.message}
-              error={errors?.message || ''}
+              isError={!!errors.message}
+              isTouched={true}
+              error={errors.message?.message || ''}
             />
           </div>
           <div className='self-start mb-16 laptopS:mb-0'>

@@ -160,7 +160,7 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
     if (selectedCountry) {
       return selectedCountry.nameEn;
     }
-    return t('search-destinations');
+    return t('search.search');
   }, [selectedCountry, selectedCity, t]);
 
   // Dropdown content
@@ -209,10 +209,11 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
                           field.onChange(city);
                           handleCitySelect(city);
                         }}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${field.value?.id === city.id
-                          ? 'bg-red-500 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                          }`}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                          field.value?.id === city.id
+                            ? 'bg-red-500 text-white'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
                       >
                         {city.name}
                       </button>
@@ -236,9 +237,9 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
     <Dropdown
       trigger={
         <FilterBarItem
-          title={{ en: t('where'), ar: t('where') }}
+          title={{ en: t('search.where'), ar: t('search.where') }}
           value={displayValue}
-          onClick={() => { }}
+          onClick={() => {}}
         />
       }
       content={dropdownContent}

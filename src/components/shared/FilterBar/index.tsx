@@ -223,7 +223,7 @@ const FilterBar = () => {
           />
 
           <DatePickerDropdown
-            title={{ en: t('check-in'), ar: t('check-in') }}
+            title={{ en: t('search.check-in'), ar: t('search.check-in') }}
             onChange={handleCheckInChange}
             mode='single'
             minDate={new Date()}
@@ -236,7 +236,7 @@ const FilterBar = () => {
           />
 
           <DatePickerDropdown
-            title={{ en: t('check-out'), ar: t('check-out') }}
+            title={{ en: t('search.check-out'), ar: t('search.check-out') }}
             onChange={handleCheckOutChange}
             mode='single'
             isCheckout={true}
@@ -246,7 +246,7 @@ const FilterBar = () => {
           />
 
           <GuestFilterItem
-            title={{ en: t('add-guests'), ar: t('add-guests') }}
+            title={{ en: t('search.add-guests'), ar: t('search.add-guests') }}
             onChange={handleGuestChange}
             initialValues={{
               adults: filtersValue?.adults || 0,

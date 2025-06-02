@@ -1,5 +1,6 @@
 // Arabic dictionary
 const ar = {
+  map: 'الخريطة',
   type: 'نوع',
   experience: 'نوع التجربة',
   person: 'شخص',
@@ -271,9 +272,18 @@ const ar = {
     slogan: 'أنا بوك أجري، وأنت؟',
   },
   bookingStatus: {
+    pending: 'في الانتظار',
+    approved: 'معتمد',
+    declined: 'مرفوض',
+    cancelled: 'ملغي',
+    refunded: 'مسترد',
+    completed: 'مكتمل',
+    refundRequested: 'طلب استرداد',
+    // Legacy status labels for compatibility
     upcoming: 'قادمة',
-    completed: 'مكتملة',
-    cancelled: 'ملغية',
+    cancel: 'إلغاء',
+    cancelBooking: 'إلغاء الحجز',
+    bookingStatus: 'حالة الحجز',
   },
   metadata: {
     title: 'بوكاجري - السياحة الزراعية الأصيلة في الأردن',
@@ -446,14 +456,14 @@ const ar = {
     'check-out': 'تسجيل المغادرة',
     'add-date': 'إضافة تاريخ',
     'add-guests': 'إضافة ضيوف',
-    'search_for_country': 'ابحث عن دولة...',
-    'search': 'بحث',
-    'when': 'متى',
-    'who': 'من',
-    'where': 'الوجهة'
+    search_for_country: 'ابحث عن دولة...',
+    search: 'بحث',
+    when: 'متى',
+    who: 'من',
+    where: 'الوجهة',
   },
   datePicker: {
-    'add_date': 'إضافة تاريخ',
+    add_date: 'إضافة تاريخ',
     months: {
       january: 'يناير',
       february: 'فبراير',
@@ -466,7 +476,7 @@ const ar = {
       september: 'سبتمبر',
       october: 'أكتوبر',
       november: 'نوفمبر',
-      december: 'ديسمبر'
+      december: 'ديسمبر',
     },
     days: {
       saturday: 'السبت',
@@ -475,7 +485,7 @@ const ar = {
       tuesday: 'الثلاثاء',
       wednesday: 'الأربعاء',
       thursday: 'الخميس',
-      friday: 'الجمعة'
+      friday: 'الجمعة',
     },
     dayAbbreviations: {
       sa: 'سبت',
@@ -484,8 +494,8 @@ const ar = {
       tu: 'ثلاثاء',
       we: 'أربعاء',
       th: 'خميس',
-      fr: 'جمعة'
-    }
+      fr: 'جمعة',
+    },
   },
 };
 

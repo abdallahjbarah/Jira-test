@@ -1,13 +1,9 @@
 'use client';
-
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-import { useMutation } from '@tanstack/react-query';
-import { reactQueryClientOptions } from '@configs/reactQueryClientOptions';
 import FormInput from '@/components/form/FormInput';
 import { useForgetPassword } from '@/lib/apis/users/useForgetPassword';
 import { useTranslation } from '@/contexts/TranslationContext';

@@ -25,5 +25,7 @@ export const useFetchPaymentMethods = (
     ...queryOptions,
     queryKey: ['paymentMethods'] as const,
     queryFn: () => fetchPaymentMethods(),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 };

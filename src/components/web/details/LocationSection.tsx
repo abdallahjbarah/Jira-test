@@ -7,16 +7,20 @@ interface LocationSectionProps {
   longitude: number;
 }
 
-const LocationSection: React.FC<LocationSectionProps> = ({ location, latitude, longitude }) => {
+const LocationSection: React.FC<LocationSectionProps> = ({
+  location,
+  latitude,
+  longitude,
+}) => {
   const mapStyles = {
-    height: "400px",
-    width: "100%",
-    borderRadius: "16px"
+    height: '400px',
+    width: '100%',
+    borderRadius: '16px',
   };
 
   const defaultCenter = {
     lat: latitude,
-    lng: longitude
+    lng: longitude,
   };
 
   const handleMapClick = () => {
@@ -36,7 +40,9 @@ const LocationSection: React.FC<LocationSectionProps> = ({ location, latitude, l
         Exact location will be available prior to one day
       </p>
       <div onClick={handleMapClick} style={{ cursor: 'pointer' }}>
-        <LoadScript googleMapsApiKey={"AIzaSyAO52U3bOXqyLz1xuVr7-czZqRyYiKe1uE"}>
+        <LoadScript
+          googleMapsApiKey={'AIzaSyAO52U3bOXqyLz1xuVr7-czZqRyYiKe1uE'}
+        >
           <GoogleMap
             mapContainerStyle={mapStyles}
             zoom={15}
@@ -50,4 +56,4 @@ const LocationSection: React.FC<LocationSectionProps> = ({ location, latitude, l
   );
 };
 
-export default LocationSection; 
+export default LocationSection;
