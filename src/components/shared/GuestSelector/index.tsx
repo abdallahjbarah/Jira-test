@@ -36,8 +36,6 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
     infants: initialValues?.infants ?? 0,
   });
 
-  const totalGuests = guests.adults + guests.children;
-
   const handleCountChange = (category: GuestCategory, increment: boolean) => {
     setGuests((prev) => {
       const newGuests = {
@@ -67,7 +65,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
             value={guests.adults}
             onIncrement={() => handleCountChange('adults', true)}
             onDecrement={() => handleCountChange('adults', false)}
-            minValue={1}
+            minValue={0}
             maxValue={maxGuests ? maxGuests - guests.children : undefined}
           />
         )}

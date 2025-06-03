@@ -30,7 +30,7 @@ const Counter: React.FC<CounterProps> = ({
   return (
     <div className={cn('flex justify-between items-center', className)}>
       <div>
-        <h3 className='text-lg font-semibold'>{title}</h3>
+        <h3 className='text-lg'>{title}</h3>
         {description && <p className='text-gray-500 text-sm'>{description}</p>}
       </div>
       <div className='flex items-center gap-3'>
