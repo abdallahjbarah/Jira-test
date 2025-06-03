@@ -33,9 +33,7 @@ const ExpandableTextSection: React.FC<ExpandableTextSectionProps> = ({
 
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
-      <h2
-        className={`text-3xl font-custom-700 text-text_1 font-gellix-Bold ${titleClassName}`}
-      >
+      <h2 className={`text-3xl text-text_1 font-bold ${titleClassName}`}>
         {title}
       </h2>
       <div

@@ -55,8 +55,6 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
     },
   });
 
-  console.log('Initial values: ', initialValues);
-
   const processingDate = React.useRef(false);
 
   const selectedLocationCountry = methods.watch('location');
@@ -114,7 +112,6 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
   };
 
   const onFormSubmit = (data: SearchFormData) => {
-    console.log('Submit data: ', data);
     onSubmit({
       country: data.country,
       checkinTime: data.checkinTime,
@@ -128,7 +125,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onFormSubmit)}>
-        <div className='bg-white rounded-xl shadow-lg w-[600px] p-6 space-y-2'>
+        <div className='bg-white rounded-xl shadow-lg w-full tabletM:w-[600px] p-6 space-y-2 max-h-[80vh] tabletM:max-h-full overflow-y-auto '>
           <Collapsible
             title={t('search.where')}
             defaultOpen={true}

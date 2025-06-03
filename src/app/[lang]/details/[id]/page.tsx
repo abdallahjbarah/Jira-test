@@ -25,6 +25,7 @@ import ImageCarousel from '@/components/shared/ImageCarousel';
 import withFavourites from '@/lib/hocs/withFavourites';
 import useFavorite from '@/utils/hooks/useFavorite';
 import { Site } from '@/lib/types';
+import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
 
 interface DetailsIdProps {
   params: { lang: Locale; id: string };
@@ -226,10 +227,9 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               </div>
               <Divider className='w-full my-8' />
               {/* Overview Section */}
-              <OverviewSection
-                overview={longDescription}
-                isExpanded={isExpanded}
-                onToggleExpand={() => setIsExpanded(!isExpanded)}
+              <ExpandableTextSection
+                title='Overview'
+                content={longDescription}
               />
               {type != 'Offers & Packages' && (
                 <>
