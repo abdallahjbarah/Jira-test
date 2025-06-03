@@ -24,6 +24,7 @@ import withFavourites from '@/lib/hocs/withFavourites';
 import useFavorite from '@/utils/hooks/useFavorite';
 import { Site } from '@/lib/types';
 import BookingStatusSection from '@/components/web/details/BookingStatusSection';
+import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
 
 interface MyBookingsPageProps {
   params: { lang: Locale; bookingId: string };
@@ -218,10 +219,9 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                 <BookingStatusSection detailsData={detailsData} />
               </div>
               <Divider className='w-full my-8' />
-              <OverviewSection
-                overview={longDescription}
-                isExpanded={isExpanded}
-                onToggleExpand={() => setIsExpanded(!isExpanded)}
+              <ExpandableTextSection
+                title='Overview'
+                content={longDescription}
               />
               {type != 'Offers & Packages' && (
                 <>

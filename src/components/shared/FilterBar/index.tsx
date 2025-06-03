@@ -17,6 +17,7 @@ import {
 import debounce from '@/utils/helpers/debounce';
 import SearchDropdown from '../SearchDropdown';
 import { useTranslation } from '@/contexts/TranslationContext';
+import MobileSearchDropdown from '../SearchDropdown/MobileSearchDropDown';
 
 const FilterBar = () => {
   const { collectionStatus } = useParams();
@@ -255,7 +256,6 @@ const FilterBar = () => {
             }}
           />
 
-          {/* Search dropdown integrated with the form */}
           <div className='p-[20px]'>
             <SearchDropdown
               onSubmit={handleSearchDropdownSubmit}
@@ -269,6 +269,9 @@ const FilterBar = () => {
               }}
             />
           </div>
+        </div>
+        <div className='block tabletM:hidden w-full'>
+          <MobileSearchDropdown onSubmit={handleSearchDropdownSubmit} />
         </div>
         <AdvancedFilterDropDown
           filterType={

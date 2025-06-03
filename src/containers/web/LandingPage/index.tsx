@@ -10,7 +10,7 @@ import Statistics from '@components/web/landing-page/Statistics';
 export default function LandingPage(): React.ReactElement {
   return (
     <main>
-      <Hero contentClassName='py-64' />
+      <Hero />
       <Statistics />
       <AboutUs />
       <DiscoverBookagri />

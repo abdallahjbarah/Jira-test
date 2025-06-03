@@ -16,9 +16,6 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({
       <h1 className='font-custom-700 text-text_1 text-custom-22 laptopM:text-custom-30'>
         Overview
       </h1>
-      <h4 className='font-custom-400 font-sans text-text_2 text-custom-20 underline'>
-        Translate
-      </h4>
     </div>
     <div className='relative'>
       <p

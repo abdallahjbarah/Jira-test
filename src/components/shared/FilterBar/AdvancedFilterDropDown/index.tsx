@@ -75,7 +75,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   };
 
   const filterContent = (
-    <div className='bg-white rounded-xl shadow-2xl w-full p-6 max-h-[500px] overflow-y-auto'>
+    <div className='bg-white rounded-xl shadow-2xl w-full p-6 max-h-[80vh] tabletM:max-h-[500px] overflow-y-auto'>
       <h3 className='text-lg text-center font-semibold'>
         {t('filter.filter')}
       </h3>
@@ -111,7 +111,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
       content={filterContent}
       position='bottom-right'
       className={className}
-      contentClassName='mt-2 shadow-2xl max-w-[500px] w-full'
+      contentClassName='mt-2 shadow-2xl tabletM:max-w-[500px] w-full'
     />
   );
 };

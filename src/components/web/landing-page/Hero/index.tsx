@@ -60,7 +60,9 @@ function Hero({
           quality={100}
         />
       </div>
-      <div className={cn('text-white container mx-auto', contentClassName)}>
+      <div
+        className={cn('text-white container mx-auto py-64', contentClassName)}
+      >
         <div className='relative'>
           <StyledHeroIconWrapper className='w-[4.6875rem] h-[3.875rem] absolute top-[-3.4375rem] left-[-1rem] laptopS:left-[-2.1875rem]'>
             <Image src={LeafImg} alt='Leaf' priority />
@@ -79,8 +81,8 @@ function Hero({
             path='/all'
             text={t('hero.discoverMore') || 'Discover More'}
             width='w-[13.67rem]'
-            height='h-[4.8125rem]'
-            className='mt-[39px] rounded-custom-16'
+            height='h-[3.625rem] laptopS:h-[4.8125rem]'
+            className='mt-[39px] rounded-custom-16 !text-custom-22 !laptopS:text-custom-24'
             buttonType='button'
             isDisable={false}
           />
