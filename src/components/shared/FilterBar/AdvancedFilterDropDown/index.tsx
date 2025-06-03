@@ -50,14 +50,12 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   };
 
   const filterTrigger = (
-    <div>
-      <CustomSvg
-        src='/SVGs/shared/filter-icon.svg'
-        className='!w-[57px] !h-[57px] text-text_2 block'
-        width='100%'
-        height='100%'
-      />
-    </div>
+    <CustomSvg
+      src='/SVGs/shared/filter-icon.svg'
+      className='!w-[57px] !h-[57px] text-text_2 block'
+      width='100%'
+      height='100%'
+    />
   );
 
   // Filter content based on filter type

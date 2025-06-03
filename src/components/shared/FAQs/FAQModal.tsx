@@ -44,7 +44,7 @@ const ContactLink = styled.span`
 `;
 
 const FAQModal: React.FC<FAQModalProps> = ({ isOpen, onClose }) => {
-  const { t, locale } = useTranslation();
+  const { locale } = useTranslation();
   const { data: faqData } = useFetchFaqs();
 
   const reshapedFaqs = reshapeFaqs(faqData);

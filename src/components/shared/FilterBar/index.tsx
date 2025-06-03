@@ -271,7 +271,6 @@ const FilterBar = () => {
           </div>
         </div>
         <AdvancedFilterDropDown
-          className='max-h-screen overflow-y-auto'
           filterType={
             collectionStatus as 'experiences' | 'events' | 'stays' | 'offers'
           }
