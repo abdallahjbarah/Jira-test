@@ -1,5 +1,7 @@
 // English dictionary
 const en = {
+  next: 'Next',
+  free: 'Free',
   map: 'MAP',
   type: 'Type',
   experience: 'Experience Type',
@@ -269,6 +271,25 @@ const en = {
     cancel: 'Cancel',
     cancelBooking: 'Cancel Booking',
     bookingStatus: 'Booking Status',
+    cancellationPolicyModal: {
+      title: 'Cancel Your Booking',
+      cancelPolicy: 'Cancellation Policy',
+      sendEmail: 'In case of cancellation send us an email',
+      cancellationCost: 'Cancellation Cost',
+    },
+    cancellationReasonsModal: {
+      reasons: 'Tell us your reason for canceling',
+      send: 'Send',
+      reasonRequired: 'Reason is required',
+      maxLength: 'Max length is 450 characters',
+      minLength: 'Min length is 10 characters',
+    },
+    cancellationSuccess: {
+      title: 'Booking Cancelled',
+      description:
+        "You will receive a refund depending on the cancellation policy. We will send you an email confirming your cancellation. You don't need to do anything else!",
+      action: 'Ok, got it',
+    },
   },
   metadata: {
     title: 'Bookagri - Authentic Agritourism in Jordan',

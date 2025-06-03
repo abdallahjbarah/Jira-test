@@ -1,4 +1,10 @@
+import {
+  CancelationPolicyModal,
+  CancelationReasonsModal,
+  CancellationSuccess,
+} from '@/components/shared/CancelationFlow';
 import { useTranslation } from '@/contexts/TranslationContext';
+import useModal from '@/hooks/useModal';
 import { BookingStatus } from '@/lib/enums';
 import { BookingDetails } from '@/lib/types';
 import React from 'react';
@@ -9,10 +15,18 @@ interface BookingStatusSectionProps {
 
 const BookingStatusSection = ({ detailsData }: BookingStatusSectionProps) => {
   const { t } = useTranslation();
+  const { openModal, closeModal, isOpen } = useModal();
+  const {
+    isOpen: isCancelationReasonsModalOpen,
+    openModal: openCancelationReasonsModal,
+    closeModal: closeCancelationReasonsModal,
+  } = useModal();
 
-  const canCancel = (status: number) => {
-    return detailsData;
-  };
+  const {
+    isOpen: isCancellationSuccessModalOpen,
+    openModal: openCancellationSuccessModal,
+    closeModal: closeCancellationSuccessModal,
+  } = useModal();
 
   const getStatusLabel = (status: number) => {
     switch (status) {
@@ -40,6 +54,16 @@ const BookingStatusSection = ({ detailsData }: BookingStatusSectionProps) => {
     }
   };
 
+  const onCancelReasonModalClose = () => {
+    closeCancelationReasonsModal();
+    openCancellationSuccessModal();
+  };
+
+  const onNext = () => {
+    closeModal();
+    openCancelationReasonsModal();
+  };
+
   return (
     <div className='flex items-center gap-2.5 mt-[27px]'>
       <span
@@ -47,16 +71,35 @@ const BookingStatusSection = ({ detailsData }: BookingStatusSectionProps) => {
       >
         {getStatusLabel(detailsData.booking.status)}
       </span>
-      {detailsData?.canCancel && (
-        <button
-          className='px-11 py-2.5 bg-[#47C40910] text-text_1 border border-green-200 rounded-full hover:bg-green-100 transition-colors duration-200 text-sm font-medium'
-          onClick={() => {
-            // Cancel booking functionality - UI only for now
-            console.log('Cancel booking clicked');
-          }}
-        >
-          {t('bookingStatus.cancel')}
-        </button>
+      {/* {detailsData?.canCancel && ( */}
+      <button
+        className='px-11 py-2.5 bg-[#47C40910] text-text_1 border border-green-200 rounded-full hover:bg-green-100 transition-colors duration-200 text-sm font-medium'
+        onClick={openModal}
+      >
+        {t('bookingStatus.cancel')}
+      </button>
+      {/* )} */}
+      {isOpen && (
+        <CancelationPolicyModal
+          isOpen={isOpen}
+          onClose={closeModal}
+          policy={detailsData.booking?.siteId?.cancellationPolicy}
+          onNext={onNext}
+        />
+      )}
+      {isCancelationReasonsModalOpen && (
+        <CancelationReasonsModal
+          isOpen={isCancelationReasonsModalOpen}
+          onClose={onCancelReasonModalClose}
+          bookingId={detailsData.booking._id}
+          onCancel={closeCancelationReasonsModal}
+        />
+      )}
+      {isCancellationSuccessModalOpen && (
+        <CancellationSuccess
+          isOpen={isCancellationSuccessModalOpen}
+          onClose={closeCancellationSuccessModal}
+        />
       )}
     </div>
   );

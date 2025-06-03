@@ -1,5 +1,7 @@
 // Arabic dictionary
 const ar = {
+  next: 'التالي',
+  free: 'مجاني',
   map: 'الخريطة',
   type: 'نوع',
   experience: 'نوع التجربة',
@@ -284,6 +286,25 @@ const ar = {
     cancel: 'إلغاء',
     cancelBooking: 'إلغاء الحجز',
     bookingStatus: 'حالة الحجز',
+    cancellationPolicyModal: {
+      title: 'إلغاء الحجز',
+      cancelPolicy: 'سياسة الإلغاء',
+      sendEmail: 'في حالة الإلغاء أرسل لنا بريدًا إلكترونيًا',
+      cancellationCost: 'تكلفة الإلغاء',
+    },
+    cancellationReasonsModal: {
+      reasons: 'أخبرنا سبب إلغاء الحجز',
+      send: 'إرسال',
+      reasonRequired: 'السبب مطلوب',
+      maxLength: 'الحد الأقصى 450 حرف',
+      minLength: 'الحد الأدنى 10 حرف',
+    },
+    cancellationSuccess: {
+      title: 'تم إلغاء الحجز',
+      description:
+        'ستتلقى رصيدًا استرجاعيًا بناءً على سياسة الإلغاء. سنرسل لك بريدًا إلكترونيًا يؤكد إلغاء الحجز. لا تحتاج إلى أن تفعل شيئًا آخر!',
+      action: 'حسنًا',
+    },
   },
   metadata: {
     title: 'بوكاجري - السياحة الزراعية الأصيلة في الأردن',
