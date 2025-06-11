@@ -56,10 +56,11 @@ export default function Home({ params }: HomePageProps): React.ReactElement {
   return (
     <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main>
-        <Hero className='min-h-[30.313rem]' contentClassName='py-[1.375rem]' />
         <div className='container mb-[30px] laptopM:mb-[68px] flex items-center justify-center'>
           <FilterBar />
         </div>
+        <Hero className='min-h-[30.313rem]' contentClassName='py-[1.375rem]' />
+
         <div className='container py-[29px]'>
           <CollectionsListing />
         </div>
