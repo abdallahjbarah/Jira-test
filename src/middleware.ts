@@ -75,10 +75,10 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  // If the user is logged in and trying to access login/signup, redirect to all page
+  // If the user is logged in and trying to access login/signup, redirect to main page
   if (isLoggedIn && isAuthPath) {
     return NextResponse.redirect(
-      new URL(`/${locale}/all${request.nextUrl.search}`, request.url),
+      new URL(`/${locale}${request.nextUrl.search}`, request.url),
     );
   }
 

@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { COLLECTION_STATUS_LIST } from '@utils/constants';
+import { COLLECTION_STATUS_LIST, COLLECTION_STATUS } from '@utils/constants';
 import CustomSvg from '@/components/ui/CustomSvg';
 import { useTranslation } from '@/contexts/TranslationContext';
 
@@ -9,11 +9,14 @@ function CollectionTypeLabel(): React.ReactElement {
   const { collectionStatus } = useParams();
   const { locale } = useTranslation();
 
+  // Default to "all" if collectionStatus is undefined (homepage)
+  const currentCollectionStatus = collectionStatus || COLLECTION_STATUS.ALL;
+
   const collectionObject = React.useMemo(() => {
     return COLLECTION_STATUS_LIST.find(
-      (item) => item.value === collectionStatus,
+      (item) => item.value === currentCollectionStatus,
     );
-  }, [collectionStatus]);
+  }, [currentCollectionStatus]);
 
   return (
     <div className='flex items-center gap-2'>

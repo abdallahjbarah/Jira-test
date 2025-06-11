@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { CollectionStatusItem } from '@utils/constants';
+import { CollectionStatusItem, COLLECTION_STATUS } from '@utils/constants';
 import Image from 'next/image';
 import { useTranslation } from '@contexts/TranslationContext';
 import CustomSvg from '@components/ui/CustomSvg';
@@ -20,6 +20,11 @@ const CollectionNavItem = ({
   const { collectionStatus: collectionStatusParam } = useParams();
 
   const isActiveItem = React.useMemo(() => {
+    // If on homepage (no collectionStatus param) and this is the "All" item, it should be active
+    if (!collectionStatusParam && collectionStatus.value === COLLECTION_STATUS.ALL) {
+      return true;
+    }
+    // Otherwise check normal match
     return collectionStatusParam === collectionStatus.value;
   }, [collectionStatusParam, collectionStatus.value]);
 

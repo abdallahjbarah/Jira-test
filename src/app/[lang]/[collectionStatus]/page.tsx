@@ -4,8 +4,8 @@ import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import ContactUsForm from '@/components/web/landing-page/ContactUsForm';
 import DownloadApp from '@/components/web/landing-page/DownloadApp';
 import ContactUs from '@/components/web/landing-page/ContactUs';
-import { Locale, COLLECTION_STATUS_LIST } from '@utils/constants';
-import { notFound } from 'next/navigation';
+import { Locale, COLLECTION_STATUS_LIST, COLLECTION_STATUS } from '@utils/constants';
+import { notFound, redirect } from 'next/navigation';
 import CollectionsListing from '@/components/web/collections/CollectionsListing';
 import ComingSoon from '@/components/shared/ComingSoon';
 
@@ -19,7 +19,12 @@ interface CollectionStatusPageProps {
 export default function CollectionStatusPage({
   params,
 }: CollectionStatusPageProps): React.ReactElement {
-  const { collectionStatus } = params;
+  const { collectionStatus, lang } = params;
+
+  // Redirect "all" to the homepage since it's now the main page
+  if (collectionStatus === COLLECTION_STATUS.ALL) {
+    redirect(`/${lang}`);
+  }
 
   const collectionStatusItem = COLLECTION_STATUS_LIST.find(
     (item) => item.value === collectionStatus,

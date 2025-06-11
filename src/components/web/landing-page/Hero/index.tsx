@@ -3,7 +3,6 @@ import React, { memo } from 'react';
 import BgHomePageImg from '@images/home/BgHomePage.jpg';
 import LeafImg from '@images/home/Leaf.png';
 import Image from 'next/image';
-import FilledButton from '@components/ui/buttons/FilledButton';
 import styles from './style.module.scss';
 import { cn } from '@/utils/cn';
 import { useTranslation } from '@contexts/TranslationContext';
@@ -77,15 +76,6 @@ function Hero({
             <br className='hidden laptopS:block' />{' '}
             {t('hero.subtitleSecondLine') || 'experiences and rural stays'}
           </h2>
-          <FilledButton
-            path='/all'
-            text={t('hero.discoverMore') || 'Discover More'}
-            width='w-[13.67rem]'
-            height='h-[3.625rem] laptopS:h-[4.8125rem]'
-            className='mt-[39px] rounded-custom-16 !text-custom-22 !laptopS:text-custom-24'
-            buttonType='button'
-            isDisable={false}
-          />
         </div>
       </div>
     </section>

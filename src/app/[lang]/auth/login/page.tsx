@@ -38,7 +38,7 @@ export default function LoginPage() {
       setCookie(TOKEN_NAME, data.token);
       setCookie('userStatus', data.user.status);
       toast.success(t('auth.login.loggedInSuccess'));
-      router.push('/all');
+      router.push('/');
     },
     onError: (error: WretchError) => {
       console.log('Error: ', error.json);

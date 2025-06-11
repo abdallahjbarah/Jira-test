@@ -105,7 +105,7 @@ const MyBookingsPage = () => {
   //           </p>
   //           <div className='flex items-center justify-center'>
   //             <FilledButton
-  //               path='/all'
+  //               path='/'
   //               text={t('exploreNow')}
   //               className='py-3 px-6 text-xl rounded-lg mt-[4.563rem] min-w-[16.875rem]'
   //               buttonType='button'

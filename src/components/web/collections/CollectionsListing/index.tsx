@@ -65,12 +65,15 @@ function CollectionsListing(): React.ReactElement {
   const [isMapView, setIsMapView] = useState(false);
   const { t } = useTranslation();
 
+  // Default to "all" if collectionStatus is undefined (homepage)
+  const currentCollectionStatus = collectionStatus || COLLECTION_STATUS.ALL;
+
   const collectionObject = React.useMemo(
     () =>
       COLLECTION_STATUS_LIST.find(
-        (collection) => collection.value === collectionStatus,
+        (collection) => collection.value === currentCollectionStatus,
       ),
-    [collectionStatus],
+    [currentCollectionStatus],
   );
 
   // Build filter object from search params using helper

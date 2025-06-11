@@ -56,7 +56,7 @@ export default function WelcomePage(): React.ReactElement {
       });
 
       toast.success('Profile updated successfully');
-      router.push('/all');
+      router.push('/');
     },
     onError: () => {
       toast.error('Failed to update profile');
