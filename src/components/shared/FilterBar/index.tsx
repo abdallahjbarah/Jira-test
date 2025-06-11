@@ -3,7 +3,8 @@ import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import LocationDropdown from '../LocationDropdown';
 import GuestFilterItem from '../GuestFilterItem';
-import DatePickerDropdown from '../DatePickerDropdown';
+import DatePickerDropdown from '@components/shared/DatePickerDropdown';
+import CombinedDatePickerDropdown from '@components/shared/CombinedDatePickerDropdown';
 import AdvancedFilterDropDown from './AdvancedFilterDropDown';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
@@ -223,27 +224,15 @@ const FilterBar = () => {
             }}
           />
 
-          <DatePickerDropdown
-            title={{ en: t('search.check-in'), ar: t('search.check-in') }}
-            onChange={handleCheckInChange}
-            mode='single'
+          <CombinedDatePickerDropdown
+            checkInTitle={{ en: t('search.check-in'), ar: t('search.check-in') }}
+            checkOutTitle={{ en: t('search.check-out'), ar: t('search.check-out') }}
+            onCheckInChange={handleCheckInChange}
+            onCheckOutChange={handleCheckOutChange}
             minDate={new Date()}
-            value={filtersValue?.checkinTime || ''}
-            maxDate={
-              filtersValue?.checkoutTime
-                ? new Date(filtersValue.checkoutTime)
-                : new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-            }
-          />
-
-          <DatePickerDropdown
-            title={{ en: t('search.check-out'), ar: t('search.check-out') }}
-            onChange={handleCheckOutChange}
-            mode='single'
-            isCheckout={true}
-            checkInDate={getCheckInDate()}
-            minDate={new Date()}
-            value={filtersValue?.checkoutTime || ''}
+            checkInValue={filtersValue?.checkinTime || ''}
+            checkOutValue={filtersValue?.checkoutTime || ''}
+            maxDate={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
           />
 
           <GuestFilterItem

@@ -1,0 +1,413 @@
+/* Airbnb Style Date Picker Animations - Pixel Perfect */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(31, 41, 55, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(31, 41, 55, 0.1);
+  }
+}
+
+@keyframes airbnbModalEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.95);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+/* Main modal animation with perfect centering */
+.airbnb-calendar-enter {
+  animation: airbnbModalEntrance 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Date picker container centering */
+.airbnb-datepicker-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  position: relative;
+}
+
+/* Modal centering overrides */
+.airbnb-modal-center {
+  margin-left: auto;
+  margin-right: auto;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Enhanced viewport centering for date picker */
+.airbnb-datepicker-modal {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  max-width: calc(100vw - 48px);
+  width: 850px;
+}
+
+/* Ensure the date picker stays centered on all screen sizes */
+@media (max-width: 900px) {
+  .airbnb-datepicker-modal {
+    width: calc(100vw - 48px);
+    max-width: none;
+  }
+  
+  .airbnb-modal-center {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin: 0 24px;
+    width: calc(100vw - 48px) !important;
+    max-width: none !important;
+  }
+}
+
+.airbnb-month-slide {
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Date interaction animations */
+.airbnb-date-hover {
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  will-change: transform;
+}
+
+.airbnb-date-hover:hover {
+  transform: scale(1.08);
+  z-index: 10;
+}
+
+.airbnb-date-hover:active {
+  transform: scale(0.95);
+  transition-duration: 0.1s;
+}
+
+.airbnb-date-selected {
+  animation: pulseGlow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(255, 90, 95, 0.2) !important;
+}
+
+/* Range background animations with Airbnb colors */
+.airbnb-range-preview {
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 90, 95, 0.12) 20%,
+    rgba(255, 90, 95, 0.18) 50%, 
+    rgba(255, 90, 95, 0.12) 80%,
+    transparent 100%
+  );
+  animation: fadeInUp 0.2s ease-out;
+}
+
+/* Enhanced range styling with Airbnb colors and seamless connection */
+.airbnb-range-background {
+  background: rgba(255, 90, 95, 0.12);
+  border-radius: 6px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.airbnb-range-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, 
+    rgba(255, 90, 95, 0.06) 0%,
+    rgba(255, 90, 95, 0.12) 50%,
+    rgba(255, 90, 95, 0.06) 100%
+  );
+  border-radius: inherit;
+}
+
+.airbnb-range-hover {
+  background: rgba(221, 221, 221, 0.15);
+  border-radius: 6px;
+  transition: all 0.2s ease-out;
+}
+
+.airbnb-range-hover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, 
+    rgba(221, 221, 221, 0.08) 0%,
+    rgba(221, 221, 221, 0.15) 50%,
+    rgba(221, 221, 221, 0.08) 100%
+  );
+  border-radius: inherit;
+}
+
+/* Mode selector enhancements */
+.airbnb-mode-tab {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.airbnb-mode-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.3), 
+    transparent
+  );
+  transition: left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.airbnb-mode-tab:hover::before {
+  left: 100%;
+}
+
+.airbnb-mode-tab-active {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Navigation buttons are now handled with pure Tailwind classes */
+
+/* Enhanced close button with Airbnb colors */
+.airbnb-close-button {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(221, 221, 221, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.airbnb-close-button:hover {
+  background-color: rgba(247, 247, 247, 1);
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.airbnb-close-button:active {
+  transform: scale(0.92);
+  transition-duration: 0.1s;
+}
+
+/* Dropdown entrance with backdrop blur */
+.airbnb-dropdown-enter {
+  animation: airbnbModalEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Enhanced date selection states with Airbnb colors */
+.airbnb-date-selected-single {
+  background-color: #FF5A5F !important;
+  color: white !important;
+  font-weight: 600;
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 90, 95, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.airbnb-date-in-range {
+  background-color: rgba(156, 163, 175, 0.15);
+  position: relative;
+}
+
+.airbnb-date-in-range::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(156, 163, 175, 0.1), 
+    rgba(156, 163, 175, 0.2)
+  );
+  border-radius: inherit;
+}
+
+.airbnb-date-hover-preview {
+  background-color: rgba(156, 163, 175, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.airbnb-date-hover-preview::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, 
+    rgba(156, 163, 175, 0.1) 0%, 
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.airbnb-date-hover-preview:hover::after {
+  opacity: 1;
+}
+
+/* Enhanced loading skeleton */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.airbnb-loading-skeleton {
+  background: linear-gradient(90deg, 
+    rgba(243, 244, 246, 0.6) 25%, 
+    rgba(229, 231, 235, 0.8) 50%, 
+    rgba(243, 244, 246, 0.6) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Glass morphism effects */
+.airbnb-glass-effect {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive micro-interactions */
+@media (max-width: 768px) {
+  .airbnb-calendar-enter {
+    animation: fadeInUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .airbnb-date-hover:hover {
+    transform: scale(1.05);
+  }
+  
+  .airbnb-nav-button:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .airbnb-date-hover:hover {
+    transform: none;
+  }
+  
+  .airbnb-date-hover:active {
+    transform: scale(0.95);
+    background-color: rgba(156, 163, 175, 0.1);
+  }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+  .airbnb-range-preview {
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(75, 85, 99, 0.25) 20%,
+      rgba(75, 85, 99, 0.3) 50%,
+      rgba(75, 85, 99, 0.25) 80%,
+      transparent 100%
+    );
+  }
+  
+  .airbnb-nav-button {
+    background-color: rgba(31, 41, 55, 0.8);
+    border-color: rgba(75, 85, 99, 0.3);
+  }
+  
+  .airbnb-nav-button:hover {
+    background-color: rgba(31, 41, 55, 0.95);
+  }
+  
+  .airbnb-glass-effect {
+    background: rgba(31, 41, 55, 0.75);
+    border-color: rgba(75, 85, 99, 0.3);
+  }
+}
+
+/* High contrast accessibility */
+@media (prefers-contrast: high) {
+  .airbnb-date-hover {
+    border: 2px solid transparent;
+  }
+  
+  .airbnb-date-hover:hover {
+    border-color: currentColor;
+    transform: scale(1.02);
+  }
+  
+  .airbnb-date-selected-single {
+    border: 3px solid white;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .airbnb-calendar-enter,
+  .airbnb-dropdown-enter,
+  .airbnb-month-slide,
+  .airbnb-date-selected {
+    animation: none;
+  }
+  
+  .airbnb-date-hover,
+  .airbnb-nav-button,
+  .airbnb-close-button,
+  .airbnb-mode-tab {
+    transition: none;
+  }
+  
+  .airbnb-date-hover:hover,
+  .airbnb-nav-button:hover,
+  .airbnb-close-button:hover {
+    transform: none;
+  }
+  
+  .airbnb-loading-skeleton {
+    animation: none;
+    background: rgba(229, 231, 235, 0.8);
+  }
+} 

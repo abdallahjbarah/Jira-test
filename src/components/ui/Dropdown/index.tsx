@@ -7,9 +7,11 @@ import { createPortal } from 'react-dom';
 interface DropdownProps {
   trigger: ReactNode | React.ReactElement;
   content: ReactNode;
-  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
+  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'bottom-center';
   className?: string;
   contentClassName?: string;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -18,8 +20,10 @@ const Dropdown: React.FC<DropdownProps> = ({
   position = 'bottom-right',
   className = '',
   contentClassName = '',
+  isOpen: externalIsOpen,
+  onClose,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [contentStyles, setContentStyles] = useState({
     top: 0,
     left: 0,
@@ -28,6 +32,9 @@ const Dropdown: React.FC<DropdownProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+
+  // Use external isOpen if provided, otherwise use internal state
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
 
   // Set mounted state after component mounts
   useEffect(() => {
@@ -38,7 +45,16 @@ const Dropdown: React.FC<DropdownProps> = ({
   const toggleDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    setIsOpen(!isOpen);
+    
+    if (externalIsOpen !== undefined) {
+      // External control - call onClose if provided
+      if (isOpen && onClose) {
+        onClose();
+      }
+    } else {
+      // Internal control
+      setInternalIsOpen(!internalIsOpen);
+    }
   };
 
   // Update position when dropdown is opened
@@ -87,6 +103,10 @@ const Dropdown: React.FC<DropdownProps> = ({
         left = triggerRect.left;
         top = triggerRect.bottom;
         break;
+      case 'bottom-center':
+        left = triggerRect.left + (triggerRect.width / 2) - (contentWidth / 2);
+        top = triggerRect.bottom;
+        break;
       case 'top-right':
         left = triggerRect.right - contentWidth;
         top = triggerRect.top - contentHeight;
@@ -109,6 +129,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       switch (position) {
         case 'bottom-right':
         case 'bottom-left':
+        case 'bottom-center':
           top = triggerRect.top - contentHeight;
           break;
       }
@@ -141,7 +162,11 @@ const Dropdown: React.FC<DropdownProps> = ({
         !dropdownRef.current.contains(event.target as Node) &&
         !triggerRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        if (externalIsOpen !== undefined && onClose) {
+          onClose();
+        } else {
+          setInternalIsOpen(false);
+        }
       }
     };
 
@@ -149,7 +174,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [externalIsOpen, onClose]);
 
   // Create portal element for dropdown content
   const renderDropdownContent = () => {
