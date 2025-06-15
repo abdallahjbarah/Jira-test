@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Hero from '@components/web/landing-page/Hero';
 import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import ContactUsForm from '@/components/web/landing-page/ContactUsForm';
@@ -58,10 +58,14 @@ export default function Home({ params }: HomePageProps): React.ReactElement {
       <main>
         <Hero className='min-h-[30.313rem]' contentClassName='py-[1.375rem]' />
         <div className='container mb-[30px] laptopM:mb-[68px] flex items-center justify-center'>
-          <FilterBar />
+          <Suspense fallback={<div className="h-[60px] flex items-center justify-center">Loading filters...</div>}>
+            <FilterBar />
+          </Suspense>
         </div>
         <div className='container py-[29px]'>
-          <CollectionsListing />
+          <Suspense fallback={<div className="h-[200px] flex items-center justify-center">Loading collections...</div>}>
+            <CollectionsListing />
+          </Suspense>
         </div>
         <DownloadApp />
         <ContactUs />

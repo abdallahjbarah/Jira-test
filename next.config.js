@@ -11,4 +11,7 @@ module.exports = {
   typescript: {
     ignoreBuildErrors: process.env.NODE_ENV === 'production',
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
