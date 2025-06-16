@@ -143,7 +143,7 @@ function CollectionsListing(): React.ReactElement {
       <CollectionsListingContainer className='mt-[31px]'>
         {collections.map((collection: Site, index: number) => (
           <MemoizedCollectionCard
-            key={collection._id || index}
+            key={index}
             collection={collection}
           />
         ))}
@@ -204,12 +204,20 @@ function CollectionsListing(): React.ReactElement {
         <>
           <CollectionTypeLabel />
           {collectionsGrid}
-          <IntersectionObserverTrigger
+          {hasNextPage ? (
+            <div className="flex justify-center items-center py-5">
+              <button className='bg-primary_1 text-white px-4 py-2 rounded-md' onClick={() => fetchNextPage()}>Load More</button>
+            </div>
+          ) :
+            <div className='text-center text-gray-500 text-lg py-10'>
+              No more results
+            </div>}
+          {/* <IntersectionObserverTrigger
             onIntersect={handleIntersect}
             enabled={hasNextPage && !isFetchingNextPage}
             rootMargin='200px'
             threshold={0.1}
-          />
+          /> */}
           {isFetchingNextPage && (
             <div className='flex justify-center items-center py-5'>
               <CircularLoader size={50} />

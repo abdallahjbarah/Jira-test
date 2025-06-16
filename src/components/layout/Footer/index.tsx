@@ -31,56 +31,130 @@ export default function Footer(): React.ReactElement {
 
   return (
     <footer className='flex min-h-[28.875rem] flex-col items-center justify-between bg-primary_5'>
-      <div className='container mx-auto px-4'>
-        <div className='pt-[4rem] w-full laptopS:px-[8.75rem]'>
-          <div className='flex flex-col items-center gap-x-[15.5rem] gap-y-8 lg:flex-row'>
-            <div className='self-center laptopS:self-start'>
-              {/* Logo */}
-              <div className='w-full h-full max-w-[11.81rem] max-h-[3rem] m-auto laptopS:m-0'>
-                <CustomLink path={'/'}>
-                  <Image
-                    className='w-[11.8125rem] h-[3rem]'
-                    quality={100}
-                    src={BookagriLogoSvg}
-                    alt='Bookagri Logo'
-                  />
-                </CustomLink>
-              </div>
-
-              {/*  Social Media */}
-              <ul className='mt-6 laptopS:mt-[9.25rem] flex gap-[0.9375rem]'>
-                <a target='_blank' href={SOCIAL_MEDIA_DATA?.instagram?.link}>
-                  <li>
-                    <InstagramSvg style='fill-primary_4 hover:fill-primary_1 transition-all duration-500' />
-                  </li>
-                </a>
-                <a target='_blank' href={SOCIAL_MEDIA_DATA?.facebook?.link}>
-                  <li>
-                    <FacebookSvg style='fill-primary_4 hover:fill-primary_1 transition-all duration-500' />
-                  </li>
-                </a>
-                <a target='_blank' href={SOCIAL_MEDIA_DATA?.tiktok?.link}>
-                  <li>
-                    <TiktokSvg style='fill-primary_4 hover:fill-primary_1 transition-all duration-500' />
-                  </li>
-                </a>
-                <a target='_blank' href={SOCIAL_MEDIA_DATA?.linkedin?.link}>
-                  <li>
-                    <LinkedinSvg style='fill-primary_4 hover:fill-primary_1 transition-all duration-500' />
-                  </li>
-                </a>
-                <a target='_blank' href={SOCIAL_MEDIA_DATA?.whatsapp?.link}>
-                  <li>
-                    <WhatsappSvg style='fill-primary_4 hover:fill-primary_1 transition-all duration-500' />
-                  </li>
-                </a>
-              </ul>
+      <div className='pt-[4rem] w-full laptopS:px-[2.75rem]'>
+        <div className='flex flex-col items-start gap-y-8 lg:flex-row'>
+          <div className='self-center laptopS:self-start'>
+            {/* Logo */}
+            <div className='w-full h-full max-w-[11.81rem] max-h-[3rem] m-auto laptopS:m-0'>
+              <CustomLink path={'/'}>
+                <Image
+                  className='w-[11.8125rem] h-[3rem]'
+                  quality={100}
+                  src={BookagriLogoSvg}
+                  alt='Bookagri Logo'
+                />
+              </CustomLink>
             </div>
 
-            {/* Links */}
-            <div className='flex w-full flex-col items-center justify-end tabletM:gap-y-8 tabletM:flex-row tabletM:items-start'>
-              {/* Pages */}
-              <div className='w-[19rem] tabletM:w-[12.5rem] tabletM:me-6'>
+            {/*  Social Media */}
+            <ul className='mt-6 laptopS:mt-[9.25rem] flex gap-[0.9375rem]'>
+              <a target='_blank' href={SOCIAL_MEDIA_DATA?.instagram?.link}>
+                <li>
+                  <InstagramSvg style='fill-primary_4 hover:fill-primary_1 transition-all duration-500' />
+                </li>
+              </a>
+              <a target='_blank' href={SOCIAL_MEDIA_DATA?.facebook?.link}>
+                <li>
+                  <FacebookSvg style='fill-primary_4 hover:fill-primary_1 transition-all duration-500' />
+                </li>
+              </a>
+              <a target='_blank' href={SOCIAL_MEDIA_DATA?.tiktok?.link}>
+                <li>
+                  <TiktokSvg style='fill-primary_4 hover:fill-primary_1 transition-all duration-500' />
+                </li>
+              </a>
+              <a target='_blank' href={SOCIAL_MEDIA_DATA?.linkedin?.link}>
+                <li>
+                  <LinkedinSvg style='fill-primary_4 hover:fill-primary_1 transition-all duration-500' />
+                </li>
+              </a>
+              <a target='_blank' href={SOCIAL_MEDIA_DATA?.whatsapp?.link}>
+                <li>
+                  <WhatsappSvg style='fill-primary_4 hover:fill-primary_1 transition-all duration-500' />
+                </li>
+              </a>
+            </ul>
+          </div>
+
+          {/* Links */}
+          <div className='px-8 flex w-full flex-col items-center justify-center tabletM:justify-start tabletM:gap-y-8 tabletM:flex-row tabletM:items-start'>
+            {/* Pages */}
+            <div className='w-full tabletM:me-6'>
+              {/* <h2 className='text-custom-20 font-custom-700 text-primary_4'>
+                {t('footer.pages')}
+              </h2> */}
+              {/* <div className="mt-4"> */}
+              <div className="flex flex-col gap-4">
+                <ul className="flex flex-col gap-4">
+                  {LINKS_DATA?.map((item: LinkData, index: number) => (
+                    <li
+                      key={index}
+                      className='text-custom-18 font-custom-400 text-primary_4'
+                    >
+                      <CustomLink
+                        className='transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
+                        path={item?.path}
+                      >
+                        {item?.name[locale]}
+                      </CustomLink>
+                    </li>
+                  ))}
+                </ul>
+                {/* </div> */}
+              </div>
+
+            </div>
+
+            <div className='w-full tabletM:me-6'>
+              <ul className="flex flex-col gap-4">
+                {COLLECTIONS_LINKS?.map((item: LinkData, index: number) => (
+                  <li
+                    key={index}
+                    className='text-custom-18 font-custom-400 text-primary_4'
+                  >
+                    <CustomLink
+                      className='transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
+                      path={item?.path}
+                    >
+                      {item?.name[locale]}
+                    </CustomLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className='w-full tabletM:me-6 flex flex-col gap-4'>
+              {/* <h2 className='text-custom-20 font-custom-700 text-primary_4'>
+                {t('footer.contactUs')}
+              </h2>
+              <div className="mt-[1.5rem] mb-4 flex w-full gap-4 tabletM:mt-6"> */}
+              <div className='text-custom-18 text-primary_4 w-full'>
+                <h2 className='font-custom-700 mb-2'>
+                  {t('footer.email.title')}
+                </h2>
+                <p className='font-custom-400'>{t('footer.email.value')}</p>
+              </div>
+              <div className='text-custom-18 text-primary_4 w-full'>
+                <h2 className='font-custom-700 mb-2'>
+                  {t('footer.phone.title')}
+                </h2>
+                {phoneValues.map((phone, index) => (
+                  <p key={index} className='font-custom-400'>
+                    {phone}
+                  </p>
+                ))}
+              </div>
+            </div>
+            <div className='w-full tabletM:me-6 flex flex-col gap-4'>
+              <div className='text-custom-18 text-primary_4 w-full'>
+                <h2 className='font-custom-700 mb-2'>
+                  {t('footer.address.title')}
+                </h2>
+                <p className='font-custom-400'>{t('footer.address.value')}</p>
+                <p className='font-custom-400'>{t('footer.address.zipCode')}</p>
+              </div>
+            </div>
+            {/* </div> */}
+            {/* <div className='w-[19rem] tabletM:w-[12.5rem] tabletM:me-6'>
                 <h2 className='text-custom-20 font-custom-700 text-primary_4'>
                   {t('footer.pages')}
                 </h2>
@@ -159,9 +233,8 @@ export default function Footer(): React.ReactElement {
                     </p>
                   </div>
                 </div>
-              </div>
-              {/* End Contact Us */}
-            </div>
+              </div> */}
+            {/* End Contact Us */}
           </div>
         </div>
       </div>
