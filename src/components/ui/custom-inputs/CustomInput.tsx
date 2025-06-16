@@ -15,7 +15,6 @@ interface CustomInputProps {
   value: string | number;
   type?: string;
   withFocus?: boolean;
-  defaultValue?: string;
   isDisable?: boolean;
   pattern: string;
   shape: number;
@@ -32,7 +31,6 @@ export default function CustomInput({
   value,
   type = 'text',
   withFocus = true,
-  defaultValue = '',
   isDisable = false,
   pattern,
   shape,
@@ -49,7 +47,6 @@ export default function CustomInput({
       disabled={isDisable}
       id={id}
       name={name}
-      defaultValue={defaultValue}
       value={value}
       className={`${shapeClass} ${disabledClass} ${focusClass} ${shapeClass} ${className}`}
       type={type}

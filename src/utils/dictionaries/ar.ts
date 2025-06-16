@@ -518,6 +518,7 @@ const ar = {
       fr: 'جمعة',
     },
   },
+  loadMore: 'عرض المزيد',
 };
 
 export default ar;

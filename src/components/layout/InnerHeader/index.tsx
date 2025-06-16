@@ -14,10 +14,10 @@ function InnerHeader({
   withNavItems = true,
 }: InnerHeaderProps): React.ReactElement {
   return (
-    <header className='relative py-12 container flex items-center justify-between'>
+    <header className='relative py-12 gap-3 container flex items-center justify-between '>
       <CustomLink path={`/`}>
         <Image
-          className='w-[11.8125rem] h-[3rem]'
+          className='w-[11.8125rem] h-[3rem] laptopM:w-[8rem]'
           quality={100}
           src={BookagriLogoSvg}
           alt='Bookagri Logo'

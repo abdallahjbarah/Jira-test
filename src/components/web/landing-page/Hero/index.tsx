@@ -51,8 +51,7 @@ function Hero({
           src={BgHomePageImg}
           fill
           sizes='100vw'
-          objectFit='cover'
-          objectPosition='center'
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
           alt='Background'
           priority
           placeholder='blur'

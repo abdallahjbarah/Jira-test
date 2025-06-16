@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import CollectionTypeLabel from '../CollectionTypeLabel';
 import MapView from '../MapView';
 import { useFetchInfiniteCollections } from '@/lib/apis/collections/useFetchCollections';
@@ -64,6 +64,7 @@ function CollectionsListing(): React.ReactElement {
   const searchParams = useSearchParams();
   const [isMapView, setIsMapView] = useState(false);
   const { t } = useTranslation();
+  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   // Default to "all" if collectionStatus is undefined (homepage)
   const currentCollectionStatus = collectionStatus || COLLECTION_STATUS.ALL;
@@ -110,6 +111,19 @@ function CollectionsListing(): React.ReactElement {
   // Handle map toggle
   const handleMapToggle = useCallback(() => {
     setIsMapView(!isMapView);
+  }, [isMapView]);
+
+  // Scroll to map when it becomes visible
+  useEffect(() => {
+    if (isMapView && mapContainerRef.current) {
+      // Small delay to ensure the map is rendered
+      setTimeout(() => {
+        mapContainerRef.current?.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+    }
   }, [isMapView]);
 
   // Handle back to list from map view
@@ -192,7 +206,7 @@ function CollectionsListing(): React.ReactElement {
       {isMapView ? (
         <>
           <CollectionTypeLabel />
-          <div className='mt-[31px]'>
+          <div ref={mapContainerRef} className='mt-[31px]'>
             <MapView
               collections={collections}
               isLoading={isLoading}
@@ -206,7 +220,7 @@ function CollectionsListing(): React.ReactElement {
           {collectionsGrid}
           {hasNextPage ? (
             <div className="flex justify-center items-center py-5">
-              <button className='bg-primary_1 text-white px-4 py-2 rounded-md' onClick={() => fetchNextPage()}>Load More</button>
+              <button className='bg-primary_1 text-white px-4 py-2 rounded-md' onClick={() => fetchNextPage()}>{t('loadMore')}</button>
             </div>
           ) :
             <div className='text-center text-gray-500 text-lg py-10'>

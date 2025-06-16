@@ -504,6 +504,7 @@ const en = {
       fr: 'Fr',
     },
   },
+  loadMore: 'Load More',
 };
 
 export default en;
