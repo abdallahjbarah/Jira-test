@@ -9,7 +9,8 @@ export interface CollectionFilter {
   children?: number;
   infants?: number;
   country?: string;
-  city?: number;
+  city?: number | string; // Can be city ID (number) or city name (string)
+  destinationText?: string; // For search functionality only, not persisted in URL
   [key: string]: any; // For advanced filters
 }
 
@@ -48,7 +49,7 @@ export const buildFiltersFromSearchParams = (
   if (children) baseFilter.children = Number(children);
   if (infants) baseFilter.infants = Number(infants);
   if (country) baseFilter.country = country;
-  if (city) baseFilter.city = Number(city);
+  if (city) baseFilter.city = city;
 
   // Parse and merge advanced filters
   if (advancedFilters) {
@@ -59,7 +60,7 @@ export const buildFiltersFromSearchParams = (
       console.error('Failed to parse advanced filters:', error);
     }
   }
-  console.log('Base filter:', clearObject(baseFilter));
+  // console.log('Base filter:', clearObject(baseFilter));
 
   return clearObject(baseFilter);
 };
@@ -129,6 +130,7 @@ export const buildSearchParamsFromFilters = (
   delete advancedFilters.infants;
   delete advancedFilters.country;
   delete advancedFilters.city;
+  delete advancedFilters.destinationText;
 
   if (Object.keys(advancedFilters).length > 0) {
     params.set('filters', JSON.stringify(advancedFilters));

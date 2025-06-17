@@ -482,6 +482,7 @@ const ar = {
     when: 'متى',
     who: 'من',
     where: 'الوجهة',
+    destination: 'الوجهة',
   },
   datePicker: {
     add_date: 'إضافة تاريخ',
@@ -519,6 +520,16 @@ const ar = {
     },
   },
   loadMore: 'عرض المزيد',
+  searchResults: {
+    noResults: 'لا يوجد نتائج',
+    searching: 'جاري البحث...',
+    noResultsFound: 'لا يوجد نتائج',
+    searchingFor: 'جاري البحث عن',
+    resultsFor: 'نتائج ل',
+    clearSearch: 'مسح البحث',
+    searchAgain: 'ابحث مرة أخرى',
+    searchAgainPlaceholder: 'ابحث عن مدينة أو دولة...',
+  },
 };
 
 export default ar;

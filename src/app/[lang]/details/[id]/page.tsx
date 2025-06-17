@@ -26,6 +26,9 @@ import withFavourites from '@/lib/hocs/withFavourites';
 import useFavorite from '@/utils/hooks/useFavorite';
 import { Site } from '@/lib/types';
 import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
+import { Gallery } from "react-grid-gallery";
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
 
 interface DetailsIdProps {
   params: { lang: Locale; id: string };
@@ -41,49 +44,55 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     title: string;
     description: string;
   }[] = [
-    {
-      icon: '/SVGs/shared/details-icons/timeCircle.svg',
-      title: 'Duration',
-      description: '2hrs 30m',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/sun.svg',
-      title: 'Time of Day',
-      description: 'Morning (before 12 pm) - Evening (after 5 pm)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/guideIcon.svg',
-      title: 'Guide (Upon Request)',
-      description: 'Extra fees applied',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
-      title: 'Level of Difficulty',
-      description: 'Easy (relaxed tour, easy walk)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
-      title: 'Age Suitability',
-      description: '3+',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/transportationIcon.svg',
-      title: 'Transportation (Upon Request)',
-      description: 'Extra fees applied',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
-      title: 'Spoken Language',
-      description:
-        'Arabic, English (Download a language translator app to communicate with host!)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
-      title: 'Wheelchair Accessible',
-      description: '',
-    },
-  ];
+      {
+        icon: '/SVGs/shared/details-icons/timeCircle.svg',
+        title: 'Duration',
+        description: '2hrs 30m',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/sun.svg',
+        title: 'Time of Day',
+        description: 'Morning (before 12 pm) - Evening (after 5 pm)',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/guideIcon.svg',
+        title: 'Guide (Upon Request)',
+        description: 'Extra fees applied',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
+        title: 'Level of Difficulty',
+        description: 'Easy (relaxed tour, easy walk)',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
+        title: 'Age Suitability',
+        description: '3+',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/transportationIcon.svg',
+        title: 'Transportation (Upon Request)',
+        description: 'Extra fees applied',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
+        title: 'Spoken Language',
+        description:
+          'Arabic, English (Download a language translator app to communicate with host!)',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
+        title: 'Wheelchair Accessible',
+        description: '',
+      },
+    ];
 
+  // All hooks must be at the top of the component
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [imageDimensions, setImageDimensions] = useState<{[key: string]: {width: number, height: number}}>({});
+  
   const collectionStatus = 'all';
   const { data: collections, isLoading: isCollectionsLoading } =
     useFetchCollections(collectionStatus as CollectionStatus, {
@@ -103,22 +112,93 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     return isFavorite(params.id);
   }, [isFavorite, params.id]);
 
-  const [isExpanded, setIsExpanded] = useState(false);
-  const handleFavoriteToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (isCollectionFavorite) {
-      removeFavorite(params.id);
-    } else {
-      openFavouritesModal(detailsData?.data as Site);
-    }
-  };
-
   const heartIconSrc = React.useMemo(() => {
     return isCollectionFavorite
       ? '/SVGs/shared/heart-filled.svg'
       : '/SVGs/shared/heart-icon.svg';
   }, [isCollectionFavorite]);
 
+  // Function to load image dimensions
+  const loadImageDimensions = React.useCallback((imageUrl: string): Promise<{width: number, height: number}> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve({ width: img.naturalWidth, height: img.naturalHeight });
+      };
+      img.onerror = () => {
+        // Fallback to default aspect ratio if image fails to load
+        resolve({ width: 4, height: 3 });
+      };
+      img.src = imageUrl;
+    });
+  }, []);
+
+  // Load all image dimensions on mount
+  React.useEffect(() => {
+    const loadAllDimensions = async () => {
+      if (!detailsData?.data?.images || detailsData.data.images.length === 0) return;
+      
+      const dimensions: {[key: string]: {width: number, height: number}} = {};
+      
+      for (const imageUrl of detailsData.data.images) {
+        const dims = await loadImageDimensions(imageUrl);
+        // Normalize dimensions to reasonable values for the gallery
+        const aspectRatio = dims.width / dims.height;
+        dimensions[imageUrl] = {
+          width: Math.max(1, Math.min(6, Math.round(aspectRatio * 3))), // Scale to 1-6 range
+          height: 3 // Standard height for consistency
+        };
+      }
+      
+      setImageDimensions(dimensions);
+    };
+
+    loadAllDimensions();
+  }, [detailsData?.data?.images, loadImageDimensions]);
+
+  const handleFavoriteToggle = React.useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isCollectionFavorite) {
+      removeFavorite(params.id);
+    } else {
+      openFavouritesModal(detailsData?.data as Site);
+    }
+  }, [isCollectionFavorite, removeFavorite, params.id, openFavouritesModal, detailsData?.data]);
+
+  const handleImageClick = React.useCallback((index: number) => {
+    // Ensure we have valid data before opening lightbox
+    const images = detailsData?.data?.images;
+    if (!images || index < 0 || index >= images.length) {
+      return;
+    }
+    setCurrentImageIndex(index);
+    // Small delay to ensure state is updated before opening lightbox
+    setTimeout(() => {
+      setIsLightboxOpen(true);
+    }, 10);
+  }, [detailsData?.data?.images]);
+
+  const handleCloseLightbox = React.useCallback(() => {
+    setIsLightboxOpen(false);
+  }, []);
+
+  const handleMovePrev = React.useCallback(() => {
+    const images = detailsData?.data?.images;
+    if (!images) return;
+    setCurrentImageIndex((current) => 
+      (current + images.length - 1) % images.length
+    );
+  }, [detailsData?.data?.images]);
+
+  const handleMoveNext = React.useCallback(() => {
+    const images = detailsData?.data?.images;
+    if (!images) return;
+    setCurrentImageIndex((current) => 
+      (current + 1) % images.length
+    );
+  }, [detailsData?.data?.images]);
+
+  // Early returns after all hooks
   if (isLoading) {
     return (
       <div className='flex justify-center items-center h-screen'>
@@ -173,24 +253,47 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     stayHouseRules,
   } = detailsData.data;
 
+  // Prepare images for gallery - Natural aspect ratios with 3 rows max
+  const galleryImages = images?.map((image: string) => {
+    const dims = imageDimensions[image] || { width: 4, height: 3 }; // Default fallback
+    return {
+      src: image,
+      width: dims.width,
+      height: dims.height,
+      thumbnail: image,
+    };
+  }) || [];
+
   return (
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
         <div className='flex flex-col'>
-          <div className='relative laptopM:h-[calc(100vh-20rem)]'>
-            <ImageCarousel
-              images={images}
-              className='w-full h-full relative'
-              imageHeight='aspect-square'
-              slickProps={{
-                autoplay: false,
-                dots: images.length > 1,
-              }}
-              imageProps={{
-                src: images[0],
-                fill: true,
+          <div className='relative'>
+            <Gallery
+              images={galleryImages}
+              onClick={handleImageClick}
+              enableImageSelection={false}
+              maxRows={3}
+              rowHeight={250}
+              margin={8}
+              thumbnailStyle={{
+                borderRadius: '12px',
+                overflow: 'hidden',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer',
+                objectFit: 'cover',
               }}
             />
+            {isLightboxOpen && (
+              <Lightbox
+                mainSrc={images[currentImageIndex]}
+                nextSrc={images[(currentImageIndex + 1) % images.length]}
+                prevSrc={images[(currentImageIndex + images.length - 1) % images.length]}
+                onCloseRequest={handleCloseLightbox}
+                onMovePrevRequest={handleMovePrev}
+                onMoveNextRequest={handleMoveNext}
+              />
+            )}
             <button
               className='absolute top-[1.875rem] right-[1.875rem] z-20 p-1 hover:!text-primary_2'
               onClick={handleFavoriteToggle}

@@ -38,14 +38,18 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
   // Get initial values from form context if available, otherwise use prop or default
   const getInitialGuests = () => {
     if (formContext) {
-      const formGuests = formContext.watch('guests');
+      const formFilters = formContext.watch('filters');
       if (
-        formGuests &&
-        (formGuests.adults > 0 ||
-          formGuests.children > 0 ||
-          formGuests.infants > 0)
+        formFilters &&
+        (formFilters.adults > 0 ||
+          formFilters.children > 0 ||
+          formFilters.infants > 0)
       ) {
-        return formGuests;
+        return {
+          adults: formFilters.adults || 0,
+          children: formFilters.children || 0,
+          infants: formFilters.infants || 0,
+        };
       }
     }
     return initialValues || { adults: 0, children: 0, infants: 0 };
@@ -56,9 +60,13 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
   // Update local state when form context changes
   useEffect(() => {
     if (formContext) {
-      const formGuests = formContext.watch('guests');
-      if (formGuests) {
-        setGuests(formGuests);
+      const formFilters = formContext.watch('filters');
+      if (formFilters) {
+        setGuests({
+          adults: formFilters.adults || 0,
+          children: formFilters.children || 0,
+          infants: formFilters.infants || 0,
+        });
       }
     }
   }, [formContext]);

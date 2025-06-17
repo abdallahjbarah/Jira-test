@@ -468,6 +468,7 @@ const en = {
     when: 'When',
     who: 'Who',
     where: 'Where',
+    destination: 'Destination',
   },
   datePicker: {
     add_date: 'Add date',
@@ -505,6 +506,16 @@ const en = {
     },
   },
   loadMore: 'Load More',
+  searchResults: {
+    noResults: 'No results',
+    searching: 'Searching...',
+    noResultsFound: 'No results found',
+    searchingFor: 'Searching for',
+    resultsFor: 'Results for',
+    clearSearch: 'Clear search',
+    searchAgain: 'Search again',
+    searchAgainPlaceholder: 'Search for a city or country...',
+  },
 };
 
 export default en;

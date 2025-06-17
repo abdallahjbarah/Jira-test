@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 const ProfileTrigger: React.FC = () => {
   const { userData } = useUser();
-  console.log(userData?.user?.profileImageUrl);
+  // console.log(userData?.user?.profileImageUrl);
   return (
     <div className='w-[50px] h-[50px] laptopM:w-[70px] laptopM:h-[70px] bg-primary_2 rounded-full p-1 laptopM:p-[11px]'>
       {userData?.user.profileImageUrl ? (
