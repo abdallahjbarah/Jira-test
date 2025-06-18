@@ -26,9 +26,7 @@ import withFavourites from '@/lib/hocs/withFavourites';
 import useFavorite from '@/utils/hooks/useFavorite';
 import { Site } from '@/lib/types';
 import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
-import { Gallery } from "react-grid-gallery";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
+import ImagesGallery from './ImagesGallery';
 
 interface DetailsIdProps {
   params: { lang: Locale; id: string };
@@ -91,8 +89,8 @@ const DetailsId: React.FC<DetailsIdProps> = ({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [imageDimensions, setImageDimensions] = useState<{[key: string]: {width: number, height: number}}>({});
-  
+  const [imageDimensions, setImageDimensions] = useState<{ [key: string]: { width: number, height: number } }>({});
+
   const collectionStatus = 'all';
   const { data: collections, isLoading: isCollectionsLoading } =
     useFetchCollections(collectionStatus as CollectionStatus, {
@@ -119,7 +117,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
   }, [isCollectionFavorite]);
 
   // Function to load image dimensions
-  const loadImageDimensions = React.useCallback((imageUrl: string): Promise<{width: number, height: number}> => {
+  const loadImageDimensions = React.useCallback((imageUrl: string): Promise<{ width: number, height: number }> => {
     return new Promise((resolve) => {
       const img = new Image();
       img.onload = () => {
@@ -137,9 +135,9 @@ const DetailsId: React.FC<DetailsIdProps> = ({
   React.useEffect(() => {
     const loadAllDimensions = async () => {
       if (!detailsData?.data?.images || detailsData.data.images.length === 0) return;
-      
-      const dimensions: {[key: string]: {width: number, height: number}} = {};
-      
+
+      const dimensions: { [key: string]: { width: number, height: number } } = {};
+
       for (const imageUrl of detailsData.data.images) {
         const dims = await loadImageDimensions(imageUrl);
         // Normalize dimensions to reasonable values for the gallery
@@ -149,7 +147,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
           height: 3 // Standard height for consistency
         };
       }
-      
+
       setImageDimensions(dimensions);
     };
 
@@ -185,7 +183,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
   const handleMovePrev = React.useCallback(() => {
     const images = detailsData?.data?.images;
     if (!images) return;
-    setCurrentImageIndex((current) => 
+    setCurrentImageIndex((current) =>
       (current + images.length - 1) % images.length
     );
   }, [detailsData?.data?.images]);
@@ -193,7 +191,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
   const handleMoveNext = React.useCallback(() => {
     const images = detailsData?.data?.images;
     if (!images) return;
-    setCurrentImageIndex((current) => 
+    setCurrentImageIndex((current) =>
       (current + 1) % images.length
     );
   }, [detailsData?.data?.images]);
@@ -269,31 +267,9 @@ const DetailsId: React.FC<DetailsIdProps> = ({
       <main className='container'>
         <div className='flex flex-col'>
           <div className='relative'>
-            <Gallery
-              images={galleryImages}
-              onClick={handleImageClick}
-              enableImageSelection={false}
-              maxRows={3}
-              rowHeight={250}
-              margin={8}
-              thumbnailStyle={{
-                borderRadius: '12px',
-                overflow: 'hidden',
-                transition: 'all 0.3s ease',
-                cursor: 'pointer',
-                objectFit: 'cover',
-              }}
-            />
-            {isLightboxOpen && (
-              <Lightbox
-                mainSrc={images[currentImageIndex]}
-                nextSrc={images[(currentImageIndex + 1) % images.length]}
-                prevSrc={images[(currentImageIndex + images.length - 1) % images.length]}
-                onCloseRequest={handleCloseLightbox}
-                onMovePrevRequest={handleMovePrev}
-                onMoveNextRequest={handleMoveNext}
-              />
-            )}
+            <div className="w-full flex justify-center">
+              <ImagesGallery images={images} />
+            </div>
             <button
               className='absolute top-[1.875rem] right-[1.875rem] z-20 p-1 hover:!text-primary_2'
               onClick={handleFavoriteToggle}
