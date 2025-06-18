@@ -520,6 +520,7 @@ const ar = {
     },
   },
   loadMore: 'عرض المزيد',
+  showAllPhotos: 'عرض جميع الصور',
   searchResults: {
     noResults: 'لا يوجد نتائج',
     searching: 'جاري البحث...',

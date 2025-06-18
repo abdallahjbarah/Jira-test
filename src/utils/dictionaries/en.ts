@@ -506,6 +506,7 @@ const en = {
     },
   },
   loadMore: 'Load More',
+  showAllPhotos: 'Show all photos',
   searchResults: {
     noResults: 'No results',
     searching: 'Searching...',
