@@ -12,7 +12,16 @@ module.exports = {
         protocol: 'https',
         hostname: 'agribooking.s3.me-south-1.amazonaws.com',
       },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
+      },
     ],
+    unoptimized: true,
   },
   sassOptions: {
     includePaths: [path.join(__dirname, 'src/styles')],

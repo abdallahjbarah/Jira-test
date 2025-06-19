@@ -33,6 +33,10 @@ const ImagesGallery = ({ images }: { images: string[] }) => {
             src={thumbnail} 
             alt="Main property image" 
             className="rounded-[6px] h-full cursor-pointer w-full object-cover hover:brightness-75 transition-all duration-200" 
+            unoptimized
+            onError={(e) => {
+              console.error('Failed to load main image:', thumbnail);
+            }}
           />
         </div>
         <div className="hidden lg:grid lg:grid-cols-2 lg:col-span-4 lg:gap-[16px]">
@@ -56,6 +60,10 @@ const ImagesGallery = ({ images }: { images: string[] }) => {
                     width={292} 
                     height={292} 
                     className="h-full w-full rounded-[6px] cursor-pointer bg-propy-overlay object-cover hover:brightness-75 transition-all duration-200" 
+                    unoptimized
+                    onError={(e) => {
+                      console.error('Failed to load gallery image:', img);
+                    }}
                   />
                   {idx === 3 && galleryImages.length > 4 && (
                     <div className="bg-propy-overlay rounded-[6px] w-full h-full text-center bottom-[100%] relative flex items-center justify-center cursor-pointer">
