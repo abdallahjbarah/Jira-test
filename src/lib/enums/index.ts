@@ -44,3 +44,9 @@ export enum BookingStatus {
   COMPLETED = 6,
   REFUND_REQUESTED = 7,
 }
+
+export enum SSOProviderType {
+  GOOGLE = 'google',
+  FACEBOOK = 'facebook',
+  APPLE = 'apple',
+}

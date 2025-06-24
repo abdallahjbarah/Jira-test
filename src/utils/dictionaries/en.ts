@@ -371,6 +371,14 @@ const en = {
       profileSetupSuccess: 'Profile setup completed successfully!',
       profileSetupFailed: 'Failed to set up profile. Please try again.',
     },
+    profile: {
+      completionRequired: 'Profile completion required',
+      missingFields: 'Missing fields',
+      completeProfile: 'Complete Profile',
+      profileCompletionTitle: 'Complete Your Profile',
+      profileCompletionDescription:
+        'Please provide additional information to complete your profile',
+    },
   },
   helpCenter: {
     title: 'Help Center',

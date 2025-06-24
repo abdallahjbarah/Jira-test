@@ -386,6 +386,14 @@ const ar = {
       profileSetupSuccess: 'تم إكمال إعداد الملف الشخصي بنجاح!',
       profileSetupFailed: 'فشل إعداد الملف الشخصي. يرجى المحاولة مرة أخرى.',
     },
+    profile: {
+      completionRequired: 'إكمال الملف الشخصي مطلوب',
+      missingFields: 'الحقول المفقودة',
+      completeProfile: 'إكمال الملف الشخصي',
+      profileCompletionTitle: 'أكمل ملفك الشخصي',
+      profileCompletionDescription:
+        'يرجى تقديم معلومات إضافية لإكمال ملفك الشخصي',
+    },
   },
   helpCenter: {
     title: 'مركز المساعدة',

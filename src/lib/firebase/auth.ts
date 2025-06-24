@@ -7,14 +7,9 @@ import {
   User,
 } from 'firebase/auth';
 import { getFirebaseAuth } from './config';
+import { SSOProvider } from '@/lib/types';
 
-export interface SSOProvider {
-  provider: 'google' | 'facebook' | 'apple';
-  idToken: string;
-  user: User;
-}
-
-export const createProvider = (providerName: string) => {
+const createProvider = (providerName: string) => {
   switch (providerName.toLowerCase()) {
     case 'google':
       const googleProvider = new GoogleAuthProvider();
@@ -42,19 +37,11 @@ export const signInWithProvider = async (
   providerName: string,
 ): Promise<SSOProvider> => {
   try {
-    console.log(`Starting ${providerName} authentication...`);
-
     const auth = await getFirebaseAuth();
     const provider = createProvider(providerName);
 
     const result = await signInWithPopup(auth, provider);
     const idToken = await result.user.getIdToken();
-
-    console.log(`${providerName} authentication successful:`, {
-      uid: result.user.uid,
-      email: result.user.email,
-      displayName: result.user.displayName,
-    });
 
     return {
       provider: providerName as 'google' | 'facebook' | 'apple',
@@ -64,7 +51,6 @@ export const signInWithProvider = async (
   } catch (error: any) {
     console.error(`${providerName} sign-in failed:`, error);
 
-    // Handle specific Firebase Auth errors
     if (error.code === 'auth/popup-closed-by-user') {
       throw new Error('Sign-in was cancelled');
     } else if (error.code === 'auth/popup-blocked') {
@@ -77,12 +63,7 @@ export const signInWithProvider = async (
   }
 };
 
-export const signOut = async () => {
-  try {
-    const auth = await getFirebaseAuth();
-    await firebaseSignOut(auth);
-  } catch (error) {
-    console.error('Sign out failed:', error);
-    throw error;
-  }
+export const signOut = async (): Promise<void> => {
+  const auth = await getFirebaseAuth();
+  await firebaseSignOut(auth);
 };

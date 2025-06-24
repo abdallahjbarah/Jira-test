@@ -37,7 +37,18 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
 
   if (onClick) {
     return (
-      <div onClick={onClick} className='block cursor-pointer'>
+      <div
+        onClick={onClick}
+        className='block cursor-pointer'
+        role='button'
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onClick();
+          }
+        }}
+      >
         {content}
       </div>
     );

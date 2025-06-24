@@ -11,24 +11,36 @@ import { setCookie } from '@/utils/cookies';
 import { TOKEN_NAME } from '@/utils';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { useFirebase } from '@/providers/FirebaseProvider';
+import { SSOProviderType } from '@/lib/enums';
 
 interface SocialLoginButtonProps {
   provider: 'google' | 'facebook' | 'apple';
   userType?: 'guest' | 'partner';
   className?: string;
   disabled?: boolean;
+  // Optional additional profile data
+  additionalProfileData?: {
+    firstName?: string;
+    lastName?: string;
+    phoneNumber?: string;
+    gender?: 'male' | 'female' | 'other';
+    birthDate?: string;
+    nationality?: string;
+    countryId?: string;
+    city?: string;
+  };
 }
 
 const PROVIDER_CONFIG = {
-  google: {
+  [SSOProviderType.GOOGLE]: {
     icon: '/SVGs/shared/google.svg',
     name: 'Google',
   },
-  facebook: {
+  [SSOProviderType.FACEBOOK]: {
     icon: '/SVGs/shared/facebook.svg',
     name: 'Facebook',
   },
-  apple: {
+  [SSOProviderType.APPLE]: {
     icon: '/SVGs/shared/apple.svg',
     name: 'Apple',
   },
@@ -39,6 +51,7 @@ export default function SocialLoginButton({
   userType = 'guest',
   className = '',
   disabled = false,
+  additionalProfileData,
 }: SocialLoginButtonProps): React.ReactElement {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -49,39 +62,47 @@ export default function SocialLoginButton({
 
   const { mutate: firebaseSSO } = useFirebaseSSO(userType, {
     onSuccess: (data) => {
-      console.log('Firebase SSO Response:', data);
-
       try {
-        // Store token and user data
         queryClient.setQueryData(['user'], data);
-        setCookie(TOKEN_NAME, data.token);
 
-        // Set userStatus cookie - handle like regular login
+        // Only set token if user doesn't need profile completion
+        if (!data.profileCompletionRequired && data.token) {
+          setCookie(TOKEN_NAME, data.token);
+        }
+
         if (
           data.user &&
           data.user.status !== undefined &&
           data.user.status !== null
         ) {
           setCookie('userStatus', data.user.status.toString());
-        } else {
-          console.warn('User status is undefined in SSO response:', data.user);
         }
 
-        // Show success message
-        toast.success(
-          data.isNewUser
-            ? t('auth.login.accountCreatedSuccess')
-            : t('auth.login.loggedInSuccess'),
-        );
-
-        // Redirect based on user status (only if status exists)
-        if (data.user && data.user.status === 3) {
-          // User needs verification
+        // Handle profile completion requirements
+        if (data.profileCompletionRequired) {
+          toast.info(
+            `${t('auth.profile.completionRequired')}. ${t('auth.profile.missingFields')}: ${data.missingFields?.join(', ')}`,
+          );
+          // Redirect to profile completion page with user data
           router.push(
-            `/auth/verify?email=${encodeURIComponent(data.user.email)}`,
+            `/auth/complete-profile?email=${encodeURIComponent(data.user.email)}&isNewUser=${data.isNewUser}`,
           );
         } else {
-          router.push('/');
+          // Show success message for completed authentication
+          toast.success(
+            data.isNewUser
+              ? t('auth.login.accountCreatedSuccess')
+              : t('auth.login.loggedInSuccess'),
+          );
+
+          // Redirect based on user status
+          if (data.user && data.user.status === 3) {
+            router.push(
+              `/auth/verify?email=${encodeURIComponent(data.user.email)}`,
+            );
+          } else {
+            router.push('/');
+          }
         }
       } catch (processingError) {
         console.error('Error processing SSO response:', processingError);
@@ -112,9 +133,8 @@ export default function SocialLoginButton({
     setIsLoading(true);
 
     try {
-      await firebaseSSO(provider);
+      await firebaseSSO({ provider, additionalData: additionalProfileData });
     } catch (error) {
-      // Error handling is done in the mutation's onError callback
       console.error(`Failed to initiate ${provider} login:`, error);
       setIsLoading(false);
     }

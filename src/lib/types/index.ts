@@ -490,3 +490,64 @@ export interface CancelReason {
   updatedAt: string;
   __v: number;
 }
+
+export interface FirebaseSSOData {
+  idToken: string;
+  provider: 'Apple' | 'Google' | 'Facebook';
+  fcmToken?: string;
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  gender?: 'male' | 'female' | 'other';
+  birthDate?: string;
+  nationality?: string;
+  countryId?: string;
+  city?: string;
+}
+
+export interface FirebaseUserInfo {
+  uid: string;
+  email: string;
+  displayName?: string;
+  firstName?: string;
+  lastName?: string;
+  photoURL?: string;
+  phoneNumber?: string;
+  emailVerified: boolean;
+  locale?: string;
+  timezone?: string;
+  providerId: string;
+  customClaims?: any;
+  providerData?: any[];
+}
+
+export interface FirebaseSSOResponse {
+  user: {
+    uid: string;
+    email: string;
+    displayName?: string;
+    firstName?: string;
+    lastName?: string;
+    photoURL?: string;
+    phoneNumber?: string;
+    providerId: string;
+    emailVerified: boolean;
+    status?: number;
+    gender?: string;
+    birthDate?: string;
+    nationality?: string;
+    city?: string;
+    customClaims?: any;
+    providerData?: any[];
+  };
+  token: string;
+  isNewUser: boolean;
+  profileCompletionRequired?: boolean;
+  missingFields?: string[];
+}
+
+export interface SSOProvider {
+  provider: 'google' | 'facebook' | 'apple';
+  idToken: string;
+  user: any;
+}
