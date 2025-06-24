@@ -1,19 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import CustomLink from '@components/ui/CustomLink';
 import HeaderLink from './HeaderLink';
-import { usePathname } from 'next/navigation';
+import { usePathname, useParams } from 'next/navigation';
 import BookagriLogoSvg from '@SVGs/shared/BookagriLogoSvg.svg';
 import {
   COLLECTIONS_LINKS,
   DEFAULT_LOCALE,
   LINKS_DATA,
+  Locale,
 } from '@utils/constants';
-import { useState } from 'react';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
-import { Locale } from '@utils/constants';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 interface LinkData {

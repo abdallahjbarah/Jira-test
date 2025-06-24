@@ -21,6 +21,7 @@
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.11",
     "dotenv": "^16.4.5",
+    "firebase": "^10.12.2",
     "formik": "^2.4.6",
     "js-cookie": "^3.0.5",
     "libphonenumber-js": "^1.12.8",

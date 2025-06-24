@@ -4,6 +4,7 @@ import ReactQueryProvider from '@providers/ReactQueryProvider';
 import ReactToastifyProvider from '@providers/ReactToastifyProvider';
 import ReactPublicContextProvider from '@providers/ReactPublicContextProvider';
 import ReactLoadingProvider from '@providers/ReactLoadingProvider';
+import { FirebaseProvider } from '@/providers/FirebaseProvider';
 import { SEO_KEYWORDS } from '@utils/constants';
 import { Locale } from '@utils/constants';
 import { TranslationProvider } from '@/contexts/TranslationContext';
@@ -56,23 +57,25 @@ export default function RootLayout({ children, params }: RootLayoutProps) {
   return (
     <html lang={params.lang} dir={params.lang === 'ar' ? 'rtl' : 'ltr'}>
       <body>
-        <TranslationProvider>
-          <CustomAuthProvider>
-            <ErrorBoundaryProvider>
-              <ReactQueryProvider>
-                <ReactToastifyProvider>
-                  <ReactPublicContextProvider>
-                    <ReactLoadingProvider>
-                      <StyledComponentsRegistry>
-                        {children}
-                      </StyledComponentsRegistry>
-                    </ReactLoadingProvider>
-                  </ReactPublicContextProvider>
-                </ReactToastifyProvider>
-              </ReactQueryProvider>
-            </ErrorBoundaryProvider>
-          </CustomAuthProvider>
-        </TranslationProvider>
+        <FirebaseProvider>
+          <TranslationProvider>
+            <CustomAuthProvider>
+              <ErrorBoundaryProvider>
+                <ReactQueryProvider>
+                  <ReactToastifyProvider>
+                    <ReactPublicContextProvider>
+                      <ReactLoadingProvider>
+                        <StyledComponentsRegistry>
+                          {children}
+                        </StyledComponentsRegistry>
+                      </ReactLoadingProvider>
+                    </ReactPublicContextProvider>
+                  </ReactToastifyProvider>
+                </ReactQueryProvider>
+              </ErrorBoundaryProvider>
+            </CustomAuthProvider>
+          </TranslationProvider>
+        </FirebaseProvider>
       </body>
     </html>
   );

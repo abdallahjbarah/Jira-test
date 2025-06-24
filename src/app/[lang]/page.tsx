@@ -5,11 +5,10 @@ import ContactUsForm from '@/components/web/landing-page/ContactUsForm';
 import DownloadApp from '@/components/web/landing-page/DownloadApp';
 import ContactUs from '@/components/web/landing-page/ContactUs';
 import FilterBar from '@/components/shared/FilterBar';
-import { Locale } from '@utils/constants';
+import { Locale, SEO_KEYWORDS } from '@utils/constants';
 import CollectionsListing from '@/components/web/collections/CollectionsListing';
 import { getDictionary } from '@/utils/dictionaries';
 import { Metadata } from 'next';
-import { SEO_KEYWORDS } from '@utils/constants';
 
 interface HomePageProps {
   params: {
@@ -58,12 +57,24 @@ export default function Home({ params }: HomePageProps): React.ReactElement {
       <main>
         <Hero className='min-h-[30.313rem]' contentClassName='py-[1.375rem]' />
         <div className='container mb-[30px] laptopM:mb-[68px] flex items-center justify-center'>
-          <Suspense fallback={<div className="h-[60px] flex items-center justify-center">Loading filters...</div>}>
+          <Suspense
+            fallback={
+              <div className='h-[60px] flex items-center justify-center'>
+                Loading filters...
+              </div>
+            }
+          >
             <FilterBar />
           </Suspense>
         </div>
         <div className='container py-[29px]'>
-          <Suspense fallback={<div className="h-[200px] flex items-center justify-center">Loading collections...</div>}>
+          <Suspense
+            fallback={
+              <div className='h-[200px] flex items-center justify-center'>
+                Loading collections...
+              </div>
+            }
+          >
             <CollectionsListing />
           </Suspense>
         </div>

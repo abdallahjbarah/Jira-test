@@ -16,6 +16,7 @@ import { TOKEN_NAME } from '@/utils';
 import PasswordInput from '@/components/form/PasswordInput';
 import { useTranslation } from '@/contexts/TranslationContext';
 import CustomLink from '@/components/ui/CustomLink';
+import SocialLoginButton from '@/components/shared/SocialLoginButton';
 
 interface LoginFormValues {
   email: string;
@@ -185,45 +186,9 @@ export default function LoginPage() {
 
           {/* Social Login Buttons */}
           <div className='space-y-3 flex flex-col items-center'>
-            <button
-              type='button'
-              style={{ border: '1px solid #EEEEEE' }}
-              className='bg-white box-border w-full max-w-[296px] h-[48px] flex items-center justify-center gap-3 rounded-[8px] text-[14px] font-bold leading-[17px] text-[#222222] transition-all hover:bg-gray-50 hover:scale-[1.02]'
-            >
-              <Image
-                src='/SVGs/shared/apple.svg'
-                alt='Apple'
-                width={24}
-                height={24}
-              />
-              <span>Apple</span>
-            </button>
-            <button
-              type='button'
-              style={{ border: '1px solid #EEEEEE' }}
-              className='bg-white box-border w-full max-w-[296px] h-[48px] flex items-center justify-center gap-3 rounded-[8px] text-[14px] font-bold leading-[17px] text-[#222222] transition-all hover:bg-gray-50 hover:scale-[1.02]'
-            >
-              <Image
-                src='/SVGs/shared/google.svg'
-                alt='Google'
-                width={24}
-                height={24}
-              />
-              <span>Google</span>
-            </button>
-            <button
-              type='button'
-              style={{ border: '1px solid #EEEEEE' }}
-              className='bg-white box-border w-full max-w-[296px] h-[48px] flex items-center justify-center gap-3 rounded-[8px] text-[14px] font-bold leading-[17px] text-[#222222] transition-all hover:bg-gray-50 hover:scale-[1.02]'
-            >
-              <Image
-                src='/SVGs/shared/facebook.svg'
-                alt='Facebook'
-                width={24}
-                height={24}
-              />
-              <span>Facebook</span>
-            </button>
+            <SocialLoginButton provider='apple' />
+            <SocialLoginButton provider='google' />
+            <SocialLoginButton provider='facebook' />
           </div>
         </div>
       </div>

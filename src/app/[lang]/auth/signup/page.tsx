@@ -23,7 +23,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { WretchError } from 'wretch';
 import { useTranslation } from '@/contexts/TranslationContext';
 import CustomLink from '@/components/ui/CustomLink';
-
+import SocialLoginButton from '@/components/shared/SocialLoginButton';
 interface SignUpFormValues {
   firstName: string;
   lastName: string;
@@ -246,6 +246,24 @@ export default function SignUpPage(): React.ReactElement {
                     t('auth.signup.createButton')
                   )}
                 </button>
+              </div>
+
+              {/* Or Divider */}
+              <div className='relative mt-12 mb-8 flex items-center justify-center w-full max-w-[296px] mx-auto'>
+                <div className='w-[123px] border-t-[1px] border-solid border-[#EEEEEE]'></div>
+                <div className='mx-[16.5px]'>
+                  <p className='text-[12px] font-normal leading-[14px] text-[#222222]'>
+                    {t('auth.login.or')}
+                  </p>
+                </div>
+                <div className='w-[123px] border-t-[1px] border-solid border-[#EEEEEE]'></div>
+              </div>
+
+              {/* Social Login Buttons */}
+              <div className='space-y-3 flex flex-col items-center mb-8'>
+                <SocialLoginButton provider='apple' />
+                <SocialLoginButton provider='google' />
+                <SocialLoginButton provider='facebook' />
               </div>
 
               {/* Already have an account */}
