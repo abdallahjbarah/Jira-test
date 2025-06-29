@@ -6,7 +6,16 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "cleanup:comments": "node scripts/remove-comments.js",
+    "cleanup:unused": "npx unimported",
+    "cleanup:console": "node scripts/remove-console.js",
+    "cleanup:all": "npm run cleanup:unused && npm run cleanup:console && npm run cleanup:comments && npm run format",
+    "analyze:bundle": "ANALYZE=true npm run build",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.6.1",
@@ -55,13 +64,17 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@types/react-slick": "^0.23.13",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
+    "eslint-plugin-unused-imports": "^3.0.0",
     "postcss": "^8",
     "prettier": "3.2.5",
     "react-hook-form": "^7.56.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.8.3",
+    "unimported": "^1.31.1",
     "wretch": "^2.11.0"
   }
 }

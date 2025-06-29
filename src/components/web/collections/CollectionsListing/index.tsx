@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import CollectionTypeLabel from '../CollectionTypeLabel';
 import MapView from '../MapView';
 import { useFetchInfiniteCollections } from '@/lib/apis/collections/useFetchCollections';
@@ -8,7 +8,6 @@ import { useParams, useSearchParams } from 'next/navigation';
 import CollectionCard from '../CollectionCard';
 import Styled from 'styled-components';
 import CircularLoader from '@/components/ui/CircularLoader';
-import { IntersectionObserverTrigger } from '@/components/shared/IntersectionObserverTrigger';
 import { Site, SitesResponse } from '@/lib/types';
 import { buildFiltersFromSearchParams } from '@/utils/helpers/filterHelpers';
 import CustomSvg from '@/components/ui/CustomSvg';
@@ -56,7 +55,6 @@ const MapToggleWidget = Styled.div`
 
 `;
 
-// Memoized collection card component to prevent unnecessary re-renders
 const MemoizedCollectionCard = React.memo(CollectionCard);
 
 function CollectionsListing(): React.ReactElement {
@@ -66,7 +64,6 @@ function CollectionsListing(): React.ReactElement {
   const { t } = useTranslation();
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
-  // Default to "all" if collectionStatus is undefined (homepage)
   const currentCollectionStatus = collectionStatus || COLLECTION_STATUS.ALL;
 
   const collectionObject = React.useMemo(
@@ -77,7 +74,6 @@ function CollectionsListing(): React.ReactElement {
     [currentCollectionStatus],
   );
 
-  // Build filter object from search params using helper
   const filters = React.useMemo(() => {
     const baseFilters = buildFiltersFromSearchParams(
       searchParams,
@@ -88,7 +84,7 @@ function CollectionsListing(): React.ReactElement {
 
     return {
       ...baseFilters,
-      limit: isMapView ? 100 : 20, // Load more items for map view
+      limit: isMapView ? 100 : 20,
     };
   }, [collectionObject?.filterValue, searchParams, isMapView]);
 
@@ -100,7 +96,6 @@ function CollectionsListing(): React.ReactElement {
     isFetchingNextPage,
   } = useFetchInfiniteCollections(filters);
 
-  // Memoize collections array to prevent unnecessary re-renders
   const collections = React.useMemo(() => {
     if (!collectionsResponse?.pages) return [];
     return collectionsResponse.pages.flatMap(
@@ -108,30 +103,25 @@ function CollectionsListing(): React.ReactElement {
     );
   }, [collectionsResponse?.pages]);
 
-  // Handle map toggle
   const handleMapToggle = useCallback(() => {
     setIsMapView(!isMapView);
   }, [isMapView]);
 
-  // Scroll to map when it becomes visible
   useEffect(() => {
     if (isMapView && mapContainerRef.current) {
-      // Small delay to ensure the map is rendered
       setTimeout(() => {
-        mapContainerRef.current?.scrollIntoView({ 
+        mapContainerRef.current?.scrollIntoView({
           behavior: 'smooth',
-          block: 'start'
+          block: 'start',
         });
       }, 100);
     }
   }, [isMapView]);
 
-  // Handle back to list from map view
   const handleBackToList = useCallback(() => {
     setIsMapView(false);
   }, []);
 
-  // Debounced intersection handler to prevent rapid API calls
   const debouncedFetchNextPage = React.useMemo(() => {
     let timeoutId: NodeJS.Timeout;
     return () => {
@@ -144,28 +134,22 @@ function CollectionsListing(): React.ReactElement {
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  // Memoize intersection handler to prevent unnecessary re-renders
   const handleIntersect = React.useCallback(() => {
     debouncedFetchNextPage();
   }, [debouncedFetchNextPage]);
 
-  // Memoize the collections grid to prevent unnecessary re-renders
   const collectionsGrid = React.useMemo(() => {
     if (!collections?.length) return null;
 
     return (
       <CollectionsListingContainer className='mt-[31px]'>
         {collections.map((collection: Site, index: number) => (
-          <MemoizedCollectionCard
-            key={index}
-            collection={collection}
-          />
+          <MemoizedCollectionCard key={index} collection={collection} />
         ))}
       </CollectionsListingContainer>
     );
   }, [collections]);
 
-  // Early return for loading state
   if (isLoading) {
     return (
       <div>
@@ -182,7 +166,7 @@ function CollectionsListing(): React.ReactElement {
       <div>
         <CollectionTypeLabel />
         <div className='text-center text-gray-500 text-lg py-10'>
-          No results found
+          {t('searchResults.noResults')}
         </div>
       </div>
     );
@@ -191,7 +175,7 @@ function CollectionsListing(): React.ReactElement {
   return (
     <div className='relative'>
       {!isMapView && (
-        <MapToggleWidget onClick={handleMapToggle} title='Show Map View'>
+        <MapToggleWidget onClick={handleMapToggle} title={t('map.showMapView')}>
           <CustomSvg
             src='/SVGs/shared/map-icon.svg'
             className='text-white'
@@ -199,7 +183,7 @@ function CollectionsListing(): React.ReactElement {
             height={45}
             alt='Map Icon'
           />
-          <span className='text-white text-custom-30'>{t('map')}</span>
+          <span className='text-white text-custom-30'>{t('mapLabel')}</span>
         </MapToggleWidget>
       )}
 
@@ -219,19 +203,20 @@ function CollectionsListing(): React.ReactElement {
           <CollectionTypeLabel />
           {collectionsGrid}
           {hasNextPage ? (
-            <div className="flex justify-center items-center py-5">
-              <button className='bg-primary_1 text-white px-4 py-2 rounded-md' onClick={() => fetchNextPage()}>{t('loadMore')}</button>
+            <div className='flex justify-center items-center py-5'>
+              <button
+                className='bg-primary_1 text-white px-4 py-2 rounded-md'
+                onClick={() => fetchNextPage()}
+              >
+                {t('loadMore')}
+              </button>
             </div>
-          ) :
+          ) : (
             <div className='text-center text-gray-500 text-lg py-10'>
               No more results
-            </div>}
-          {/* <IntersectionObserverTrigger
-            onIntersect={handleIntersect}
-            enabled={hasNextPage && !isFetchingNextPage}
-            rootMargin='200px'
-            threshold={0.1}
-          /> */}
+            </div>
+          )}
+
           {isFetchingNextPage && (
             <div className='flex justify-center items-center py-5'>
               <CircularLoader size={50} />

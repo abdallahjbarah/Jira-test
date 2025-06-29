@@ -1,5 +1,3 @@
-// GET /users/favCollections
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { FavoriteCollection } from '@/lib/types';

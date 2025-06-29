@@ -6,7 +6,6 @@ interface Translations {
   };
 }
 
-// Dictionary of translations
 const translations: Translations = {
   home: {
     en: 'Home',
@@ -62,28 +61,14 @@ const translations: Translations = {
   },
 };
 
-/**
- * Get translation for a key in specific locale
- *
- * @param key - The translation key
- * @param locale - The target locale
- * @returns Translated string or the key if translation not found
- */
 export function t(key: string, locale: Locale = DEFAULT_LOCALE): string {
   if (!translations[key]) {
-    // Return the key if translation not available
     return key;
   }
 
   return translations[key][locale] || translations[key][DEFAULT_LOCALE] || key;
 }
 
-/**
- * Create a translation function for a specific locale
- *
- * @param locale - The target locale
- * @returns A translation function bound to the specified locale
- */
 export function createTranslator(locale: Locale) {
   return (key: string) => t(key, locale);
 }

@@ -14,13 +14,11 @@ export const ToggleSwitchExamples: React.FC = () => {
       <h2 className='text-xl font-bold mb-4'>Toggle Switch Examples</h2>
 
       <div className='space-y-4'>
-        {/* Basic toggle without label */}
         <div className='p-4 border rounded-lg'>
           <h3 className='text-lg font-medium mb-2'>Basic Toggle</h3>
           <ToggleSwitch checked={switch1} onChange={setSwitch1} />
         </div>
 
-        {/* Toggle with left label (default) */}
         <div className='p-4 border rounded-lg'>
           <h3 className='text-lg font-medium mb-2'>Toggle with Left Label</h3>
           <ToggleSwitch
@@ -31,7 +29,6 @@ export const ToggleSwitchExamples: React.FC = () => {
           />
         </div>
 
-        {/* Toggle with right label */}
         <div className='p-4 border rounded-lg'>
           <h3 className='text-lg font-medium mb-2'>Toggle with Right Label</h3>
           <ToggleSwitch
@@ -43,7 +40,6 @@ export const ToggleSwitchExamples: React.FC = () => {
           />
         </div>
 
-        {/* Toggle with custom colors */}
         <div className='p-4 border rounded-lg'>
           <h3 className='text-lg font-medium mb-2'>Custom Colors</h3>
           <ToggleSwitch
@@ -56,7 +52,6 @@ export const ToggleSwitchExamples: React.FC = () => {
           />
         </div>
 
-        {/* Toggle with React node as label */}
         <div className='p-4 border rounded-lg'>
           <h3 className='text-lg font-medium mb-2'>Complex Label</h3>
           <ToggleSwitch
@@ -73,7 +68,6 @@ export const ToggleSwitchExamples: React.FC = () => {
         </div>
       </div>
 
-      {/* Form integration example */}
       <div className='p-4 border rounded-lg'>
         <h3 className='text-lg font-medium mb-2'>Form Integration</h3>
         <form className='space-y-4'>

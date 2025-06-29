@@ -41,7 +41,6 @@ const VerifyCodeInput = ({
       }
     }
 
-    // Check if all inputs are filled
     if (newOtp.every((digit) => digit)) {
       onComplete(newOtp.join(''));
     }

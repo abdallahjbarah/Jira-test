@@ -75,7 +75,6 @@ const EditCollectionModal: React.FC<EditCollectionModalProps> = ({
     },
   });
 
-  // Reset form when modal opens/closes or currentName changes
   useEffect(() => {
     if (isOpen) {
       setCollectionName(currentName);
@@ -86,7 +85,6 @@ const EditCollectionModal: React.FC<EditCollectionModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation
     if (!collectionName.trim()) {
       setError(t('wishlist.editModal.validation.nameRequired'));
       return;
@@ -97,10 +95,8 @@ const EditCollectionModal: React.FC<EditCollectionModalProps> = ({
       return;
     }
 
-    // Clear any previous errors
     setError('');
 
-    // Submit the update
     updateCollection({
       id: collectionId,
       collectionName: collectionName.trim(),

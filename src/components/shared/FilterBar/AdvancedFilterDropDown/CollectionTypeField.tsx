@@ -45,7 +45,6 @@ const CollectionTypeField: React.FC = () => {
       control={control}
       render={({ field }) => (
         <FilterSection
-          // if status is all show experiance
           title={titleLabel}
           options={experienceTypesList}
           selectedValues={field.value}

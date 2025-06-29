@@ -3,15 +3,15 @@ import React from 'react';
 import TabsNavigation, { TabItem } from './index';
 
 const BookingsTabs: React.FC = () => {
-  const [activeTab, setActiveTab] = React.useState('upcoming');
+  const [activeTab, setActiveTab] = React.useState(0);
 
-  const handleTabChange = (tabId: string) => {
+  const handleTabChange = (tabId: number) => {
     setActiveTab(tabId);
   };
 
   const tabs: TabItem[] = [
     {
-      id: 'upcoming',
+      id: 0,
       label: 'Upcoming',
       content: (
         <div className='p-6'>
@@ -25,7 +25,7 @@ const BookingsTabs: React.FC = () => {
       ),
     },
     {
-      id: 'completed',
+      id: 1,
       label: 'Completed',
       content: (
         <div className='p-6'>
@@ -39,7 +39,7 @@ const BookingsTabs: React.FC = () => {
       ),
     },
     {
-      id: 'cancelled',
+      id: 2,
       label: 'Cancelled',
       content: (
         <div className='p-6'>
@@ -58,7 +58,7 @@ const BookingsTabs: React.FC = () => {
     <div className='container py-8'>
       <TabsNavigation
         tabs={tabs}
-        defaultActiveTab='upcoming'
+        defaultActiveTab={0}
         onChange={handleTabChange}
       />
     </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import { useFetchCountries } from '@/lib/apis/countries/useFetchCountries';
 import { Country } from '@/lib/types';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface CountrySelectorProps {
   selectedCountry?: string | null;
@@ -20,18 +21,18 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
   selectedCountry,
   onSelectCountry,
   className = '',
-  placeholder = 'Search for a country...',
+  placeholder,
 }) => {
+  const { t } = useTranslation();
   const { data: countries = [], isLoading } = useFetchCountries();
+  const defaultPlaceholder = placeholder || t('form.searchForCountry');
 
-  // Convert countries to options format
   const countryOptions: CountryOption[] = countries.map((country) => ({
     value: country._id,
     label: country.name,
     country,
   }));
 
-  // Handle selection
   const handleChange = (selectedOption: CountryOption | null) => {
     if (selectedOption) {
       onSelectCountry(selectedOption.value);
@@ -50,7 +51,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
         options={countryOptions}
         value={currentValue}
         onChange={handleChange}
-        placeholder={placeholder}
+        placeholder={defaultPlaceholder}
         isClearable
         isSearchable
         getOptionValue={(option) => option?.value}
@@ -58,8 +59,8 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
         isLoading={isLoading}
         noOptionsMessage={({ inputValue }) =>
           inputValue
-            ? `No countries found matching "${inputValue}"`
-            : 'No countries available'
+            ? `${t('form.noCountriesFound')} "${inputValue}"`
+            : t('form.noCountriesAvailable')
         }
         styles={{
           control: (provided, state) => ({

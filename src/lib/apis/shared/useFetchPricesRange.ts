@@ -1,5 +1,3 @@
-// GET /sites/prices/all
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { PricesRange } from '@/lib/types';

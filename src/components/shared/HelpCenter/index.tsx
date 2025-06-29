@@ -25,7 +25,6 @@ const HelpCenterModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const [currentView, setCurrentView] = useState<ViewState>('list');
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
 
-  // Automatically show create view if no tickets exist
   useEffect(() => {
     if (
       !isLoading &&
@@ -39,7 +38,6 @@ const HelpCenterModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   }, [tickets, isLoading, currentView, selectedTicket]);
 
   const handleSubmit = (data: { subject: string; description: string }) => {
-    console.log('Create Ticket', data);
     setCurrentView('list');
   };
 
@@ -51,7 +49,7 @@ const HelpCenterModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
   const handleBack = () => {
     setSelectedTicket(null);
-    // Go back to create view if no tickets exist, otherwise go to list
+
     const hasTickets = tickets && tickets.length > 0;
     setCurrentView(hasTickets ? 'list' : 'create');
   };

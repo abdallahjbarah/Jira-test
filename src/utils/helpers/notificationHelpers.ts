@@ -2,13 +2,11 @@ import { Notification } from '@/lib/types';
 import { NotificationCategory, NotificationPaths } from '@/lib/enums';
 import { format } from 'date-fns';
 
-// Interface for localized content
 export interface LocalizedContent {
   en: string;
   ar: string;
 }
 
-// Reshape notification object for localized display
 export interface LocalizedNotification extends Notification {
   title: LocalizedContent;
   message: LocalizedContent;
@@ -35,7 +33,6 @@ export const reshapeNotification = (
   };
 };
 
-// Format timestamp helper function
 export const formatTimestamp = (timestamp: Date): string => {
   const now = new Date();
   const diffInMinutes = Math.floor(
@@ -49,7 +46,6 @@ export const formatTimestamp = (timestamp: Date): string => {
   }
 };
 
-// Format date header helper function
 export const formatDateHeader = (category: string): string => {
   if (category === NotificationCategory.TODAY) {
     return format(new Date(), 'MM/dd/yyyy');
@@ -61,7 +57,6 @@ export const formatDateHeader = (category: string): string => {
   return '';
 };
 
-// Group notifications by date
 export const groupNotificationsByDate = (
   notifications: Notification[],
 ): Record<string, Notification[]> => {

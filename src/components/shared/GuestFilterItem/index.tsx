@@ -35,7 +35,6 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
   const { t, locale } = useTranslation();
   const formContext = useFormContext();
 
-  // Get initial values from form context if available, otherwise use prop or default
   const getInitialGuests = () => {
     if (formContext) {
       const formFilters = formContext.watch('filters');
@@ -57,7 +56,6 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
 
   const [guests, setGuests] = useState(getInitialGuests());
 
-  // Update local state when form context changes
   useEffect(() => {
     if (formContext) {
       const formFilters = formContext.watch('filters');
@@ -71,33 +69,25 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
     }
   }, [formContext]);
 
-  // Update local state when initialValues prop changes
   useEffect(() => {
     if (initialValues) {
       setGuests(initialValues);
     }
   }, [initialValues]);
 
-  // Format the guest count display text
   const getGuestDisplayText = () => {
     const total = guests.adults + guests.children + guests.infants;
     if (total === 0) return t('search.add-guests');
 
     const guestParts = [];
     if (guests.adults > 0) {
-      guestParts.push(
-        `${guests.adults} ${t('guests.adults')}`,
-      );
+      guestParts.push(`${guests.adults} ${t('guests.adults')}`);
     }
     if (guests.children > 0) {
-      guestParts.push(
-        `${guests.children} ${t('guests.children')}`,
-      );
+      guestParts.push(`${guests.children} ${t('guests.children')}`);
     }
     if (guests.infants > 0) {
-      guestParts.push(
-        `${guests.infants} ${t('guests.infants')}`,
-      );
+      guestParts.push(`${guests.infants} ${t('guests.infants')}`);
     }
 
     return guestParts.join(', ');
@@ -131,7 +121,7 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
           <FilterBarItem
             title={title || { en: '', ar: '' }}
             value={getGuestDisplayText()}
-            onClick={() => { }}
+            onClick={() => {}}
           />
         )
       }

@@ -23,7 +23,6 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
             {t('myBookings.description')} 14{' '}
             {t('myBookings.descriptionSecondLine')}
           </p>
-          {/* Upcoming bookings content here */}
         </div>
       ),
     },
@@ -32,7 +31,6 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
       label: t('bookingStatus.completed') || 'Completed',
       content: (
         <div className='mt-8'>
-          {/* Completed bookings content here */}
           <p className='text-custom-30 font-custom-500 text-[#000000]'>
             {t('myBookings.completedDescription') ||
               'Your completed bookings will appear here.'}
@@ -45,7 +43,6 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
       label: t('bookingStatus.cancelled') || 'Cancelled',
       content: (
         <div className='mt-8'>
-          {/* Cancelled bookings content here */}
           <p className='text-custom-30 font-custom-500 text-[#000000]'>
             {t('myBookings.cancelledDescription') ||
               'Your cancelled bookings will appear here.'}

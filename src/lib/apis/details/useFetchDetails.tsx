@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { api } from '../index'; // Assuming api is setup for potential future API calls
+import { api } from '../index';
 import { Site, SiteByIdResponse } from '@/lib/types';
 
 const fetchDetails = async (
@@ -11,12 +11,15 @@ const fetchDetails = async (
 
 export const useFetchDetails = (
   id: string,
-  queryOptions?: Omit<UseQueryOptions<
-    { data: Site | undefined },
-    Error,
-    { data: Site | undefined },
-    readonly ['details', string]
-  >, 'queryKey' | 'queryFn' | 'enabled'>,
+  queryOptions?: Omit<
+    UseQueryOptions<
+      { data: Site | undefined },
+      Error,
+      { data: Site | undefined },
+      readonly ['details', string]
+    >,
+    'queryKey' | 'queryFn' | 'enabled'
+  >,
 ) => {
   return useQuery({
     ...queryOptions,

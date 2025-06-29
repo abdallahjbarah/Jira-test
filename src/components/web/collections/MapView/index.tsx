@@ -10,7 +10,6 @@ import Image from 'next/image';
 import Styled from 'styled-components';
 import { Site } from '@/lib/types';
 import useCurrency from '@/utils/hooks/useCurrency';
-import CustomSvg from '@/components/ui/CustomSvg';
 import { useTranslation } from '@/contexts/TranslationContext';
 
 interface MapViewProps {
@@ -40,7 +39,7 @@ const BackToListButton = Styled.button`
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s ease;
-  
+
   &:hover {
     // box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transform: translateY(-1px);
@@ -112,7 +111,7 @@ const InfoWindowContent = Styled.div`
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border: none;
   padding: 0;
-  
+
   .image-container {
     position: relative;
     width: 100%;
@@ -120,11 +119,11 @@ const InfoWindowContent = Styled.div`
     overflow: hidden;
     border-radius: 16px;
   }
-  
+
   .content {
     padding: 16px;
   }
-  
+
   .title {
     font-size: 18px;
     font-weight: 700;
@@ -132,41 +131,41 @@ const InfoWindowContent = Styled.div`
     margin-bottom: 8px;
     line-height: 1.3;
   }
-  
+
   .location {
     font-size: 14px;
     color: #666;
     margin-bottom: 16px;
     display: flex;
     align-items: center;
-    
+
   }
-  
+
   .footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 12px;
   }
-  
+
   .price-section {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .price-label {
     font-size: 12px;
     color: #666;
     margin-bottom: 2px;
   }
-  
+
   .price {
     font-size: 16px;
     font-weight: 700;
     color: #1a1a1a;
   }
-  
+
   .book-button {
     background: #FFA500;
     color: white;
@@ -178,7 +177,7 @@ const InfoWindowContent = Styled.div`
     cursor: pointer;
     transition: all 0.2s ease;
     min-width: 80px;
-    
+
     &:hover {
       background: #FF8C00;
       transform: translateY(-1px);
@@ -201,13 +200,11 @@ function MapView({ collections, isLoading, onBackToList }: MapViewProps) {
   const { currency } = useCurrency();
   const { t } = useTranslation();
 
-  // Use useJsApiLoader instead of LoadScript to prevent multiple script loads
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: 'AIzaSyAO52U3bOXqyLz1xuVr7-czZqRyYiKe1uE',
   });
 
-  // Create markers from collections data
   const markers = useMemo(() => {
     return collections
       .filter((site) => site.location?.coordinates?.length === 2)
@@ -224,13 +221,11 @@ function MapView({ collections, isLoading, onBackToList }: MapViewProps) {
       }));
   }, [collections, currency]);
 
-  // Calculate map center based on markers
   const mapCenter = useMemo(() => {
     if (markers.length === 0) return defaultCenter;
 
     if (markers.length === 1) return markers[0].position;
 
-    // Calculate bounds of all markers
     const bounds = markers.reduce(
       (acc, marker) => ({
         north: Math.max(acc.north, marker.position.lat),
@@ -246,19 +241,16 @@ function MapView({ collections, isLoading, onBackToList }: MapViewProps) {
       },
     );
 
-    // Calculate center point
     const centerLat = (bounds.north + bounds.south) / 2;
     const centerLng = (bounds.east + bounds.west) / 2;
 
     return { lat: centerLat, lng: centerLng };
   }, [markers]);
 
-  // Calculate appropriate zoom level based on markers spread
   const mapZoom = useMemo(() => {
     if (markers.length === 0) return 8;
     if (markers.length === 1) return 15;
 
-    // Calculate the span of coordinates
     const bounds = markers.reduce(
       (acc, marker) => ({
         north: Math.max(acc.north, marker.position.lat),
@@ -278,32 +270,27 @@ function MapView({ collections, isLoading, onBackToList }: MapViewProps) {
     const lngSpan = bounds.east - bounds.west;
     const maxSpan = Math.max(latSpan, lngSpan);
 
-    // Determine zoom level based on coordinate span
-    if (maxSpan > 10) return 5; // Very wide area
-    if (maxSpan > 5) return 6; // Wide area
-    if (maxSpan > 2) return 7; // Medium area
-    if (maxSpan > 1) return 8; // Moderate area
-    if (maxSpan > 0.5) return 9; // Small area
-    if (maxSpan > 0.1) return 11; // Very small area
-    return 13; // Tiny area
+    if (maxSpan > 10) return 5;
+    if (maxSpan > 5) return 6;
+    if (maxSpan > 2) return 7;
+    if (maxSpan > 1) return 8;
+    if (maxSpan > 0.5) return 9;
+    if (maxSpan > 0.1) return 11;
+    return 13;
   }, [markers]);
 
-  // Handle marker click
   const handleMarkerClick = useCallback((site: Site) => {
     setSelectedMarker(site);
   }, []);
 
-  // Handle info window close
   const handleInfoWindowClose = useCallback(() => {
     setSelectedMarker(null);
   }, []);
 
-  // Handle view details click
   const handleViewDetails = useCallback((siteId: string) => {
     window.open(`/details/${siteId}`, '_blank');
   }, []);
 
-  // Render custom info window content
   const renderInfoWindowContent = useCallback(
     (site: Site) => (
       <InfoWindowContent onClick={() => handleViewDetails(site._id)}>
@@ -347,7 +334,6 @@ function MapView({ collections, isLoading, onBackToList }: MapViewProps) {
     [handleViewDetails, currency],
   );
 
-  // Handle loading and error states
   if (isLoading) {
     return (
       <div className='flex justify-center items-center h-96'>

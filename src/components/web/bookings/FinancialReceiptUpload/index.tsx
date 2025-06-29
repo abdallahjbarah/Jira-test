@@ -39,7 +39,7 @@ const FinancialReceiptUpload = <T extends FieldValues = FieldValues>({
     'image/gif',
     'image/webp',
   ];
-  const maxFileSize = 10 * 1024 * 1024; // 10MB
+  const maxFileSize = 10 * 1024 * 1024;
 
   const validateFile = (file: File): string | null => {
     if (!acceptedFileTypes.includes(file.type)) {
@@ -122,7 +122,6 @@ const FinancialReceiptUpload = <T extends FieldValues = FieldValues>({
   const renderFilePreview = () => {
     if (!value) return null;
 
-    // For images, show thumbnail
     if (value.type.startsWith('image/')) {
       const imageUrl = URL.createObjectURL(value);
       return (
@@ -169,7 +168,6 @@ const FinancialReceiptUpload = <T extends FieldValues = FieldValues>({
       );
     }
 
-    // For non-images, show icon
     return (
       <div className='flex items-center justify-between p-3 bg-gray-50 rounded-lg'>
         <div className='flex items-center gap-3'>
@@ -233,7 +231,6 @@ const FinancialReceiptUpload = <T extends FieldValues = FieldValues>({
         />
       )}
 
-      {/* Error Messages */}
       {(uploadError || error) && (
         <p className='text-sm text-red-500'>{uploadError || error?.message}</p>
       )}

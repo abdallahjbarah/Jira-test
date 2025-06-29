@@ -33,7 +33,6 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
 
   const { handleSubmit, reset } = methods;
 
-  // Update form values when defaultValues change
   React.useEffect(() => {
     if (defaultValues) {
       reset(defaultValues);
@@ -58,7 +57,6 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
     />
   );
 
-  // Filter content based on filter type
   const getFilterContent = () => {
     switch (filterType) {
       case 'experiences':

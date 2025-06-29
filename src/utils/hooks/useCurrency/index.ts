@@ -1,8 +1,3 @@
-/**
- * Custom to get the current currency from the user if the user is logged in
- * else return the default currency
- */
-
 import { useEffect, useState } from 'react';
 import useUser from '../useUser';
 

@@ -26,7 +26,6 @@ export default function ImageContainer({
   return (
     <CustomLink className='group' path={path || '#'}>
       <div className='relative rounded-custom-32 overflow-hidden'>
-        {/* Image component */}
         <Image
           quality={100}
           placeholder='blur'
@@ -34,7 +33,7 @@ export default function ImageContainer({
           alt={alt}
           className={`group-hover:opacity-75 object-cover transition-opacity duration-300 ease-in-out ${className || ''}`}
         />
-        {/* Gradient overlay */}
+
         <div
           style={{
             position: 'absolute',
@@ -46,7 +45,7 @@ export default function ImageContainer({
               'linear-gradient(118deg, rgba(0, 0, 0, 0.50) 2.75%, rgba(0, 0, 0, 0.00) 54.45%)',
           }}
         />
-        {/* Content overlay */}
+
         <div className='absolute top-10 left-10 z-10'>
           <h2 className='text-custom-32 font-bold text-primary_4 mb-2 select-none'>
             {title}

@@ -36,14 +36,11 @@ const CountriesModal: React.FC<CountriesModalProps> = ({
     );
   }, [countriesData, searchQuery]);
 
-  console.log(filteredCountries, 'filteredCountries');
-
   if (!isOpen) return null;
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
       <div className='relative w-full max-w-md rounded-2xl bg-white p-6 animate-fadeIn'>
-        {/* Modal Header */}
         <div className='mb-6 flex flex-col items-center'>
           <div className='flex w-full justify-center'>
             <h2 className='w-[114px] h-[24px] text-center font-bold text-[#222222] leading-[24px]'>
@@ -61,7 +58,6 @@ const CountriesModal: React.FC<CountriesModalProps> = ({
           </button>
         </div>
 
-        {/* Search Input */}
         <div className='mb-6 flex flex-col items-center'>
           <input
             type='text'
@@ -73,7 +69,6 @@ const CountriesModal: React.FC<CountriesModalProps> = ({
           <div className='mt-6 h-[1px] w-[312px] bg-[#EEEEEE]'></div>
         </div>
 
-        {/* Countries List */}
         <div className='max-h-[400px] overflow-y-auto'>
           {filteredCountries.map((country, key) => (
             <button

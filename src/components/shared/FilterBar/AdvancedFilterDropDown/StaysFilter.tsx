@@ -21,7 +21,10 @@ const StaysFilter: React.FC = () => {
         name='includesExperience'
         control={control}
         render={({ field }) => (
-          <Collapsible title={t('filter.includes-experience')} defaultOpen={true}>
+          <Collapsible
+            title={t('filter.includes-experience')}
+            defaultOpen={true}
+          >
             <div className='space-y-3'>
               <RadioButton
                 id='includes-experience-yes'

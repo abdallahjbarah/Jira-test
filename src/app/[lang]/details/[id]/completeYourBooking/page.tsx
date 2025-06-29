@@ -37,7 +37,6 @@ interface BookingFormData {
 const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   params,
 }) => {
-  // const queryClient = useQueryClient();
   const {
     data: detailsData,
     isLoading: isDetailsLoading,
@@ -63,7 +62,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     },
   });
 
-  // Watch form values for real-time updates
   const transportationChecked = watch('transportationChecked');
   const guideChecked = watch('guideChecked');
   const airportChecked = watch('airportChecked');
@@ -109,13 +107,11 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   });
 
   const onSubmit: SubmitHandler<BookingFormData> = (data) => {
-    // if payment method is not selected show an error
     if (!data.financialReceipt) {
       toast.error(t('booking.financialReceipt.error'));
       return;
     }
 
-    // if financialReceipt is not null, upload it useing @useUploadFile
     if (data.financialReceipt) {
       uploadFile({
         file: data.financialReceipt,
@@ -160,7 +156,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
             <div className='flex flex-col lg:flex-row justify-between w-full gap-20'>
               <div className='flex flex-col gap-2 flex-1'>
                 <BookingDetails
-                  // time here is timestamp convert to readable format
                   time={`${new Date(
                     detailsData?.data?.schedule.startDateTime || '',
                   ).toLocaleTimeString('en-US', {
@@ -172,7 +167,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                     hour: '2-digit',
                     minute: '2-digit',
                   })}`}
-                  // dates are timestamp convert to readable format
                   date={`${new Date(
                     bookingData?.availability?.startDate ||
                       detailsData?.data?.schedule.startDateTime ||
@@ -190,7 +184,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                     month: 'short',
                     day: 'numeric',
                   })}`}
-                  // if one of the guests values are 0 don't show it
                   people={`${bookingData?.guests?.adults > 0 ? `${bookingData?.guests?.adults} Adults` : ''} ${bookingData?.guests?.children > 0 ? `${bookingData?.guests?.children} Children` : ''} ${bookingData?.guests?.infants > 0 ? `${bookingData?.guests?.infants} Infant` : ''}`}
                   onGuestUpdate={(guests) => {
                     updateBookingData(params.id, {

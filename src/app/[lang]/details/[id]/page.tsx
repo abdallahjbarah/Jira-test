@@ -12,7 +12,6 @@ import BookingPanel from '@/components/web/details/BookingPanel';
 import FeaturesSection from '@/components/web/details/FeaturesSection';
 import AmenitiesSection from '@/components/web/details/AmenitiesSection';
 import HostInfoSection from '@/components/web/details/HostInfoSection';
-import OverviewSection from '@/components/web/details/OverviewSection';
 import LocationSection from '@/components/web/details/LocationSection';
 import WhatToExpectSection from '@/components/web/details/WhatToExpectSection';
 import ItinerarySection from '@/components/web/details/ItinerarySection';
@@ -21,7 +20,6 @@ import StayDetailsSection from '@/components/web/details/StayDetailsSection';
 import NearbySurroundingsSection from '@/components/web/details/NearbySurroundingsSection';
 import HouseRulesSection from '@/components/web/details/HouseRulesSection';
 import SpecialInstructionsAndCancellationSection from '@/components/web/details/SpecialInstructionsAndCancellationSection';
-import ImageCarousel from '@/components/shared/ImageCarousel';
 import withFavourites from '@/lib/hocs/withFavourites';
 import useFavorite from '@/utils/hooks/useFavorite';
 import { Site } from '@/lib/types';
@@ -42,54 +40,55 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     title: string;
     description: string;
   }[] = [
-      {
-        icon: '/SVGs/shared/details-icons/timeCircle.svg',
-        title: 'Duration',
-        description: '2hrs 30m',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/sun.svg',
-        title: 'Time of Day',
-        description: 'Morning (before 12 pm) - Evening (after 5 pm)',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/guideIcon.svg',
-        title: 'Guide (Upon Request)',
-        description: 'Extra fees applied',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
-        title: 'Level of Difficulty',
-        description: 'Easy (relaxed tour, easy walk)',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
-        title: 'Age Suitability',
-        description: '3+',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/transportationIcon.svg',
-        title: 'Transportation (Upon Request)',
-        description: 'Extra fees applied',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
-        title: 'Spoken Language',
-        description:
-          'Arabic, English (Download a language translator app to communicate with host!)',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
-        title: 'Wheelchair Accessible',
-        description: '',
-      },
-    ];
+    {
+      icon: '/SVGs/shared/details-icons/timeCircle.svg',
+      title: 'Duration',
+      description: '2hrs 30m',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/sun.svg',
+      title: 'Time of Day',
+      description: 'Morning (before 12 pm) - Evening (after 5 pm)',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/guideIcon.svg',
+      title: 'Guide (Upon Request)',
+      description: 'Extra fees applied',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
+      title: 'Level of Difficulty',
+      description: 'Easy (relaxed tour, easy walk)',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
+      title: 'Age Suitability',
+      description: '3+',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/transportationIcon.svg',
+      title: 'Transportation (Upon Request)',
+      description: 'Extra fees applied',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
+      title: 'Spoken Language',
+      description:
+        'Arabic, English (Download a language translator app to communicate with host!)',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
+      title: 'Wheelchair Accessible',
+      description: '',
+    },
+  ];
 
-  // All hooks must be at the top of the component
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [imageDimensions, setImageDimensions] = useState<{ [key: string]: { width: number, height: number } }>({});
+  const [imageDimensions, setImageDimensions] = useState<{
+    [key: string]: { width: number; height: number };
+  }>({});
 
   const collectionStatus = 'all';
   const { data: collections, isLoading: isCollectionsLoading } =
@@ -116,35 +115,37 @@ const DetailsId: React.FC<DetailsIdProps> = ({
       : '/SVGs/shared/heart-icon.svg';
   }, [isCollectionFavorite]);
 
-  // Function to load image dimensions
-  const loadImageDimensions = React.useCallback((imageUrl: string): Promise<{ width: number, height: number }> => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        resolve({ width: img.naturalWidth, height: img.naturalHeight });
-      };
-      img.onerror = () => {
-        // Fallback to default aspect ratio if image fails to load
-        resolve({ width: 4, height: 3 });
-      };
-      img.src = imageUrl;
-    });
-  }, []);
+  const loadImageDimensions = React.useCallback(
+    (imageUrl: string): Promise<{ width: number; height: number }> => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          resolve({ width: img.naturalWidth, height: img.naturalHeight });
+        };
+        img.onerror = () => {
+          resolve({ width: 4, height: 3 });
+        };
+        img.src = imageUrl;
+      });
+    },
+    [],
+  );
 
-  // Load all image dimensions on mount
   React.useEffect(() => {
     const loadAllDimensions = async () => {
-      if (!detailsData?.data?.images || detailsData.data.images.length === 0) return;
+      if (!detailsData?.data?.images || detailsData.data.images.length === 0)
+        return;
 
-      const dimensions: { [key: string]: { width: number, height: number } } = {};
+      const dimensions: { [key: string]: { width: number; height: number } } =
+        {};
 
       for (const imageUrl of detailsData.data.images) {
         const dims = await loadImageDimensions(imageUrl);
-        // Normalize dimensions to reasonable values for the gallery
+
         const aspectRatio = dims.width / dims.height;
         dimensions[imageUrl] = {
-          width: Math.max(1, Math.min(6, Math.round(aspectRatio * 3))), // Scale to 1-6 range
-          height: 3 // Standard height for consistency
+          width: Math.max(1, Math.min(6, Math.round(aspectRatio * 3))),
+          height: 3,
         };
       }
 
@@ -154,27 +155,38 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     loadAllDimensions();
   }, [detailsData?.data?.images, loadImageDimensions]);
 
-  const handleFavoriteToggle = React.useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    if (isCollectionFavorite) {
-      removeFavorite(params.id);
-    } else {
-      openFavouritesModal(detailsData?.data as Site);
-    }
-  }, [isCollectionFavorite, removeFavorite, params.id, openFavouritesModal, detailsData?.data]);
+  const handleFavoriteToggle = React.useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      if (isCollectionFavorite) {
+        removeFavorite(params.id);
+      } else {
+        openFavouritesModal(detailsData?.data as Site);
+      }
+    },
+    [
+      isCollectionFavorite,
+      removeFavorite,
+      params.id,
+      openFavouritesModal,
+      detailsData?.data,
+    ],
+  );
 
-  const handleImageClick = React.useCallback((index: number) => {
-    // Ensure we have valid data before opening lightbox
-    const images = detailsData?.data?.images;
-    if (!images || index < 0 || index >= images.length) {
-      return;
-    }
-    setCurrentImageIndex(index);
-    // Small delay to ensure state is updated before opening lightbox
-    setTimeout(() => {
-      setIsLightboxOpen(true);
-    }, 10);
-  }, [detailsData?.data?.images]);
+  const handleImageClick = React.useCallback(
+    (index: number) => {
+      const images = detailsData?.data?.images;
+      if (!images || index < 0 || index >= images.length) {
+        return;
+      }
+      setCurrentImageIndex(index);
+
+      setTimeout(() => {
+        setIsLightboxOpen(true);
+      }, 10);
+    },
+    [detailsData?.data?.images],
+  );
 
   const handleCloseLightbox = React.useCallback(() => {
     setIsLightboxOpen(false);
@@ -183,20 +195,17 @@ const DetailsId: React.FC<DetailsIdProps> = ({
   const handleMovePrev = React.useCallback(() => {
     const images = detailsData?.data?.images;
     if (!images) return;
-    setCurrentImageIndex((current) =>
-      (current + images.length - 1) % images.length
+    setCurrentImageIndex(
+      (current) => (current + images.length - 1) % images.length,
     );
   }, [detailsData?.data?.images]);
 
   const handleMoveNext = React.useCallback(() => {
     const images = detailsData?.data?.images;
     if (!images) return;
-    setCurrentImageIndex((current) =>
-      (current + 1) % images.length
-    );
+    setCurrentImageIndex((current) => (current + 1) % images.length);
   }, [detailsData?.data?.images]);
 
-  // Early returns after all hooks
   if (isLoading) {
     return (
       <div className='flex justify-center items-center h-screen'>
@@ -251,23 +260,23 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     stayHouseRules,
   } = detailsData.data;
 
-  // Prepare images for gallery - Natural aspect ratios with 3 rows max
-  const galleryImages = images?.map((image: string) => {
-    const dims = imageDimensions[image] || { width: 4, height: 3 }; // Default fallback
-    return {
-      src: image,
-      width: dims.width,
-      height: dims.height,
-      thumbnail: image,
-    };
-  }) || [];
+  const galleryImages =
+    images?.map((image: string) => {
+      const dims = imageDimensions[image] || { width: 4, height: 3 };
+      return {
+        src: image,
+        width: dims.width,
+        height: dims.height,
+        thumbnail: image,
+      };
+    }) || [];
 
   return (
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
         <div className='flex flex-col'>
           <div className='relative'>
-            <div className="w-full flex justify-center">
+            <div className='w-full flex justify-center'>
               <ImagesGallery images={images} />
             </div>
             <button
@@ -305,7 +314,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                 </div>
               </div>
               <Divider className='w-full my-8' />
-              {/* Overview Section */}
+
               <ExpandableTextSection
                 title='Overview'
                 content={longDescription}
@@ -313,7 +322,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               {type != 'Offers & Packages' && (
                 <>
                   <Divider className='w-full my-8' />
-                  {/* Location Section */}
+
                   <LocationSection
                     location={name + ' in ' + country?.name + ', ' + city}
                     latitude={location.coordinates[0]}
@@ -324,14 +333,14 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               {type === 'Offers & Packages' && (
                 <>
                   <Divider className='w-full my-8' />
-                  {/* Itinerary Section */}
+
                   <ItinerarySection stops={itineraryStops || []} />
                 </>
               )}
               {type != 'Stay' && (
                 <>
                   <Divider className='w-full my-8' />
-                  {/* Features Section */}
+
                   <FeaturesSection features={features} />
                 </>
               )}
@@ -345,7 +354,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                   />
                 </>
               )}
-              {/* Host Info Section */}
+
               {host && coHost && (
                 <>
                   <Divider className='w-full my-8' />
@@ -389,10 +398,6 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               <HouseRulesSection rules={stayHouseRules} />
             </>
           )}
-          {/* <Divider className='w-full my-8' /> */}
-          {/* Similar Experiences Section */}
-          {/* <SimilarExperiencesSection collections={collections?.data || []} /> */}
-          {/* <Divider className='w-full my-8' /> */}
         </div>
       </main>
     </InnerPagesLayout>

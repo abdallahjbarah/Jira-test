@@ -5,13 +5,10 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import { ActionButton, ActionsContainer } from './styles';
 import { useReadAllNotifications } from '@/lib/apis/notifications/useReadAllNotifications';
 import { useDeleteAllNotifications } from '@/lib/apis/notifications/useDeleteAllNotifications';
-import { useQueryClient } from '@tanstack/react-query';
 
 interface NotificationsActionsProps {}
 
 function NotificationsActions({}: NotificationsActionsProps): React.ReactElement {
-  // Get the unread notifications from the query client
-
   const { t } = useTranslation();
   const { mutate: readAllNotifications, isPending: isReadingAllNotifications } =
     useReadAllNotifications();

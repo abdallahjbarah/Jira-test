@@ -1,5 +1,3 @@
-// GET /experience-type
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { ExperienceType } from '@/lib/types';

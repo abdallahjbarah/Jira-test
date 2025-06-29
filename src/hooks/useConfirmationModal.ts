@@ -18,10 +18,6 @@ interface UseConfirmationModalReturn {
   setLoading: (loading: boolean) => void;
 }
 
-/**
- * Custom hook for managing confirmation modal state
- * @returns {UseConfirmationModalReturn} Confirmation modal state and control functions
- */
 const useConfirmationModal = (): UseConfirmationModalReturn => {
   const [isOpen, setIsOpen] = useState(false);
   const [config, setConfig] = useState<ConfirmationConfig | null>(null);
@@ -48,7 +44,7 @@ const useConfirmationModal = (): UseConfirmationModalReturn => {
       resolvePromise(false);
       setResolvePromise(null);
     }
-    // Clear config after a short delay to allow for exit animation
+
     setTimeout(() => {
       setConfig(null);
     }, 300);
@@ -61,7 +57,7 @@ const useConfirmationModal = (): UseConfirmationModalReturn => {
     }
     setIsOpen(false);
     setIsLoading(false);
-    // Clear config after a short delay to allow for exit animation
+
     setTimeout(() => {
       setConfig(null);
     }, 300);

@@ -29,7 +29,6 @@ const Dropdown: React.FC<DropdownProps> = ({
   const triggerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
 
-  // Set mounted state after component mounts
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
@@ -41,7 +40,6 @@ const Dropdown: React.FC<DropdownProps> = ({
     setIsOpen(!isOpen);
   };
 
-  // Update position when dropdown is opened
   useEffect(() => {
     if (isOpen && triggerRef.current) {
       updatePosition();
@@ -55,7 +53,6 @@ const Dropdown: React.FC<DropdownProps> = ({
     };
   }, [isOpen]);
 
-  // Update dropdown position based on trigger element position
   const updatePosition = () => {
     if (!triggerRef.current) return;
 
@@ -63,21 +60,17 @@ const Dropdown: React.FC<DropdownProps> = ({
     const windowHeight = window.innerHeight;
     const windowWidth = window.innerWidth;
 
-    // Get dropdown content width (default to trigger width)
     const contentWidth = dropdownRef.current
       ? dropdownRef.current.offsetWidth
       : triggerRect.width;
 
-    // Calculate content height (if available)
     const contentHeight = dropdownRef.current
       ? dropdownRef.current.offsetHeight
       : 0;
 
-    // Base position (relative to viewport)
     let top = triggerRect.bottom;
     let left = triggerRect.left;
 
-    // Adjust position based on dropdown position prop
     switch (position) {
       case 'bottom-right':
         left = triggerRect.right - contentWidth;
@@ -97,14 +90,12 @@ const Dropdown: React.FC<DropdownProps> = ({
         break;
     }
 
-    // Adjust if dropdown would go off screen
     if (left < 0) {
       left = 0;
     } else if (left + contentWidth > windowWidth) {
       left = windowWidth - contentWidth;
     }
 
-    // Check if dropdown would go off screen bottom and switch to top position
     if (top + contentHeight > windowHeight && triggerRect.top > contentHeight) {
       switch (position) {
         case 'bottom-right':
@@ -114,7 +105,6 @@ const Dropdown: React.FC<DropdownProps> = ({
       }
     }
 
-    // Check if dropdown would go off screen top and switch to bottom position
     if (top < 0) {
       switch (position) {
         case 'top-right':
@@ -124,7 +114,6 @@ const Dropdown: React.FC<DropdownProps> = ({
       }
     }
 
-    // Set positioning styles
     setContentStyles({
       top,
       left,
@@ -132,7 +121,6 @@ const Dropdown: React.FC<DropdownProps> = ({
     });
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -151,7 +139,6 @@ const Dropdown: React.FC<DropdownProps> = ({
     };
   }, []);
 
-  // Create portal element for dropdown content
   const renderDropdownContent = () => {
     if (!isOpen || !mounted) return null;
 

@@ -37,18 +37,15 @@ export const calculatePriceBreakdown = (
 ): PriceBreakdownItem[] => {
   const breakdown: PriceBreakdownItem[] = [];
 
-  // Process each guest type
   Object.entries(guests).forEach(([guestType, guestCount]) => {
     if (!guestCount || guestCount <= 0) return;
 
-    // Find all pricing options for this guest type
     const guestTypePricing = pricingInformation.filter(
       (pricing) => pricing.personType === guestType,
     );
 
     if (guestTypePricing.length === 0) return;
 
-    // Find the appropriate pricing tier based on guest count
     const applicablePricing = guestTypePricing.find(
       (pricing) =>
         guestCount >= pricing.minUnit && guestCount <= pricing.maxUnit,
@@ -60,13 +57,11 @@ export const calculatePriceBreakdown = (
     const discount = applicablePricing.discount;
     const isFree = originalPrice === 0;
 
-    // Calculate final price per person
     let finalPricePerPerson = originalPrice;
     if (discount && discount > 0) {
       finalPricePerPerson = originalPrice - (originalPrice * discount) / 100;
     }
 
-    // Calculate total amount for this guest type, considering number of nights
     const nights = numberOfNights || 1;
     const totalAmount = finalPricePerPerson * guestCount * nights;
 
@@ -82,7 +77,6 @@ export const calculatePriceBreakdown = (
     });
   });
 
-  // Add number of nights as a separate item if more than 1 night
   if (numberOfNights && numberOfNights > 1) {
     breakdown.push({
       label: `Number of nights`,
@@ -96,7 +90,6 @@ export const calculatePriceBreakdown = (
     });
   }
 
-  // Process extras if provided
   if (extras && extras.length > 0) {
     extras.forEach((extra) => {
       const nights = numberOfNights || 1;
@@ -127,7 +120,7 @@ export const calculateTotalAmount = (
 
 export const calculateTax = (
   subtotal: number,
-  taxRate: number = 0.05, // Default 5% tax rate
+  taxRate: number = 0.05,
 ): number => {
   return subtotal * taxRate;
 };

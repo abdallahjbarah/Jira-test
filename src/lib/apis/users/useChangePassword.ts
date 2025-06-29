@@ -1,5 +1,3 @@
-// PATCH /users/{userId}/change-password
-
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 

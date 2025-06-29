@@ -1,6 +1,5 @@
 'use client';
 
-import CustomSvg from '@/components/ui/CustomSvg';
 import React from 'react';
 import NotificationMenu from './NotificationMenu';
 import Dropdown from '@/components/ui/Dropdown';

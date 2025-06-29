@@ -1,7 +1,3 @@
-/**
- * GET /booking/details/{id}
- */
-
 import { api } from '@/lib/apis';
 import { BookingDetails } from '@/lib/types';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';

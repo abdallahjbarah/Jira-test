@@ -5,7 +5,7 @@ import {
   UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
-import { Site, SitesResponse } from '@/lib/types';
+import { SitesResponse } from '@/lib/types';
 
 const fetchCollections = async (filter: any): Promise<SitesResponse> => {
   const response = await api

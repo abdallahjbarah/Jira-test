@@ -11,12 +11,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
   if (images.length === 1) {
     return (
       <div className='rounded-custom-16 overflow-hidden w-full h-[30rem] relative'>
-        <Image
-          src={images[0]}
-          alt={images[0]}
-          fill
-          className='object-cover'
-        />
+        <Image src={images[0]} alt={images[0]} fill className='object-cover' />
       </div>
     );
   }
@@ -44,16 +39,10 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
     );
   }
 
-  // Three or more images: 1 big left, 2 stacked right
   return (
     <div className='flex gap-4 w-full h-[30rem]'>
       <div className='flex-[2] relative rounded-custom-16 overflow-hidden'>
-        <Image
-          src={images[0]}
-          alt={images[0]}
-          fill
-          className='object-cover'
-        />
+        <Image src={images[0]} alt={images[0]} fill className='object-cover' />
       </div>
       <div className='flex flex-col gap-4 flex-1 h-full'>
         <div className='relative rounded-custom-16 overflow-hidden flex-1'>
@@ -77,4 +66,4 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
   );
 };
 
-export default ImageGallery; 
+export default ImageGallery;

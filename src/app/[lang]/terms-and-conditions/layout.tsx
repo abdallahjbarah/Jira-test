@@ -1,6 +1,5 @@
-import { SEO_KEYWORDS } from '@utils/constants';
+import { SEO_KEYWORDS, Locale } from '@utils/constants';
 import { Metadata } from 'next';
-import { Locale } from '@utils/constants';
 import { fetchPolicies } from '@/lib/apis/policies/useFetchPolicies';
 import React from 'react';
 
@@ -14,36 +13,29 @@ export async function generateMetadata({
 }: Omit<Props, 'children'>): Promise<Metadata> {
   const { lang } = params;
 
-  // Fetch policy content from API
   let termsDescription = '';
   try {
     const policiesData = await fetchPolicies();
 
-    // Extract terms and conditions content based on language
     if (lang === 'ar' && policiesData.termsConditionsAr) {
-      // Extract the first 200 characters as a summary for the description
       termsDescription = policiesData.termsConditionsAr.substring(0, 200);
-      // Add ellipsis if the content is longer than 200 characters
+
       if (policiesData.termsConditionsAr.length > 200) {
         termsDescription += '...';
       }
     } else if (policiesData.termsConditionsEn) {
-      // Extract the first 200 characters as a summary for the description
       termsDescription = policiesData.termsConditionsEn.substring(0, 200);
-      // Add ellipsis if the content is longer than 200 characters
+
       if (policiesData.termsConditionsEn.length > 200) {
         termsDescription += '...';
       }
     } else {
-      // Fallback descriptions if API doesn't return content
       termsDescription =
         lang === 'ar'
           ? 'الشروط والأحكام الخاصة ببوكاجري. يرجى قراءة هذه الشروط بعناية قبل استخدام موقعنا وخدماتنا.'
           : 'Bookagri Terms and Conditions. Please read these terms carefully before using our website and services.';
     }
   } catch (error) {
-    console.error('Failed to fetch policy data for metadata:', error);
-    // Fallback descriptions if API call fails
     termsDescription =
       lang === 'ar'
         ? 'الشروط والأحكام الخاصة ببوكاجري. يرجى قراءة هذه الشروط بعناية قبل استخدام موقعنا وخدماتنا.'

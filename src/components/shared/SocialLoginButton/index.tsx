@@ -18,7 +18,7 @@ interface SocialLoginButtonProps {
   userType?: 'guest' | 'partner';
   className?: string;
   disabled?: boolean;
-  // Optional additional profile data
+
   additionalProfileData?: {
     firstName?: string;
     lastName?: string;
@@ -65,7 +65,6 @@ export default function SocialLoginButton({
       try {
         queryClient.setQueryData(['user'], data);
 
-        // Only set token if user doesn't need profile completion
         if (!data.profileCompletionRequired && data.token) {
           setCookie(TOKEN_NAME, data.token);
         }
@@ -78,24 +77,21 @@ export default function SocialLoginButton({
           setCookie('userStatus', data.user.status.toString());
         }
 
-        // Handle profile completion requirements
         if (data.profileCompletionRequired) {
           toast.info(
             `${t('auth.profile.completionRequired')}. ${t('auth.profile.missingFields')}: ${data.missingFields?.join(', ')}`,
           );
-          // Redirect to profile completion page with user data
+
           router.push(
             `/auth/complete-profile?email=${encodeURIComponent(data.user.email)}&isNewUser=${data.isNewUser}`,
           );
         } else {
-          // Show success message for completed authentication
           toast.success(
             data.isNewUser
               ? t('auth.login.accountCreatedSuccess')
               : t('auth.login.loggedInSuccess'),
           );
 
-          // Redirect based on user status
           if (data.user && data.user.status === 3) {
             router.push(
               `/auth/verify?email=${encodeURIComponent(data.user.email)}`,
@@ -105,7 +101,6 @@ export default function SocialLoginButton({
           }
         }
       } catch (processingError) {
-        console.error('Error processing SSO response:', processingError);
         toast.error(t('auth.login.loginFailed'));
         setIsLoading(false);
       }
@@ -135,16 +130,15 @@ export default function SocialLoginButton({
     try {
       await firebaseSSO({ provider, additionalData: additionalProfileData });
     } catch (error) {
-      console.error(`Failed to initiate ${provider} login:`, error);
       setIsLoading(false);
     }
   };
 
   const config = PROVIDER_CONFIG[provider];
   const baseClassName = `
-    bg-white box-border w-full max-w-[296px] h-[48px] 
-    flex items-center justify-center gap-3 rounded-[8px] 
-    text-[14px] font-bold leading-[17px] text-[#222222] 
+    bg-white box-border w-full max-w-[296px] h-[48px]
+    flex items-center justify-center gap-3 rounded-[8px]
+    text-[14px] font-bold leading-[17px] text-[#222222]
     transition-all hover:bg-gray-50 hover:scale-[1.02]
     disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
     ${className}

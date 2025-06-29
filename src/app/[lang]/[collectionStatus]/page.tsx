@@ -1,10 +1,13 @@
 import React from 'react';
 import Hero from '@components/web/landing-page/Hero';
-import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import ContactUsForm from '@/components/web/landing-page/ContactUsForm';
 import DownloadApp from '@/components/web/landing-page/DownloadApp';
 import ContactUs from '@/components/web/landing-page/ContactUs';
-import { Locale, COLLECTION_STATUS_LIST, COLLECTION_STATUS } from '@utils/constants';
+import {
+  Locale,
+  COLLECTION_STATUS_LIST,
+  COLLECTION_STATUS,
+} from '@utils/constants';
 import { notFound, redirect } from 'next/navigation';
 import CollectionsListing from '@/components/web/collections/CollectionsListing';
 import ComingSoon from '@/components/shared/ComingSoon';
@@ -21,7 +24,6 @@ export default function CollectionStatusPage({
 }: CollectionStatusPageProps): React.ReactElement {
   const { collectionStatus, lang } = params;
 
-  // Redirect "all" to the homepage since it's now the main page
   if (collectionStatus === COLLECTION_STATUS.ALL) {
     redirect(`/${lang}`);
   }

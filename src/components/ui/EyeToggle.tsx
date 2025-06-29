@@ -1,5 +1,4 @@
 import React from 'react';
-import { XMarkIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 
 interface EyeToggleProps {

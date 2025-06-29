@@ -9,21 +9,15 @@ export interface CollectionFilter {
   children?: number;
   infants?: number;
   country?: string;
-  city?: number | string; // Can be city ID (number) or city name (string)
-  destinationText?: string; // For search functionality only, not persisted in URL
-  [key: string]: any; // For advanced filters
+  city?: number | string;
+  destinationText?: string;
+  [key: string]: any;
 }
 
 export interface FilterFormValues {
   filters: CollectionFilter;
 }
 
-/**
- * Builds a filter object from URL search parameters
- * @param searchParams - The URL search parameters
- * @param baseType - The base collection type filter value
- * @returns A filter object to be used with the collections API
- */
 export const buildFiltersFromSearchParams = (
   searchParams: ReadonlyURLSearchParams,
   baseType?: string | null,
@@ -32,7 +26,6 @@ export const buildFiltersFromSearchParams = (
     type: baseType ?? undefined,
   };
 
-  // Extract individual filter parameters from URL
   const checkinTime = searchParams.get('checkinTime');
   const checkoutTime = searchParams.get('checkoutTime');
   const adults = searchParams.get('adults');
@@ -42,7 +35,6 @@ export const buildFiltersFromSearchParams = (
   const city = searchParams.get('city');
   const advancedFilters = searchParams.get('filters');
 
-  // Add filters to base filter object if they exist
   if (checkinTime) baseFilter.checkinTime = checkinTime;
   if (checkoutTime) baseFilter.checkoutTime = checkoutTime;
   if (adults) baseFilter.adults = Number(adults);
@@ -51,33 +43,22 @@ export const buildFiltersFromSearchParams = (
   if (country) baseFilter.country = country;
   if (city) baseFilter.city = city;
 
-  // Parse and merge advanced filters
   if (advancedFilters) {
     try {
       const parsedFilters = JSON.parse(advancedFilters);
       Object.assign(baseFilter, parsedFilters);
-    } catch (error) {
-      console.error('Failed to parse advanced filters:', error);
-    }
+    } catch (error) {}
   }
-  // console.log('Base filter:', clearObject(baseFilter));
 
   return clearObject(baseFilter);
 };
 
-/**
- * Builds URL search parameters from a filter object
- * @param filters - The filter object
- * @param currentParams - Current URL search parameters to preserve other params
- * @returns URLSearchParams object ready to be used in URL
- */
 export const buildSearchParamsFromFilters = (
   filters: CollectionFilter,
   currentParams: ReadonlyURLSearchParams,
 ): URLSearchParams => {
   const params = new URLSearchParams(currentParams);
 
-  // Update individual filter params
   if (filters.checkinTime) {
     params.set('checkinTime', filters.checkinTime);
   } else {
@@ -120,7 +101,6 @@ export const buildSearchParamsFromFilters = (
     params.delete('city');
   }
 
-  // Handle advanced filters
   const advancedFilters = { ...filters };
   delete advancedFilters.type;
   delete advancedFilters.checkinTime;
@@ -141,11 +121,6 @@ export const buildSearchParamsFromFilters = (
   return params;
 };
 
-/**
- * Initializes form default values from URL search parameters
- * @param searchParams - The URL search parameters
- * @returns Default values object for react-hook-form
- */
 export const getFormDefaultsFromSearchParams = (
   searchParams: ReadonlyURLSearchParams,
 ): FilterFormValues => {

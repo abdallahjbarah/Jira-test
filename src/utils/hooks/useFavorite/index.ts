@@ -20,9 +20,7 @@ const useFavorite = () => {
     );
   };
 
-  const addFavorite = (siteId: string) => {
-    console.log('addFavorite', siteId);
-  };
+  const addFavorite = (siteId: string) => {};
 
   const removeFavorite = (siteId: string) =>
     addToCollection({

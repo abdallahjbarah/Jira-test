@@ -29,7 +29,6 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
     onChange(!checked);
   };
 
-  // Size classes
   const sizeClasses = {
     sm: {
       container: 'w-10 h-5',

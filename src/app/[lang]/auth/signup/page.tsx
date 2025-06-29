@@ -11,7 +11,6 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SignUpSchema } from '@utils/formsSchemas';
 import { toast } from 'react-toastify';
-import Image from 'next/image';
 import FormInput from '@/components/form/FormInput';
 import Checkbox from '@/components/ui/Checkbox';
 import PasswordInput from '@/components/form/PasswordInput';
@@ -42,7 +41,7 @@ export default function SignUpPage(): React.ReactElement {
   const signUpForm = useForm<SignUpFormValues>({
     resolver: yupResolver(SignUpSchema) as any,
     defaultValues: {
-      countryCode: '962', // Default Jordan country code
+      countryCode: '962',
       agreeToTerms: false,
     },
   });
@@ -75,11 +74,8 @@ export default function SignUpPage(): React.ReactElement {
     });
   };
 
-  console.log(signUpForm.formState.errors);
-
   return (
     <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 md:px-8'>
-      {/* Sign Up Button Top Right */}
       <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[240px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
@@ -90,9 +86,7 @@ export default function SignUpPage(): React.ReactElement {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className='mt-32 sm:mt-52 w-full max-w-[296px] space-y-8 px-4 sm:px-0'>
-        {/* Heading */}
         <div className='flex flex-col items-center gap-2 animate-fadeIn'>
           <h1 className='w-[264px] h-[30px] text-[25px] font-bold whitespace-nowrap text-center'>
             <span className='text-[#222222]'>
@@ -101,14 +95,12 @@ export default function SignUpPage(): React.ReactElement {
           </h1>
         </div>
 
-        {/* Form */}
         <div className='w-full space-y-5 pb-16'>
           <FormProvider {...signUpForm}>
             <form
               onSubmit={signUpForm.handleSubmit(onSubmit)}
               className='space-y-4 flex flex-col items-center w-full'
             >
-              {/* Name Fields */}
               <div className='flex flex-col sm:flex-row gap-4 w-full'>
                 <div className='flex flex-col items-center w-full'>
                   <Controller
@@ -143,7 +135,6 @@ export default function SignUpPage(): React.ReactElement {
                 </div>
               </div>
 
-              {/* Email Field */}
               <div className='flex flex-col items-center w-full'>
                 <Controller
                   control={signUpForm.control}
@@ -160,7 +151,6 @@ export default function SignUpPage(): React.ReactElement {
                 />
               </div>
 
-              {/* Phone Number Field */}
               <PhoneNumberInput
                 phoneFieldName='phoneNumber'
                 phoneLocalFieldName='phoneNumber'
@@ -170,7 +160,6 @@ export default function SignUpPage(): React.ReactElement {
                 label={t('auth.signup.phoneNumber')}
               />
 
-              {/* Password Field */}
               <div className='flex flex-col items-center w-full'>
                 <div className='w-full relative'>
                   <Controller
@@ -188,7 +177,6 @@ export default function SignUpPage(): React.ReactElement {
                 </div>
               </div>
 
-              {/* Terms and Conditions */}
               <div className='w-full'>
                 <Checkbox
                   id='agreeToTerms'
@@ -222,7 +210,6 @@ export default function SignUpPage(): React.ReactElement {
                 )}
               </div>
 
-              {/* Submit Button */}
               <div className='w-full pt-6'>
                 <button
                   type='submit'
@@ -248,7 +235,6 @@ export default function SignUpPage(): React.ReactElement {
                 </button>
               </div>
 
-              {/* Or Divider */}
               <div className='relative mt-12 mb-8 flex items-center justify-center w-full max-w-[296px] mx-auto'>
                 <div className='w-[123px] border-t-[1px] border-solid border-[#EEEEEE]'></div>
                 <div className='mx-[16.5px]'>
@@ -259,14 +245,12 @@ export default function SignUpPage(): React.ReactElement {
                 <div className='w-[123px] border-t-[1px] border-solid border-[#EEEEEE]'></div>
               </div>
 
-              {/* Social Login Buttons */}
               <div className='space-y-3 flex flex-col items-center mb-8'>
                 <SocialLoginButton provider='apple' />
                 <SocialLoginButton provider='google' />
                 <SocialLoginButton provider='facebook' />
               </div>
 
-              {/* Already have an account */}
               <div className='text-center transform transition-all hover:scale-105'>
                 <p className='text-[12px] font-normal leading-[14px] text-[#222222] mx-auto pb-2'>
                   {t('auth.signup.alreadyHaveAccount')}{' '}

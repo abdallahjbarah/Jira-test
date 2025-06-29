@@ -27,7 +27,7 @@ export default function useUser(): UseUserReturn {
   const { mutate: logoutMutate } = useLogout({
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: ['user'] });
-      // invalidate user queries
+
       queryClient.invalidateQueries({ queryKey: ['user'] });
       queryClient.removeQueries({ queryKey: ['notifications'] });
       queryClient.removeQueries({

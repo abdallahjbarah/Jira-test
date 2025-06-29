@@ -15,4 +15,4 @@ const CancellationPolicy: React.FC<CancellationPolicyProps> = ({ policy }) => {
   );
 };
 
-export default CancellationPolicy; 
+export default CancellationPolicy;

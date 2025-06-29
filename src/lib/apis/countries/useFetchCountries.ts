@@ -1,5 +1,3 @@
-// GET /countries
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { Country } from '@/lib/types';
@@ -15,7 +13,7 @@ export const useFetchCountries = (
   return useQuery({
     queryKey: ['countries'],
     queryFn: fetchCountries,
-    staleTime: 1000 * 60 * 60 * 24, // 24 hours
+    staleTime: 1000 * 60 * 60 * 24,
     refetchOnWindowFocus: false,
     ...queryOptions,
   });

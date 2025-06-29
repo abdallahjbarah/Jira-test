@@ -7,12 +7,7 @@ import RangeSlider from '@/components/ui/RangeSlider';
 import RadioButton from '@/components/ui/RadioButton';
 import FilterSection from './FilterSection';
 import ToggleSwitch from '@/components/ui/ToggleSwitch';
-import {
-  LANGUAGE_PREFERENCES_LIST,
-  AMENITIES_LIST,
-  ACCESSIBILITY_FEATURES_LIST,
-  BOOKING_OPTIONS_LIST,
-} from '@/utils/constants';
+
 import CustomSvg from '@/components/ui/CustomSvg';
 import { useFetchPricesRange } from '@/lib/apis/shared/useFetchPricesRange';
 import { useFetchLanguages } from '@/lib/apis/shared/useFetchLanguages';
@@ -145,18 +140,18 @@ const CommonFilters: React.FC = () => {
         control={control}
         render={({ field }) => (
           <Collapsible title={t('filter.special-offers')} defaultOpen={true}>
-            <div className="space-y-3">
+            <div className='space-y-3'>
               <RadioButton
-                id="special-offers-yes"
-                name="specialOffers"
+                id='special-offers-yes'
+                name='specialOffers'
                 label={t('filter.yes')}
                 value={true}
                 checked={field.value === true}
                 onChange={field.onChange}
               />
               <RadioButton
-                id="special-offers-no"
-                name="specialOffers"
+                id='special-offers-no'
+                name='specialOffers'
                 label={t('filter.no')}
                 value={false}
                 checked={field.value === false}
@@ -164,7 +159,6 @@ const CommonFilters: React.FC = () => {
               />
             </div>
           </Collapsible>
-
         )}
       />
 

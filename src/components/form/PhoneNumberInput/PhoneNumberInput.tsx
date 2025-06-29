@@ -29,7 +29,6 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
     formState: { errors },
   } = useFormContext();
 
-  // Get all countries and format them
   const countries: Country[] = getCountries().map((code) => {
     const dialCode = getCountryCallingCode(code as CountryCode);
     return {
@@ -40,12 +39,9 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
     };
   });
 
-  // Sort countries by name
   countries.sort((a, b) => a.name.localeCompare(b.name));
 
-  // Set default country
   const [selectedCountry, setSelectedCountry] = useState<Country>(() => {
-    // Handle case when defaultCountry is a dial code (e.g. "962" or "+962")
     const dialCode =
       typeof defaultCountry === 'string' && defaultCountry.startsWith('+')
         ? defaultCountry.substring(1)
@@ -57,7 +53,6 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
     return foundCountry || countries[0];
   });
 
-  // Initialize the country code field on mount
   useEffect(() => {
     setValue(countryCodeFieldName, selectedCountry.dialCode);
   }, [countryCodeFieldName, selectedCountry.dialCode, setValue]);
@@ -85,7 +80,6 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
           </div>
         </button>
 
-        {/* Use the CountriesModal component */}
         <CountriesModal
           isOpen={showCountryModal}
           onClose={() => setShowCountryModal(false)}

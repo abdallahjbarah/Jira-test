@@ -110,9 +110,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             <ImageWithFallback
               src={image}
               alt={image}
-              // fill
               className={imageClassName}
-              // priority={index === 0}
               loading='lazy'
               {...imageProps}
             />

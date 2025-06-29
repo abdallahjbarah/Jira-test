@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Formik, Form, FormikHelpers } from 'formik';
-import { VerificationCodeSchema } from '@utils/formsSchemas';
 import { toast } from 'react-toastify';
 import { useVerifyCode } from '@/lib/apis/users/useVerifyCode';
 import useUser from '@/utils/hooks/useUser';
@@ -214,9 +213,7 @@ export default function VerifyPage(): React.ReactElement {
             <button
               type='button'
               className='text-[12px] sm:text-[13px] font-bold leading-[15px] sm:leading-[16px] text-[#47C409] hover:text-[#3ba007] transition-colors'
-              onClick={() => {
-                // Resend code logic
-              }}
+              onClick={() => {}}
             >
               {t('auth.verify.resendCode')}
             </button>

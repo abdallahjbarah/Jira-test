@@ -1,5 +1,3 @@
-// GET /countries/cities
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { City } from '@/lib/types';

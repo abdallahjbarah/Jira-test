@@ -32,7 +32,7 @@ const FloatingLabelSelect: React.FC<FloatingLabelSelectProps> = ({
       borderRadius: '0.5rem',
       boxShadow: 'none',
       padding: '0px 12px',
-      // paddingTop: '16px', // Add padding at the top to make room for the label
+
       transition: 'all 0.2s',
       '&:hover': {
         borderColor: state.isFocused
@@ -45,14 +45,14 @@ const FloatingLabelSelect: React.FC<FloatingLabelSelectProps> = ({
     }),
     placeholder: (provided, state) => ({
       ...provided,
-      display: 'none', // Hide the default placeholder since we're using a label
+      display: 'none',
       ...(styles.placeholder && typeof styles.placeholder === 'function'
         ? styles.placeholder(provided, state)
         : {}),
     }),
     valueContainer: (provided, state) => ({
       ...provided,
-      padding: '8px 0 2px', // Adjust padding to accommodate the label
+      padding: '8px 0 2px',
       ...(styles.valueContainer && typeof styles.valueContainer === 'function'
         ? styles.valueContainer(provided, state)
         : {}),

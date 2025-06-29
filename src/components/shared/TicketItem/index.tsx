@@ -1,6 +1,5 @@
 import { useTranslation } from '@/contexts/TranslationContext';
 import { Ticket } from '@/lib/types';
-import { locale } from 'dayjs';
 import React from 'react';
 import styled from 'styled-components';
 

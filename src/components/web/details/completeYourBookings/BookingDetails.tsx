@@ -1,7 +1,5 @@
 import CustomSvg from '@/components/ui/CustomSvg';
-import Image from 'next/image';
 import React, { useState } from 'react';
-import GuestFilterItem from '@/components/shared/GuestFilterItem';
 
 interface BookingDetailsProps {
   time: string;
@@ -29,9 +27,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({
     infants: 0,
   });
 
-  // Parse the people string to extract guest numbers (assuming format like "2 adults, 1 child")
   React.useEffect(() => {
-    // Basic parsing - you might need to adjust this based on your actual people string format
     const totalGuests = parseInt(people) || 0;
     setGuests({
       adults: totalGuests,
@@ -45,7 +41,6 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({
     children: number;
     infants: number;
   }) => {
-    console.log('newGuests', newGuests);
     setGuests(newGuests);
     if (onGuestUpdate) {
       onGuestUpdate(newGuests);
@@ -82,20 +77,6 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({
         <p className='font-custom-400 text-text_1 font-sans text-3xl'>
           {people}
         </p>
-        {/* <GuestFilterItem
-          triggerComponent={
-            <Image
-              src={'/SVGs/shared/editIcon.svg'}
-              alt='edit'
-              width={30}
-              height={30}
-              className='cursor-pointer'
-            />
-          }
-          onChange={handleGuestChange}
-          initialValues={guests}
-          allowedGuestsField={allowedGuestsField}
-        /> */}
       </div>
     </div>
   );

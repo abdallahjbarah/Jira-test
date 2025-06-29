@@ -5,7 +5,12 @@ import Image from 'next/image';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { Notification } from '@/lib/types';
 import { IntersectionObserverTrigger } from '../../IntersectionObserverTrigger';
-import { NotificationContainer, NotificationHeader, NotificationContent, NotificationFooter } from './styles';
+import {
+  NotificationContainer,
+  NotificationHeader,
+  NotificationContent,
+  NotificationFooter,
+} from './styles';
 import NotificationList from './NotificationList';
 import NotificationDropdown from './NotificationDropdown';
 import NotificationsActions from './NotificationsActions';
@@ -15,7 +20,6 @@ import {
   InfiniteQueryObserverResult,
 } from '@tanstack/react-query';
 
-// Export the NotificationDropdown component for reuse
 export { NotificationDropdown };
 
 interface NotificationMenuProps {
@@ -39,9 +43,7 @@ function NotificationMenu({
 }: NotificationMenuProps): React.ReactElement {
   const { t, locale } = useTranslation();
 
-  // Memoize the intersection callback to prevent unnecessary re-renders
   const handleIntersect = React.useCallback(() => {
-    console.log('onIntersect');
     if (!isFetchingNextPage) {
       fetchNextPage();
     }
@@ -60,9 +62,7 @@ function NotificationMenu({
   if (error) {
     return (
       <NotificationContainer>
-        <div className='p-5'>
-          Error loading notifications
-        </div>
+        <div className='p-5'>Error loading notifications</div>
       </NotificationContainer>
     );
   }

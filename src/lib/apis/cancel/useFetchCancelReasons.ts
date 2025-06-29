@@ -1,7 +1,3 @@
-/**
- * GET /cancel-reason
- */
-
 import { api } from '@/lib/apis';
 import { CancelReason } from '@/lib/types';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';

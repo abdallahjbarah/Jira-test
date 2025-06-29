@@ -1,5 +1,3 @@
-// /faq
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { Faq } from '@/lib/types';
@@ -14,6 +12,6 @@ export const useFetchFaqs = (queryOptions?: UseQueryOptions<Faq[], Error>) =>
     queryKey: ['faqs'],
     queryFn: fetchFaqs,
     refetchOnWindowFocus: false,
-    staleTime: 24 * 60 * 60 * 1000, // 24 hours
+    staleTime: 24 * 60 * 60 * 1000,
     ...queryOptions,
   });

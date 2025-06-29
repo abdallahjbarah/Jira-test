@@ -1,5 +1,3 @@
-// /users/{userId}/edit-guest
-
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 

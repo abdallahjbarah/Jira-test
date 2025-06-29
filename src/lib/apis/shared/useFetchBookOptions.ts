@@ -1,5 +1,3 @@
-// get /book-options
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { BookOption } from '@/lib/types';

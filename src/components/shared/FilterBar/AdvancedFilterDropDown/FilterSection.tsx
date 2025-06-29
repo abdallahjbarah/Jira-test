@@ -33,10 +33,8 @@ const FilterSection: React.FC<FilterSectionProps> = ({
 
   const handleToggle = (value: string) => {
     if (type === 'radio') {
-      // For radio buttons, just select the one value
       onChange([value]);
     } else {
-      // For checkboxes, toggle the value in the array
       if (selectedValues.includes(value)) {
         onChange(selectedValues.filter((v) => v !== value));
       } else {

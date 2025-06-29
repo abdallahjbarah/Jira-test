@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import Modal from '@/components/ui/Modal';
-import Link from 'next/link';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { useFetchCancelReasons } from '@/lib/apis/cancel/useFetchCancelReasons';
 import { CancelReason } from '@/lib/types';
 import RadioButton from '@/components/ui/RadioButton';
 import { Controller, useForm } from 'react-hook-form';
-import FormInput from '@/components/form/FormInput';
 import Divider from '@/components/ui/Divider';
 import { useCancelBooking } from '@/lib/apis/bookings/useCancelBooking';
 import CircularLoader from '@/components/ui/CircularLoader';

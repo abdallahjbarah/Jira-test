@@ -11,7 +11,6 @@ import FormInput from '@/components/form/FormInput';
 import DateRangePicker from '@/components/shared/DateRangePicker';
 import Dropdown from '@/components/ui/Dropdown';
 
-// Omit the onChange from HTML input props since we'll define our own
 type InputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'onChange' | 'value'
@@ -48,14 +47,12 @@ const DatePickerInput = forwardRef<HTMLInputElement, DatePickerInputProps>(
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // Format date for display in the input
     const formatDate = (dateString: string) => {
       if (!dateString) return '';
       const date = new Date(dateString);
       return date.toLocaleDateString();
     };
 
-    // Handle date selection
     const handleDateChange = (dates: Date[]) => {
       const date = dates[0] ? dates[0].toISOString().split('T')[0] : '';
       onChange && onChange(date);

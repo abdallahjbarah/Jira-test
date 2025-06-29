@@ -4,7 +4,6 @@ import {
   FacebookAuthProvider,
   OAuthProvider,
   signOut as firebaseSignOut,
-  User,
 } from 'firebase/auth';
 import { getFirebaseAuth } from './config';
 import { SSOProvider } from '@/lib/types';
@@ -29,7 +28,7 @@ const createProvider = (providerName: string) => {
       return appleProvider;
 
     default:
-      throw new Error(`Unsupported provider: ${providerName}`);
+      throw new Error(`auth.firebase.unsupportedProvider: ${providerName}`);
   }
 };
 
@@ -49,17 +48,15 @@ export const signInWithProvider = async (
       user: result.user,
     };
   } catch (error: any) {
-    console.error(`${providerName} sign-in failed:`, error);
-
     if (error.code === 'auth/popup-closed-by-user') {
-      throw new Error('Sign-in was cancelled');
+      throw new Error('auth.firebase.signInCancelled');
     } else if (error.code === 'auth/popup-blocked') {
-      throw new Error('Please allow popups for this website');
+      throw new Error('auth.firebase.popupBlocked');
     } else if (error.code === 'auth/unauthorized-domain') {
-      throw new Error('This domain is not authorized for authentication');
+      throw new Error('auth.firebase.unauthorizedDomain');
     }
 
-    throw new Error(`Failed to sign in with ${providerName}`);
+    throw new Error(`auth.firebase.signInFailed ${providerName}`);
   }
 };
 

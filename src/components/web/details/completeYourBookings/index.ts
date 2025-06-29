@@ -3,4 +3,4 @@ export { default as AdditionalServices } from './AdditionalServices';
 export { default as ThingsToKnow } from './ThingsToKnow';
 export { default as CancellationPolicy } from './CancellationPolicy';
 export { default as PaymentMethods } from './PaymentMethods';
-export { default as BookingSummary } from './BookingSummary'; 
+export { default as BookingSummary } from './BookingSummary';

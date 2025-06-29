@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 export interface ExpandableTextSectionProps {
   title: string;
@@ -19,6 +20,7 @@ const ExpandableTextSection: React.FC<ExpandableTextSectionProps> = ({
   contentClassName = '',
   buttonClassName = '',
 }) => {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const shouldShowReadMore = content.length > maxLength;
@@ -47,7 +49,7 @@ const ExpandableTextSection: React.FC<ExpandableTextSectionProps> = ({
               type='button'
               className={`underline font-custom-500 text-text_1 font-sans text-xl hover:opacity-80 transition-opacity ${buttonClassName}`}
             >
-              {isExpanded ? 'Read less' : 'Read more'}
+              {isExpanded ? t('common.readLess') : t('common.readMore')}
             </button>
           </>
         )}

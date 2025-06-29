@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import Image from 'next/image';
 import { cn } from '@/utils/cn';
 import CustomSvg from '@/components/ui/CustomSvg';
 
@@ -21,7 +20,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   const [image, setImage] = useState<string>(initialImage);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Determine the size of the avatar
   const sizeClasses = {
     sm: 'w-16 h-16',
     md: 'w-24 h-24',
@@ -66,11 +64,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           onError={handleImageError}
         />
 
-        {/* Always visible half overlay with camera icon */}
-        <div
-          className='absolute bottom-0 left-0 right-0 h-1/2 bg-black bg-opacity-50 flex items-center justify-center cursor-pointer text-white hover:text-primary_1'
-          // onClick={handleClick}
-        >
+        <div className='absolute bottom-0 left-0 right-0 h-1/2 bg-black bg-opacity-50 flex items-center justify-center cursor-pointer text-white hover:text-primary_1'>
           <CustomSvg
             src='/SVGs/shared/camera-icon.svg'
             alt='Upload'
@@ -80,7 +74,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         </div>
       </div>
 
-      {/* Hidden file input */}
       <input
         type='file'
         ref={fileInputRef}

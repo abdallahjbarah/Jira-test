@@ -16,7 +16,6 @@ export default function AboutUs(): React.ReactElement {
       className='bg-secondary_2 flex px-[1rem] items-center justify-center laptopS:justify-start '
     >
       <div className='flex flex-col laptopS:flex-row laptopS:gap-20 items-center justify-center container mx-auto'>
-        {/* Image */}
         <div className='w-full max-w-[50rem] max-h-[50rem] my-[4rem] laptopS:my-[8.75rem]'>
           <Image
             quality={100}
@@ -27,9 +26,7 @@ export default function AboutUs(): React.ReactElement {
           />
         </div>
 
-        {/* Content */}
         <div className='flex flex-col gap-12 max-w-[43.875rem] pb-[4rem] laptopS:pb-0'>
-          {/* About Us */}
           <div>
             <h1 className='text-custom-48 font-custom-800 text-primary_5 font-gellix-Bold'>
               {t('aboutUs.title')}
@@ -39,7 +36,6 @@ export default function AboutUs(): React.ReactElement {
             </p>
           </div>
 
-          {/* Vision */}
           <div className='flex gap-4'>
             <div className='w-full bg-primary_4 max-w-[6.4375rem] max-h-[6.4375rem] rounded-custom-20 flex justify-center items-center'>
               <div className='w-10 h-9'>
@@ -56,7 +52,6 @@ export default function AboutUs(): React.ReactElement {
             </div>
           </div>
 
-          {/* Mission */}
           <div className='flex gap-4'>
             <div className='w-full bg-primary_4 max-w-[6.4375rem] max-h-[6.4375rem] rounded-custom-20 flex justify-center items-center'>
               <div className='w-10 h-9'>
@@ -73,7 +68,6 @@ export default function AboutUs(): React.ReactElement {
             </div>
           </div>
 
-          {/* Read More */}
           <div className=''>
             <FilledButton
               path='#'

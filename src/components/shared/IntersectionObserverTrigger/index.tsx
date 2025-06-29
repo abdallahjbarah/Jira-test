@@ -1,5 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
-import React from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 
 interface IntersectionObserverTriggerProps {
   onIntersect: () => void;
@@ -31,7 +30,6 @@ export const IntersectionObserverTrigger = React.memo(
 
     useEffect(() => {
       if (!enabled) {
-        // Clean up existing observer if disabled
         if (observerRef.current) {
           observerRef.current.disconnect();
           observerRef.current = null;
@@ -39,7 +37,6 @@ export const IntersectionObserverTrigger = React.memo(
         return;
       }
 
-      // Create new observer
       observerRef.current = new IntersectionObserver(handleIntersection, {
         rootMargin,
         threshold,

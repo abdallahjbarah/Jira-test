@@ -1,5 +1,3 @@
-/// GET  /booking/user
-
 import {
   UseInfiniteQueryOptions,
   useQuery,
@@ -8,7 +6,7 @@ import {
 import { api } from '@/lib/apis';
 import { Booking } from '@/lib/types';
 import { BookingStatus } from '@/lib/enums';
-import { clearObject, deepClearObject } from '@/utils/helpers/clearObject';
+import { deepClearObject } from '@/utils/helpers/clearObject';
 
 interface UseFetchBookingsFilters {
   skip: number;

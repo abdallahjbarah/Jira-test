@@ -1,5 +1,3 @@
-// GET /language
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { Language } from '@/lib/types';

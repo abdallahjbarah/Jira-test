@@ -1,5 +1,3 @@
-// get /continent
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { Continent } from '@/lib/types';

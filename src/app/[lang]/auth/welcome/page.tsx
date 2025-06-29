@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import DateRangePicker from '@/components/shared/DateRangePicker';
@@ -30,36 +30,31 @@ export default function WelcomePage(): React.ReactElement {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Upload file mutation
   const uploadFileMutation = useUploadFile({
     onSuccess: (data) => {
-      // Once file is uploaded, the response contains the image URL
       updateUserWithImage(data);
     },
     onError: (error) => {
-      console.log(error, 'error');
-      toast.error('Failed to upload profile image');
+      toast.error(t('auth.welcome.profileImageUploadFailed'));
       setLoading(false);
     },
   });
 
-  // Edit user mutation
   const editUserMutation = useEditUser({
     onSuccess: (data) => {
       setLoading(false);
       queryClient.setQueryData(['user'], (oldData: any) => {
-        console.log(oldData, 'oldData');
         return {
           ...oldData,
           user: { ...oldData.user, ...data },
         };
       });
 
-      toast.success('Profile updated successfully');
+      toast.success(t('auth.welcome.profileUpdatedSuccess'));
       router.push('/');
     },
     onError: () => {
-      toast.error('Failed to update profile');
+      toast.error(t('auth.welcome.profileUpdateFailed'));
       setLoading(false);
     },
   });
@@ -94,7 +89,6 @@ export default function WelcomePage(): React.ReactElement {
     }
   };
 
-  // Update user with the image URL returned from upload
   const updateUserWithImage = (imageUrl: string) => {
     const formData = watch();
 
@@ -106,7 +100,6 @@ export default function WelcomePage(): React.ReactElement {
     });
   };
 
-  // Update user without image
   const updateUserWithoutImage = (formData: FormValues) => {
     editUserMutation.mutate({
       userId: userData?.user._id,
@@ -118,45 +111,39 @@ export default function WelcomePage(): React.ReactElement {
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     setLoading(true);
 
-    // If there's an image file, upload it first
     if (imageFile) {
       uploadFileMutation.mutate({
         file: imageFile,
         folderName: FileFolder.PROFILE,
       });
     } else {
-      // If no image, just update user data
       updateUserWithoutImage(data);
     }
   };
 
   return (
     <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 md:px-8'>
-      {/* Welcome Button Top Right */}
       <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[240px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
             <span className='text-[25px] font-semibold text-white whitespace-nowrap'>
-              Sign Up
+              {t('auth.signup.title')}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
       <div className='mt-32 sm:mt-52 w-full max-w-[296px] space-y-8 px-4 sm:px-0'>
-        {/* Heading */}
         <div className='flex flex-col items-center gap-2 animate-fadeIn'>
           <h1 className='w-[178px] h-[38px] text-[32px] font-bold whitespace-nowrap mb-4 text-center'>
-            <span className='text-[#222222]'>Hello </span>
+            <span className='text-[#222222]'>{t('auth.welcome.hello')} </span>
           </h1>
           <p className='text-[14px] font-normal leading-[17px] text-[#555555] text-center'>
-            Tell us more about you :)
+            {t('auth.welcome.tellUsMore')}
           </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Profile Photo Upload */}
           <div className='flex flex-col items-center space-y-4'>
             <div className='relative group'>
               <div className='relative w-40 h-40 overflow-hidden bg-gray-100 rounded-full'>
@@ -180,7 +167,7 @@ export default function WelcomePage(): React.ReactElement {
                     />
                   </svg>
                 )}
-                {/* Camera Icon Overlay */}
+
                 <div
                   className='absolute bottom-0 left-0 right-0 h-12 bg-black bg-opacity-50 flex items-center justify-center cursor-pointer'
                   onClick={() =>
@@ -219,12 +206,10 @@ export default function WelcomePage(): React.ReactElement {
             </div>
           </div>
 
-          {/* Form Sections */}
           <div className='space-y-4 flex flex-col items-center w-full'>
-            {/* Birthday Section */}
             <div className='space-y-3 flex flex-col items-center w-full mt-4'>
               <label className='w-[296px] h-[17px] text-[14px] font-bold text-black'>
-                Let's celebrate your birthday
+                {t('auth.welcome.celebrateBirthday')}
               </label>
               <div className='relative w-[296px]'>
                 <Controller
@@ -283,7 +268,6 @@ export default function WelcomePage(): React.ReactElement {
               </div>
             </div>
 
-            {/* Gender Selection */}
             <div className='space-y-3 flex flex-col items-start w-full'>
               <label className='w-[296px] h-[17px] text-[14px] font-bold text-black'>
                 Are you
@@ -317,7 +301,6 @@ export default function WelcomePage(): React.ReactElement {
               />
             </div>
 
-            {/* Start Exploring Button */}
             <div className='pt-12 w-full'>
               <button
                 type='submit'
@@ -330,7 +313,6 @@ export default function WelcomePage(): React.ReactElement {
               </button>
             </div>
 
-            {/* Skip Option */}
             <div className='text-center pt-1 pb-16 w-full'>
               <button
                 type='button'

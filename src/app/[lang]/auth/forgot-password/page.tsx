@@ -51,7 +51,6 @@ export default function ForgotPasswordPage() {
 
   return (
     <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 lg:px-8'>
-      {/* Forgot Password Button Top Right */}
       <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[200px] sm:w-[278px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[200px] sm:w-[278px] rounded-bl-[50px] bg-[#FE360A] flex items-center justify-center transform transition-transform hover:scale-[1.02]'>
@@ -97,7 +96,6 @@ export default function ForgotPasswordPage() {
               </div>
             </div>
 
-            {/* Submit Button */}
             <div className='flex justify-center'>
               <button
                 type='submit'

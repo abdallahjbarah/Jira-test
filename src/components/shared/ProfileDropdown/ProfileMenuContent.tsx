@@ -1,6 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
-import CustomSvg from '@/components/ui/CustomSvg';
 import ProfileMenuItem from './ProfileMenuItem';
 import ProfileDivider from './ProfileDivider';
 import { useTranslation } from '@/contexts/TranslationContext';
@@ -34,12 +32,10 @@ const ProfileMenuContent: React.FC = () => {
 
   return (
     <div className='bg-white rounded-lg shadow-lg w-[22.5rem] sm:w-[20rem] border border-solid border-secondary_3 max-h-[min(80vh,600px)] flex flex-col'>
-      {/* Fixed Header - Avatar Section */}
       <div className='p-6 pb-4 border-b border-gray-100 flex-shrink-0 shadow-sm bg-gradient-to-b from-gray-50 to-white'>
         <ProfileDropDownHeader />
       </div>
 
-      {/* Scrollable Content */}
       <div className='flex-1 overflow-y-auto px-6 py-4 customScroll min-h-0'>
         <div className='space-y-4'>
           <ProfileMenuItem
@@ -118,7 +114,6 @@ const ProfileMenuContent: React.FC = () => {
         </div>
       </div>
 
-      {/* Fixed Footer - Logout Button */}
       <div className='px-6 py-4 border-t border-gray-200 flex-shrink-0 shadow-inner bg-gray-50'>
         <div className='p-2 rounded-lg border border-gray-200 shadow-sm bg-white hover:shadow-md transition-shadow duration-200'>
           <FilledButton

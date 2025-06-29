@@ -53,7 +53,6 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
 
   const { mutate: uploadFile, isPending: isUploadingFile } = useUploadFile({
     onSuccess: (uploadedUrl: string) => {
-      // After successful file upload, create the ticket with the uploaded URL
       if (pendingFormData) {
         createTicket({
           subject: pendingFormData.subject,
@@ -73,16 +72,13 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
   };
 
   const onSubmitForm: SubmitHandler<FormData> = (data) => {
-    // Check if there's an attachment to upload
     if (data.file && data.file[0]) {
-      // Store form data and upload the file first
       setPendingFormData(data);
       uploadFile({
         file: data.file[0],
         folderName: FileFolder.TICKETS,
       });
     } else {
-      // No attachment, create ticket directly
       createTicket({
         subject: data.subject,
         message: data.description,

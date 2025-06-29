@@ -1,5 +1,3 @@
-// PATCH /notification/read-all
-
 import {
   useMutation,
   UseMutationOptions,

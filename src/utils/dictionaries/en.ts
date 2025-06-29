@@ -1,8 +1,7 @@
-// English dictionary
 const en = {
   next: 'Next',
   free: 'Free',
-  map: 'MAP',
+  mapLabel: 'MAP',
   type: 'Type',
   experience: 'Experience Type',
   person: 'person',
@@ -208,7 +207,7 @@ const en = {
     termsOfService: 'Terms of Service',
     checkTerms: 'Check our terms of service',
     logout: 'Logout',
-    // Personal Information form
+
     firstName: 'First Name',
     lastName: 'Last Name',
     phoneNumber: 'Phone Number',
@@ -222,12 +221,12 @@ const en = {
     location: 'Location',
     save: 'Save',
     cancel: 'Cancel',
-    // Security form
+
     oldPassword: 'Old Password',
     newPassword: 'New Password',
     confirmPassword: 'Confirm Password',
     changePasswordBtn: 'Change Password',
-    // Currency form
+
     selectCurrency: 'Select Currency',
     currencyDescription: 'Select your preferred currency for displaying prices',
     currencies: {
@@ -266,7 +265,7 @@ const en = {
     refunded: 'Refunded',
     completed: 'Completed',
     refundRequested: 'Refund Requested',
-    // Legacy status labels for compatibility
+
     upcoming: 'Upcoming',
     cancel: 'Cancel',
     cancelBooking: 'Cancel Booking',
@@ -368,8 +367,14 @@ const en = {
       title: 'Welcome to Bookagri',
       description: 'Complete your profile to get started',
       welcomeToBookagri: 'Welcome to Bookagri!',
+      hello: 'Hello',
+      tellUsMore: 'Tell us more about you :)',
+      celebrateBirthday: "Let's celebrate your birthday",
       profileSetupSuccess: 'Profile setup completed successfully!',
       profileSetupFailed: 'Failed to set up profile. Please try again.',
+      profileUpdatedSuccess: 'Profile updated successfully',
+      profileUpdateFailed: 'Failed to update profile',
+      profileImageUploadFailed: 'Failed to upload profile image',
     },
     profile: {
       completionRequired: 'Profile completion required',
@@ -378,6 +383,13 @@ const en = {
       profileCompletionTitle: 'Complete Your Profile',
       profileCompletionDescription:
         'Please provide additional information to complete your profile',
+    },
+    firebase: {
+      signInCancelled: 'Sign-in was cancelled',
+      popupBlocked: 'Please allow popups for this website',
+      unauthorizedDomain: 'This domain is not authorized for authentication',
+      signInFailed: 'Failed to sign in with',
+      unsupportedProvider: 'Unsupported provider',
     },
   },
   helpCenter: {
@@ -414,6 +426,9 @@ const en = {
     adding: 'Adding...',
     create: 'Create',
     creating: 'Creating...',
+    readMore: 'Read more',
+    readLess: 'Read less',
+    goToHome: 'Go To Home',
     error: {
       generic: 'An error occurred. Please try again.',
     },
@@ -466,6 +481,14 @@ const en = {
     paymentMethod: {
       error: 'Please select a payment method',
     },
+    guests: {
+      selectGuests: 'Please select guests',
+      exceedsLimit: 'The selected number of guests exceeds the allowed limit',
+    },
+    availableStaySlots: 'Available Stay Slots',
+    availableTimeSlots: 'Available Time Slots',
+    startFrom: 'Start from',
+    perPerson: '/person',
   },
   search: {
     'check-in': 'Check-in',
@@ -479,8 +502,10 @@ const en = {
     where: 'Where',
     destination: 'Destination',
   },
+
   datePicker: {
     add_date: 'Add date',
+    selectDate: 'Select date',
     months: {
       january: 'January',
       february: 'February',
@@ -517,7 +542,7 @@ const en = {
   loadMore: 'Load More',
   showAllPhotos: 'Show all photos',
   searchResults: {
-    noResults: 'No results',
+    noResults: 'No results found',
     searching: 'Searching...',
     noResultsFound: 'No results found',
     searchingFor: 'Searching for',
@@ -525,6 +550,29 @@ const en = {
     clearSearch: 'Clear search',
     searchAgain: 'Search again',
     searchAgainPlaceholder: 'Search for a city or country...',
+    startTypingToSearch: 'Start typing to search...',
+  },
+  form: {
+    date: 'Date',
+    guests: 'Guests',
+    noCountriesAvailable: 'No countries available',
+    noCountriesFound: 'No countries found matching',
+    searchForCountry: 'Search for a country...',
+  },
+  validation: {
+    pleaseSelectCountry: 'Please select a country',
+    pleaseSelectCity: 'Please select a city',
+  },
+  regions: {
+    menaRegion: 'Mena Region',
+    imFlexible: "I'm flexible",
+    jordan: 'Jordan',
+    europe: 'Europe',
+    africa: 'Africa',
+    city: 'City',
+  },
+  map: {
+    showMapView: 'Show Map View',
   },
 };
 

@@ -1,5 +1,3 @@
-// GET /help-center/guest/all
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { Ticket } from '@/lib/types';

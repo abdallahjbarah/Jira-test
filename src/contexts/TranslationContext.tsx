@@ -26,7 +26,6 @@ export function TranslationProvider({
   const router = useRouter();
   const [dictionary, setDictionary] = useState<Record<string, any>>({});
 
-  // Load dictionary when locale changes
   useEffect(() => {
     const loadDictionary = async () => {
       const dict = await getDictionary(locale);
@@ -36,9 +35,7 @@ export function TranslationProvider({
     loadDictionary();
   }, [locale]);
 
-  // Translation function
   const t = (key: string): string => {
-    // key can be a nested object
     const nestedKey = key.split('.');
     if (nestedKey.length > 1) {
       try {
@@ -54,7 +51,6 @@ export function TranslationProvider({
     return dictionary[key] || key;
   };
 
-  // Function to change locale
   const changeLocale = (newLocale: Locale) => {
     const currentPath = window.location.pathname;
     const pathWithoutLocale = currentPath.replace(`/${locale}`, '');
@@ -76,7 +72,6 @@ export function TranslationProvider({
   );
 }
 
-// Custom hook to use the translation context
 export const useTranslation = () => {
   const context = useContext(TranslationContext);
   if (context === undefined) {

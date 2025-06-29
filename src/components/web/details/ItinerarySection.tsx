@@ -5,7 +5,7 @@ import CustomSvg from '@/components/ui/CustomSvg';
 export interface ItineraryStop {
   title: string;
   locationURL: string;
-  // coordinates: [number, number];
+
   details: string;
   duration: number;
 }
@@ -15,10 +15,10 @@ interface ItinerarySectionProps {
 }
 
 const ItinerarySection: React.FC<ItinerarySectionProps> = ({ stops }) => {
-    const handleMapClick = (locationUrl: string) => {
-        const googleMapsUrl = locationUrl;
-        window.open(googleMapsUrl, '_blank');
-      };
+  const handleMapClick = (locationUrl: string) => {
+    const googleMapsUrl = locationUrl;
+    window.open(googleMapsUrl, '_blank');
+  };
   return (
     <div className='flex flex-col gap-4'>
       <h1 className='font-custom-700 font-gellix-Bold text-text_1 text-custom-30'>
@@ -29,13 +29,17 @@ const ItinerarySection: React.FC<ItinerarySectionProps> = ({ stops }) => {
       </p>
       <div className='grid grid-cols-2 gap-8'>
         {stops.map((stop, index) => (
-          <div key={index} className='flex gap-4 cursor-pointer' onClick={() => handleMapClick(stop.locationURL)}>
+          <div
+            key={index}
+            className='flex gap-4 cursor-pointer'
+            onClick={() => handleMapClick(stop.locationURL)}
+          >
             <div className='w-[50px] h-[50px] relative flex-shrink-0'>
               <Image
-                src="/SVGs/shared/details-icons/itineraryStopIcon.svg"
-                alt="Stop Icon"
+                src='/SVGs/shared/details-icons/itineraryStopIcon.svg'
+                alt='Stop Icon'
                 fill
-                className="object-contain"
+                className='object-contain'
               />
             </div>
             <div className='flex-1'>
@@ -51,7 +55,9 @@ const ItinerarySection: React.FC<ItinerarySectionProps> = ({ stops }) => {
                   width={20}
                   height={20}
                 />
-                <span className='text-custom-16 text-text_3'>{stop.duration} hours</span>
+                <span className='text-custom-16 text-text_3'>
+                  {stop.duration} hours
+                </span>
               </div>
             </div>
           </div>
@@ -61,4 +67,4 @@ const ItinerarySection: React.FC<ItinerarySectionProps> = ({ stops }) => {
   );
 };
 
-export default ItinerarySection; 
+export default ItinerarySection;

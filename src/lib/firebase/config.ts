@@ -18,7 +18,6 @@ export const getFirebaseConfig = async () => {
     firebaseConfig = await response.json();
     return firebaseConfig;
   } catch (error) {
-    console.error('Failed to fetch Firebase config:', error);
     throw error;
   }
 };
@@ -29,7 +28,6 @@ export const initializeFirebase = async () => {
   try {
     const config = await getFirebaseConfig();
 
-    // Check if Firebase app is already initialized
     if (!getApps().length) {
       app = initializeApp(config);
     } else {
@@ -39,7 +37,6 @@ export const initializeFirebase = async () => {
     auth = getAuth(app);
     return { app, auth };
   } catch (error) {
-    console.error('Failed to initialize Firebase:', error);
     throw error;
   }
 };

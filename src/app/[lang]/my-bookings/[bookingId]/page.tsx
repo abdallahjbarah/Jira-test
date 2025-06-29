@@ -10,7 +10,6 @@ import Divider from '@/components/ui/Divider';
 import FeaturesSection from '@/components/web/details/FeaturesSection';
 import AmenitiesSection from '@/components/web/details/AmenitiesSection';
 import HostInfoSection from '@/components/web/details/HostInfoSection';
-import OverviewSection from '@/components/web/details/OverviewSection';
 import LocationSection from '@/components/web/details/LocationSection';
 import WhatToExpectSection from '@/components/web/details/WhatToExpectSection';
 import ItinerarySection from '@/components/web/details/ItinerarySection';
@@ -236,14 +235,14 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
               {type === 'Offers & Packages' && (
                 <>
                   <Divider className='w-full my-8' />
-                  {/* Itinerary Section */}
+
                   <ItinerarySection stops={itineraryStops || []} />
                 </>
               )}
               {type != 'Stay' && (
                 <>
                   <Divider className='w-full my-8' />
-                  {/* Features Section */}
+
                   <FeaturesSection features={features} />
                 </>
               )}
@@ -258,12 +257,12 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                 </>
               )}
               <Divider className='w-full my-8' />
-              {/* Host Info Section */}
+
               {host && coHost && (
                 <HostInfoSection hosts={host} coHosts={coHost} />
               )}
               <Divider className='w-full my-8' />
-              {/* Amenities Section */}
+
               <AmenitiesSection amenities={amenities || []} />
             </div>
           </div>

@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { Continent } from '@/lib/types';
 import { useTranslation } from '@/contexts/TranslationContext';
 
-// Types for regions
 export type Region =
   | 'MenaRegion'
   | 'Flexible'
@@ -14,7 +13,6 @@ export type Region =
   | 'Africa'
   | null;
 
-// Region data
 export const regions = [
   {
     id: 'MenaRegion',

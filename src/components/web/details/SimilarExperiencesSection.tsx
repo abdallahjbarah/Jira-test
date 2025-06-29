@@ -6,7 +6,9 @@ interface SimilarExperiencesSectionProps {
   collections: Collection[];
 }
 
-const SimilarExperiencesSection: React.FC<SimilarExperiencesSectionProps> = ({ collections }) => (
+const SimilarExperiencesSection: React.FC<SimilarExperiencesSectionProps> = ({
+  collections,
+}) => (
   <div className='flex flex-col gap-11'>
     <p className='font-custom-700 font-gellix-Bold text-text_1 text-custom-30'>
       Similar Experiences
@@ -16,7 +18,10 @@ const SimilarExperiencesSection: React.FC<SimilarExperiencesSectionProps> = ({ c
     </p>
     <div className='flex gap-6 overflow-x-auto hide-scrollbar'>
       {collections.map((collection) => (
-        <div key={collection.id} className='min-w-[19.5rem] max-w-[19.5rem] flex-shrink-0'>
+        <div
+          key={collection.id}
+          className='min-w-[19.5rem] max-w-[19.5rem] flex-shrink-0'
+        >
           <CollectionCard collection={collection} />
         </div>
       ))}
@@ -24,4 +29,4 @@ const SimilarExperiencesSection: React.FC<SimilarExperiencesSectionProps> = ({ c
   </div>
 );
 
-export default SimilarExperiencesSection; 
+export default SimilarExperiencesSection;

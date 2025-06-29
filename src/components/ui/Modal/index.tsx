@@ -13,7 +13,6 @@ interface ModalProps {
   headerPrefix?: React.ReactNode;
 }
 
-// Styled components defined outside the render method
 const ModalOverlay = styled.div<{ isOpen: boolean }>`
   position: fixed;
   top: 0;
@@ -90,12 +89,6 @@ const CloseButton = styled.button`
 
 const ModalContent = styled.div``;
 
-/**
- * Reusable Modal component
- *
- * Note: The keyboard event and body scroll handling are
- * now managed by the useModal hook
- */
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
@@ -108,7 +101,6 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Handle click outside modal
   const handleOutsideClick = (e: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
       if (canClose) {

@@ -117,12 +117,10 @@ const CancelButton = styled.button`
   }
 `;
 
-// Props that will be injected into the wrapped component
 export interface WithFavouritesProps {
   openFavouritesModal: (site: Site) => void;
 }
 
-// HOC function
 function withFavourites<P extends object>(
   WrappedComponent: ComponentType<P>,
 ): ComponentType<Omit<P, keyof WithFavouritesProps>> {
@@ -141,19 +139,17 @@ function withFavourites<P extends object>(
     const [selectedCollectionId, setSelectedCollectionId] = React.useState<
       string | null
     >(null);
-    // default value is site
+
     const [newCollectionName, setNewCollectionName] = React.useState<
       string | null
     >(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
-    // Fetch user's favorite collections
     const { data: favoriteCollections, refetch: refetchCollections } =
       useFetchUserFavoriteCollections({
         enabled: isLoggedIn,
       });
 
-    // Mutation for adding to collection
     const { mutate: addToCollection } = useAddToCollectionMutate({
       onSuccess: () => {
         toast.success(t('favorites.addedSuccessfully'));
@@ -162,7 +158,6 @@ function withFavourites<P extends object>(
       },
       onError: (error) => {
         toast.error(t('favorites.addError'));
-        console.error('Error adding to collection:', error);
         setIsLoading(false);
       },
     });
@@ -174,7 +169,6 @@ function withFavourites<P extends object>(
       setIsLoading(false);
     };
 
-    // Function to open the favourites modal
     const openFavouritesModal = React.useCallback(
       (site: Site) => {
         if (!isLoggedIn) {
@@ -187,8 +181,6 @@ function withFavourites<P extends object>(
           return;
         }
 
-        console.log('Site: ', site);
-
         setCurrentSiteId(site._id);
         setNewCollectionName(site.name);
         openModal();
@@ -196,49 +188,41 @@ function withFavourites<P extends object>(
       [isFavorite, openModal, t],
     );
 
-    // Handle collection selection
     const handleCollectionSelect = (collectionId: string) => {
       setSelectedCollectionId(collectionId);
-      setNewCollectionName(null); // Clear new collection name when selecting existing
+      setNewCollectionName(null);
     };
 
-    // Handle creating new collection
     const handleCreateNewCollection = () => {
       if (!currentSiteId || !newCollectionName) return;
 
       setIsLoading(true);
 
-      // Create new collection and add site
       addToCollection({
         siteId: currentSiteId,
         collectionName: newCollectionName.trim(),
       });
     };
 
-    // Handle adding to selected existing collection
     const handleAddToExistingCollection = () => {
       if (!currentSiteId || !selectedCollectionId) return;
 
       setIsLoading(true);
 
-      // Add to existing collection
       addToCollection({
         siteId: currentSiteId,
         collectionId: selectedCollectionId,
       });
     };
 
-    // Handle modal close
     const handleCloseModal = () => {
       closeModal();
       resetModalState();
     };
 
-    // Check if can create new collection
     const canCreateNew =
       newCollectionName !== null && newCollectionName?.trim().length > 0;
 
-    // Check if can add to existing collection
     const canAddToExisting = selectedCollectionId !== null;
 
     return (
@@ -255,7 +239,6 @@ function withFavourites<P extends object>(
           width='600px'
         >
           <ModalContent>
-            {/* Create New Collection Section */}
             <CreateNewSection>
               <SectionTitle>{t('favorites.createNewCollection')}</SectionTitle>
               <CreateNewForm>
@@ -264,7 +247,7 @@ function withFavourites<P extends object>(
                   value={newCollectionName || ''}
                   onChange={(e) => {
                     setNewCollectionName(e.target.value);
-                    setSelectedCollectionId(null); // Clear selection when typing
+                    setSelectedCollectionId(null);
                   }}
                   placeholder={t('favorites.enterCollectionName')}
                   disabled={isLoading}
@@ -282,7 +265,6 @@ function withFavourites<P extends object>(
               </CreateNewForm>
             </CreateNewSection>
 
-            {/* Existing Collections Section */}
             {favoriteCollections && favoriteCollections.length > 0 && (
               <CollectionsSection>
                 <SectionTitle>
@@ -304,7 +286,6 @@ function withFavourites<P extends object>(
                   ))}
                 </CollectionsList>
 
-                {/* Add to Selected Collection Button */}
                 {canAddToExisting && (
                   <FilledButton
                     text={
@@ -324,7 +305,6 @@ function withFavourites<P extends object>(
               </CollectionsSection>
             )}
 
-            {/* Cancel Button */}
             <ButtonContainer>
               <CancelButton onClick={handleCloseModal} disabled={isLoading}>
                 {t('common.cancel')}
@@ -336,7 +316,6 @@ function withFavourites<P extends object>(
     );
   };
 
-  // Set display name for debugging
   WithFavouritesComponent.displayName = `withFavourites(${
     WrappedComponent.displayName || WrappedComponent.name || 'Component'
   })`;

@@ -32,10 +32,7 @@ const SEOWrapper = ({
         content='FMv1VEtb3QMU_-SmMIPkq6PB6L5QJ1RfuTjWR3Rv82o'
       />
       <meta name='theme-color' content='#000000' />
-      {/* <meta
-          name="facebook-domain-verification"
-          content=""
-        /> */}
+
       <link rel='apple-touch-icon' href='/favicon.svg' />
       <link rel='manifest' href='/manifest.json' />
       <link rel='icon' href='/favicon.svg' />

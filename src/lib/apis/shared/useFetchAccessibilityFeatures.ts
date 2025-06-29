@@ -1,5 +1,3 @@
-// get /accessibility-features
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { AccessibilityFeature } from '@/lib/types';

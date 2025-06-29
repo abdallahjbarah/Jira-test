@@ -1,24 +1,21 @@
-import { NextResponse } from "next/server";
-import { VerificationCodeSchema } from "@utils/formsSchemas";
+import { NextResponse } from 'next/server';
+import { VerificationCodeSchema } from '@utils/formsSchemas';
 
 export async function POST(request) {
-    try {
-        const body = await request.json();
-        const { code } = body;
+  try {
+    const body = await request.json();
+    const { code } = body;
 
-        // Validate the code
-        await VerificationCodeSchema.validate({ code });
+    await VerificationCodeSchema.validate({ code });
 
-        // TODO: Replace with actual verification logic
-        // This is a mock response for demonstration
-        return NextResponse.json({
-            message: "Code verified successfully"
-        });
-    } catch (error) {
-        console.error('Verification error:', error);
-        return NextResponse.json(
-            { message: error.message || "Invalid verification code" },
-            { status: 400 }
-        );
-    }
-} 
+    return NextResponse.json({
+      message: 'Code verified successfully',
+    });
+  } catch (error) {
+    console.error('Verification error:', error);
+    return NextResponse.json(
+      { message: error.message || 'Invalid verification code' },
+      { status: 400 },
+    );
+  }
+}

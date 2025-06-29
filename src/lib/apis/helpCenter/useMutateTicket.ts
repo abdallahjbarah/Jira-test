@@ -1,5 +1,3 @@
-// POST /help-center
-
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { Ticket } from '@/lib/types';

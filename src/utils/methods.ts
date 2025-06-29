@@ -31,7 +31,6 @@ export const customDateToTimeStamp = (
 
 export const customConvertTime24HoursTo12 = (stringTime24: string): string => {
   try {
-    // Check correct time format and split into components
     const match = stringTime24
       .toString()
       .match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/);
@@ -49,7 +48,6 @@ export const customConvertTime24HoursTo12 = (stringTime24: string): string => {
   }
 };
 
-// https://day.js.org/docs/en/manipulate/add
 export const addToObjectDate = (
   objectDate: Date | string | number,
   unit: dayjs.ManipulateType,
@@ -220,10 +218,10 @@ export const generateQueryString = (
   }
 
   const validProperties = Object.entries(properties)
-    .filter(([_, value]) => value) // Filter out properties with falsy values
-    .map(([key, value]) => `${key}=${value}`); // Create query string for each property
+    .filter(([_, value]) => value)
+    .map(([key, value]) => `${key}=${value}`);
 
-  return validProperties.join('&'); // Join query strings with '&'
+  return validProperties.join('&');
 };
 
 export const stopPropagation = (e: React.SyntheticEvent): void => {
@@ -231,23 +229,23 @@ export const stopPropagation = (e: React.SyntheticEvent): void => {
 };
 
 export const convertDecimalTime = (decimalTime: number): string => {
-  let hours = Math.floor(decimalTime); // Get the whole number part as hours
-  let minutes = Math.round((decimalTime % 1) * 60); // Convert the decimal part to minutes
+  const hours = Math.floor(decimalTime);
+  const minutes = Math.round((decimalTime % 1) * 60);
 
   let result = '';
 
   if (hours > 0) {
-    result += `${hours}h`; // Add hours to the result if there are any
+    result += `${hours}h`;
   }
 
   if (minutes > 0) {
     if (result !== '') {
-      result += ' '; // Add a space if both hours and minutes are present
+      result += ' ';
     }
-    result += `${minutes}m`; // Add minutes to the result
+    result += `${minutes}m`;
   }
 
-  return result !== '' ? result : '0m'; // Return '0m' if no time is present
+  return result !== '' ? result : '0m';
 };
 
 export const removeDuplicateObjects = <T>(arr: T[]): T[] => {
@@ -265,8 +263,8 @@ export const removeDuplicateObjects = <T>(arr: T[]): T[] => {
 export const downloadPDF = (pdfUrl: string): void => {
   const link = document.createElement('a');
   link.href = pdfUrl;
-  link.target = '_blank'; // Open in a new tab/window if supported by the browser
-  link.setAttribute('download', 'download'); // Add the download attribute to force download
+  link.target = '_blank';
+  link.setAttribute('download', 'download');
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

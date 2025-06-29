@@ -4,12 +4,10 @@ import Image from 'next/image';
 import AboutUsImg from '@images/home/AboutUs.jpg';
 import { useTranslation } from '@contexts/TranslationContext';
 
-// Contact info
 import EmailSVG from '@SVGs/home/Email.svg';
 import PhoneSVG from '@SVGs/home/Phone.svg';
 import AddressSVG from '@SVGs/home/Address.svg';
 
-// Social media
 import FacebookSVG from '@SVGs/home/Facebook.svg';
 import LinkedinSVG from '@SVGs/home/Linkedin.svg';
 import InstagramSVG from '@SVGs/home/Instagram.svg';
@@ -27,7 +25,6 @@ export default function ContactUs(): React.ReactElement {
       className='w-full flex container mx-auto px-4 items-center justify-center laptopS:justify-start'
     >
       <div className='flex flex-col laptopS:flex-row laptopS:gap-20 items-center justify-center w-full'>
-        {/* Image */}
         <div className='my-[4rem] laptopS:my-[7.5rem]'>
           <Image
             quality={100}
@@ -38,7 +35,6 @@ export default function ContactUs(): React.ReactElement {
           />
         </div>
 
-        {/* Contact Us */}
         <div className='flex flex-col gap-12 max-w-[43.875rem]'>
           <div>
             <h2 className='text-custom-32 font-custom-400 text-primary_1'>
@@ -50,7 +46,6 @@ export default function ContactUs(): React.ReactElement {
           </div>
 
           <div className='flex flex-col gap-4'>
-            {/* Email */}
             <div className='border border-solid rounded-custom-16 border-secondary_3'>
               <div className='flex gap-4 p-4'>
                 <div className='w-full max-w-[6.4375rem] max-h-[6.4375rem] rounded-custom-20 flex justify-center items-center'>
@@ -69,7 +64,6 @@ export default function ContactUs(): React.ReactElement {
               </div>
             </div>
 
-            {/* Phone */}
             <div className='border border-solid rounded-custom-16 border-secondary_3'>
               <div className='flex gap-4 p-4'>
                 <div className='w-full max-w-[6.4375rem] max-h-[6.4375rem] rounded-custom-20 flex justify-center items-center'>
@@ -88,7 +82,6 @@ export default function ContactUs(): React.ReactElement {
               </div>
             </div>
 
-            {/* Address */}
             <div className='border border-solid rounded-custom-16 border-secondary_3'>
               <div className='flex gap-4 p-4'>
                 <div className='w-full max-w-[6.4375rem] max-h-[6.4375rem] rounded-custom-20 flex justify-center items-center'>

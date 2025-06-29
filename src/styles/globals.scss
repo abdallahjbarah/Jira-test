@@ -13,14 +13,13 @@
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
 
-  --primary-color: #47C409;
-  --secondary-color: #FE360A;
-  --secondary-color-2: #EEEEEE;
+  --primary-color: #47c409;
+  --secondary-color: #fe360a;
+  --secondary-color-2: #eeeeee;
   --tertiary-color: #000;
-  --quaternary-color: #FFF;
+  --quaternary-color: #fff;
   --quinary-color: #222;
-  --senary-color: #FF4B55;
-  
+  --senary-color: #ff4b55;
 }
 
 * {
@@ -84,7 +83,7 @@ a {
 
 .hide-scrollbar {
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE 10+ */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome/Safari/Webkit */
@@ -95,11 +94,9 @@ button {
   border: none;
   background: none;
   padding: 0;
-  
+
   &:disabled {
     cursor: not-allowed;
     opacity: 0.7;
   }
 }
-
-

@@ -1,12 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-import Image from 'next/image';
 import FormInput from '@/components/form/FormInput';
 import { useUserLogin } from '@/lib/apis/auth/useLogin';
 import { WretchError } from 'wretch';
@@ -42,7 +40,6 @@ export default function LoginPage() {
       router.push('/');
     },
     onError: (error: WretchError) => {
-      console.log('Error: ', error.json);
       toast.error(error.json.message);
     },
   });
@@ -66,7 +63,6 @@ export default function LoginPage() {
 
   return (
     <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 md:px-8'>
-      {/* Login Button Top Right */}
       <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[240px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[240px] rounded-bl-[100px] bg-[#FE360A] flex items-center justify-center'>
@@ -173,7 +169,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Or Divider */}
           <div className='relative mt-12 mb-8 flex items-center justify-center w-full max-w-[296px] mx-auto'>
             <div className='w-[123px] border-t-[1px] border-solid border-[#EEEEEE]'></div>
             <div className='mx-[16.5px]'>
@@ -184,7 +179,6 @@ export default function LoginPage() {
             <div className='w-[123px] border-t-[1px] border-solid border-[#EEEEEE]'></div>
           </div>
 
-          {/* Social Login Buttons */}
           <div className='space-y-3 flex flex-col items-center'>
             <SocialLoginButton provider='apple' />
             <SocialLoginButton provider='google' />

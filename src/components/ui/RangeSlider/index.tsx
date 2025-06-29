@@ -42,7 +42,6 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     setMaxInputValue(value[1].toString());
   }, [value]);
 
-  // Handle value change from the library component
   const handleChange = (newValues: number[]) => {
     const newValue: [number, number] = [newValues[0], newValues[1]];
     setLocalValue(newValue);
@@ -51,13 +50,10 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     onChange(newValue);
   };
 
-  // Handle min input change
   const handleMinInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Get input value and remove currency and spaces
     const inputValue = e.target.value.replace(currency, '').trim();
     setMinInputValue(inputValue);
 
-    // Parse numeric value
     const numValue = parseInt(inputValue);
     if (!isNaN(numValue)) {
       const newValue: [number, number] = [
@@ -69,13 +65,10 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     }
   };
 
-  // Handle max input change
   const handleMaxInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Get input value and remove currency and spaces
     const inputValue = e.target.value.replace(currency, '').trim();
     setMaxInputValue(inputValue);
 
-    // Parse numeric value
     const numValue = parseInt(inputValue);
     if (!isNaN(numValue)) {
       const newValue: [number, number] = [
@@ -87,17 +80,14 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     }
   };
 
-  // Format display value with currency
   const formatDisplayValue = (value: string) => {
     return `${currency} ${value}`;
   };
 
-  // Extract color without the 'bg-' prefix for inline styles
   const primaryColor = activeColor.startsWith('bg-primary_1')
-    ? '#47C409' // Default green-500 color
+    ? '#47C409'
     : activeColor.replace('bg-', '');
 
-  // Custom CSS variables for styling the range slider
   const sliderStyles = {
     '--range-slider-height': '4px',
     '--range-slider-connect-bg': primaryColor,
@@ -114,7 +104,6 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         {t('filter.average-price')} {priceValue}
       </div>
 
-      {/* Custom styled Range Slider */}
       <div className='px-3' style={sliderStyles}>
         <RangeSliderInput
           id='range-slider'
@@ -127,10 +116,12 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
           className='custom-range-slider'
         />
       </div>
-      {/* Min/Max input fields */}
+
       <div className='flex justify-between gap-4 mt-6'>
         <label className='w-full border border-secondary_3 border-solid rounded-lg p-2'>
-          <span className='block text-text_3 text-sm mb-1'>{t('filter.minimum')}</span>
+          <span className='block text-text_3 text-sm mb-1'>
+            {t('filter.minimum')}
+          </span>
           <div className='relative flex items-center gap-1'>
             <span className='text-text_1'>{currency}</span>
             <input
@@ -142,7 +133,9 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
           </div>
         </label>
         <label className='w-full border border-secondary_3 border-solid rounded-lg p-2'>
-          <span className='block text-text_3 text-sm mb-1'>{t('filter.maximum')}</span>
+          <span className='block text-text_3 text-sm mb-1'>
+            {t('filter.maximum')}
+          </span>
           <div className='relative flex items-center gap-1'>
             <span className='text-text_1'>{currency}</span>
             <input

@@ -44,7 +44,6 @@ function CollectionCard({
     ],
   );
 
-  // Memoize slick props to prevent unnecessary re-renders
   const slickProps = React.useMemo(
     () => ({
       autoplay: false,
@@ -55,7 +54,6 @@ function CollectionCard({
     [collection.images.length],
   );
 
-  // Memoize image props to prevent unnecessary re-renders
   const imageProps = React.useMemo(
     () => ({
       width: 500,
@@ -66,12 +64,10 @@ function CollectionCard({
     [collection.images],
   );
 
-  // Memoize location string
   const locationString = React.useMemo(() => {
     return `${collection?.country?.name}, ${collection?.city}`;
   }, [collection?.country?.name, collection?.city]);
 
-  // Memoize price string
   const priceString = React.useMemo(() => {
     const price = collection.pricingInformation[0]?.price;
     return price ? `${price} ${currency}` : '';
@@ -83,7 +79,6 @@ function CollectionCard({
       : '/SVGs/shared/heart-icon.svg';
   }, [isCollectionFavorite]);
 
-  // Memoize touch event handlers to prevent re-creation
   const touchHandlers = React.useMemo(
     () => ({
       onTouchStart: (e: React.TouchEvent<HTMLAnchorElement>) => {
@@ -136,12 +131,6 @@ function CollectionCard({
             <h3 className='text-custom-14 font-custom-500 text-primary_5 line-clamp-1'>
               {collection.name}
             </h3>
-            {/* <div className='flex items-center gap-1 text-custom-12 font-custom-400'>
-              <span className=''>{collection.rating.score}</span>
-              <span className='text-secondary_1'>
-                | {collection.rating.count}
-              </span>
-            </div> */}
           </div>
 
           <p className='text-custom-12 text-gray_3 mt-1'>{locationString}</p>
@@ -168,7 +157,6 @@ function CollectionCard({
   );
 }
 
-// Memoize the component to prevent unnecessary re-renders
 const MemoizedCollectionCard = React.memo(CollectionCard);
 
 export default withFavourites(MemoizedCollectionCard);

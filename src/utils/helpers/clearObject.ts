@@ -1,4 +1,3 @@
-// Remove undefined, null values from an object and handle nested objects
 export const clearObject = (obj: any): any => {
   if (!obj || typeof obj !== 'object') {
     return obj;
@@ -18,7 +17,6 @@ export const clearObject = (obj: any): any => {
   );
 };
 
-// should clear all the nested objects and arrays and clear empty strings
 export const deepClearObject = (obj: any): any => {
   if (!obj || typeof obj !== 'object') {
     return obj;

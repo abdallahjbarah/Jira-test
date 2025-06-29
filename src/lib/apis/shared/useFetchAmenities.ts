@@ -1,5 +1,3 @@
-//get /api/amenities
-
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { Amenity } from '@/lib/types';

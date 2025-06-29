@@ -9,7 +9,6 @@ function CollectionTypeLabel(): React.ReactElement {
   const { collectionStatus } = useParams();
   const { locale } = useTranslation();
 
-  // Default to "all" if collectionStatus is undefined (homepage)
   const currentCollectionStatus = collectionStatus || COLLECTION_STATUS.ALL;
 
   const collectionObject = React.useMemo(() => {

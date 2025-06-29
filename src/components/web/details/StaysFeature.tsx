@@ -18,12 +18,7 @@ interface StaysFeatureProps {
 
 const InfoItem: React.FC<InfoItemProps> = ({ icon, title, description }) => (
   <div className='flex gap-2 items-start justify-start'>
-    <CustomSvg
-      src={icon}
-      width={24}
-      height={24}
-      color='black'
-    />
+    <CustomSvg src={icon} width={24} height={24} color='black' />
     <div className='flex flex-col justify-start'>
       <p className='font-custom-400 font-sans text-text_1 text-custom-20'>
         {title}
@@ -35,7 +30,11 @@ const InfoItem: React.FC<InfoItemProps> = ({ icon, title, description }) => (
   </div>
 );
 
-const StaysFeature: React.FC<StaysFeatureProps> = ({ checkinTime, checkoutTime, languages }) => {
+const StaysFeature: React.FC<StaysFeatureProps> = ({
+  checkinTime,
+  checkoutTime,
+  languages,
+}) => {
   const infoItems = [
     {
       icon: '/SVGs/shared/details-icons/timeCircle.svg',
@@ -50,7 +49,9 @@ const StaysFeature: React.FC<StaysFeatureProps> = ({ checkinTime, checkoutTime, 
     {
       icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
       title: 'Spoken Language',
-      description: languages?.map((language) => language.nameEn).join(', ') + ' (Download a language translator app to communicate with host!)',
+      description:
+        languages?.map((language) => language.nameEn).join(', ') +
+        ' (Download a language translator app to communicate with host!)',
     },
   ];
 
@@ -63,4 +64,4 @@ const StaysFeature: React.FC<StaysFeatureProps> = ({ checkinTime, checkoutTime, 
   );
 };
 
-export default StaysFeature; 
+export default StaysFeature;

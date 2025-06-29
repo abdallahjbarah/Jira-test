@@ -66,7 +66,6 @@ export default function ResetPasswordPage() {
 
   return (
     <main className='relative flex min-h-screen flex-col items-center bg-white px-4 sm:px-6 lg:px-8'>
-      {/* Reset Password Button Top Right */}
       <div className='absolute right-0 top-0'>
         <div className='h-[65px] w-[200px] sm:w-[278px] overflow-hidden'>
           <div className='absolute right-0 top-0 h-[65px] w-[200px] sm:w-[278px] rounded-bl-[50px] bg-[#FE360A] flex items-center justify-center transform transition-transform hover:scale-[1.02]'>
@@ -77,9 +76,7 @@ export default function ResetPasswordPage() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className='mt-24 sm:mt-32 md:mt-52 w-full max-w-[296px] space-y-6 sm:space-y-8 px-4'>
-        {/* Heading */}
         <div className='flex flex-col items-center gap-2 sm:gap-3 animate-fadeIn'>
           <h1 className='w-[234px] h-[30px] text-[20px] xs:text-[22px] sm:text-[25px] font-bold whitespace-nowrap text-center'>
             <span className='text-[#222222]'>

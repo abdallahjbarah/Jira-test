@@ -1,7 +1,3 @@
-/**
- * PATCH /booking/{id}/cancel-booking
- */
-
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { WretchError } from 'wretch';

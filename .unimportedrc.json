@@ -1,0 +1,77 @@
+{
+  "entry": [
+    "src/app/**/*.{js,jsx,ts,tsx}",
+    "src/pages/**/*.{js,jsx,ts,tsx}",
+    "src/components/**/*.{js,jsx,ts,tsx}",
+    "src/lib/**/*.{js,jsx,ts,tsx}",
+    "src/utils/**/*.{js,jsx,ts,tsx}",
+    "src/hooks/**/*.{js,jsx,ts,tsx}",
+    "src/contexts/**/*.{js,jsx,ts,tsx}",
+    "src/providers/**/*.{js,jsx,ts,tsx}",
+    "src/layouts/**/*.{js,jsx,ts,tsx}",
+    "src/queries/**/*.{js,jsx,ts,tsx}",
+    "src/configs/**/*.{js,jsx,ts,tsx}",
+    "src/styles/**/*.{js,jsx,ts,tsx}",
+    "src/middleware.ts",
+    "next.config.js",
+    "tailwind.config.js",
+    "postcss.config.js"
+  ],
+  "source": [
+    "src/**/*.{js,jsx,ts,tsx}",
+    "!src/**/*.test.{js,jsx,ts,tsx}",
+    "!src/**/*.spec.{js,jsx,ts,tsx}",
+    "!src/**/__tests__/**",
+    "!src/**/test/**"
+  ],
+  "extensions": [".js", ".jsx", ".ts", ".tsx"],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/build/**",
+    "**/dist/**",
+    "**/.git/**",
+    "**/public/**",
+    "**/scripts/**",
+    "**/*.config.js",
+    "**/*.config.ts"
+  ],
+  "ignoreUnresolved": [
+    "react",
+    "react-dom",
+    "next",
+    "next/app",
+    "next/navigation",
+    "next/headers",
+    "next/router",
+    "@types/react",
+    "@types/react-dom",
+    "@types/node"
+  ],
+  "ignoreUnused": [
+    "src/app/**/layout.tsx",
+    "src/app/**/page.tsx",
+    "src/app/**/loading.tsx",
+    "src/app/**/error.tsx",
+    "src/app/**/not-found.tsx",
+    "src/app/**/route.{js,ts}",
+    "src/pages/_app.{js,jsx,ts,tsx}",
+    "src/pages/_document.{js,jsx,ts,tsx}",
+    "src/middleware.ts",
+    "src/lib/types/index.ts",
+    "src/utils/constants.ts"
+  ],
+  "aliases": {
+    "@/*": ["src/*"],
+    "@components/*": ["src/components/*"],
+    "@utils/*": ["src/utils/*"],
+    "@lib/*": ["src/lib/*"],
+    "@hooks/*": ["src/hooks/*"],
+    "@contexts/*": ["src/contexts/*"],
+    "@providers/*": ["src/providers/*"],
+    "@layouts/*": ["src/layouts/*"],
+    "@queries/*": ["src/queries/*"],
+    "@configs/*": ["src/configs/*"],
+    "@styles/*": ["src/styles/*"]
+  }
+}

@@ -43,7 +43,6 @@ const ImageWithFallback = ({
     setState((prev) => ({ ...prev, isLoading: false }));
   }, []);
 
-  //change imageSrc if src is changed
   React.useEffect(() => {
     if (src) {
       setState((prev) => ({ ...prev, imgSrc: src }));

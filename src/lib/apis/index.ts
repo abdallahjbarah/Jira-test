@@ -1,4 +1,4 @@
-import wretch, { FetchLike, WretchOptions, WretchError } from 'wretch';
+import wretch from 'wretch';
 import QueryStringAddon from 'wretch/addons/queryString';
 import authMiddleware from './authMiddleware';
 

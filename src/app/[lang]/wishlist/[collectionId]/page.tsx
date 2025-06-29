@@ -129,7 +129,6 @@ function WishlistCollectionPage() {
         </WishlistItemsContainer>
       </main>
 
-      {/* Confirmation Modal */}
       {confirmationConfig && (
         <ConfirmationModal
           isOpen={isConfirmationOpen}
@@ -144,7 +143,6 @@ function WishlistCollectionPage() {
         />
       )}
 
-      {/* Edit Collection Modal */}
       <EditCollectionModal
         isOpen={isEditModalOpen}
         onClose={closeEditModal}

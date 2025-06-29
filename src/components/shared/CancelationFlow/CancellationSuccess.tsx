@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Modal from '@/components/ui/Modal';
 import { useTranslation } from '@/contexts/TranslationContext';
-import Divider from '@/components/ui/Divider';
 import CustomSvg from '@/components/ui/CustomSvg';
 
 interface CancellationSuccessProps {

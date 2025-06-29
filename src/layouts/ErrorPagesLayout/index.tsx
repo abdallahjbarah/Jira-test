@@ -31,30 +31,6 @@ export default function ErrorPagesLayout({
           </div>
         </div>
         <div className='imageContainer'>{image}</div>
-
-        {/* {hasRedirectButton && (
-          <MainButtonLink
-            path={path}
-            text={'Take me home'}
-            icon={
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M8 16L18 6M18 6H7.25M18 6V16.75"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="square"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            }
-          />
-        )} */}
       </div>
     </PublicLayout>
   );

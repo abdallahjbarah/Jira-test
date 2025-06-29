@@ -26,7 +26,6 @@ interface LinkData {
 export default function Footer(): React.ReactElement {
   const { locale, t } = useTranslation();
 
-  // Get the phone values from the dictionary
   const phoneValues = ['00962-77-2236393'];
 
   return (
@@ -34,7 +33,6 @@ export default function Footer(): React.ReactElement {
       <div className='pt-[4rem] w-full laptopS:px-[2.75rem]'>
         <div className='flex flex-col items-start gap-y-8 lg:flex-row'>
           <div className='self-center laptopS:self-start'>
-            {/* Logo */}
             <div className='w-full h-full max-w-[11.81rem] max-h-[3rem] m-auto laptopS:m-0'>
               <CustomLink path={'/'}>
                 <Image
@@ -46,7 +44,6 @@ export default function Footer(): React.ReactElement {
               </CustomLink>
             </div>
 
-            {/*  Social Media */}
             <ul className='mt-6 laptopS:mt-[9.25rem] flex gap-[0.9375rem]'>
               <a target='_blank' href={SOCIAL_MEDIA_DATA?.instagram?.link}>
                 <li>
@@ -76,16 +73,10 @@ export default function Footer(): React.ReactElement {
             </ul>
           </div>
 
-          {/* Links */}
           <div className='px-8 flex w-full flex-col items-center justify-center tabletM:justify-start tabletM:gap-y-8 tabletM:flex-row tabletM:items-start'>
-            {/* Pages */}
             <div className='w-full tabletM:me-6'>
-              {/* <h2 className='text-custom-20 font-custom-700 text-primary_4'>
-                {t('footer.pages')}
-              </h2> */}
-              {/* <div className="mt-4"> */}
-              <div className="flex flex-col gap-4">
-                <ul className="flex flex-col gap-4">
+              <div className='flex flex-col gap-4'>
+                <ul className='flex flex-col gap-4'>
                   {LINKS_DATA?.map((item: LinkData, index: number) => (
                     <li
                       key={index}
@@ -100,13 +91,11 @@ export default function Footer(): React.ReactElement {
                     </li>
                   ))}
                 </ul>
-                {/* </div> */}
               </div>
-
             </div>
 
             <div className='w-full tabletM:me-6'>
-              <ul className="flex flex-col gap-4">
+              <ul className='flex flex-col gap-4'>
                 {COLLECTIONS_LINKS?.map((item: LinkData, index: number) => (
                   <li
                     key={index}
@@ -123,10 +112,6 @@ export default function Footer(): React.ReactElement {
               </ul>
             </div>
             <div className='w-full tabletM:me-6 flex flex-col gap-4'>
-              {/* <h2 className='text-custom-20 font-custom-700 text-primary_4'>
-                {t('footer.contactUs')}
-              </h2>
-              <div className="mt-[1.5rem] mb-4 flex w-full gap-4 tabletM:mt-6"> */}
               <div className='text-custom-18 text-primary_4 w-full'>
                 <h2 className='font-custom-700 mb-2'>
                   {t('footer.email.title')}
@@ -153,93 +138,10 @@ export default function Footer(): React.ReactElement {
                 <p className='font-custom-400'>{t('footer.address.zipCode')}</p>
               </div>
             </div>
-            {/* </div> */}
-            {/* <div className='w-[19rem] tabletM:w-[12.5rem] tabletM:me-6'>
-                <h2 className='text-custom-20 font-custom-700 text-primary_4'>
-                  {t('footer.pages')}
-                </h2>
-                <ul className='mt-[1.5rem] mb-4 flex w-full flex-col gap-4 tabletM:mt-6'>
-                  {LINKS_DATA?.map((item: LinkData, index: number) => (
-                    <li
-                      key={index}
-                      className='text-custom-18 font-custom-400 text-primary_4'
-                    >
-                      <CustomLink
-                        className='transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
-                        path={item?.path}
-                      >
-                        {item?.name[locale]}
-                      </CustomLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className='w-[19rem] tabletM:w-[12.5rem] tabletM:me-20'>
-                <ul className='mb-4 flex w-full flex-col gap-4 tabletM:mt-[3.375rem]'>
-                  {COLLECTIONS_LINKS?.map((item: LinkData, index: number) => (
-                    <li
-                      key={index}
-                      className='text-custom-18 font-custom-400 text-primary_4'
-                    >
-                      <CustomLink
-                        className='transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
-                        path={item?.path}
-                      >
-                        {item?.name[locale]}
-                      </CustomLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className='w-[19rem] tabletM:w-[12.5rem] tabletM:me-6'>
-                <h2 className='text-custom-20 font-custom-700 text-primary_4'>
-                  {t('footer.contactUs')}
-                </h2>
-
-                <div className='my-[1.5rem] flex w-full flex-col gap-4 tabletM:mt-6'>
-                  <div className='text-custom-18 text-primary_4'>
-                    <h2 className='font-custom-700 mb-2'>
-                      {t('footer.email.title')}
-                    </h2>
-                    <p className='font-custom-400'>{t('footer.email.value')}</p>
-                  </div>
-
-                  <div className='text-custom-18 text-primary_4 flex flex-col gap-1'>
-                    <h2 className='font-custom-700 mb-2'>
-                      {t('footer.phone.title')}
-                    </h2>
-                    {phoneValues.map((phone, index) => (
-                      <p key={index} className='font-custom-400'>
-                        {phone}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className='w-[19rem] tabletM:w-[17.3125rem] text-primary_4 text-custom-18'>
-                <div className='flex w-full flex-col gap-4 tabletM:mt-[3.375rem]'>
-                  <div>
-                    <h2 className='font-custom-700 mb-2'>
-                      {t('footer.address.title')}
-                    </h2>
-                    <p className='font-custom-400'>
-                      {t('footer.address.value')}
-                    </p>
-                    <p className='font-custom-400'>
-                      {t('footer.address.zipCode')}
-                    </p>
-                  </div>
-                </div>
-              </div> */}
-            {/* End Contact Us */}
           </div>
         </div>
       </div>
 
-      {/* Copyright */}
       <div className='h-full w-full mt-4 laptopS:mt-0'>
         <hr />
         <div className='my-[1.5rem] flex content-end justify-center gap-2'>

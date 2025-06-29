@@ -64,7 +64,6 @@ const isValidPasswordSchema = (requiredMessage: string): Yup.StringSchema => {
     .required(requiredMessage);
 };
 
-// SignUp form
 export const SignUpSchema = Yup.object().shape({
   firstName: Yup.string().required('First Name is required'),
   lastName: Yup.string().required('Last Name is required'),
@@ -77,23 +76,19 @@ export const SignUpSchema = Yup.object().shape({
     .required('You must accept the terms and conditions'),
 });
 
-// SignIn
 export const SignInSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
   password: isValidPasswordSchema('Password is required'),
 });
 
-// Forget Password
 export const ForgetPasswordEmailSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
 });
 
-// Verification Code
 export const VerificationCodeSchema = Yup.object().shape({
   code: Yup.number().required('Code is required'),
 });
 
-// Reset Password Forget
 export const resetPasswordForgotSchema = Yup.object().shape({
   newPassword: passwordSchema('New Password is required'),
   ConfirmPassword: Yup.string()
@@ -101,7 +96,6 @@ export const resetPasswordForgotSchema = Yup.object().shape({
     .required('Confirm Password is required'),
 });
 
-// Change Password
 export const changePasswordSchema = Yup.object().shape({
   oldPassword: isValidPasswordSchema('Old Password is required').notOneOf(
     [Yup.ref('newPassword')],
@@ -113,7 +107,6 @@ export const changePasswordSchema = Yup.object().shape({
     .required('Confirm Password is required'),
 });
 
-// Contact Us Form
 export const contactUsSchema = Yup.object().shape({
   firstName: Yup.string().required('First Name is required'),
   lastName: Yup.string().required('Last Name is required'),
@@ -135,7 +128,6 @@ export const ResetPasswordSchema = Yup.object().shape({
     .oneOf([Yup.ref('password')], 'Passwords must match'),
 });
 
-// Personal Information Schema
 export const personalInfoSchema = Yup.object().shape({
   firstName: Yup.string().required('First name is required'),
   lastName: Yup.string().required('Last name is required'),
@@ -160,7 +152,6 @@ export const personalInfoSchema = Yup.object().shape({
   }),
 });
 
-// Currency Schema
 export const currencySchema = Yup.object().shape({
   currency: Yup.string().required('Currency is required'),
 });

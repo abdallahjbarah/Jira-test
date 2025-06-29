@@ -71,14 +71,14 @@ const BookingStatusSection = ({ detailsData }: BookingStatusSectionProps) => {
       >
         {getStatusLabel(detailsData.booking.status)}
       </span>
-      {/* {detailsData?.canCancel && ( */}
+
       <button
         className='px-11 py-2.5 bg-[#47C40910] text-text_1 border border-green-200 rounded-full hover:bg-green-100 transition-colors duration-200 text-sm font-medium'
         onClick={openModal}
       >
         {t('bookingStatus.cancel')}
       </button>
-      {/* )} */}
+
       {isOpen && (
         <CancelationPolicyModal
           isOpen={isOpen}

@@ -22,7 +22,6 @@ const TermsAndConditionsPage = async ({
       }}
       className='relative w-full min-h-screen flex items-center justify-center bg-gradient-full'
     >
-      {/* Background Image */}
       <div className='absolute top-0 left-0 w-full h-full -z-10'>
         <Image
           src={BgHomePage}
@@ -34,7 +33,6 @@ const TermsAndConditionsPage = async ({
         />
       </div>
 
-      {/* Logo at the top-left corner */}
       <div className='absolute top-[20px] left-[20px] z-20'>
         <CustomLink path={'/'}>
           <Image
@@ -46,7 +44,6 @@ const TermsAndConditionsPage = async ({
         </CustomLink>
       </div>
 
-      {/* Terms & Conditions Content */}
       <div className='z-10 text-white max-w-3xl mx-auto bg-black bg-opacity-50 p-6 rounded-lg shadow-lg my-10'>
         <h1 className='text-3xl font-bold text-center mb-6'>
           {lang === 'ar' ? 'الشروط والأحكام' : 'Terms & Conditions'}

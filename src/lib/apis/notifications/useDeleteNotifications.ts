@@ -1,23 +1,17 @@
-// /notification/delete/{id}
-
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 
 const deleteNotification = async (id: string) => {
   try {
-    // Get the raw response first
     const response = await api.url(`/notification/delete/${id}`).delete().res();
 
-    // Check if response has JSON content
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('application/json')) {
       return await response.json();
     }
 
-    // For empty or non-JSON responses, return a success object
     return { success: true };
   } catch (error) {
-    // If any error occurs, still return a success object
     return { success: true };
   }
 };

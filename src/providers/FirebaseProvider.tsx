@@ -38,7 +38,6 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
         setIsInitialized(true);
         setError(null);
       } catch (err) {
-        console.error('Failed to initialize Firebase:', err);
         setError(
           err instanceof Error ? err.message : 'Failed to initialize Firebase',
         );

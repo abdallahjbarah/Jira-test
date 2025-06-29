@@ -67,15 +67,13 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       : '/SVGs/shared/heart-icon.svg';
   }, [isCollectionFavorite]);
 
-  // Calculate number of nights from availability data
   const numberOfNights = React.useMemo(() => {
     if (bookingData?.availability?.availabilitiesIds) {
       return bookingData.availability.availabilitiesIds.length;
     }
-    return 1; // Default to 1 night
+    return 1;
   }, [bookingData?.availability?.availabilitiesIds]);
 
-  // Calculate dynamic price breakdown based on booking data and site pricing information
   const dynamicPriceBreakdown = React.useMemo(() => {
     if (!bookingData?.guests || !siteInfo?.pricingInformation) {
       return [];
@@ -84,8 +82,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     const breakdown = calculatePriceBreakdown(
       siteInfo.pricingInformation,
       bookingData.guests,
-      siteInfo.extras, // Include extras from siteInfo
-      numberOfNights, // Include number of nights
+      siteInfo.extras,
+      numberOfNights,
     );
 
     return formatPriceBreakdownForDisplay(breakdown, currency, numberOfNights);
@@ -97,7 +95,6 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     numberOfNights,
   ]);
 
-  // Calculate dynamic total amount including tax
   const dynamicTotalAmount = React.useMemo(() => {
     if (!bookingData?.guests || !siteInfo?.pricingInformation) {
       return '0';
@@ -106,8 +103,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     const breakdown = calculatePriceBreakdown(
       siteInfo.pricingInformation,
       bookingData.guests,
-      siteInfo.extras, // Include extras from siteInfo
-      numberOfNights, // Include number of nights
+      siteInfo.extras,
+      numberOfNights,
     );
 
     const grandTotal = calculateGrandTotal(breakdown);

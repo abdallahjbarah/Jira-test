@@ -1,8 +1,7 @@
-// Arabic dictionary
 const ar = {
   next: 'التالي',
   free: 'مجاني',
-  map: 'الخريطة',
+  mapLabel: 'الخريطة',
   type: 'نوع',
   experience: 'نوع التجربة',
   person: 'شخص',
@@ -225,7 +224,7 @@ const ar = {
     termsOfService: 'شروط الخدمة',
     checkTerms: 'اطلع على شروط الخدمة لدينا',
     logout: 'تسجيل الخروج',
-    // Personal Information form
+
     firstName: 'الاسم الأول',
     lastName: 'اسم العائلة',
     phoneNumber: 'رقم الهاتف',
@@ -239,12 +238,12 @@ const ar = {
     location: 'الموقع',
     save: 'حفظ',
     cancel: 'إلغاء',
-    // Security form
+
     oldPassword: 'كلمة المرور الحالية',
     newPassword: 'كلمة المرور الجديدة',
     confirmPassword: 'تأكيد كلمة المرور',
     changePasswordBtn: 'تغيير كلمة المرور',
-    // Currency form
+
     selectCurrency: 'اختر العملة',
     currencyDescription: 'اختر العملة المفضلة لعرض الأسعار',
     currencies: {
@@ -281,7 +280,7 @@ const ar = {
     refunded: 'مسترد',
     completed: 'مكتمل',
     refundRequested: 'طلب استرداد',
-    // Legacy status labels for compatibility
+
     upcoming: 'قادمة',
     cancel: 'إلغاء',
     cancelBooking: 'إلغاء الحجز',
@@ -383,8 +382,14 @@ const ar = {
       title: 'مرحباً بك في بوكاجري',
       description: 'أكمل ملفك الشخصي للبدء',
       welcomeToBookagri: 'مرحباً بك في بوكاجري!',
+      hello: 'مرحباً',
+      tellUsMore: 'أخبرنا المزيد عنك :)',
+      celebrateBirthday: 'دعنا نحتفل بعيد ميلادك',
       profileSetupSuccess: 'تم إكمال إعداد الملف الشخصي بنجاح!',
       profileSetupFailed: 'فشل إعداد الملف الشخصي. يرجى المحاولة مرة أخرى.',
+      profileUpdatedSuccess: 'تم تحديث الملف الشخصي بنجاح',
+      profileUpdateFailed: 'فشل في تحديث الملف الشخصي',
+      profileImageUploadFailed: 'فشل في رفع صورة الملف الشخصي',
     },
     profile: {
       completionRequired: 'إكمال الملف الشخصي مطلوب',
@@ -393,6 +398,13 @@ const ar = {
       profileCompletionTitle: 'أكمل ملفك الشخصي',
       profileCompletionDescription:
         'يرجى تقديم معلومات إضافية لإكمال ملفك الشخصي',
+    },
+    firebase: {
+      signInCancelled: 'تم إلغاء تسجيل الدخول',
+      popupBlocked: 'يرجى السماح للنوافذ المنبثقة لهذا الموقع',
+      unauthorizedDomain: 'هذا النطاق غير مخول للمصادقة',
+      signInFailed: 'فشل تسجيل الدخول باستخدام',
+      unsupportedProvider: 'مزود غير مدعوم',
     },
   },
   helpCenter: {
@@ -428,6 +440,9 @@ const ar = {
     adding: 'جاري الإضافة...',
     create: 'إنشاء',
     creating: 'جاري الإنشاء...',
+    readMore: 'اقرأ المزيد',
+    readLess: 'اقرأ أقل',
+    goToHome: 'اذهب للرئيسية',
     error: {
       generic: 'حدث خطأ. يرجى المحاولة مرة أخرى.',
     },
@@ -480,6 +495,14 @@ const ar = {
     paymentMethod: {
       error: 'يرجى اختيار طريقة الدفع',
     },
+    guests: {
+      selectGuests: 'يرجى اختيار الضيوف',
+      exceedsLimit: 'عدد الضيوف المحدد يتجاوز الحد المسموح',
+    },
+    availableStaySlots: 'فترات الإقامة المتاحة',
+    availableTimeSlots: 'الأوقات المتاحة',
+    startFrom: 'يبدأ من',
+    perPerson: '/شخص',
   },
   search: {
     'check-in': 'تسجيل الوصول',
@@ -493,8 +516,31 @@ const ar = {
     where: 'الوجهة',
     destination: 'الوجهة',
   },
+  form: {
+    date: 'التاريخ',
+    guests: 'الضيوف',
+    noCountriesAvailable: 'لا توجد دول متاحة',
+    noCountriesFound: 'لا توجد دول مطابقة',
+    searchForCountry: 'ابحث عن دولة...',
+  },
+  validation: {
+    pleaseSelectCountry: 'يرجى اختيار الدولة',
+    pleaseSelectCity: 'يرجى اختيار المدينة',
+  },
+  regions: {
+    menaRegion: 'منطقة الشرق الأوسط وشمال أفريقيا',
+    imFlexible: 'مرن',
+    jordan: 'الأردن',
+    europe: 'أوروبا',
+    africa: 'أفريقيا',
+    city: 'مدينة',
+  },
+  map: {
+    showMapView: 'عرض الخريطة',
+  },
   datePicker: {
     add_date: 'إضافة تاريخ',
+    selectDate: 'اختر التاريخ',
     months: {
       january: 'يناير',
       february: 'فبراير',
@@ -539,6 +585,7 @@ const ar = {
     clearSearch: 'مسح البحث',
     searchAgain: 'ابحث مرة أخرى',
     searchAgainPlaceholder: 'ابحث عن مدينة أو دولة...',
+    startTypingToSearch: 'ابدأ الكتابة للبحث...',
   },
 };
 

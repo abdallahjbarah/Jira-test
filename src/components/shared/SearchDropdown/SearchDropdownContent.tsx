@@ -1,14 +1,11 @@
 import React from 'react';
-import { useForm, Controller, FormProvider, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import DateRangePicker from '../DateRangePicker';
 import GuestSelector from '../GuestSelector';
 import Collapsible from '@/components/ui/Collapsible';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { FilterFormValues } from '@/utils/helpers/filterHelpers';
 import { useFetchSearchDestination } from '@/lib/apis/shared/useFetchSearchDestination';
-import debounce from '@/utils/helpers/debounce';
-import Image from 'next/image';
-import ExperienceIcon from 'public/images/shared/experience.png';
 import SearchInput from '../FilterBar/SearchInput';
 
 interface SearchFormData {
@@ -25,7 +22,7 @@ interface SubmitData
   adults: number;
   children: number;
   infants: number;
-  city?: number | string; // Add city to the interface
+  city?: number | string;
 }
 
 interface SearchDropdownContentProps {
@@ -40,8 +37,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
   initialValues = {},
 }) => {
   const { t } = useTranslation();
-  
-  // Use the same form context as FilterBar
+
   const { watch, setValue, getValues } = useFormContext<FilterFormValues>();
   const filtersValue = watch('filters');
 
@@ -49,9 +45,8 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
   const [searchText, setSearchText] = React.useState('');
   const [isSearching, setIsSearching] = React.useState(false);
 
-  const { data: searchDestinationData, isLoading: isSearchLoading } = useFetchSearchDestination(
-    searchText || '',
-  );
+  const { data: searchDestinationData, isLoading: isSearchLoading } =
+    useFetchSearchDestination(searchText || '');
 
   const [showSearchResults, setShowSearchResults] = React.useState(false);
 
@@ -59,43 +54,31 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
     setSearchText(text);
   };
 
-  // Handle search result selection
   const handleSearchResultSelect = (result: any) => {
     const { searchType } = result;
-    
-    console.log('Search result selected:', result);
-    console.log('Search type:', searchType);
-    console.log('City data:', result.city);
-    console.log('City type:', typeof result.city);
-    
+
     if (searchType === 'site') {
-      // For sites, always redirect to the experience page
       window.location.href = `/${window.location.pathname.split('/')[1] || 'en'}/details/${result._id}`;
     } else {
-      // For other collection types, apply filters
       const currentFilters = getValues('filters') || {};
-      let updatedFilters = { ...currentFilters };
+      const updatedFilters = { ...currentFilters };
 
       if (searchType === 'city') {
-        // Use city name for filtering (API accepts city names)
         const cityValue = result.city;
-        console.log('City value to be used:', cityValue);
         updatedFilters.city = cityValue;
         updatedFilters.country = result.countryId;
         delete updatedFilters.siteId;
       } else if (searchType === 'country') {
-        // Use country ID for filtering
-        updatedFilters.country = result._id; // Use the country ID
+        updatedFilters.country = result._id;
         delete updatedFilters.siteId;
         delete updatedFilters.city;
       }
-      
-      console.log('Updated filters:', updatedFilters);
+
       setValue('filters', updatedFilters, { shouldValidate: true });
     }
-    
+
     setShowSearchResults(false);
-    setSearchText(''); // Clear the search text after selection
+    setSearchText('');
   };
 
   const getSelectedDates = (): Date[] => {
@@ -106,17 +89,13 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
     if (checkinTime) {
       try {
         dateArray.push(new Date(checkinTime));
-      } catch (e) {
-        console.error('Error parsing checkinTime date:', e);
-      }
+      } catch (e) {}
     }
 
     if (checkoutTime) {
       try {
         dateArray.push(new Date(checkoutTime));
-      } catch (e) {
-        console.error('Error parsing checkoutTime date:', e);
-      }
+      } catch (e) {}
     }
 
     return dateArray;
@@ -147,7 +126,6 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
       updatedFilters.checkoutTime = '';
     }
 
-    // Only update form value, don't trigger URL update
     setValue('filters', updatedFilters, { shouldValidate: false });
     processingDate.current = false;
   };
@@ -155,11 +133,10 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
   const onFormSubmit = () => {
     const currentFilters = getValues('filters') || {};
     setIsSearching(true);
-    
-    // Submit all filters at once when search button is clicked
+
     onSubmit({
       country: currentFilters.country,
-      city: currentFilters.city, // Include city in the submission
+      city: currentFilters.city,
       checkinTime: currentFilters.checkinTime || '',
       checkoutTime: currentFilters.checkoutTime || '',
       adults: currentFilters.adults || 0,
@@ -167,7 +144,6 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
       infants: currentFilters.infants || 0,
     });
 
-    // Reset loading state after a delay
     setTimeout(() => {
       setIsSearching(false);
     }, 1000);
@@ -182,13 +158,11 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
       infants: guests.infants,
     };
 
-    // Only update form value, don't trigger URL update
     setValue('filters', updatedFilters, { shouldValidate: false });
   };
 
   return (
     <div className='bg-white rounded-xl shadow-lg w-full tabletM:w-[600px] p-6 space-y-2 max-h-[400px] overflow-y-auto'>
-      {/* Mobile-only SearchInput */}
       <div className='block tabletM:hidden mb-4'>
         <SearchInput
           value={filtersValue?.destinationText || ''}
@@ -198,7 +172,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
               const updatedFilters = {
                 ...currentFilters,
                 country: undefined,
-                city: undefined
+                city: undefined,
               };
               setValue('filters', updatedFilters, { shouldValidate: false });
               return;
@@ -209,12 +183,10 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
               const currentFilters = getValues('filters') || {};
               const updatedFilters = {
                 ...currentFilters,
-                ...filterData
+                ...filterData,
               };
               setValue('filters', updatedFilters, { shouldValidate: false });
-            } catch (e) {
-              console.error('Error parsing filter data:', e);
-            }
+            } catch (e) {}
           }}
         />
       </div>
@@ -235,26 +207,26 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
         </Collapsible>
       )}
 
-      {((!filtersValue?.adults || filtersValue?.adults === 0) && 
-        (!filtersValue?.children || filtersValue?.children === 0) && 
-        (!filtersValue?.infants || filtersValue?.infants === 0)) && (
-        <Collapsible
-          title={t('search.who')}
-          defaultOpen={true}
-          titleClassName='!text-custom-24'
-          contentClassName='!mt-6'
-        >
-          <GuestSelector
-            onGuestChange={handleGuestChange}
-            initialValues={{
-              adults: filtersValue?.adults || 0,
-              children: filtersValue?.children || 0,
-              infants: filtersValue?.infants || 0,
-            }}
-            className='shadow-none w-full p-0'
-          />
-        </Collapsible>
-      )}
+      {(!filtersValue?.adults || filtersValue?.adults === 0) &&
+        (!filtersValue?.children || filtersValue?.children === 0) &&
+        (!filtersValue?.infants || filtersValue?.infants === 0) && (
+          <Collapsible
+            title={t('search.who')}
+            defaultOpen={true}
+            titleClassName='!text-custom-24'
+            contentClassName='!mt-6'
+          >
+            <GuestSelector
+              onGuestChange={handleGuestChange}
+              initialValues={{
+                adults: filtersValue?.adults || 0,
+                children: filtersValue?.children || 0,
+                infants: filtersValue?.infants || 0,
+              }}
+              className='shadow-none w-full p-0'
+            />
+          </Collapsible>
+        )}
 
       <div className='pt-4'>
         <button
@@ -263,7 +235,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
           className='w-full py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
           disabled={isSearching}
         >
-          {isSearching ? 'Searching...' : t('search.search')}
+          {isSearching ? t('searchResults.searching') : t('search.search')}
         </button>
       </div>
     </div>

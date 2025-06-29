@@ -80,7 +80,6 @@ export default function Header(): React.ReactElement {
         </ul>
       </nav>
 
-      {/* Mobile Hamburger menu */}
       <nav className='z-50 absolute w-full'>
         <div className='laptopS:hidden flex items-end justify-end p-4'>
           <button

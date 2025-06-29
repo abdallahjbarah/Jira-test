@@ -24,7 +24,6 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   ) => {
     const [isFocused, setIsFocused] = useState(false);
 
-    // Check if the input has a value (for floating label)
     const hasValue =
       (value !== undefined && value !== '') ||
       (defaultValue !== undefined && defaultValue !== '') ||

@@ -1,5 +1,3 @@
-// /auth/socialMediaLogin
-
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { SocialLoginType } from '@/utils/constants';

@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { Notification } from '@/lib/types';
-import { NotificationCategory } from '@/lib/enums';
 import {
   formatTimestamp,
   formatDateHeader,

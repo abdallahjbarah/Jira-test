@@ -65,8 +65,6 @@ export interface OffersNotification {
   allEnabled: boolean;
 }
 
-// Policies
-
 export interface Policies {
   _id: string;
   termsConditionsEn: string;

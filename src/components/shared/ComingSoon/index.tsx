@@ -1,11 +1,11 @@
 import React from 'react';
-import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
-import CustomLink from '@components/ui/CustomLink';
 import FilledButton from '@components/ui/buttons/FilledButton';
 import BgHomePage from '@public/images/home/BgHomePage.jpg';
 import Image from 'next/image';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 export default function ComingSoon(): React.ReactElement {
+  const { t } = useTranslation();
   return (
     <div
       style={{
@@ -25,18 +25,6 @@ export default function ComingSoon(): React.ReactElement {
         />
       </div>
       <div className='z-10 text-white text-center'>
-        {/* <div className='absolute top-[20px] left-[20px]'>
-          <CustomLink path={'/'}>
-            <Image
-              className='w-[11.8125rem] h-[3rem]'
-              quality={100}
-              // @ts-ignore
-              src={BookagriLogoSvg}
-              alt='Bookagri Logo'
-            />
-          </CustomLink>
-        </div> */}
-
         <h1 className='text-custom-72 font-custom-700 font-gellix-Bold'>
           Coming Soon
         </h1>
@@ -46,7 +34,7 @@ export default function ComingSoon(): React.ReactElement {
         </p>
         <FilledButton
           path='/'
-          text='Go To Home'
+          text={t('common.goToHome')}
           icon={null}
           width='w-[13.67rem]'
           height='h-[4.81rem]'

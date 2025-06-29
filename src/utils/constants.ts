@@ -1,8 +1,3 @@
-import ExperiencesSvg from '@SVGs/shared/experiences-icon.svg';
-import StaysSvg from '@SVGs/shared/stays-icon.svg';
-import EventsSvg from '@SVGs/shared/events-icon.svg';
-import OffersSvg from '@SVGs/shared/diamond.svg';
-import ProductsSvg from '@SVGs/shared/bag-icon.svg';
 import { Gender } from '@/lib/enums';
 
 export const DAY_DURATION: number = 86400000;
@@ -21,7 +16,6 @@ export const MAX_SIZE_PDF: number = 5 * 1_048_576;
 export const USER_DETAILS: string = 'Bookagri_UserData';
 export const TOKEN_NAME: string = 'Bookagri_Token';
 
-// Internationalization settings
 export enum LocaleValues {
   EN = 'en',
   AR = 'ar',
@@ -128,8 +122,7 @@ export const PDF_TYPES: Record<string, string[]> = {
 };
 
 export const SEO = {
-  CONTENT: 'none', // for staging
-  // CONTENT: "all", // for production
+  CONTENT: 'none',
 } as const;
 
 interface LinkData {
@@ -283,7 +276,6 @@ export interface FilterOption {
   };
 }
 
-// Experience Types
 export const EXPERIENCE_TYPES = {
   ART_AND_CULTURE: 'art_and_culture',
   ENTERTAINMENT: 'entertainment',
@@ -310,7 +302,6 @@ export const EXPERIENCE_TYPES_LIST: FilterOption[] = [
   },
 ];
 
-// Time of Day
 export const TIME_OF_DAY = {
   MORNING: 'morning',
   AFTERNOON: 'afternoon',
@@ -344,7 +335,6 @@ export const TIME_OF_DAY_LIST: FilterOption[] = [
   },
 ];
 
-// Duration
 export const DURATION_TYPES = {
   SHORT: 'short',
   MODERATE: 'moderate',
@@ -371,7 +361,6 @@ export const DURATION_TYPES_LIST: FilterOption[] = [
   },
 ];
 
-// Language Preferences
 export const LANGUAGE_PREFERENCES = {
   ENGLISH: 'english',
   ARABIC: 'arabic',
@@ -403,7 +392,6 @@ export const LANGUAGE_PREFERENCES_LIST: FilterOption[] = [
   },
 ];
 
-// Age Suitability
 export const AGE_SUITABILITY = {
   INFANTS: 'infants',
   CHILDREN: 'children',
@@ -425,7 +413,6 @@ export const AGE_SUITABILITY_LIST: FilterOption[] = [
   },
 ];
 
-// Experience Level
 export const EXPERIENCE_LEVEL = {
   EASY: 'easy',
   MODERATE: 'moderate',
@@ -447,7 +434,6 @@ export const EXPERIENCE_LEVEL_LIST: FilterOption[] = [
   },
 ];
 
-// Available Amenities
 export const AMENITIES = {
   WIFI: 'wifi',
   FREE_PARKING: 'free_parking',
@@ -469,7 +455,6 @@ export const AMENITIES_LIST: FilterOption[] = [
   },
 ];
 
-// Accessibility Features
 export const ACCESSIBILITY_FEATURES = {
   STEP_FREE_GUEST_ENTRANCE: 'step_free_guest_entrance',
   GUEST_ENTRANCE_UNDER_32_INCHES: 'guest_entrance_under_32_inches',
@@ -497,7 +482,6 @@ export const ACCESSIBILITY_FEATURES_LIST: FilterOption[] = [
   },
 ];
 
-// Package Types for Offers & Packages
 export const PACKAGE_TYPES = {
   GROUP_PACKAGE: 'group_package',
 } as const;
@@ -509,7 +493,6 @@ export const PACKAGE_TYPES_LIST: FilterOption[] = [
   },
 ];
 
-// Package Duration for Offers & Packages
 export const PACKAGE_DURATION = {
   HALF_DAY: 'half_day',
   FULL_DAY: 'full_day',
@@ -526,7 +509,6 @@ export const PACKAGE_DURATION_LIST: FilterOption[] = [
   },
 ];
 
-// Booking Options
 export const BOOKING_OPTIONS = {
   ALLOWS_PETS: 'allows_pets',
 } as const;
@@ -538,7 +520,6 @@ export const BOOKING_OPTIONS_LIST: FilterOption[] = [
   },
 ];
 
-// Filter Configurations for each page type
 export const EXPERIENCES_FILTERS = {
   EXPERIENCE_TYPE: 'experience_type',
   PRICE_RANGE: 'price_range',

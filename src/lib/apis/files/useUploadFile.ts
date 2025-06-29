@@ -1,5 +1,3 @@
-// /api/file/uploadImage/{folderName}
-
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { api } from '@/lib/apis';
 import { FileFolder } from '@/lib/enums';

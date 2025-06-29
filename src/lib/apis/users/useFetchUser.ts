@@ -1,6 +1,9 @@
-import { useQueryClient } from '@tanstack/react-query';
+import {
+  useQueryClient,
+  useQuery,
+  UseQueryResult,
+} from '@tanstack/react-query';
 
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { UserLoginResponse } from '@/lib/types';
 
 export const useFetchUserQuery = (): UseQueryResult<UserLoginResponse> => {

@@ -20,7 +20,6 @@ export const isString = (val: string): boolean => /^\S[a-zA-Z\x20]$/.test(val);
 export const username = (val: string): boolean =>
   /^\S[a-zA-Z\x20]{2,25}$/.test(val);
 
-/* eslint-disable */
 export const url = (val: string): boolean =>
   /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(
     val,
@@ -41,7 +40,6 @@ export const validateCvFile = (cvExtension: string): boolean =>
   /(pdf|doc|docx)$/.test(cvExtension);
 
 export const removeHtmlTags = (html: string): string => {
-  // Replace HTML tags with an empty string using regex
   const sanitizedText = html.replace(/<\/?[^>]+(>|$)/g, '');
   return sanitizedText;
 };

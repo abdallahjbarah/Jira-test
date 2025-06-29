@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm, Controller, useWatch, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { personalInfoSchema } from '@/utils/formsSchemas';
@@ -40,7 +40,6 @@ export default function PersonalInfoPage() {
   const { t, locale } = useTranslation();
   const queryClient = useQueryClient();
   const { userData } = useUser();
-  console.log(userData, 'userData');
   const { data: countries } = useFetchCountries();
   const { mutate: editUser, isPending: isEditUserLoading } = useEditUser({
     onSuccess: (data) => {
@@ -53,7 +52,6 @@ export default function PersonalInfoPage() {
       toast.success(t('profile.updateUser.personalInfoUpdated'));
     },
     onError: (error) => {
-      console.log(error, 'error');
       toast.error(t('profile.updateUser.personalInfoUpdateFailed'));
     },
   });
@@ -105,19 +103,16 @@ export default function PersonalInfoPage() {
     name: 'country',
   });
 
-  // Refetch cities when country changes in the form
   const { data: citiesForSelectedCountry } = useFetchCities(
     selectedCountry?.value || '',
   );
 
   const uploadFileMutation = useUploadFile({
     onSuccess: (data) => {
-      // Once file is uploaded, the response contains the image URL
       updateUserWithImage(data);
     },
     onError: (error) => {
-      console.log(error, 'error');
-      toast.error('Failed to upload profile image');
+      toast.error(t('auth.welcome.profileImageUploadFailed'));
     },
   });
 
@@ -178,7 +173,6 @@ export default function PersonalInfoPage() {
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            {/* First Name */}
             <div>
               <Controller
                 name='firstName'
@@ -194,7 +188,6 @@ export default function PersonalInfoPage() {
               />
             </div>
 
-            {/* Last Name */}
             <div>
               <Controller
                 name='lastName'
@@ -210,7 +203,6 @@ export default function PersonalInfoPage() {
               />
             </div>
 
-            {/* Email */}
             <div>
               <Controller
                 name='email'

@@ -42,7 +42,6 @@ export default function ProfileLayout({
       <InnerHeader withNavItems={false} />
       <div className='desktop:max-w-[1440px] mx-auto py-8 px-4'>
         <div className='flex flex-col md:flex-row gap-8'>
-          {/* Vertical Tabs */}
           <div className='w-full md:w-1/4'>
             <div className='bg-white rounded-lg shadow border border-solid border-secondary_2 p-4'>
               <ul className='space-y-2'>
@@ -67,7 +66,6 @@ export default function ProfileLayout({
             </div>
           </div>
 
-          {/* Content Area */}
           <div className='w-full md:w-3/4'>
             <div className='bg-white rounded-lg shadow border border-solid border-secondary_2 p-6'>
               {children}

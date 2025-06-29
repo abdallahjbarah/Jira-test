@@ -33,7 +33,6 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
       };
     }) || [];
 
-  // if payment method is not selected select the first enabled method useing useeffect
   React.useEffect(() => {
     if (!selectedMethod) {
       onMethodChange(allMethods[0].value || '');

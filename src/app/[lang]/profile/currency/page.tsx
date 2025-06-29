@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { currencySchema } from '@/utils/formsSchemas';
@@ -22,7 +22,6 @@ export default function CurrencyPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  // Format the currencies to match the image design
   const currencyOptions: CurrencyOption[] = [
     {
       value: 'USD',
@@ -44,8 +43,6 @@ export default function CurrencyPage() {
 
   const { mutate: editUser, isPending: isEditing } = useEditUser({
     onSuccess: (data) => {
-      console.log(data, 'data');
-      // update user data query cache
       queryClient.setQueryData(['user'], (old: any) => {
         return {
           ...old,
