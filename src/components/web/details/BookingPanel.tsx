@@ -130,10 +130,10 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
             type === 'Stay'
               ? availabilityStaySlots?.data
               : {
-                  slotIds,
-                  startDateTime: searchDates.startDateTime,
-                  endDateTime: searchDates.endDateTime,
-                },
+                slotIds,
+                startDateTime: searchDates.startDateTime,
+                endDateTime: searchDates.endDateTime,
+              },
           type,
           name,
         };
@@ -239,8 +239,20 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
     return pricingInformation.map((info) => info.personType);
   }, [pricingInformation]);
 
+  const getGuestDisplay = () => {
+    const totalGuests = guests.adults + guests.children + guests.infants;
+    if (totalGuests === 0) return 'Select guests';
+
+    const guestParts = [];
+    if (guests.adults > 0) guestParts.push(`${guests.adults} adult${guests.adults > 1 ? 's' : ''}`);
+    if (guests.children > 0) guestParts.push(`${guests.children} child${guests.children > 1 ? 'ren' : ''}`);
+    if (guests.infants > 0) guestParts.push(`${guests.infants} infant${guests.infants > 1 ? 's' : ''}`);
+
+    return guestParts.join(', ');
+  };
+
   return (
-    <div className='w-full max-w-[30.563rem] h-[55.938rem] bg-white border border-[#F2F2F2] rounded-[1.5rem] shadow-[0_0.25rem_0.25rem_rgba(0,0,0,0.25)] p-[1.5rem] flex flex-col space-y-[1.25rem] overflow-y-auto flex-[0.3]'>
+    <div className='w-full max-w-[30.563rem] bg-white border border-[#F2F2F2] rounded-[1.5rem] drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] p-[1.5rem] flex flex-col space-y-[1.25rem] flex-[0.3]'>
       <h2 className='text-xl font-custom-700 text-text_1 pt-2 font-gellix-Bold'>
         {t('booking.startFrom')} JOD {price}{' '}
         <span className='font-custom-400 font-sans text-text_2'>
@@ -273,7 +285,8 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                 type='text'
                 className='border border-secondary_3 rounded-custom-10 p-3'
                 label={t('form.guests')}
-                value={guests.adults + guests.children + guests.infants}
+                value={getGuestDisplay()}
+                readOnly
               />
             }
             onChange={(guests) => {
@@ -302,7 +315,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
             <CircularLoader size={50} />
           </div>
         ) : type === 'Stay' ? (
-          <div className='flex flex-col max-h-[550px] overflow-y-auto gap-5'>
+          <div className='flex flex-col max-h-[400px] overflow-y-auto gap-5'>
             {selectedDates.length === 2 && availabilityStaySlots?.data && (
               <>
                 <p className='text-sm font-custom-400 text-text_1 font-sans'>
@@ -354,7 +367,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
             )}
           </div>
         ) : (
-          <div className='flex flex-col max-h-[550px] overflow-y-auto gap-5'>
+          <div className='flex flex-col max-h-[400px] overflow-y-auto gap-5'>
             {Object.entries(groupedSlots).map(([dateKey, { date, slots }]) => (
               <div key={dateKey} className='flex flex-col gap-2'>
                 <p className='text-sm font-custom-400 text-text_1 font-sans'>

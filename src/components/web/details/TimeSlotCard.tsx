@@ -21,7 +21,7 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
 }) => {
   if (type === 'Stay') {
     return (
-      <div className='w-full bg-white rounded-2xl shadow-[0_3px_20px_rgba(0,0,0,0.08)] px-[21px] py-[15px] mb-[0.3rem]'>
+      <div className='w-full bg-white border border-[#F3F1F1] rounded-[6px] shadow-[0px_4px_4px_rgba(184,184,184,0.25)] px-[21px] py-[15px] mb-[0.3rem]'>
         <div className='flex flex-col gap-2'>
           <h3 className='font-custom-600 text-xl text-text_1'>{title}</h3>
           <div className='flex justify-between items-center'>
@@ -41,7 +41,7 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
   }
 
   return (
-    <div className='w-full bg-white rounded-2xl shadow-[0_3px_20px_rgba(0,0,0,0.08)] px-[21px] py-[15px] max-h-[136px] min-h-[136px] mb-[0.3rem]'>
+    <div className='w-full bg-white border border-[#F3F1F1] rounded-[6px] shadow-[0px_4px_4px_rgba(184,184,184,0.25)] px-[21px] py-[15px] max-h-[136px] min-h-[136px] mb-[0.3rem]'>
       <div className='flex justify-between items-end'>
         <div className='flex flex-col gap-2'>
           <div className='font-custom-400 text-sm font-sans text-text_1'>

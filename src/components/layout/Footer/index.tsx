@@ -29,7 +29,7 @@ export default function Footer(): React.ReactElement {
   const phoneValues = ['00962-77-2236393'];
 
   return (
-    <footer className='flex min-h-[28.875rem] flex-col items-center justify-between bg-primary_5'>
+    <footer className='flex min-h-[28.875rem] flex-col items-center justify-between bg-primary_5 mt-[20px]'>
       <div className='pt-[4rem] w-full laptopS:px-[2.75rem]'>
         <div className='flex flex-col items-start gap-y-8 lg:flex-row'>
           <div className='self-center laptopS:self-start'>

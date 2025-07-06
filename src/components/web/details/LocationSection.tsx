@@ -23,7 +23,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({
     lng: longitude,
   };
 
-  const handleMapClick = () => {
+  const handleMapDoubleClick = () => {
     const googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
     window.open(googleMapsUrl, '_blank');
   };
@@ -39,7 +39,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({
       <p className='font-custom-400 font-sans text-text_3 text-custom-20 laptopM:text-custom-25'>
         Exact location will be available prior to one day
       </p>
-      <div onClick={handleMapClick} style={{ cursor: 'pointer' }}>
+      <div onDoubleClick={handleMapDoubleClick} style={{ cursor: 'pointer' }}>
         <LoadScript
           googleMapsApiKey={'AIzaSyAO52U3bOXqyLz1xuVr7-czZqRyYiKe1uE'}
         >

@@ -17,7 +17,7 @@ const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({
     <div className='flex flex-col laptopM:flex-row justify-between items-start gap-16'>
       <p className='font-custom-400 text-custom-20 laptopM:text-custom-28 text-text_2'>
         {description}{' '}
-        <span className='font-custom-500 underline'>Read more</span>
+        <span className='font-custom-500 underline text-black'>Read more</span>
       </p>
       <ImageGallery images={images} />
     </div>
