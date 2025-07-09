@@ -50,7 +50,7 @@ export default function Header(): React.ReactElement {
           <li>
             <CustomLink path={`/`}>
               <Image
-                className='w-[11.8125rem] h-[3rem]'
+                className='w-[20.6719rem] h-[5.25rem]'
                 quality={100}
                 src={BookagriLogoSvg}
                 alt='Bookagri Logo'
@@ -119,7 +119,7 @@ export default function Header(): React.ReactElement {
                   <div className=''>
                     <CustomLink path={`/`}>
                       <Image
-                        className='w-[11.8125rem] h-[3rem]'
+                        className='w-[20.6719rem] h-[5.25rem]'
                         quality={100}
                         src={BookagriLogoSvg}
                         alt='Bookagri Logo'

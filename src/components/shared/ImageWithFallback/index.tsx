@@ -1,8 +1,8 @@
 'use client';
-import React from 'react';
-import Image, { ImageProps, StaticImageData } from 'next/image';
-import Shimmer from '../Shimmer';
 import FallbackImage from '@public/images/shared/BookagriLogo.png';
+import Image, { ImageProps, StaticImageData } from 'next/image';
+import React from 'react';
+import Shimmer from '../Shimmer';
 
 type ImageSource = string | StaticImageData;
 

@@ -379,7 +379,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
 
               <WhatToExpectSection
                 description={whatToExpect?.description}
-                images={whatToExpect?.images}
+                images={images}
               />
             </>
           )}

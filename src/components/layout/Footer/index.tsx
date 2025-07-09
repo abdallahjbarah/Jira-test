@@ -33,10 +33,10 @@ export default function Footer(): React.ReactElement {
       <div className='pt-[4rem] w-full laptopS:px-[2.75rem]'>
         <div className='flex flex-col items-start gap-y-8 lg:flex-row'>
           <div className='self-center laptopS:self-start'>
-            <div className='w-full h-full max-w-[11.81rem] max-h-[3rem] m-auto laptopS:m-0'>
+            <div className='w-full h-full max-w-[20.67rem] max-h-[5.25rem] m-auto laptopS:m-0'>
               <CustomLink path={'/'}>
                 <Image
-                  className='w-[11.8125rem] h-[3rem]'
+                  className='w-[20.6719rem] h-[5.25rem]'
                   quality={100}
                   src={BookagriLogoSvg}
                   alt='Bookagri Logo'

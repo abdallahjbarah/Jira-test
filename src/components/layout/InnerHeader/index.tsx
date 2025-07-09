@@ -17,7 +17,7 @@ function InnerHeader({
     <header className='relative py-12 gap-3 container flex items-center justify-between '>
       <CustomLink path={`/`}>
         <Image
-          className='w-[11.8125rem] h-[3rem] laptopM:w-[8rem]'
+          className='w-[20.6719rem] h-[5.25rem] laptopM:w-[14rem]'
           quality={100}
           src={BookagriLogoSvg}
           alt='Bookagri Logo'

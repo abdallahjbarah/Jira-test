@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useTranslation } from '@/contexts/TranslationContext';
+import React, { useEffect, useState } from 'react';
 import RangeSliderInput from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import './styles.css';
-import { useTranslation } from '@/contexts/TranslationContext';
 
 interface RangeSliderProps {
   min: number;
@@ -18,7 +18,7 @@ interface RangeSliderProps {
 }
 
 const RangeSlider: React.FC<RangeSliderProps> = ({
-  min,
+  min = 0,
   max,
   step = 1,
   value,
@@ -30,39 +30,28 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   const { t } = useTranslation();
   const [localValue, setLocalValue] = useState<[number, number]>(value);
   const [minInputValue, setMinInputValue] = useState<string>(
-    value[0].toString(),
+    Math.max(0, Math.round(value[0])).toString(),
   );
   const [maxInputValue, setMaxInputValue] = useState<string>(
-    value[1].toString(),
+    Math.round(value[1]).toString(),
   );
 
   useEffect(() => {
-    setLocalValue(value);
-    setMinInputValue(value[0].toString());
-    setMaxInputValue(value[1].toString());
+    const safeMin = Math.max(0, Math.round(value[0]));
+    const safeMax = Math.max(safeMin, Math.round(value[1]));
+    setLocalValue([safeMin, safeMax]);
+    setMinInputValue(safeMin.toString());
+    setMaxInputValue(safeMax.toString());
   }, [value]);
 
   const handleChange = (newValues: number[]) => {
-    const newValue: [number, number] = [newValues[0], newValues[1]];
-    setLocalValue(newValue);
-    setMinInputValue(Math.round(newValue[0]).toString());
-    setMaxInputValue(Math.round(newValue[1]).toString());
-    onChange(newValue);
-  };
-
-  const handleMinInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value.replace(currency, '').trim();
-    setMinInputValue(inputValue);
-
-    const numValue = parseInt(inputValue);
-    if (!isNaN(numValue)) {
-      const newValue: [number, number] = [
-        Math.min(numValue, localValue[1] - step),
-        localValue[1],
-      ];
-      setLocalValue(newValue);
-      onChange(newValue);
-    }
+    const safeMin = Math.max(0, Math.round(newValues[0]));
+    const safeMax = Math.max(safeMin, Math.round(newValues[1]));
+    const roundedValues: [number, number] = [safeMin, safeMax];
+    setLocalValue(roundedValues);
+    setMinInputValue(roundedValues[0].toString());
+    setMaxInputValue(roundedValues[1].toString());
+    onChange(roundedValues);
   };
 
   const handleMaxInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,10 +60,23 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
 
     const numValue = parseInt(inputValue);
     if (!isNaN(numValue)) {
-      const newValue: [number, number] = [
-        localValue[0],
-        Math.max(numValue, localValue[0] + step),
-      ];
+      // Only prevent negative values, allow any positive number
+      const safeMax = Math.max(0, numValue);
+      const newValue: [number, number] = [localValue[0], safeMax];
+      setLocalValue(newValue);
+      onChange(newValue);
+    }
+  };
+
+  const handleMinInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value.replace(currency, '').trim();
+    setMinInputValue(inputValue);
+
+    const numValue = parseInt(inputValue);
+    if (!isNaN(numValue)) {
+      // For minimum, we still need to respect the maximum value
+      const safeMin = Math.max(0, Math.min(numValue, localValue[1]));
+      const newValue: [number, number] = [safeMin, localValue[1]];
       setLocalValue(newValue);
       onChange(newValue);
     }
@@ -94,14 +96,15 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     '--range-slider-handle-ring-color': 'rgba(74, 222, 128, 0.3)',
   } as React.CSSProperties;
 
-  const priceValue = React.useMemo(() => {
-    return localValue[1] - localValue[0];
+  const averagePrice = React.useMemo(() => {
+    const price = (localValue[1] + localValue[0]) / 2;
+    return Math.round(price);
   }, [localValue]);
 
   return (
     <div className={`${className}`}>
       <div className='text-xs text-gray-500 mb-3'>
-        {t('filter.average-price')} {priceValue}
+        {t('filter.average-price')} {currency} {averagePrice}
       </div>
 
       <div className='px-3' style={sliderStyles}>

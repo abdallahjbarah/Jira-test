@@ -13,9 +13,10 @@ const LocationSection: React.FC<LocationSectionProps> = ({
   longitude,
 }) => {
   const mapStyles = {
-    height: '400px',
+    height: '550px',
     width: '100%',
-    borderRadius: '16px',
+    // borderRadius: '16px',
+    opacity: 1,
   };
 
   const defaultCenter = {

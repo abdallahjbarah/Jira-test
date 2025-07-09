@@ -1,9 +1,9 @@
 'use client';
-import React, { useState, useMemo, useEffect } from 'react';
 import Dropdown from '@/components/ui/Dropdown';
-import FilterBarItem from '../FilterBar/FilterBarItem';
-import DateRangePicker from '../DateRangePicker';
 import { useTranslation } from '@/contexts/TranslationContext';
+import React, { useEffect, useMemo, useState } from 'react';
+import DateRangePicker from '../DateRangePicker';
+import FilterBarItem from '../FilterBar/FilterBarItem';
 
 interface DatePickerDropdownProps {
   title?: {
@@ -19,6 +19,8 @@ interface DatePickerDropdownProps {
   checkInDate?: Date;
   value?: string;
   triggerComponent?: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
   schedule?: {
     startDateTime: number;
     endDateTime: number;
@@ -43,12 +45,15 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   checkInDate,
   value,
   triggerComponent,
+  className,
+  onClick,
   schedule,
 }) => {
   const { t, locale } = useTranslation();
   const [selectedDates, setSelectedDates] = useState<Date[]>(
     initialDate ? [initialDate] : [],
   );
+  const [isOpen, setIsOpen] = useState(false);
 
   const { enabledDays } = useMemo(() => {
     if (!schedule?.days) return { enabledDays: [], daySlots: new Map() };
@@ -106,7 +111,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
         } else {
           setSelectedDates([new Date(value)]);
         }
-      } catch (e) {}
+      } catch (e) { }
     } else if (!value && selectedDates.length > 0) {
       setSelectedDates([]);
     }
@@ -126,32 +131,21 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
       return t('datePicker.add_date');
     }
 
+    const currentYear = new Date().getFullYear();
+    const formatDate = (date: Date) => {
+      const isCurrentYear = date.getFullYear() === currentYear;
+      return date.toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US', {
+        month: 'short',
+        day: 'numeric',
+        ...(isCurrentYear ? {} : { year: 'numeric' })
+      });
+    };
+
     if (selectedDates.length === 1) {
-      return selectedDates[0].toLocaleDateString(
-        locale === 'ar' ? 'ar-SA' : 'en-US',
-        {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-        },
-      );
+      return formatDate(selectedDates[0]);
     }
 
-    return `${selectedDates[0].toLocaleDateString(
-      locale === 'ar' ? 'ar-SA' : 'en-US',
-      {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      },
-    )} - ${selectedDates[1].toLocaleDateString(
-      locale === 'ar' ? 'ar-SA' : 'en-US',
-      {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      },
-    )}`;
+    return `${formatDate(selectedDates[0])} - ${formatDate(selectedDates[1])}`;
   };
 
   const handleDateChange = (dates: Date[]) => {
@@ -199,11 +193,13 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
           <FilterBarItem
             title={title || { en: '', ar: '' }}
             value={getDisplayValue()}
-            onClick={() => {}}
+            onClick={onClick || (() => { })}
+            className={`${className || ''} ${isOpen ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}`}
           />
         )
       }
       content={dropdownContent}
+      onOpenChange={setIsOpen}
     />
   );
 };

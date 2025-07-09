@@ -4,15 +4,15 @@ interface BookagriLogoSvgProps {
 }
 
 export default function BookagriLogoSvg({
-  width = '11.8125rem',
-  height = '3rem',
+  width = '20.6719rem',
+  height = '5.25rem',
 }: BookagriLogoSvgProps): React.ReactElement {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
       width={width}
       height={height}
-      viewBox='0 0 189 48'
+      viewBox='0 0 331 84'
       fill='none'
     >
       <path

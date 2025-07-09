@@ -16,13 +16,6 @@ const en = {
   'offers-packages': 'Offers & Packages',
   products: 'Products',
   'view-all': 'View All',
-  hero: {
-    title: 'Connecting you with',
-    titleSecondLine: 'a world of agritourism',
-    subtitle: 'Book or become a host for agritourism',
-    subtitleSecondLine: 'experiences and rural stays',
-    discoverMore: 'Discover More',
-  },
   guests: {
     adults: 'Adults',
     adultsDescription: 'Ages 12 or above',
@@ -429,6 +422,7 @@ const en = {
     readMore: 'Read more',
     readLess: 'Read less',
     goToHome: 'Go To Home',
+    done: 'Done',
     error: {
       generic: 'An error occurred. Please try again.',
     },
@@ -495,10 +489,10 @@ const en = {
     'check-out': 'Check-out',
     'add-date': 'Add date',
     'add-guests': 'Add guests',
+    'who': 'Who',
     search_for_country: 'Search for a country...',
     search: 'Search',
     when: 'When',
-    who: 'Who',
     where: 'Where',
     destination: 'Destination',
   },
