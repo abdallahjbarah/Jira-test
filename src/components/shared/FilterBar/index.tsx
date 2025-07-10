@@ -223,7 +223,7 @@ const FilterBar = () => {
     setShowSearchResults(false);
 
     // Reset URL to base
-    router.push(`/${searchParams.get('lang') || 'en'}`);
+    // router.push(`/${searchParams.get('lang') || 'en'}`);
   };
 
   const handleSearchDropdownSubmit = (data: any) => {

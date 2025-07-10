@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
-import { TOKEN_NAME } from './utils';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { ApprovalStatus } from './lib/enums';
+import { TOKEN_NAME } from './utils';
 export const locales = ['en', 'ar'];
 export const defaultLocale = 'en';
 

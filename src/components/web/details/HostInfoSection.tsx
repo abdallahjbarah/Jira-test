@@ -1,5 +1,5 @@
-import React from 'react';
 import Image from 'next/image';
+import React from 'react';
 
 interface Host {
   _id: string;
@@ -52,13 +52,14 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({
     </div>
     <div className='flex gap-4 items-start'>
       <div className='rounded-full w-20 h-20 flex-shrink-0'>
-        <Image
-          src={coHosts?.image || ''}
+        {/* <Image
+          src={'../'}
           alt='host'
           width={80}
           height={80}
           className='w-full h-full object-cover rounded-full'
-        />
+        /> */}
+        <img src={''} alt='host' />
       </div>
       <div className='flex flex-col gap-1 justify-start'>
         <p className='font-custom-700 text-text_1 text-custom-22 laptopM:text-custom-30'>

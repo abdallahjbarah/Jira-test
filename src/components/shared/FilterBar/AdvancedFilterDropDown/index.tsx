@@ -4,7 +4,7 @@ import CustomSvg from '@/components/ui/CustomSvg';
 import Dropdown from '@/components/ui/Dropdown';
 import FilledButton from '@/components/ui/buttons/FilledButton';
 import { useTranslation } from '@/contexts/TranslationContext';
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import EventsFilter from './EventsFilter';
 import ExperiencesFilter from './ExperiencesFilter';
@@ -32,7 +32,57 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   });
   const dropdownContentRef = useRef<HTMLDivElement>(null);
 
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit, reset, watch } = methods;
+  const formValues = watch();
+
+  // Calculate number of active filters
+  const activeFiltersCount = useMemo(() => {
+    if (!formValues) return 0;
+
+    const countActiveFilters = (obj: any): number => {
+      if (!obj || typeof obj !== 'object') return 0;
+
+      return Object.entries(obj).reduce((count, [key, value]) => {
+        // Skip null/undefined
+        if (value === null || value === undefined) return count;
+
+        // Handle arrays (like amenities, languages, etc.)
+        if (Array.isArray(value)) {
+          // For price range, count as 1 if modified
+          if (key === 'priceRange') {
+            const [min, max] = value;
+            return count + ((min > 0 || max < 100) ? 1 : 0);
+          }
+          // For other arrays, count each item
+          return count + value.length;
+        }
+
+        // Handle boolean values (like radio buttons and checkboxes)
+        if (typeof value === 'boolean') {
+          return count + (value ? 1 : 0);
+        }
+
+        // Handle numbers (like bedrooms, beds, bathrooms)
+        if (typeof value === 'number') {
+          return count + (value > 0 ? 1 : 0);
+        }
+
+        // Handle strings
+        if (typeof value === 'string') {
+          return count + (value.trim() !== '' ? 1 : 0);
+        }
+
+        // Handle nested objects
+        if (typeof value === 'object') {
+          return count + countActiveFilters(value);
+        }
+
+        return count;
+      }, 0);
+    };
+
+    return countActiveFilters(formValues);
+  }, [formValues]);
 
   React.useEffect(() => {
     if (defaultValues) {
@@ -45,8 +95,25 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   };
 
   const clearAllFilters = () => {
-    reset();
+    // Reset form with empty values
+    const emptyValues = {
+      priceRange: [0, 100],
+      languages: [],
+      amenities: [],
+      bookingOptions: [],
+      accessibilityFeatures: [],
+      bookagriBadge: false,
+      specialOffers: undefined,
+      bedrooms: 0,
+      beds: 0,
+      bathrooms: 0,
+      includesExperience: undefined,
+      collectionType: undefined
+    };
+
+    reset(emptyValues);
     onFilterClear?.();
+
     // Scroll to top of the dropdown content
     if (dropdownContentRef.current) {
       dropdownContentRef.current.scrollTo({
@@ -57,12 +124,31 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   };
 
   const filterTrigger = (
-    <CustomSvg
-      src='/SVGs/shared/filter-icon.svg'
-      className='!w-[57px] !h-[57px] text-text_2 block'
-      width='100%'
-      height='100%'
-    />
+    <div className="relative">
+      <CustomSvg
+        src='/SVGs/shared/filter-icon.svg'
+        className='!w-[57px] !h-[57px] text-text_2 block'
+        width='100%'
+        height='100%'
+      />
+      {activeFiltersCount > 0 && (
+        <div
+  className="
+    absolute -top-2 -right-2
+    bg-[#FF3A1E] text-white rounded-full
+    min-w-[24px] h-[24px]
+    flex items-center justify-center
+    text-sm font-semibold
+    px-1
+    shadow-lg
+  "
+>
+  {activeFiltersCount}
+</div>
+
+
+      )}
+    </div>
   );
 
   const getFilterContent = () => {

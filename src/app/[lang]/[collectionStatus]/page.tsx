@@ -4,9 +4,9 @@ import ContactUs from '@/components/web/landing-page/ContactUs';
 import ContactUsForm from '@/components/web/landing-page/ContactUsForm';
 import DownloadApp from '@/components/web/landing-page/DownloadApp';
 import {
-    COLLECTION_STATUS,
-    COLLECTION_STATUS_LIST,
-    Locale,
+  COLLECTION_STATUS,
+  COLLECTION_STATUS_LIST,
+  Locale,
 } from '@utils/constants';
 import { notFound, redirect } from 'next/navigation';
 import React from 'react';

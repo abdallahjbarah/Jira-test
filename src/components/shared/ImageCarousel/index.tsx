@@ -53,19 +53,19 @@ const defaultSettings: SlickSettings = {
     }
 
     return (
-      <div
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          width: '100%',
-          textAlign: 'center',
-        }}
-      >
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      style={{
+        position: 'absolute',
+        bottom: '20px',
+        width: '100%',
+        textAlign: 'center',
+      }}
+    >
         <ul style={{ margin: '0', padding: '0' }}>{visibleDots}</ul>
-      </div>
+    </div>
     );
   },
 };
