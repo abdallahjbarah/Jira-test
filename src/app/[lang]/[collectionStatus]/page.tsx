@@ -1,16 +1,15 @@
-import React from 'react';
-import Hero from '@components/web/landing-page/Hero';
+import ComingSoon from '@/components/shared/ComingSoon';
+import CollectionsListing from '@/components/web/collections/CollectionsListing';
+import ContactUs from '@/components/web/landing-page/ContactUs';
 import ContactUsForm from '@/components/web/landing-page/ContactUsForm';
 import DownloadApp from '@/components/web/landing-page/DownloadApp';
-import ContactUs from '@/components/web/landing-page/ContactUs';
 import {
-  Locale,
-  COLLECTION_STATUS_LIST,
   COLLECTION_STATUS,
+  COLLECTION_STATUS_LIST,
+  Locale,
 } from '@utils/constants';
 import { notFound, redirect } from 'next/navigation';
-import CollectionsListing from '@/components/web/collections/CollectionsListing';
-import ComingSoon from '@/components/shared/ComingSoon';
+import React from 'react';
 
 interface CollectionStatusPageProps {
   params: {
@@ -42,7 +41,6 @@ export default function CollectionStatusPage({
 
   return (
     <>
-      <Hero className='min-h-[30.313rem]' contentClassName='py-[1.375rem]' />
       <div className='container py-[29px]'>
         <CollectionsListing />
       </div>

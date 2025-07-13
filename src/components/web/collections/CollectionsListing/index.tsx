@@ -1,17 +1,17 @@
 'use client';
-import React, { useState, useCallback, useRef, useEffect } from 'react';
-import CollectionTypeLabel from '../CollectionTypeLabel';
-import MapView from '../MapView';
-import { useFetchInfiniteCollections } from '@/lib/apis/collections/useFetchCollections';
-import { COLLECTION_STATUS, COLLECTION_STATUS_LIST } from '@/utils/constants';
-import { useParams, useSearchParams } from 'next/navigation';
-import CollectionCard from '../CollectionCard';
-import Styled from 'styled-components';
 import CircularLoader from '@/components/ui/CircularLoader';
-import { Site, SitesResponse } from '@/lib/types';
-import { buildFiltersFromSearchParams } from '@/utils/helpers/filterHelpers';
 import CustomSvg from '@/components/ui/CustomSvg';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { useFetchInfiniteCollections } from '@/lib/apis/collections/useFetchCollections';
+import { Site, SitesResponse } from '@/lib/types';
+import { COLLECTION_STATUS, COLLECTION_STATUS_LIST } from '@/utils/constants';
+import { buildFiltersFromSearchParams } from '@/utils/helpers/filterHelpers';
+import { useParams, useSearchParams } from 'next/navigation';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import Styled from 'styled-components';
+import CollectionCard from '../CollectionCard';
+import CollectionTypeLabel from '../CollectionTypeLabel';
+import MapView from '../MapView';
 
 const CollectionsListingContainer = Styled.div`
   display: grid;

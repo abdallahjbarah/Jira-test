@@ -28,7 +28,7 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({ amenities }) => {
           Available Amenities
         </p>
         <button
-          className='font-custom-400 font-sans text-text_1 text-custom-20 underline'
+          className='font-custom-400 font-sans text-text_1 text-custom-20'
           onClick={() => setIsPopupOpen(true)}
         >
           See All

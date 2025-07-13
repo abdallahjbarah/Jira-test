@@ -1,14 +1,13 @@
-import React, { Suspense } from 'react';
-import Hero from '@components/web/landing-page/Hero';
-import InnerPagesLayout from '@/layouts/InnerPagesLayout';
+import FilterBar from '@/components/shared/FilterBar';
+import CollectionsListing from '@/components/web/collections/CollectionsListing';
+import ContactUs from '@/components/web/landing-page/ContactUs';
 import ContactUsForm from '@/components/web/landing-page/ContactUsForm';
 import DownloadApp from '@/components/web/landing-page/DownloadApp';
-import ContactUs from '@/components/web/landing-page/ContactUs';
-import FilterBar from '@/components/shared/FilterBar';
-import { Locale, SEO_KEYWORDS } from '@utils/constants';
-import CollectionsListing from '@/components/web/collections/CollectionsListing';
+import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import { getDictionary } from '@/utils/dictionaries';
+import { Locale, SEO_KEYWORDS } from '@utils/constants';
 import { Metadata } from 'next';
+import React, { Suspense } from 'react';
 
 interface HomePageProps {
   params: {
@@ -55,7 +54,6 @@ export default function Home({ params }: HomePageProps): React.ReactElement {
   return (
     <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main>
-        <Hero className='min-h-[30.313rem]' contentClassName='py-[1.375rem]' />
         <div className='container mb-[30px] laptopM:mb-[68px] flex items-center justify-center'>
           <Suspense
             fallback={

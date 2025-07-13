@@ -10,16 +10,10 @@ const ar = {
   'check-out': 'تسجيل المغادرة',
   'add-date': 'إضافة تاريخ',
   'add-guests': 'إضافة ضيوف',
+  'who': 'من',
   where: 'الوجهة',
   background: 'الخلفية',
   leaf: 'الورقة',
-  hero: {
-    title: 'نربطك بعالم',
-    titleSecondLine: 'من السياحة الزراعية',
-    subtitle: 'احجز أو كن مضيفًا للتجارب',
-    subtitleSecondLine: 'الزراعية والإقامات الريفية',
-    discoverMore: 'اكتشف المزيد',
-  },
   guests: {
     adults: 'البالغون',
     adultsDescription: '12 سنة أو أكثر',
@@ -381,15 +375,6 @@ const ar = {
     welcome: {
       title: 'مرحباً بك في بوكاجري',
       description: 'أكمل ملفك الشخصي للبدء',
-      welcomeToBookagri: 'مرحباً بك في بوكاجري!',
-      hello: 'مرحباً',
-      tellUsMore: 'أخبرنا المزيد عنك :)',
-      celebrateBirthday: 'دعنا نحتفل بعيد ميلادك',
-      profileSetupSuccess: 'تم إكمال إعداد الملف الشخصي بنجاح!',
-      profileSetupFailed: 'فشل إعداد الملف الشخصي. يرجى المحاولة مرة أخرى.',
-      profileUpdatedSuccess: 'تم تحديث الملف الشخصي بنجاح',
-      profileUpdateFailed: 'فشل في تحديث الملف الشخصي',
-      profileImageUploadFailed: 'فشل في رفع صورة الملف الشخصي',
     },
     profile: {
       completionRequired: 'إكمال الملف الشخصي مطلوب',
@@ -443,6 +428,7 @@ const ar = {
     readMore: 'اقرأ المزيد',
     readLess: 'اقرأ أقل',
     goToHome: 'اذهب للرئيسية',
+    done: 'تم',
     error: {
       generic: 'حدث خطأ. يرجى المحاولة مرة أخرى.',
     },

@@ -145,7 +145,7 @@ export const COLLECTIONS_LINKS: LinkData[] = [
   { path: '/events', name: { en: 'Events', ar: 'الفعاليات' } },
   { path: '/stays', name: { en: 'Stays', ar: 'الإقامات' } },
   {
-    path: '/offers-Packages',
+    path: '/offers',
     name: { en: 'Offers & Packages', ar: 'العروض والباقات' },
   },
   { path: '/products', name: { en: 'Products', ar: 'المنتجات' } },

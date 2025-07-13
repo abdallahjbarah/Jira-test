@@ -1,6 +1,6 @@
-import React from 'react';
 import ComingSoon from '@components/shared/ComingSoon';
 import { Locale } from '@utils/constants';
+import React from 'react';
 
 interface NewsPageProps {
   params: {

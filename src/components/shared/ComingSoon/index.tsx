@@ -1,8 +1,8 @@
-import React from 'react';
+import { useTranslation } from '@/contexts/TranslationContext';
 import FilledButton from '@components/ui/buttons/FilledButton';
 import BgHomePage from '@public/images/home/BgHomePage.jpg';
 import Image from 'next/image';
-import { useTranslation } from '@/contexts/TranslationContext';
+import React from 'react';
 
 export default function ComingSoon(): React.ReactElement {
   const { t } = useTranslation();

@@ -1,29 +1,38 @@
 'use client';
-import React, { useEffect } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import GuestFilterItem from '../GuestFilterItem';
-import DatePickerDropdown from '../DatePickerDropdown';
-import AdvancedFilterDropDown from './AdvancedFilterDropDown';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import {
-  buildSearchParamsFromFilters,
-  buildFiltersFromSearchParams,
-  CollectionFilter,
-  FilterFormValues,
-  getFormDefaultsFromSearchParams,
-} from '@/utils/helpers/filterHelpers';
-import debounce from '@/utils/helpers/debounce';
-import SearchInput from './SearchInput';
-import SearchDropdown from '../SearchDropdown';
+import CustomSvg from '@/components/ui/CustomSvg';
 import { useTranslation } from '@/contexts/TranslationContext';
-import MobileSearchDropdown from '../SearchDropdown/MobileSearchDropDown';
 import { useFetchSearchDestination } from '@/lib/apis/shared/useFetchSearchDestination';
+import debounce from '@/utils/helpers/debounce';
+import {
+    buildFiltersFromSearchParams,
+    buildSearchParamsFromFilters,
+    CollectionFilter,
+    FilterFormValues,
+    getFormDefaultsFromSearchParams,
+} from '@/utils/helpers/filterHelpers';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import DatePickerDropdown from '../DatePickerDropdown';
+import GuestFilterItem from '../GuestFilterItem';
+import MobileSearchDropdown from '../SearchDropdown/MobileSearchDropDown';
+import AdvancedFilterDropDown from './AdvancedFilterDropDown';
+import FilterBarItem from './FilterBarItem';
+import WherePopup from './WherePopup';
 
 const FilterBar = () => {
   const { collectionStatus } = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { t, locale } = useTranslation();
+
+  // Add state for SearchPopup
+  const [showSearchPopup, setShowSearchPopup] = React.useState(false);
+  const [selectedLocation, setSelectedLocation] = React.useState<string>('');
+  const [selectedFilter, setSelectedFilter] = React.useState(collectionStatus || 'all');
+
+  // Add state to track active filter buttons
+  const [activeButton, setActiveButton] = React.useState<string | null>(null);
 
   const methods = useForm<FilterFormValues>({
     defaultValues: getFormDefaultsFromSearchParams(searchParams),
@@ -37,7 +46,7 @@ const FilterBar = () => {
 
   const [showSearchResults, setShowSearchResults] = React.useState(false);
 
-  useEffect(() => {}, [searchDestinationData]);
+  useEffect(() => { }, [searchDestinationData]);
 
   const [isUrlSync, setIsUrlSync] = React.useState(false);
   const isInitialMount = React.useRef(true);
@@ -73,7 +82,7 @@ const FilterBar = () => {
     }
   };
 
-  const onSubmit = (data: FilterFormValues) => {};
+  const onSubmit = (data: FilterFormValues) => { };
 
   const handleCheckInChange = (dateString: string, dates: Date[]) => {
     const currentFilters = methods.getValues('filters') || {};
@@ -90,6 +99,12 @@ const FilterBar = () => {
     }
 
     methods.setValue('filters', updatedFilters, { shouldValidate: false });
+    // Only set active button to checkout if not in experiences section
+    if (collectionStatus !== 'experiences') {
+      setActiveButton('checkout');
+    } else {
+      setActiveButton(null);
+    }
   };
 
   const handleCheckOutChange = (dateString: string, dates: Date[]) => {
@@ -100,26 +115,43 @@ const FilterBar = () => {
     };
 
     methods.setValue('filters', updatedFilters, { shouldValidate: false });
+    setActiveButton(null); // Clear active button after selecting checkout
   };
 
-  const handleLocationChange = (locationData: {
-    country?: string;
-    city?: number;
-  }) => {
+  const handleLocationSelect = (location: { type: string; id?: string; name: string; searchType: string }) => {
+    setSelectedLocation(location.name);
+
     const currentFilters = methods.getValues('filters') || {};
-    const updatedFilters: Record<string, any> = {
-      ...currentFilters,
-      country: locationData.country || undefined,
-      city: locationData.city || undefined,
-    };
+    const updatedFilters = { ...currentFilters };
 
-    Object.keys(updatedFilters).forEach((key) => {
-      if (updatedFilters[key] === undefined) {
-        delete updatedFilters[key];
-      }
-    });
+    if (location.searchType === 'city') {
+      updatedFilters.city = location.id;
+      // You might need to add country ID here if available in the location object
+    } else if (location.searchType === 'country') {
+      updatedFilters.country = location.id;
+      delete updatedFilters.city;
+    }
 
-    debouncedFilterUpdate(updatedFilters);
+    methods.setValue('filters', updatedFilters, { shouldValidate: true });
+    setActiveButton('date'); // Move to date selection
+  };
+
+  const handleLocationClear = () => {
+    // Reset the selected location text
+    setSelectedLocation('');
+
+    // Clear location-related filters
+    const currentFilters = methods.getValues('filters') || {};
+    const updatedFilters = { ...currentFilters };
+
+    // Remove all location-related fields
+    delete updatedFilters.city;
+    delete updatedFilters.country;
+    delete updatedFilters.destinationText;
+    delete updatedFilters.siteId;
+
+    // Update the form
+    methods.setValue('filters', updatedFilters, { shouldValidate: true });
   };
 
   const handleGuestChange = (guests: {
@@ -169,8 +201,29 @@ const FilterBar = () => {
     debouncedFilterUpdate(preservedFilters);
   };
   const handleClear = () => {
-    methods.reset();
-    router.push(`/${searchParams.get('lang') || 'en'}`);
+    // Reset form and all filters
+    methods.reset({
+      filters: {
+        adults: 0,
+        children: 0,
+        infants: 0,
+        checkinTime: '',
+        ...(collectionStatus !== 'experiences' && { checkoutTime: '' }),
+        city: undefined,
+        country: undefined,
+        destinationText: '',
+        siteId: undefined
+      }
+    });
+
+    // Reset all state
+    setSelectedLocation('');
+    setShowSearchPopup(false);
+    setActiveButton(null);
+    setShowSearchResults(false);
+
+    // Reset URL to base
+    // router.push(`/${searchParams.get('lang') || 'en'}`);
   };
 
   const handleSearchDropdownSubmit = (data: any) => {
@@ -262,30 +315,38 @@ const FilterBar = () => {
         ...filterData,
       };
       methods.setValue('filters', updatedFilters, { shouldValidate: false });
-    } catch (e) {}
+    } catch (e) { }
+  };
+
+  const handleFilterSelect = (filterKey: string) => {
+    setSelectedFilter(filterKey);
+    // Clear checkout time if switching to experiences
+    if (filterKey === 'experiences') {
+      const currentFilters = methods.getValues('filters') || {};
+      const updatedFilters = {
+        ...currentFilters,
+        checkoutTime: ''
+      };
+      methods.setValue('filters', updatedFilters, { shouldValidate: false });
+    }
   };
 
   return (
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
-        className={`flex items-center gap-[10px] laptopM:gap-[25px] w-full tabletM:w-auto mt-12 ${
-          locale === 'ar' ? 'rtl' : 'ltr'
-        }`}
+        className={`flex items-center gap-[10px] laptopM:gap-[25px] w-full tabletM:w-auto mt-12 ${locale === 'ar' ? 'rtl' : 'ltr'}`}
       >
         <div
-          className={`relative bg-primary_1 hidden flex-col tabletM:flex-row justify-center items-center gap-[10px] laptopM:gap-[20px] mx-auto tabletM:rounded-full w-full tabletM:flex ${
-            locale === 'ar' ? 'rtl' : 'ltr'
-          }`}
+          className={`relative bg-primary_1 hidden flex-col tabletM:flex-row justify-center items-center gap-[10px] laptopM:gap-[20px] mx-auto tabletM:rounded-full w-full tabletM:flex ${locale === 'ar' ? 'rtl' : 'ltr'}`}
         >
-          <div
-            className={`relative flex-1 ${locale === 'ar' ? 'mr-6' : 'ml-6'}`}
-          >
-            <SearchInput
-              value={filtersValue?.destinationText || ''}
-              onChange={handleSearchInputChange}
-            />
-          </div>
+          {/* Where/Search destinations button */}
+          <FilterBarItem
+            title={{ en: 'Where', ar: 'أين' }}
+            value={selectedLocation || 'Search Destinations'}
+            onClick={() => setShowSearchPopup(true)}
+            className={showSearchPopup ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
+          />
 
           <DatePickerDropdown
             title={{ en: t('search.check-in'), ar: t('search.check-in') }}
@@ -298,20 +359,24 @@ const FilterBar = () => {
                 ? new Date(filtersValue.checkoutTime)
                 : new Date(new Date().setFullYear(new Date().getFullYear() + 1))
             }
+            className={activeButton === 'date' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
           />
 
-          <DatePickerDropdown
-            title={{ en: t('search.check-out'), ar: t('search.check-out') }}
-            onChange={handleCheckOutChange}
-            mode='single'
-            isCheckout={true}
-            checkInDate={getCheckInDate()}
-            minDate={new Date()}
-            value={filtersValue?.checkoutTime || ''}
-          />
+          {selectedFilter !== 'experiences' && (
+            <DatePickerDropdown
+              title={{ en: t('search.check-out'), ar: t('search.check-out') }}
+              onChange={handleCheckOutChange}
+              mode='single'
+              isCheckout={true}
+              checkInDate={getCheckInDate()}
+              minDate={new Date()}
+              value={filtersValue?.checkoutTime || ''}
+              className={activeButton === 'checkout' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
+            />
+          )}
 
           <GuestFilterItem
-            title={{ en: t('search.add-guests'), ar: t('search.add-guests') }}
+            title={{ en: t('search.who'), ar: t('search.who') }}
             onChange={handleGuestChange}
             initialValues={{
               adults: filtersValue?.adults || 0,
@@ -321,42 +386,56 @@ const FilterBar = () => {
           />
 
           <div
-            className={`p-[20px] absolute ${
-              locale === 'ar' ? 'left-14' : 'right-14'
-            } top-1/2 transform -translate-y-1/2`}
+            className={`relative flex-1 ${locale === 'ar' ? 'ml-6' : 'mr-6'}`}
           >
             <button
-              type='button'
-              onClick={handleClear}
-              className='p-2 w-10 h-10 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+              type="button"
+              className="flex items-center justify-center ml-6 p-3 bg-transparent rounded-full border-transparent transition-colors group"
             >
-              <svg
-                className='w-full h-full'
-                stroke='currentColor'
-                fill='currentColor'
-                strokeWidth='0'
-                viewBox='0 0 1024 1024'
-                version='1.1'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <defs></defs>
-                <path d='M899.1 869.6l-53-305.6H864c14.4 0 26-11.6 26-26V346c0-14.4-11.6-26-26-26H618V138c0-14.4-11.6-26-26-26H432c-14.4 0-26 11.6-26 26v182H160c-14.4 0-26 11.6-26 26v192c0 14.4 11.6 26 26 26h17.9l-53 305.6c-0.3 1.5-0.4 3-0.4 4.4 0 14.4 11.6 26 26 26h723c1.5 0 3-0.1 4.4-0.4 14.2-2.4 23.7-15.9 21.2-30zM204 390h272V182h72v208h272v104H204V390z m468 440V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H416V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H202.8l45.1-260H776l45.1 260H672z'></path>
-              </svg>
+              <CustomSvg
+                src="/SVGs/home/search-bar-logo.svg"
+                width={33}
+                height={33}
+                className="opacity-100 group-hover:text-black"
+                color="white"
+              />
             </button>
-          </div>
-          <div className='p-[20px]'>
-            <SearchDropdown
-              onSubmit={handleSearchDropdownSubmit}
-              initialValues={{
-                country: filtersValue?.country || '',
-                checkinTime: filtersValue?.checkinTime || '',
-                checkoutTime: filtersValue?.checkoutTime || '',
-                adults: filtersValue?.adults || 0,
-                children: filtersValue?.children || 0,
-                infants: filtersValue?.infants || 0,
-              }}
+            {/* Render WherePopup */}
+            <WherePopup
+              isOpen={showSearchPopup}
+              onClose={() => setShowSearchPopup(false)}
+              currentCollectionStatus={collectionStatus as string}
+              onNext={handleLocationSelect}
+              onClear={handleLocationClear}
+              onFilterSelect={handleFilterSelect}
             />
           </div>
+
+          {!showSearchPopup && (
+            <div
+              className={`p-[20px] absolute ${locale === 'ar' ? 'left-14' : 'right-14'
+                } top-1/2 transform -translate-y-1/2`}
+            >
+              <button
+                type='button'
+                onClick={handleClear}
+                className='p-2 w-[45px] h-[45px] text-sm font-medium text-white bg-transparent border-transparent rounded-full focus:outline-none transition-colors'
+              >
+                <svg
+                  className='w-full h-full text-white'
+                  stroke='currentColor'
+                  fill='currentColor'
+                  strokeWidth='0'
+                  viewBox='0 0 1024 1024'
+                  version='1.1'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <defs></defs>
+                  <path d='M899.1 869.6l-53-305.6H864c14.4 0 26-11.6 26-26V346c0-14.4-11.6-26-26-26H618V138c0-14.4-11.6-26-26-26H432c-14.4 0-26 11.6-26 26v182H160c-14.4 0-26 11.6-26 26v192c0 14.4 11.6 26 26 26h17.9l-53 305.6c-0.3 1.5-0.4 3-0.4 4.4 0 14.4 11.6 26 26 26h723c1.5 0 3-0.1 4.4-0.4 14.2-2.4 23.7-15.9 21.2-30zM204 390h272V182h72v208h272v104H204V390z m468 440V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H416V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H202.8l45.1-260H776l45.1 260H672z'></path>
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
         <div className='block tabletM:hidden w-full'>
           <MobileSearchDropdown onSubmit={handleSearchDropdownSubmit} />

@@ -1,13 +1,13 @@
 'use client';
-import React from 'react';
-import { useTranslation } from '@/contexts/TranslationContext';
-import CustomSvg from '@/components/ui/CustomSvg';
 import ImageCarousel from '@/components/shared/ImageCarousel';
+import CustomLink from '@/components/ui/CustomLink';
+import CustomSvg from '@/components/ui/CustomSvg';
+import { useTranslation } from '@/contexts/TranslationContext';
+import withFavourites from '@/lib/hocs/withFavourites';
 import { Site } from '@/lib/types';
 import useCurrency from '@/utils/hooks/useCurrency';
-import CustomLink from '@/components/ui/CustomLink';
 import useFavorite from '@/utils/hooks/useFavorite';
-import withFavourites from '@/lib/hocs/withFavourites';
+import React from 'react';
 
 function CollectionCard({
   collection,
@@ -48,8 +48,12 @@ function CollectionCard({
     () => ({
       autoplay: false,
       dots: collection.images.length > 1,
-      arrows: false,
-      infinite: false,
+      arrows: collection.images.length > 1,
+      infinite: collection.images.length > 1,
+      speed: 400,
+      lazyLoad: 'progressive' as const,
+      pauseOnHover: true,
+      autoplaySpeed: 2000,
     }),
     [collection.images.length],
   );
@@ -58,10 +62,9 @@ function CollectionCard({
     () => ({
       width: 500,
       height: 500,
-      src: collection.images[0],
       className: 'object-cover w-full h-full',
     }),
-    [collection.images],
+    [],
   );
 
   const locationString = React.useMemo(() => {
@@ -78,24 +81,6 @@ function CollectionCard({
       ? '/SVGs/shared/heart-filled.svg'
       : '/SVGs/shared/heart-icon.svg';
   }, [isCollectionFavorite]);
-
-  const touchHandlers = React.useMemo(
-    () => ({
-      onTouchStart: (e: React.TouchEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-      },
-      onTouchEnd: (e: React.TouchEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-      },
-      onTouchMove: (e: React.TouchEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-      },
-    }),
-    [],
-  );
 
   return (
     <CustomLink

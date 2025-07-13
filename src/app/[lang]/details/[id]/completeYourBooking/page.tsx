@@ -37,6 +37,23 @@ interface BookingFormData {
 const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   params,
 }) => {
+  // Helper function to format guest information
+  const formatGuestInfo = (guests: { adults: number; children: number; infants: number } | undefined) => {
+    if (!guests) return '';
+
+    const parts = [];
+    if (guests.adults > 0) {
+      parts.push(`${guests.adults} Adult${guests.adults > 1 ? 's' : ''}`);
+    }
+    if (guests.children > 0) {
+      parts.push(`${guests.children} Child${guests.children > 1 ? 'ren' : ''}`);
+    }
+    if (guests.infants > 0) {
+      parts.push(`${guests.infants} Infant${guests.infants > 1 ? 's' : ''}`);
+    }
+
+    return parts.join(', ');
+  };
   const {
     data: detailsData,
     isLoading: isDetailsLoading,
@@ -72,6 +89,14 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   const { getBookingData, updateBookingData, clearBookingData } =
     useBookingData();
   const bookingData = getBookingData(params.id);
+
+  // Debug log to help troubleshoot data issues
+  console.log('📊 Booking Data Retrieved:', {
+    bookingData,
+    availability: bookingData?.availability,
+    guests: bookingData?.guests,
+    type: bookingData?.type
+  });
 
   const { mutate: bookCollection, isPending: isBookingCollectionPending } =
     useMutateBooking({
@@ -157,34 +182,36 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
               <div className='flex flex-col gap-2 flex-1'>
                 <BookingDetails
                   time={`${new Date(
+                    bookingData?.availability?.startDateTime ||
                     detailsData?.data?.schedule.startDateTime || '',
                   ).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
                   })} - ${new Date(
+                    bookingData?.availability?.endDateTime ||
                     detailsData?.data?.schedule.endDateTime || '',
                   ).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}`}
                   date={`${new Date(
-                    bookingData?.availability?.startDate ||
-                      detailsData?.data?.schedule.startDateTime ||
-                      '',
+                    bookingData?.availability?.startDateTime ||
+                    detailsData?.data?.schedule.startDateTime ||
+                    '',
                   ).toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'short',
                     day: 'numeric',
                   })} - ${new Date(
-                    bookingData?.availability?.endDate ||
-                      detailsData?.data?.schedule.endDateTime ||
-                      '',
+                    bookingData?.availability?.endDateTime ||
+                    detailsData?.data?.schedule.endDateTime ||
+                    '',
                   ).toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'short',
                     day: 'numeric',
                   })}`}
-                  people={`${bookingData?.guests?.adults > 0 ? `${bookingData?.guests?.adults} Adults` : ''} ${bookingData?.guests?.children > 0 ? `${bookingData?.guests?.children} Children` : ''} ${bookingData?.guests?.infants > 0 ? `${bookingData?.guests?.infants} Infant` : ''}`}
+                  people={formatGuestInfo(bookingData?.guests)}
                   onGuestUpdate={(guests) => {
                     updateBookingData(params.id, {
                       guests: guests,

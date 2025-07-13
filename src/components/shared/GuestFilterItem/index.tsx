@@ -34,6 +34,7 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
 }) => {
   const { t, locale } = useTranslation();
   const formContext = useFormContext();
+  const [isOpen, setIsOpen] = useState(false);
 
   const getInitialGuests = () => {
     if (formContext) {
@@ -121,13 +122,15 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
           <FilterBarItem
             title={title || { en: '', ar: '' }}
             value={getGuestDisplayText()}
-            onClick={() => {}}
+            onClick={() => { }}
+            className={`${isOpen || (guests.adults > 0 || guests.children > 0 || guests.infants > 0) ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}`}
           />
         )
       }
       content={dropdownContent}
       position='bottom-left'
       contentClassName='mt-4'
+      onOpenChange={setIsOpen}
     />
   );
 };

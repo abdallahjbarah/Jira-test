@@ -130,20 +130,17 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
     <div
       ref={innerRef}
       {...innerProps}
-      className={`w-full text-left px-4 py-3 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0 focus:outline-none focus:bg-gray-100 ${
-        locale === 'ar' ? 'text-right' : 'text-left'
-      }`}
+      className={`w-full text-left px-4 py-3 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0 focus:outline-none focus:bg-gray-100 ${locale === 'ar' ? 'text-right' : 'text-left'
+        }`}
     >
       <div
-        className={`flex items-center ${
-          locale === 'ar' ? 'justify-end' : 'justify-between'
-        }`}
+        className={`flex items-center ${locale === 'ar' ? 'justify-end' : 'justify-between'
+          }`}
       >
         <div className='flex flex-col items-center gap-2'>
           <div
-            className={`flex items-center gap-2 ${
-              locale === 'ar' ? 'flex-row-reverse' : 'flex-row'
-            }`}
+            className={`flex items-center gap-2 ${locale === 'ar' ? 'flex-row-reverse' : 'flex-row'
+              }`}
           >
             <Image
               src={ExperienceIcon}

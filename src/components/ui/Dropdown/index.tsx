@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/utils/cn';
-import React, { useState, useRef, useEffect, ReactNode } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface DropdownProps {
@@ -10,6 +10,8 @@ interface DropdownProps {
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
   className?: string;
   contentClassName?: string;
+  onOpenChange?: (isOpen: boolean) => void;
+  closeOnSelect?: boolean;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -18,6 +20,8 @@ const Dropdown: React.FC<DropdownProps> = ({
   position = 'bottom-right',
   className = '',
   contentClassName = '',
+  onOpenChange,
+  closeOnSelect = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [contentStyles, setContentStyles] = useState({
@@ -37,7 +41,9 @@ const Dropdown: React.FC<DropdownProps> = ({
   const toggleDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    setIsOpen(!isOpen);
+    const newIsOpen = !isOpen;
+    setIsOpen(newIsOpen);
+    onOpenChange?.(newIsOpen);
   };
 
   useEffect(() => {
@@ -130,14 +136,35 @@ const Dropdown: React.FC<DropdownProps> = ({
         !triggerRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
+        onOpenChange?.(false);
       }
     };
 
+    const handleContentClick = (event: MouseEvent) => {
+      // Don't close if closeOnSelect is false or if clicking form elements
+      if (
+        !closeOnSelect ||
+        !dropdownRef.current?.contains(event.target as Node) ||
+        (event.target as HTMLElement).closest('button, input, select, textarea')
+      ) {
+        return;
+      }
+      setIsOpen(false);
+      onOpenChange?.(false);
+    };
+
     document.addEventListener('mousedown', handleClickOutside);
+    if (closeOnSelect) {
+      document.addEventListener('click', handleContentClick);
+    }
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      if (closeOnSelect) {
+        document.removeEventListener('click', handleContentClick);
+      }
     };
-  }, []);
+  }, [onOpenChange, closeOnSelect]);
 
   const renderDropdownContent = () => {
     if (!isOpen || !mounted) return null;

@@ -102,7 +102,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
       ? availabilityStaySlotsQuery
       : { data: undefined, isLoading: false };
 
-  const getAllowedGuests = async (slotIds?: string[]) => {
+  const getAllowedGuests = async (slotIds?: string[], selectedSlot?: any) => {
     try {
       const response = await fetchAllowedGuests({
         siteId: params.id,
@@ -131,8 +131,8 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
               ? availabilityStaySlots?.data
               : {
                 slotIds,
-                startDateTime: searchDates.startDateTime,
-                endDateTime: searchDates.endDateTime,
+                startDateTime: selectedSlot?.startDateTime || searchDates.startDateTime,
+                endDateTime: selectedSlot?.endDateTime || searchDates.endDateTime,
               },
           type,
           name,
@@ -388,7 +388,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                         guests.adults + guests.children + guests.infants >
                         0
                       ) {
-                        getAllowedGuests([slot._id]);
+                        getAllowedGuests([slot._id], slot);
                       } else {
                         toast.error(t('booking.guests.selectGuests'), {
                           position: 'top-right',
