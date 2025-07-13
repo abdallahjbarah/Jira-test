@@ -216,7 +216,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
 
   if (isError) {
     return (
-      <InnerPagesLayout headerProps={{ withNavItems: false }}>
+      <InnerPagesLayout headerProps={{ withNavItems: true }}>
         <main className='container py-[6.25rem]'>
           <div>Error fetching details: {error?.message}</div>
         </main>
@@ -226,7 +226,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
 
   if (!detailsData?.data) {
     return (
-      <InnerPagesLayout headerProps={{ withNavItems: false }}>
+      <InnerPagesLayout headerProps={{ withNavItems: true }}>
         <main className='container py-[6.25rem]'>
           <div>Details not found.</div>
         </main>
@@ -272,7 +272,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     }) || [];
 
   return (
-    <InnerPagesLayout headerProps={{ withNavItems: false }}>
+    <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main className='container'>
         <div className='flex flex-col'>
           <div className='relative'>
