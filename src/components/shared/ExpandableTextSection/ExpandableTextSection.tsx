@@ -41,18 +41,18 @@ const ExpandableTextSection: React.FC<ExpandableTextSectionProps> = ({
       <div
         className={`font-custom-400 text-text_1 font-sans text-xl ${contentClassName}`}
       >
-        <p dangerouslySetInnerHTML={{ __html: displayContent }} />
-        {shouldShowReadMore && (
-          <>
+        <p>
+          <span dangerouslySetInnerHTML={{ __html: displayContent }} />
+          {shouldShowReadMore && (
             <button
               onClick={toggleExpanded}
               type='button'
-              className={`underline font-custom-500 text-text_1 font-sans text-xl hover:opacity-80 transition-opacity ${buttonClassName}`}
+              className={`ml-1 font-bold text-black font-sans text-2xl hover:opacity-80 transition-opacity ${buttonClassName}`}
             >
               {isExpanded ? t('common.readLess') : t('common.readMore')}
             </button>
-          </>
-        )}
+          )}
+        </p>
       </div>
     </div>
   );

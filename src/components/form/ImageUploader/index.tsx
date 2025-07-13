@@ -60,8 +60,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         <img
           src={image}
           alt={altText}
-          className='w-full h-full object-cover'
+          className='h-[50px] object-contain object-center ml-[11px] border-2 border-red-500'
           onError={handleImageError}
+          style={{ objectPosition: 'center' }}
         />
 
         <div className='absolute bottom-0 left-0 right-0 h-1/2 bg-black bg-opacity-50 flex items-center justify-center cursor-pointer text-white hover:text-primary_1'>

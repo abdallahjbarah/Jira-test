@@ -10,6 +10,7 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 import FormInput from '@/components/form/FormInput';
 import DateRangePicker from '@/components/shared/DateRangePicker';
 import Dropdown from '@/components/ui/Dropdown';
+import Image from 'next/image';
 
 type InputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -63,17 +64,31 @@ const DatePickerInput = forwardRef<HTMLInputElement, DatePickerInputProps>(
       <div className={`${fullWidth ? 'w-full' : ''}`}>
         <Dropdown
           trigger={
-            <FormInput
-              {...props}
-              {...registration}
-              id={props.id || 'date-picker'}
-              ref={ref || inputRef}
-              value={formatDate(value)}
-              onFocus={() => setIsDatePickerOpen(true)}
-              label={label}
-              error={error}
-              readOnly
-            />
+            <div className='relative'>
+              <FormInput
+                {...props}
+                {...registration}
+                id={props.id || 'date-picker'}
+                ref={ref || inputRef}
+                value={formatDate(value)}
+                onFocus={() => setIsDatePickerOpen(true)}
+                label={label}
+                error={error}
+                readOnly
+              />
+              <div
+                onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+                className='absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer z-10'
+              >
+                <Image
+                  src='/SVGs/shared/calendar-2.svg'
+                  alt='Calendar'
+                  width={24}
+                  height={24}
+                  className='pointer-events-none'
+                />
+              </div>
+            </div>
           }
           content={
             <div className='bg-white shadow-xl rounded-lg p-2'>

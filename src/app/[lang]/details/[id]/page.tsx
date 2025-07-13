@@ -40,48 +40,48 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     title: string;
     description: string;
   }[] = [
-    {
-      icon: '/SVGs/shared/details-icons/timeCircle.svg',
-      title: 'Duration',
-      description: '2hrs 30m',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/sun.svg',
-      title: 'Time of Day',
-      description: 'Morning (before 12 pm) - Evening (after 5 pm)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/guideIcon.svg',
-      title: 'Guide (Upon Request)',
-      description: 'Extra fees applied',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
-      title: 'Level of Difficulty',
-      description: 'Easy (relaxed tour, easy walk)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
-      title: 'Age Suitability',
-      description: '3+',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/transportationIcon.svg',
-      title: 'Transportation (Upon Request)',
-      description: 'Extra fees applied',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
-      title: 'Spoken Language',
-      description:
-        'Arabic, English (Download a language translator app to communicate with host!)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
-      title: 'Wheelchair Accessible',
-      description: '',
-    },
-  ];
+      {
+        icon: '/SVGs/shared/details-icons/timeCircle.svg',
+        title: 'Duration',
+        description: '2hrs 30m',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/sun.svg',
+        title: 'Time of Day',
+        description: 'Morning (before 12 pm) - Evening (after 5 pm)',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/guideIcon.svg',
+        title: 'Guide (Upon Request)',
+        description: 'Extra fees applied',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
+        title: 'Level of Difficulty',
+        description: 'Easy (relaxed tour, easy walk)',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
+        title: 'Age Suitability',
+        description: '3+',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/transportationIcon.svg',
+        title: 'Transportation (Upon Request)',
+        description: 'Extra fees applied',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
+        title: 'Spoken Language',
+        description:
+          'Arabic, English (Download a language translator app to communicate with host!)',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
+        title: 'Wheelchair Accessible',
+        description: '',
+      },
+    ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -381,11 +381,6 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                 description={whatToExpect?.description}
                 images={whatToExpect?.images}
               />
-              <Divider className='w-full my-8' />
-              <SpecialInstructionsAndCancellationSection
-                specialInstructions={specialInstructions}
-                cancellationPolicy={cancellationPolicy}
-              />
             </>
           )}
           {type === 'Stay' && (
@@ -396,6 +391,17 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               <NearbySurroundingsSection details={stayNearby} />
               <Divider className='w-full my-8' />
               <HouseRulesSection rules={stayHouseRules} />
+            </>
+          )}
+          {(specialInstructions || cancellationPolicy) && (
+            <>
+              <Divider className='w-full my-8' />
+              <div className='mb-[5px]'>
+                <SpecialInstructionsAndCancellationSection
+                  specialInstructions={specialInstructions}
+                  cancellationPolicy={cancellationPolicy}
+                />
+              </div>
             </>
           )}
         </div>
