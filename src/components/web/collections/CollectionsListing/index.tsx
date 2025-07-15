@@ -28,15 +28,15 @@ const LoaderContainer = Styled.div`
 
 const MapToggleWidget = Styled.div`
   position: fixed;
-  right: -62px;
-  top: 50%;
+  right: -72px;
+  top: 40%;
   transform: translateY(-50%) rotate(270deg);
   z-index: 1000;
   background: var(--secondary-color);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  padding: 12px 30px;
+  padding: 2px 30px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -179,8 +179,8 @@ function CollectionsListing(): React.ReactElement {
           <CustomSvg
             src='/SVGs/shared/map-icon.svg'
             className='text-white'
-            width={45}
-            height={45}
+            width={30}
+            height={30}
             alt='Map Icon'
           />
           <span className='text-white text-custom-30'>{t('mapLabel')}</span>

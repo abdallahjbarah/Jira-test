@@ -34,10 +34,10 @@ const LocationSection: React.FC<LocationSectionProps> = ({
       <h1 className='font-custom-700 text-text_1 text-custom-22 laptopM:text-custom-30'>
         Location
       </h1>
-      <p className='font-custom-400 font-sans text-text_1 text-custom-20 laptopM:text-custom-30'>
+      <p className='font-custom-400 font-sans text-text_1 text-custom-20 laptopM:text-custom-24'>
         {location}
       </p>
-      <p className='font-custom-400 font-sans text-text_3 text-custom-20 laptopM:text-custom-25'>
+      <p className='font-custom-400 font-sans text-text_3 text-custom-16 laptopM:text-custom-20'>
         Exact location will be available prior to one day
       </p>
       <div onDoubleClick={handleMapDoubleClick} style={{ cursor: 'pointer' }}>

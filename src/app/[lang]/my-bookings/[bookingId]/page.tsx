@@ -18,7 +18,13 @@ import StayDetailsSection from '@/components/web/details/StayDetailsSection';
 import NearbySurroundingsSection from '@/components/web/details/NearbySurroundingsSection';
 import HouseRulesSection from '@/components/web/details/HouseRulesSection';
 import SpecialInstructionsAndCancellationSection from '@/components/web/details/SpecialInstructionsAndCancellationSection';
-import ImageCarousel from '@/components/shared/ImageCarousel';
+import Image from 'next/image';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
+import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
+import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import Counter from 'yet-another-react-lightbox/plugins/counter';
 import withFavourites from '@/lib/hocs/withFavourites';
 import useFavorite from '@/utils/hooks/useFavorite';
 import { Site } from '@/lib/types';
@@ -96,6 +102,39 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
   }, [isFavorite, params.bookingId]);
 
   const [isExpanded, setIsExpanded] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+  const handleImageClick = React.useCallback(
+    (index: number) => {
+      const images = detailsData?.booking?.siteId?.images;
+      if (!images || index < 0 || index >= images.length) {
+        return;
+      }
+      setCurrentImageIndex(index);
+      setIsLightboxOpen(true);
+    },
+    [detailsData?.booking?.siteId?.images],
+  );
+
+  const handleCloseLightbox = React.useCallback(() => {
+    setIsLightboxOpen(false);
+  }, []);
+
+  const handleMovePrev = React.useCallback(() => {
+    const images = detailsData?.booking?.siteId?.images;
+    if (!images) return;
+    setCurrentImageIndex(
+      (current) => (current + images.length - 1) % images.length,
+    );
+  }, [detailsData?.booking?.siteId?.images]);
+
+  const handleMoveNext = React.useCallback(() => {
+    const images = detailsData?.booking?.siteId?.images;
+    if (!images) return;
+    setCurrentImageIndex((current) => (current + 1) % images.length);
+  }, [detailsData?.booking?.siteId?.images]);
+
   const handleFavoriteToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     if (isCollectionFavorite) {
@@ -167,20 +206,9 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
         <div className='flex flex-col'>
-          <div className='relative  laptopM:h-[calc(100vh-15rem)]'>
-            <ImageCarousel
-              images={images}
-              className='w-full h-full relative'
-              imageHeight='aspect-square'
-              slickProps={{
-                autoplay: false,
-                dots: images.length > 1,
-              }}
-              imageProps={{
-                src: images[0],
-                fill: true,
-              }}
-            />
+          {/* Responsive Image Grid replacing Swiper */}
+          <div className='relative w-full'>
+            {/* Heart Favorite Button */}
             <button
               className='absolute top-[1.875rem] right-[1.875rem] z-20 p-1 hover:!text-primary_2'
               onClick={handleFavoriteToggle}
@@ -192,7 +220,59 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                 className='transition-colors duration-200 text-white'
               />
             </button>
+
+            {/* Grid */}
+            <div className='grid grid-cols-1 lg:grid-cols-9 gap-[16px] lg:h-[600px] w-full'>
+              {/* Main Image */}
+              {images?.[0] && (
+                <div className='rounded-lg h-[320px] relative lg:col-span-5 w-full lg:h-[600px] shadow-md'>
+                  <Image
+                    onClick={() => handleImageClick(0)}
+                    width={600}
+                    height={600}
+                    src={images[0]}
+                    alt='Main property image'
+                    className='rounded-[6px] h-full cursor-pointer w-full object-cover hover:brightness-75 transition-all duration-200'
+                    unoptimized
+                  />
+                </div>
+              )}
+
+              {/* Gallery Images */}
+              <div className='hidden lg:grid lg:grid-cols-2 lg:col-span-4 lg:gap-[16px]'>
+                {images?.slice(1, 5).map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleImageClick(idx + 1)}
+                    className='max-h-[292px] shadow-md relative border-0 p-0 bg-transparent'
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleImageClick(idx + 1);
+                      }
+                    }}
+                  >
+                    <Image
+                      src={img}
+                      alt={`Property image ${idx + 1}`}
+                      width={292}
+                      height={292}
+                      className='h-full w-full rounded-[6px] cursor-pointer bg-propy-overlay object-cover hover:brightness-75 transition-all duration-200'
+                      unoptimized
+                    />
+                    {idx === 3 && images.length > 5 && (
+                      <div className='bg-propy-overlay rounded-[6px] w-full h-full text-center absolute inset-0 flex items-center justify-center cursor-pointer'>
+                        <span className='text-[24px] text-white font-semibold'>
+                          +{images.length - 5}
+                        </span>
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
+
 
           <div className='flex  items-start mt-20'>
             <div className='flex flex-col gap-2 max-w-[60rem] w-full'>
@@ -293,6 +373,23 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
           )}
         </div>
       </main>
+
+      {/* Lightbox for Image Gallery */}
+      {images && images.length > 0 && (
+        <Lightbox
+          slides={images.map((image) => ({ src: image }))}
+          open={isLightboxOpen}
+          index={currentImageIndex}
+          close={handleCloseLightbox}
+          plugins={[Counter, Fullscreen, Slideshow, Zoom]}
+          counter={{
+            separator: '/',
+            container: {
+              color: 'white',
+            },
+          }}
+        />
+      )}
     </InnerPagesLayout>
   );
 };

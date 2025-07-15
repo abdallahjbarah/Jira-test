@@ -19,7 +19,7 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({
     </div>
     <div className='relative'>
       <p
-        className={`laptopM:max-w-[52.5rem] font-custom-400 font-sans text-text_1 text-custom-20 laptopM:text-custom-30 break-words ${!isExpanded ? 'line-clamp-3' : ''}`}
+        className={`laptopM:max-w-[52.5rem] font-custom-400 font-sans text-text_1 text-custom-16 laptopM:text-custom-24 break-words ${!isExpanded ? 'line-clamp-3' : ''}`}
       >
         {overview}
         <span>

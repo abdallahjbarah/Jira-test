@@ -53,19 +53,19 @@ const defaultSettings: SlickSettings = {
     }
 
     return (
-    <div
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-      style={{
-        position: 'absolute',
-        bottom: '20px',
-        width: '100%',
-        textAlign: 'center',
-      }}
-    >
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          width: '100%',
+          textAlign: 'center',
+        }}
+      >
         <ul style={{ margin: '0', padding: '0' }}>{visibleDots}</ul>
-    </div>
+      </div>
     );
   },
 };
@@ -116,9 +116,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
       <style jsx global>{`
         .slick-custom-arrows .slick-prev,
         .slick-custom-arrows .slick-next {
-          width: 48px;
-          height: 48px;
-          background: rgba(0, 0, 0, 0.3);
+          width: 30px;
+          height: 30px;
+          background: white;
           border-radius: 50%;
           z-index: 10;
           transition: all 0.3s ease;
@@ -142,13 +142,34 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
 
         .slick-custom-arrows .slick-prev:hover,
         .slick-custom-arrows .slick-next:hover {
-          background: rgba(0, 0, 0, 0.5);
+          background: rgba(255, 255, 255, 0.98);
         }
 
         .slick-custom-arrows .slick-prev:before,
         .slick-custom-arrows .slick-next:before {
-          font-size: 24px;
+          content: '';
+          width: 24px;
+          height: 24px;
+          background-size: 18px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-color: #47C409;
+          border-radius: 50%;
           opacity: 1;
+          display: block;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        .slick-custom-arrows .slick-prev:before {
+          background-image: url('/SVGs/shared/right-s-arrow.svg');
+          transform: translate(-50%, -50%) scaleX(-1);
+        }
+
+        .slick-custom-arrows .slick-next:before {
+          background-image: url('/SVGs/shared/right-s-arrow.svg');
         }
 
         .slick-dots {
@@ -158,7 +179,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
           transition: all 0.3s ease;
           display: flex !important;
           justify-content: center;
-          gap: 24px; /* Doubled gap between dots */
+          gap: 32px; /* Doubled gap between dots */
           padding: 0 24px; /* Increased padding */
         }
 

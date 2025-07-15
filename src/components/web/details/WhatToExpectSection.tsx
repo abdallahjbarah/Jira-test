@@ -23,7 +23,7 @@ const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({
         What to Expect
       </p>
       <div className='flex flex-col laptopM:flex-row justify-between items-start gap-16'>
-        <p className='font-custom-400 text-custom-20 laptopM:text-custom-28 text-text_2 max-w-[800px]'>
+        <p className='font-custom-400 text-custom-16 laptopM:text-custom-20 text-text_2 max-w-[650px]'>
           {displayText}
           {shouldTruncate && !isExpanded && '.....'}
           {shouldTruncate && (
