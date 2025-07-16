@@ -1,4 +1,7 @@
+'use client';
+
 import { useTranslation } from '@/contexts/TranslationContext';
+import { useRouter } from 'next/navigation';
 import FilledButton from '@components/ui/buttons/FilledButton';
 import BgHomePage from '@public/images/home/BgHomePage.jpg';
 import Image from 'next/image';
@@ -6,13 +9,19 @@ import React from 'react';
 
 export default function ComingSoon(): React.ReactElement {
   const { t } = useTranslation();
+  const router = useRouter();
+
+  const handleGoHome = () => {
+    router.push('/');
+  };
+
   return (
     <div
       style={{
         backgroundImage:
           'linear-gradient(183deg, rgba(0, 0, 0, 0.33) 8.42%, rgba(0, 0, 0, 0.00) 38.77%), linear-gradient(92deg, rgba(0, 0, 0, 0.44) 18.39%, rgba(0, 0, 0, 0.00) 107.81%)',
       }}
-      className='relative w-full h-[calc(100vh-300px)] flex items-center justify-center bg-gradient-full'
+      className='relative w-full h-screen flex items-center justify-center bg-gradient-full'
     >
       <div className='absolute top-0 left-0 w-full h-full -z-10'>
         <Image
@@ -33,12 +42,11 @@ export default function ComingSoon(): React.ReactElement {
           <br /> Stay tuned!
         </p>
         <FilledButton
-          path='/'
           text={t('common.goToHome')}
           icon={null}
           width='w-[13.67rem]'
           height='h-[4.81rem]'
-          onClick={() => {}}
+          onClick={handleGoHome}
           buttonType='button'
           isDisable={false}
           className='mt-5 rounded-custom-16'

@@ -36,10 +36,10 @@ const FilterBarItem = ({ title, value, onClick, className }: FilterBarItemProps)
 
   return (
     <FilterBarItemContainer onClick={onClick} className={className} $isOpen={isOpen}>
-      <span className='text-[25px] font-custom-500 text-[#ffffff] text-center'>
+      <span className='text-[22px] font-custom-500 text-[#ffffff] text-center'>
         {title[locale]}
       </span>
-      <span className='text-[18px] font-custom-500 text-[#ffffff] text-center'>
+      <span className='text-[12px] font-custom-500 text-[#ffffff] text-center'>
         {value}
       </span>
     </FilterBarItemContainer>

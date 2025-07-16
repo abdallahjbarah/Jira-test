@@ -170,6 +170,17 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     );
   }
 
+  const isPayOnSite = (name: string | undefined) =>
+    name === 'On-site Cash Payment' || name === 'On-site Card Payment';
+
+  // Find the selected payment method object
+  const selectedPaymentMethodObj = (paymentMethods || []).find(
+    (m) => m._id === selectedPaymentMethod
+  );
+  const disableAttachment = isPayOnSite(selectedPaymentMethodObj?.name);
+
+  const enabledPaymentMethods = (paymentMethods || []).filter((m) => m.isEnabled);
+
   return (
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
@@ -275,19 +286,22 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 )}
                 <Divider className='w-full my-8' />
 
-                <PaymentMethods
-                  methods={paymentMethods || []}
-                  selectedMethod={selectedPaymentMethod || ''}
-                  onMethodChange={(method) =>
-                    setValue('selectedPaymentMethod', method)
-                  }
-                />
-                <Divider className='w-full my-8' />
+                {enabledPaymentMethods.length > 0 && (
+                  <>
+                    <PaymentMethods
+                      methods={enabledPaymentMethods}
+                      selectedMethod={selectedPaymentMethod || ''}
+                      onMethodChange={(method) => setValue('selectedPaymentMethod', method)}
+                    />
+                    <Divider className='w-full my-8' />
+                  </>
+                )}
 
                 <FinancialReceiptUpload
                   control={control}
                   name='financialReceipt'
                   className='mb-24'
+                  disabled={disableAttachment}
                 />
               </div>
               <BookingSummary

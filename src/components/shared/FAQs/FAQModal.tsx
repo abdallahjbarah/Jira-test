@@ -75,7 +75,7 @@ const FAQModal: React.FC<FAQModalProps> = ({ isOpen, onClose }) => {
 
         <ContactText>
           Didn't find what you were looking for?{' '}
-          <Link href='/contact' passHref>
+          <Link href='/#ContactUs' passHref>
             <ContactLink>Contact Us</ContactLink>
           </Link>
         </ContactText>

@@ -27,7 +27,7 @@ class ErrorBoundary extends React.Component<
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {}
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void { }
 
   render(): React.ReactNode {
     if (this.state.hasError) {
@@ -70,7 +70,6 @@ class ErrorBoundary extends React.Component<
               height='h-[4.81rem]'
               className='mt-5 rounded-custom-16'
               icon={null}
-              onClick={() => {}}
               buttonType='button'
               isDisable={false}
             />

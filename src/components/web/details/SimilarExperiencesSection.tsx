@@ -9,7 +9,7 @@ interface SimilarExperiencesSectionProps {
 const SimilarExperiencesSection: React.FC<SimilarExperiencesSectionProps> = ({
   collections,
 }) => (
-  <div className='flex flex-col gap-11'>
+  <div className='flex flex-col gap-11 px-8 tabletM:px-4'>
     <p className='font-custom-700 font-gellix-Bold text-text_1 text-custom-30'>
       Similar Experiences
     </p>
@@ -22,7 +22,7 @@ const SimilarExperiencesSection: React.FC<SimilarExperiencesSectionProps> = ({
           key={collection.id}
           className='min-w-[19.5rem] max-w-[19.5rem] flex-shrink-0'
         >
-          <CollectionCard collection={collection} />
+          <CollectionCard collection={collection as any} />
         </div>
       ))}
     </div>

@@ -16,8 +16,10 @@ export default function CustomLink({
   ...rest
 }: CustomLinkProps): React.ReactElement {
   const { lang } = useParams();
+  // Always redirect to /en/collections if path is /collections
+  const href = path === '/collections' ? '/en/collections' : `/${lang}${path}`;
   return (
-    <Link prefetch={true} href={`/${lang}${path}`} {...rest} draggable={false}>
+    <Link prefetch={true} href={href} {...rest} draggable={false}>
       {children}
     </Link>
   );

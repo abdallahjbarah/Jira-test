@@ -14,6 +14,9 @@ interface PaymentMethodsProps {
   onMethodChange: (value: string) => void;
 }
 
+const isPayOnSite = (name: string) =>
+  name === 'On-site Cash Payment' || name === 'On-site Card Payment';
+
 const PaymentMethods: React.FC<PaymentMethodsProps> = ({
   methods,
   selectedMethod,
@@ -38,6 +41,9 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
       onMethodChange(allMethods[0].value || '');
     }
   }, [selectedMethod, onMethodChange, allMethods]);
+
+  const selectedMethodObj = allMethods.find((m) => m.value === selectedMethod);
+  const disableAttachment = selectedMethodObj && isPayOnSite(selectedMethodObj.name);
 
   return (
     <div className='flex flex-col gap-14'>

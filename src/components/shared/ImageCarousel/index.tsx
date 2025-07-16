@@ -15,6 +15,7 @@ export interface ImageCarouselProps {
   imageClassName?: string;
   imageHeight?: string;
   imageProps?: Partial<ImageWithFallbackProps>;
+  isHovered?: boolean;
 }
 
 const defaultSettings: SlickSettings = {
@@ -77,23 +78,26 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
   imageClassName = 'object-cover',
   imageHeight = 'h-full',
   imageProps,
+  isHovered: isHoveredProp,
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHoveredInternal, setIsHoveredInternal] = useState(false);
+  const isHovered = isHoveredProp !== undefined ? isHoveredProp : isHoveredInternal;
   const sliderRef = React.useRef<Slider>(null);
 
-  const handleMouseEnter = useCallback(() => {
-    setIsHovered(true);
-    if (sliderRef.current && images.length > 1) {
-      sliderRef.current.slickPlay();
-    }
-  }, [images.length]);
+  // Remove handleMouseEnter/Leave if using prop
+  // const handleMouseEnter = useCallback(() => {
+  //   setIsHovered(true);
+  //   if (sliderRef.current && images.length > 1) {
+  //     sliderRef.current.slickPlay();
+  //   }
+  // }, [images.length]);
 
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
-    if (sliderRef.current) {
-      sliderRef.current.slickPause();
-    }
-  }, []);
+  // const handleMouseLeave = useCallback(() => {
+  //   setIsHovered(false);
+  //   if (sliderRef.current) {
+  //     sliderRef.current.slickPause();
+  //   }
+  // }, []);
 
   const settings = React.useMemo(() => {
     return {
@@ -102,16 +106,26 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
       dots: images.length > 1,
       arrows: images.length > 1,
       infinite: images.length > 1,
-      autoplay: false, // We'll control this with hover
+      autoplay: isHovered, // <-- change this line
     };
-  }, [slickProps, images.length]);
+  }, [slickProps, images.length, isHovered]);
+
+  React.useEffect(() => {
+    if (sliderRef.current) {
+      if (isHovered && images.length > 1) {
+        sliderRef.current.slickPlay();
+      } else {
+        sliderRef.current.slickPause();
+      }
+    }
+  }, [isHovered, images.length]);
 
   return (
     <div
       className={className}
       onClick={(e) => e.stopPropagation()}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={isHoveredProp === undefined ? () => setIsHoveredInternal(true) : undefined}
+      onMouseLeave={isHoveredProp === undefined ? () => setIsHoveredInternal(false) : undefined}
     >
       <style jsx global>{`
         .slick-custom-arrows .slick-prev,

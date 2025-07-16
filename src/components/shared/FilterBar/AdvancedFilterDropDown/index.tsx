@@ -194,7 +194,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
             text={t('filter.show-results')}
             buttonType='submit'
             isButton
-            onClick={handleSubmit(onSubmit)}
+            onClick={() => handleSubmit(onSubmit)()}
             className='px-6 py-2 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors text-sm'
           />
         </div>

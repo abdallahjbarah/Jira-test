@@ -78,6 +78,7 @@ const ProfileMenuContent: React.FC = () => {
             icon='/SVGs/shared/help.svg'
             href='#'
             onClick={openHelpCenterModal}
+            isHelpCenter={true}
           />
 
           <ProfileMenuItem

@@ -45,7 +45,7 @@ const CollectionNavItem = ({
           color='currentColor'
         />
       )}
-      <span className='text-custom-25 leading-none laptopM:text-custom-23'>
+      <span className='text-custom-18 leading-none laptopM:text-custom-16'>
         {collectionStatus.label[locale]}
       </span>
     </CustomLink>

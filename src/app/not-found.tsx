@@ -43,7 +43,6 @@ export default function NotFound() {
           height='h-[4.81rem]'
           className='mt-5 rounded-custom-16'
           icon={null}
-          onClick={() => {}}
           buttonType='button'
           isDisable={false}
         />

@@ -10,6 +10,7 @@ interface ProfileMenuItemProps {
   href: string;
   isExternal?: boolean;
   onClick?: () => void;
+  isHelpCenter?: boolean; // Add this prop
 }
 
 const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
@@ -19,6 +20,7 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
   href,
   isExternal = false,
   onClick,
+  isHelpCenter = false, // Destructure
 }) => {
   const content = (
     <div className='flex items-center justify-between'>
@@ -28,7 +30,13 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
         </div>
         <div>
           <p className='text-sm font-semibold text-text_1'>{label}</p>
-          {sublabel && <p className='text-xs text-text_3'>{sublabel}</p>}
+          {sublabel && (
+            <p
+              className={`text-xs text-text_3${isHelpCenter ? '' : ''}`}
+            >
+              {sublabel}
+            </p>
+          )}
         </div>
       </div>
       <ChevronRightIcon className='w-4 h-4 text-text_1' />
@@ -38,7 +46,10 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
   if (onClick) {
     return (
       <div
-        onClick={onClick}
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent dropdown from closing
+          onClick();
+        }}
         className='block cursor-pointer'
         role='button'
         tabIndex={0}

@@ -219,7 +219,7 @@ export const COLLECTION_STATUS_LIST: CollectionStatusItem[] = [
   {
     value: COLLECTION_STATUS.ALL,
     label: { en: 'All', ar: 'الكل' },
-    path: `/`,
+    path: `/collections`,
     filterValue: 'all',
   },
   {
