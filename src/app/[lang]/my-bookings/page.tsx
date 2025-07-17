@@ -74,6 +74,19 @@ const MyBookingsPage = () => {
     return bookingsData?.pages[0].totalCount || 0;
   }, [bookingsData]);
 
+  // Calculate counts for each status
+  const upcomingCount = React.useMemo(() => {
+    return bookings.filter((booking: Booking) => booking.status === BookingStatus.PENDING).length;
+  }, [bookings]);
+
+  const completedCount = React.useMemo(() => {
+    return bookings.filter((booking: Booking) => booking.status === BookingStatus.COMPLETED).length;
+  }, [bookings]);
+
+  const cancelledCount = React.useMemo(() => {
+    return bookings.filter((booking: Booking) => booking.status === BookingStatus.CANCELLED).length;
+  }, [bookings]);
+
   const handleIntersect = React.useCallback(() => {
     if (hasNextPage) {
       fetchNextPage();
@@ -87,13 +100,15 @@ const MyBookingsPage = () => {
           {t('myBookings.my')}{' '}
           <span className='text-primary_1'>{t('myBookings.bookings')}</span>
         </h2>
-        <p className='text-custom-20 laptopM:text-custom-30 font-custom-500 text-[#000000] mt-[1rem]'>
-          {t('myBookings.description')} {totalCount}{' '}
-          {t('myBookings.descriptionSecondLine')}
-        </p>
 
         <div className='mt-[2rem]'>
-          <BookingsFilter onFilterChange={onFilterChange} onSearch={onSearch} />
+          <BookingsFilter
+            onFilterChange={onFilterChange}
+            onSearch={onSearch}
+            upcomingCount={upcomingCount}
+            completedCount={completedCount}
+            cancelledCount={cancelledCount}
+          />
         </div>
         {totalCount === 0 && !isLoading && (
           <div className=' mt-[2rem]'>

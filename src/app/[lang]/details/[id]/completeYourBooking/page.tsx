@@ -77,12 +77,14 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
       selectedPaymentMethod: null,
       financialReceipt: null,
     },
+    mode: 'onChange',
   });
 
   const transportationChecked = watch('transportationChecked');
   const guideChecked = watch('guideChecked');
   const airportChecked = watch('airportChecked');
   const selectedPaymentMethod = watch('selectedPaymentMethod');
+  const financialReceipt = watch('financialReceipt');
 
   const router = useRouter();
 
@@ -95,8 +97,51 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     bookingData,
     availability: bookingData?.availability,
     guests: bookingData?.guests,
-    type: bookingData?.type
+    type: bookingData?.type,
+    detailsType: detailsData?.data?.type,
+    detailsSchedule: detailsData?.data?.schedule
   });
+
+  // Helper function to get the correct date/time based on site type
+  const getBookingDateTime = () => {
+    console.log('🔍 Debug - getBookingDateTime called with:', {
+      bookingData,
+      detailsData: detailsData?.data,
+      availability: bookingData?.availability
+    });
+
+    if (!bookingData?.availability) {
+      console.log('⚠️ No booking availability data, using fallback');
+      return {
+        startTime: detailsData?.data?.schedule?.startDateTime || '',
+        endTime: detailsData?.data?.schedule?.endDateTime || '',
+        startDate: detailsData?.data?.schedule?.startDateTime || '',
+        endDate: detailsData?.data?.schedule?.endDateTime || ''
+      };
+    }
+
+    // For stays, the structure is different - availability contains startDate/endDate
+    if (detailsData?.data?.type === 'Stay') {
+      console.log('🏠 Stay type detected, using startDate/endDate');
+      return {
+        startTime: bookingData.availability.startDate || bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '',
+        endTime: bookingData.availability.endDate || bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || '',
+        startDate: bookingData.availability.startDate || bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '',
+        endDate: bookingData.availability.endDate || bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || ''
+      };
+    }
+
+    // For experiences, use startDateTime/endDateTime from the selected slot
+    console.log('🎯 Experience type detected, using startDateTime/endDateTime');
+    return {
+      startTime: bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '',
+      endTime: bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || '',
+      startDate: bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '',
+      endDate: bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || ''
+    };
+  };
+
+  const bookingDateTime = getBookingDateTime();
 
   const { mutate: bookCollection, isPending: isBookingCollectionPending } =
     useMutateBooking({
@@ -134,6 +179,14 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
   const onSubmit: SubmitHandler<BookingFormData> = (data) => {
     console.log('Form submitted with data:', data);
+    console.log('Financial receipt from data:', data.financialReceipt);
+    console.log('Financial receipt from watch:', financialReceipt);
+
+    // Check if payment method is selected
+    if (!data.selectedPaymentMethod) {
+      toast.error('Please select a payment method to proceed.');
+      return;
+    }
 
     // Check if selected payment method is on-site payment
     const selectedPaymentMethodObj = (paymentMethods || []).find(
@@ -143,43 +196,46 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
     console.log('Selected payment method:', selectedPaymentMethodObj?.name);
     console.log('Is on-site payment:', isOnSitePayment);
+    console.log('File attached from data:', !!data.financialReceipt);
+    console.log('File attached from watch:', !!financialReceipt);
 
-    // For on-site payments, proceed without file attachment
-    if (isOnSitePayment) {
-      console.log('Proceeding with on-site payment without file attachment');
-      bookCollection({
-        siteId: detailsData?.data?._id || '',
-        availabilityId:
-          detailsData?.data?.type === 'Stay'
-            ? bookingData?.availability?.availabilitiesIds
-            : bookingData?.availability?.slotIds[0] || '',
-        paymentMethod: data.selectedPaymentMethod || '',
-        guests: bookingData?.guests,
-        hasGuide: data.guideChecked,
-        hasTransportation: data.transportationChecked,
-        hasAirport: data.airportChecked,
-        attachment: null, // No attachment for on-site payments
-      });
+    // Use either the data parameter or the watched value
+    const hasFile = data.financialReceipt || financialReceipt;
+    console.log('Has file (combined check):', !!hasFile);
+
+    // Allow submission if:
+    // 1. It's an on-site payment (no file needed), OR
+    // 2. A file is attached (for any payment method)
+    if (isOnSitePayment || hasFile) {
+      if (isOnSitePayment) {
+        console.log('Proceeding with on-site payment without file attachment');
+        bookCollection({
+          siteId: detailsData?.data?._id || '',
+          availabilityId:
+            detailsData?.data?.type === 'Stay'
+              ? bookingData?.availability?.availabilitiesIds
+              : bookingData?.availability?.slotIds[0] || '',
+          paymentMethod: data.selectedPaymentMethod || '',
+          guests: bookingData?.guests,
+          hasGuide: data.guideChecked,
+          hasTransportation: data.transportationChecked,
+          hasAirport: data.airportChecked,
+          attachment: null, // No attachment for on-site payments
+        });
+      } else {
+        console.log('Proceeding with file attachment for non-on-site payment');
+        const fileToUpload = data.financialReceipt || financialReceipt;
+        uploadFile({
+          file: fileToUpload!,
+          folderName: FileFolder.PAYMENT_INFO,
+        });
+      }
       return;
     }
 
-    if (disableAttachment) {
-      // For other payment methods, require file attachment
-      if (!data.financialReceipt) {
-        console.log('File attachment required but not provided');
-        toast.error(t('booking.financialReceipt.error'));
-        return;
-      }
-    }
-
-
-    if (data.financialReceipt) {
-      console.log('Uploading file for non-on-site payment');
-      uploadFile({
-        file: data.financialReceipt,
-        folderName: FileFolder.PAYMENT_INFO,
-      });
-    }
+    // If we reach here, it's a non-on-site payment with no file attached
+    console.log('File attachment required for non-on-site payment but not provided');
+    toast.error('Please attach a financial receipt to proceed with your booking.');
   };
 
   const {
@@ -229,32 +285,18 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
             <div className='flex flex-col lg:flex-row justify-between w-full gap-20'>
               <div className='flex flex-col gap-2 flex-1'>
                 <BookingDetails
-                  time={`${new Date(
-                    bookingData?.availability?.startDateTime ||
-                    detailsData?.data?.schedule.startDateTime || '',
-                  ).toLocaleTimeString('en-US', {
+                  time={`${new Date(bookingDateTime.startTime).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
-                  })} - ${new Date(
-                    bookingData?.availability?.endDateTime ||
-                    detailsData?.data?.schedule.endDateTime || '',
-                  ).toLocaleTimeString('en-US', {
+                  })} - ${new Date(bookingDateTime.endTime).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}`}
-                  date={`${new Date(
-                    bookingData?.availability?.startDateTime ||
-                    detailsData?.data?.schedule.startDateTime ||
-                    '',
-                  ).toLocaleDateString('en-US', {
+                  date={`${new Date(bookingDateTime.startDate).toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'short',
                     day: 'numeric',
-                  })} - ${new Date(
-                    bookingData?.availability?.endDateTime ||
-                    detailsData?.data?.schedule.endDateTime ||
-                    '',
-                  ).toLocaleDateString('en-US', {
+                  })} - ${new Date(bookingDateTime.endDate).toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'short',
                     day: 'numeric',
@@ -335,12 +377,20 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 )}
 
                 {!disableAttachment ? (
-                  <FinancialReceiptUpload
-                    control={control}
-                    name='financialReceipt'
-                    className='mb-24'
-                    disabled={disableAttachment}
-                  />
+                  <div className='mb-24'>
+                    {!financialReceipt && (
+                      <div className='mb-2'>
+                        <p className='text-sm text-red-600 font-medium'>
+                          * Financial receipt is required for this payment method
+                        </p>
+                      </div>
+                    )}
+                    <FinancialReceiptUpload
+                      control={control}
+                      name='financialReceipt'
+                      disabled={disableAttachment}
+                    />
+                  </div>
                 ) : (
                   <div className='mb-24 p-4 bg-green-50 border border-green-200 rounded-lg'>
                     <p className='text-green-800 text-sm'>

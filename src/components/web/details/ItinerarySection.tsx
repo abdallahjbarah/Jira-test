@@ -56,7 +56,7 @@ const ItinerarySection: React.FC<ItinerarySectionProps> = ({ stops }) => {
                   height={20}
                 />
                 <span className='text-custom-16 text-text_3'>
-                  {stop.duration} hours
+                  {stop.duration} {stop.duration === 1 ? 'hour' : 'hours'}
                 </span>
               </div>
             </div>
