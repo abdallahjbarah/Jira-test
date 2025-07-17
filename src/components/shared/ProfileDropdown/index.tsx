@@ -8,16 +8,9 @@ import useUser from '@/utils/hooks/useUser';
 import CustomLink from '@/components/ui/CustomLink';
 
 function ProfileDropdown(): React.ReactElement {
-  const { isLoggedIn } = useUser();
+  // const { isLoggedIn } = useUser();
 
-  if (!isLoggedIn) {
-    return (
-      <CustomLink path='/auth/login'>
-        <ProfileTrigger />
-      </CustomLink>
-    );
-  }
-
+  // Always show the dropdown, regardless of login state
   return (
     <Dropdown
       trigger={<ProfileTrigger />}

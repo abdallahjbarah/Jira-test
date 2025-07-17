@@ -34,6 +34,7 @@ export const buildFiltersFromSearchParams = (
   const country = searchParams.get('country');
   const city = searchParams.get('city');
   const advancedFilters = searchParams.get('filters');
+  const experienceTypes = searchParams.get('experienceTypes');
 
   if (checkinTime) baseFilter.checkinTime = checkinTime;
   if (checkoutTime) baseFilter.checkoutTime = checkoutTime;
@@ -42,12 +43,13 @@ export const buildFiltersFromSearchParams = (
   if (infants) baseFilter.infants = Number(infants);
   if (country) baseFilter.country = country;
   if (city) baseFilter.city = city;
+  if (experienceTypes) baseFilter.experienceTypes = experienceTypes;
 
   if (advancedFilters) {
     try {
       const parsedFilters = JSON.parse(advancedFilters);
       Object.assign(baseFilter, parsedFilters);
-    } catch (error) {}
+    } catch (error) { }
   }
 
   return clearObject(baseFilter);
@@ -101,6 +103,13 @@ export const buildSearchParamsFromFilters = (
     params.delete('city');
   }
 
+  if (filters.experienceTypes) {
+    params.set('experienceTypes', filters.experienceTypes);
+  } else {
+    params.delete('experienceTypes');
+  }
+
+  // Remove known filters from advancedFilters
   const advancedFilters = { ...filters };
   delete advancedFilters.type;
   delete advancedFilters.checkinTime;
@@ -111,12 +120,27 @@ export const buildSearchParamsFromFilters = (
   delete advancedFilters.country;
   delete advancedFilters.city;
   delete advancedFilters.destinationText;
+  delete advancedFilters.experienceTypes;
 
-  if (Object.keys(advancedFilters).length > 0) {
-    params.set('filters', JSON.stringify(advancedFilters));
-  } else {
-    params.delete('filters');
-  }
+  // Instead of serializing advancedFilters as JSON, add each as its own query param
+  Object.entries(advancedFilters).forEach(([key, value]) => {
+    if (value === undefined || value === null || value === '') {
+      params.delete(key);
+    } else if (Array.isArray(value)) {
+      // Remove any existing values for this key
+      params.delete(key);
+      value.forEach((v) => {
+        if (v !== undefined && v !== null && v !== '') {
+          params.append(key, v.toString());
+        }
+      });
+    } else {
+      params.set(key, value.toString());
+    }
+  });
+
+  // Remove the old 'filters' param if present
+  params.delete('filters');
 
   return params;
 };

@@ -4,11 +4,11 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import { useFetchSearchDestination } from '@/lib/apis/shared/useFetchSearchDestination';
 import debounce from '@/utils/helpers/debounce';
 import {
-    buildFiltersFromSearchParams,
-    buildSearchParamsFromFilters,
-    CollectionFilter,
-    FilterFormValues,
-    getFormDefaultsFromSearchParams,
+  buildFiltersFromSearchParams,
+  buildSearchParamsFromFilters,
+  CollectionFilter,
+  FilterFormValues,
+  getFormDefaultsFromSearchParams,
 } from '@/utils/helpers/filterHelpers';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
@@ -125,7 +125,7 @@ const FilterBar = () => {
     const updatedFilters = { ...currentFilters };
 
     if (location.searchType === 'city') {
-      updatedFilters.city = location.id;
+      updatedFilters.city = location.name; // Use city name for API
       // You might need to add country ID here if available in the location object
     } else if (location.searchType === 'country') {
       updatedFilters.country = location.id;
@@ -134,6 +134,13 @@ const FilterBar = () => {
 
     methods.setValue('filters', updatedFilters, { shouldValidate: true });
     setActiveButton('date'); // Move to date selection
+  };
+
+  const handleMainSearch = () => {
+    const filters = methods.getValues('filters') || {};
+    const params = buildSearchParamsFromFilters(filters, searchParams);
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    router.push(newUrl, { scroll: false });
   };
 
   const handleLocationClear = () => {
@@ -177,7 +184,12 @@ const FilterBar = () => {
       ...filters,
     };
 
-    debouncedFilterUpdate(mergedFilters);
+    methods.setValue('filters', mergedFilters, { shouldValidate: true });
+
+    // Immediately trigger the main search with all filters
+    const params = buildSearchParamsFromFilters(mergedFilters, searchParams);
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    router.push(newUrl, { scroll: false });
   };
 
   const onFilterClear = () => {
@@ -277,8 +289,7 @@ const FilterBar = () => {
       const updatedFilters = { ...currentFilters };
 
       if (searchType === 'city') {
-        const cityValue = result.city;
-        updatedFilters.city = cityValue;
+        updatedFilters.city = result.city; // Use city name for API
         updatedFilters.country = result.countryId;
         delete updatedFilters.siteId;
       } else if (searchType === 'country') {
@@ -335,10 +346,10 @@ const FilterBar = () => {
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
-        className={`flex items-center gap-[10px] laptopM:gap-[25px] w-full tabletM:w-auto mt-12 ${locale === 'ar' ? 'rtl' : 'ltr'}`}
+        className={`flex items-center gap-[2px] laptopM:gap-[5px] w-full tabletM:w-auto mt-4 ${locale === 'ar' ? 'rtl' : 'ltr'}`}
       >
         <div
-          className={`relative bg-primary_1 hidden flex-col tabletM:flex-row justify-center items-center gap-[10px] laptopM:gap-[20px] mx-auto tabletM:rounded-full w-full tabletM:flex ${locale === 'ar' ? 'rtl' : 'ltr'}`}
+          className={`relative bg-primary_1 hidden flex-col tabletM:flex-row justify-center items-center gap-[2px] laptopM:gap-[5px] mx-auto tabletM:rounded-full w-full tabletM:flex ${locale === 'ar' ? 'rtl' : 'ltr'}`}
         >
           {/* Where/Search destinations button */}
           <FilterBarItem
@@ -385,12 +396,11 @@ const FilterBar = () => {
             }}
           />
 
-          <div
-            className={`relative flex-1 ${locale === 'ar' ? 'ml-6' : 'mr-6'}`}
-          >
+          <div className={`relative flex-1 flex items-center justify-end gap-4 ${locale === 'ar' ? 'ml-6' : 'mr-6'}`}>
             <button
               type="button"
-              className="flex items-center justify-center ml-6 p-3 bg-transparent rounded-full border-transparent transition-colors group"
+              onClick={handleMainSearch}
+              className="flex items-center justify-center p-3 bg-transparent rounded-full border-transparent transition-colors group"
             >
               <CustomSvg
                 src="/SVGs/home/search-bar-logo.svg"
@@ -400,29 +410,15 @@ const FilterBar = () => {
                 color="white"
               />
             </button>
-            {/* Render WherePopup */}
-            <WherePopup
-              isOpen={showSearchPopup}
-              onClose={() => setShowSearchPopup(false)}
-              currentCollectionStatus={collectionStatus as string}
-              onNext={handleLocationSelect}
-              onClear={handleLocationClear}
-              onFilterSelect={handleFilterSelect}
-            />
-          </div>
-
-          {!showSearchPopup && (
-            <div
-              className={`p-[20px] absolute ${locale === 'ar' ? 'left-14' : 'right-14'
-                } top-1/2 transform -translate-y-1/2`}
-            >
+            {!showSearchPopup && (
               <button
                 type='button'
                 onClick={handleClear}
-                className='p-2 w-[45px] h-[45px] text-sm font-medium text-white bg-transparent border-transparent rounded-full focus:outline-none transition-colors'
+                className='flex items-center justify-center p-3 bg-transparent rounded-full border-transparent transition-colors group'
+                aria-label='Clear filters'
               >
                 <svg
-                  className='w-full h-full text-white'
+                  className='w-[35px] h-[35px] text-white'
                   stroke='currentColor'
                   fill='currentColor'
                   strokeWidth='0'
@@ -431,11 +427,21 @@ const FilterBar = () => {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <defs></defs>
-                  <path d='M899.1 869.6l-53-305.6H864c14.4 0 26-11.6 26-26V346c0-14.4-11.6-26-26-26H618V138c0-14.4-11.6-26-26-26H432c-14.4 0-26 11.6-26 26v182H160c-14.4 0-26 11.6-26 26v192c0 14.4 11.6 26 26 26h17.9l-53 305.6c-0.3 1.5-0.4 3-0.4 4.4 0 14.4 11.6 26 26 26h723c1.5 0 3-0.1 4.4-0.4 14.2-2.4 23.7-15.9 21.2-30zM204 390h272V182h72v208h272v104H204V390z m468 440V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H416V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H202.8l45.1-260H776l45.1 260H672z'></path>
+                  <path d='M899.1 869.6l-53-305.6H864c14.4 0 26-11.6 26-26V346c0-14.4-11.6-26-26-26H618V138c0-14.4-11.6-26-26-26H432c-14.4 0-26 11.6-26 26v182H160c-14.4 0-26 11.6-26 26v192c0-14.4 11.6-26 26-26h17.9l-53 305.6c-0.3 1.5-0.4 3-0.4 4.4 0 14.4 11.6 26 26 26h723c1.5 0 3-0.1 4.4-0.4 14.2-2.4 23.7-15.9 21.2-30zM204 390h272V182h72v208h272v104H204V390z m468 440V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H416V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H202.8l45.1-260H776l45.1 260H672z'></path>
                 </svg>
               </button>
-            </div>
-          )}
+            )}
+            {/* Render WherePopup */}
+            <WherePopup
+              isOpen={showSearchPopup}
+              onClose={() => setShowSearchPopup(false)}
+              currentCollectionStatus={collectionStatus as string}
+              onNext={handleLocationSelect}
+              onClear={handleLocationClear}
+              onFilterSelect={handleFilterSelect}
+              filtersValue={filtersValue}
+            />
+          </div>
         </div>
         <div className='block tabletM:hidden w-full'>
           <MobileSearchDropdown onSubmit={handleSearchDropdownSubmit} />
@@ -449,7 +455,7 @@ const FilterBar = () => {
           defaultValues={filtersValue}
         />
       </form>
-    </FormProvider>
+    </FormProvider >
   );
 };
 

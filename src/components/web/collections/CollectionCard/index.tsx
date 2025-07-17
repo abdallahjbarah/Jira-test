@@ -82,23 +82,30 @@ function CollectionCard({
       : '/SVGs/shared/heart-icon.svg';
   }, [isCollectionFavorite]);
 
+  const [isHovered, setIsHovered] = React.useState(false);
+
   return (
     <CustomLink
       path={path || `/details/${collection._id}`}
       className='group block'
     >
-      <div className='transition-all duration-300'>
-        <div className='relative rounded-custom-16 overflow-hidden'>
-          <div className='w-full aspect-square relative overflow-hidden'>
+      <div
+        className='transition-all duration-300 rounded-custom-24 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_15px_-1px_rgba(0,0,0,0.20)] hover:-translate-y-1 hover:scale-[1.02] pb-4'
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <div className='relative rounded-custom-2 overflow-hidden'>
+          <div className='w-full aspect-[3/3] relative overflow-hidden'>
             <ImageCarousel
               images={collection.images}
               className='w-full h-full relative'
-              imageHeight='aspect-square'
+              imageHeight='aspect-[4/5]'
               slickProps={slickProps}
               imageProps={imageProps}
+              isHovered={isHovered}
             />
             <button
-              className='absolute top-3 right-3 z-20 p-1 hover:!text-primary_2'
+              className='absolute top-2 right-2 z-20 p-1 hover:!text-primary_2'
               onClick={handleFavoriteToggle}
             >
               <CustomSvg
@@ -111,19 +118,19 @@ function CollectionCard({
           </div>
         </div>
 
-        <div className='mt-4'>
+        <div className='mt-4 px-4'>
           <div className='flex justify-between items-center'>
-            <h3 className='text-custom-14 font-custom-500 text-primary_5 line-clamp-1'>
+            <h3 className='text-custom-12 font-custom-500 text-primary_5 line-clamp-1'>
               {collection.name}
             </h3>
           </div>
 
-          <p className='text-custom-12 text-gray_3 mt-1'>{locationString}</p>
+          <p className='text-custom-10 text-gray_3 mt-1'>{locationString}</p>
 
           <div className='flex justify-between items-center mt-2'>
-            <p className='text-custom-14 font-bold text-text_1'>
+            <p className='text-custom-12 font-bold text-text_1'>
               {t('from')} {priceString}
-              <span className='text-custom-14 font-custom-400 '>
+              <span className='text-custom-10 font-custom-400 '>
                 {' '}
                 /{t('person')}
               </span>

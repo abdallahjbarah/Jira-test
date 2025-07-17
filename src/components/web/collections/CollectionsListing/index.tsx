@@ -8,6 +8,7 @@ import { COLLECTION_STATUS, COLLECTION_STATUS_LIST } from '@/utils/constants';
 import { buildFiltersFromSearchParams } from '@/utils/helpers/filterHelpers';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import Styled from 'styled-components';
 import CollectionCard from '../CollectionCard';
 import CollectionTypeLabel from '../CollectionTypeLabel';
@@ -16,7 +17,13 @@ import MapView from '../MapView';
 const CollectionsListingContainer = Styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(312px, 1fr));
-  gap: 52px;
+  gap: 16px;
+  padding-left: 32px;
+  padding-right: 32px;
+  @media (max-width: 768px) {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 `;
 
 const LoaderContainer = Styled.div`
@@ -75,18 +82,38 @@ function CollectionsListing(): React.ReactElement {
   );
 
   const filters = React.useMemo(() => {
-    const baseFilters = buildFiltersFromSearchParams(
-      searchParams,
-      collectionObject?.filterValue === COLLECTION_STATUS.ALL
-        ? null
-        : collectionObject?.filterValue,
-    );
+    // Only pass a type if not 'all'
+    const baseType =
+      collectionObject?.filterValue && collectionObject?.filterValue !== 'all'
+        ? collectionObject?.filterValue
+        : undefined;
+
+    const baseFilters = buildFiltersFromSearchParams(searchParams, baseType);
 
     return {
       ...baseFilters,
       limit: isMapView ? 100 : 20,
     };
   }, [collectionObject?.filterValue, searchParams, isMapView]);
+
+  // Create base filters without search parameters for "You May Also Like"
+  const baseFilters = React.useMemo(() => {
+    // Only pass a type if not 'all'
+    const baseType =
+      collectionObject?.filterValue && collectionObject?.filterValue !== 'all'
+        ? collectionObject?.filterValue
+        : undefined;
+
+    const baseFilters = buildFiltersFromSearchParams(
+      new URLSearchParams() as any, // Empty search params
+      baseType,
+    );
+
+    return {
+      ...baseFilters,
+      limit: 8, // Show fewer items for "You May Also Like"
+    };
+  }, [collectionObject?.filterValue]);
 
   const {
     data: collectionsResponse,
@@ -96,12 +123,25 @@ function CollectionsListing(): React.ReactElement {
     isFetchingNextPage,
   } = useFetchInfiniteCollections(filters);
 
+  // Fetch base collections for "You May Also Like"
+  const {
+    data: baseCollectionsResponse,
+    isLoading: isLoadingBase,
+  } = useFetchInfiniteCollections(baseFilters);
+
   const collections = React.useMemo(() => {
     if (!collectionsResponse?.pages) return [];
     return collectionsResponse.pages.flatMap(
       (page: SitesResponse) => page.sites.data,
     );
   }, [collectionsResponse?.pages]);
+
+  const baseCollections = React.useMemo(() => {
+    if (!baseCollectionsResponse?.pages) return [];
+    return baseCollectionsResponse.pages.flatMap(
+      (page: SitesResponse) => page.sites.data,
+    );
+  }, [baseCollectionsResponse?.pages]);
 
   const handleMapToggle = useCallback(() => {
     setIsMapView(!isMapView);
@@ -150,6 +190,18 @@ function CollectionsListing(): React.ReactElement {
     );
   }, [collections]);
 
+  const youMayAlsoLikeGrid = React.useMemo(() => {
+    if (!baseCollections?.length) return null;
+
+    return (
+      <CollectionsListingContainer className='mt-[31px]'>
+        {baseCollections.map((collection: Site, index: number) => (
+          <MemoizedCollectionCard key={index} collection={collection} />
+        ))}
+      </CollectionsListingContainer>
+    );
+  }, [baseCollections]);
+
   if (isLoading) {
     return (
       <div>
@@ -164,9 +216,22 @@ function CollectionsListing(): React.ReactElement {
   if (!collections?.length) {
     return (
       <div>
-        <CollectionTypeLabel />
-        <div className='text-center text-gray-500 text-lg py-10'>
-          {t('searchResults.noResults')}
+        <div className='text-center py-10'>
+          <Image
+            src='/images/shared/no-result.png'
+            alt='No results found'
+            width={300}
+            height={200}
+            className='mx-auto'
+          />
+          {!isLoadingBase && baseCollections?.length > 0 && (
+            <div className='mt-8'>
+              <h3 className='text-2xl font-semibold text-gray-800 mb-6 text-left'>
+                You May Also Like
+              </h3>
+              {youMayAlsoLikeGrid}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -179,8 +244,8 @@ function CollectionsListing(): React.ReactElement {
           <CustomSvg
             src='/SVGs/shared/map-icon.svg'
             className='text-white'
-            width={30}
-            height={30}
+            width={20}
+            height={20}
             alt='Map Icon'
           />
           <span className='text-white text-custom-30'>{t('mapLabel')}</span>

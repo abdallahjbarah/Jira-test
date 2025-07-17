@@ -49,6 +49,13 @@ const PrivacyPolicyPage = async ({ params }: { params: { lang: string } }) => {
                 : policiesData?.privacyPolicyEn || '',
           }}
         />
+        <div className='flex justify-center mt-8'>
+          <CustomLink path='/'>
+            <button className='bg-primary_1 hover:bg-primary_2 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition'>
+              Go to Home
+            </button>
+          </CustomLink>
+        </div>
       </div>
     </div>
   );

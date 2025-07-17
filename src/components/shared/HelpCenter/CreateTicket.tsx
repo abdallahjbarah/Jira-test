@@ -155,7 +155,7 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
         {isPending ? t('helpCenter.saving') : t('helpCenter.save')}
       </button>
 
-      <div className='absolute left-[36.75%] right-[35.51%] top-[94.09%] bottom-[4.07%] font-normal text-xs leading-[14px] text-center text-[#222222]'>
+      <div className='absolute left-[36.75%] right-[35.51%] top-[96.09%] bottom-[2.07%] font-normal text-xs leading-[14px] text-center text-[#222222]'>
         {t('helpCenter.checkFAQs')}{' '}
         <a
           className='text-[#47C409] no-underline cursor-pointer hover:underline'
