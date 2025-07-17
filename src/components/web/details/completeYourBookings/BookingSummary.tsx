@@ -189,16 +189,14 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
           </div>
         </div>
       </div>
-      <FilledButton
-        text='Submit'
-        width='w-[186px]'
-        className='bg-primary_1 text-white px-6 py-3 rounded-lg font-custom-700 text-sm font-gellix-Bold max-w-[186px] min-w-[186px] mb-24 lg:mb-0'
-        icon={null}
-        onClick={onSubmit}
-        buttonType='button'
-        isDisable={isBookingCollectionPending || isUploadingFile}
-        isButton
-      />
+      <button
+        type='submit'
+        form='booking-form'
+        disabled={isBookingCollectionPending || isUploadingFile}
+        className='w-[186px] bg-primary_1 text-white px-6 py-3 rounded-lg font-custom-700 text-sm font-gellix-Bold max-w-[186px] min-w-[186px] mb-24 lg:mb-0 hover:bg-primary_2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+      >
+        Submit
+      </button>
     </div>
   );
 };
