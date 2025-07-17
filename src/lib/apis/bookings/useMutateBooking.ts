@@ -13,7 +13,7 @@ interface BookingFormData {
   hasGuide: boolean;
   hasTransportation: boolean;
   hasAirport: boolean;
-  attachment: string;
+  attachment: string | null;
   paymentMethod: string;
 }
 

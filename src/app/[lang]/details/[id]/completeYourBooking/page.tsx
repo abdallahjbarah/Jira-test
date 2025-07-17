@@ -106,6 +106,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
         router.push(`/my-bookings/${data._id}`);
       },
       onError: () => {
+        console.log('hamza error');
         toast.error(t('booking.financialReceipt.error'));
       },
     });
@@ -132,12 +133,48 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   });
 
   const onSubmit: SubmitHandler<BookingFormData> = (data) => {
-    if (!data.financialReceipt) {
-      toast.error(t('booking.financialReceipt.error'));
+    console.log('Form submitted with data:', data);
+
+    // Check if selected payment method is on-site payment
+    const selectedPaymentMethodObj = (paymentMethods || []).find(
+      (m) => m._id === data.selectedPaymentMethod
+    );
+    const isOnSitePayment = isPayOnSite(selectedPaymentMethodObj?.name);
+
+    console.log('Selected payment method:', selectedPaymentMethodObj?.name);
+    console.log('Is on-site payment:', isOnSitePayment);
+
+    // For on-site payments, proceed without file attachment
+    if (isOnSitePayment) {
+      console.log('Proceeding with on-site payment without file attachment');
+      bookCollection({
+        siteId: detailsData?.data?._id || '',
+        availabilityId:
+          detailsData?.data?.type === 'Stay'
+            ? bookingData?.availability?.availabilitiesIds
+            : bookingData?.availability?.slotIds[0] || '',
+        paymentMethod: data.selectedPaymentMethod || '',
+        guests: bookingData?.guests,
+        hasGuide: data.guideChecked,
+        hasTransportation: data.transportationChecked,
+        hasAirport: data.airportChecked,
+        attachment: null, // No attachment for on-site payments
+      });
       return;
     }
 
+    if (disableAttachment) {
+      // For other payment methods, require file attachment
+      if (!data.financialReceipt) {
+        console.log('File attachment required but not provided');
+        toast.error(t('booking.financialReceipt.error'));
+        return;
+      }
+    }
+
+
     if (data.financialReceipt) {
+      console.log('Uploading file for non-on-site payment');
       uploadFile({
         file: data.financialReceipt,
         folderName: FileFolder.PAYMENT_INFO,
@@ -184,7 +221,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   return (
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form id="booking-form" onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-32'>
             <h1 className='text-5xl font-custom-700 text-text_1 font-gellix-Bold'>
               Complete your booking and pay
@@ -297,12 +334,20 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                   </>
                 )}
 
-                <FinancialReceiptUpload
-                  control={control}
-                  name='financialReceipt'
-                  className='mb-24'
-                  disabled={disableAttachment}
-                />
+                {!disableAttachment ? (
+                  <FinancialReceiptUpload
+                    control={control}
+                    name='financialReceipt'
+                    className='mb-24'
+                    disabled={disableAttachment}
+                  />
+                ) : (
+                  <div className='mb-24 p-4 bg-green-50 border border-green-200 rounded-lg'>
+                    <p className='text-green-800 text-sm'>
+                      No file attachment required for on-site payment methods. You can proceed with your booking.
+                    </p>
+                  </div>
+                )}
               </div>
               <BookingSummary
                 siteInfo={detailsData?.data}
@@ -311,7 +356,10 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                   `${detailsData?.data?.country?.name}, ${detailsData?.data?.city}` ||
                   ''
                 }
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={() => {
+                  console.log('Submit button clicked');
+                  handleSubmit(onSubmit)();
+                }}
                 bookingData={bookingData}
                 isBookingCollectionPending={isBookingCollectionPending}
                 isUploadingFile={isUploadingFile}
