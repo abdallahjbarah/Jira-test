@@ -49,9 +49,11 @@ const StaysFeature: React.FC<StaysFeatureProps> = ({
     {
       icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
       title: 'Spoken Language',
-      description:
-        `${languages?.map(language => language.nameEn).join(', ') 
-        } (Download a language translator app to communicate with host!)`,
+      description: `${languages
+        ?.map(language => language.nameEn)
+        .join(
+          ', '
+        )} (Download a language translator app to communicate with host!)`,
     },
   ];
 

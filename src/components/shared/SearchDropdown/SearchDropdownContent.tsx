@@ -67,10 +67,8 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
         const cityValue = result.city;
         updatedFilters.city = cityValue;
         updatedFilters.country = result.countryId;
-        delete updatedFilters.siteId;
       } else if (searchType === 'country') {
         updatedFilters.country = result._id;
-        delete updatedFilters.siteId;
         delete updatedFilters.city;
       }
 

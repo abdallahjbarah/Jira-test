@@ -154,7 +154,7 @@ export default function Header(): React.ReactElement {
                   <ul className='grid gap-y-4'>
                     {LINKS_DATA?.map((item, index) => (
                       <HeaderLink
-                        key={`${item?.name[lang] + index  }Nav`}
+                        key={`${item?.name[lang] + index}Nav`}
                         path={item?.path}
                         text={item?.name[lang]}
                         isActive={

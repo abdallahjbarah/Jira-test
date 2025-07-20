@@ -18,7 +18,7 @@ const BookingsFilter = ({
   onSearch,
   upcomingCount = 0,
   completedCount = 0,
-  cancelledCount = 0
+  cancelledCount = 0,
 }: BookingsFilterProps) => {
   const { t } = useTranslation();
 
@@ -29,7 +29,8 @@ const BookingsFilter = ({
       content: (
         <div className='mt-8'>
           <p className='text-custom-30 font-custom-500 text-[#000000]'>
-            You have <span className='text-[#47C409]'>{upcomingCount}</span> upcoming {upcomingCount === 1 ? 'booking' : 'bookings'}
+            You have <span className='text-[#47C409]'>{upcomingCount}</span>{' '}
+            upcoming {upcomingCount === 1 ? 'booking' : 'bookings'}
           </p>
         </div>
       ),
@@ -40,7 +41,8 @@ const BookingsFilter = ({
       content: (
         <div className='mt-8'>
           <p className='text-custom-30 font-custom-500 text-[#000000]'>
-            You have <span className='text-[#47C409]'>{completedCount}</span> completed {completedCount === 1 ? 'booking' : 'bookings'}
+            You have <span className='text-[#47C409]'>{completedCount}</span>{' '}
+            completed {completedCount === 1 ? 'booking' : 'bookings'}
           </p>
         </div>
       ),
@@ -51,7 +53,8 @@ const BookingsFilter = ({
       content: (
         <div className='mt-8'>
           <p className='text-custom-30 font-custom-500 text-[#000000]'>
-            You have <span className='text-[#47C409]'>{cancelledCount}</span> cancelled {cancelledCount === 1 ? 'booking' : 'bookings'}
+            You have <span className='text-[#47C409]'>{cancelledCount}</span>{' '}
+            cancelled {cancelledCount === 1 ? 'booking' : 'bookings'}
           </p>
         </div>
       ),

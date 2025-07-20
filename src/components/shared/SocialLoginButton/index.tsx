@@ -120,7 +120,7 @@ export default function SocialLoginButton({
   const handleSocialLogin = async () => {
     if (disabled || isLoading || !isFirebaseInitialized) {
       if (!isFirebaseInitialized && firebaseError) {
-        toast.error(`${t('auth.login.loginFailed')  }: Firebase not initialized`);
+        toast.error(`${t('auth.login.loginFailed')}: Firebase not initialized`);
       }
       return;
     }

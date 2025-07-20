@@ -27,7 +27,7 @@ const ExpandableTextSection: React.FC<ExpandableTextSectionProps> = ({
   const displayContent =
     isExpanded || !shouldShowReadMore
       ? content
-      : `${content.substring(0, maxLength)  }...`;
+      : `${content.substring(0, maxLength)}...`;
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);

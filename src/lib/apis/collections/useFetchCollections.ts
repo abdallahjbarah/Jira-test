@@ -1,5 +1,6 @@
 import { api } from '@/lib/apis';
 import { SitesResponse } from '@/lib/types';
+import { BackendFilterParams } from '@/utils/helpers/filterHelpers';
 import {
   useInfiniteQuery,
   UseInfiniteQueryOptions,
@@ -7,7 +8,9 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 
-const fetchCollections = async (filter: any): Promise<SitesResponse> => {
+const fetchCollections = async (
+  filter: BackendFilterParams
+): Promise<SitesResponse> => {
   const response = await api
     .url('/sites')
     .query(filter)
@@ -17,26 +20,28 @@ const fetchCollections = async (filter: any): Promise<SitesResponse> => {
 };
 
 export const useFetchCollections = (
-  filter: any,
+  filter: BackendFilterParams,
   queryOptions?: UseQueryOptions<SitesResponse, Error>
 ) => {
   return useQuery({
     ...queryOptions,
     queryKey: ['collections', filter],
     queryFn: () => fetchCollections(filter),
-    enabled: !!filter,
+    enabled: !!filter && Object.keys(filter).length > 0,
   });
 };
 
 export const useFetchInfiniteCollections = (
-  filter: any,
+  filter: BackendFilterParams,
   queryOptions?: UseInfiniteQueryOptions<
     SitesResponse,
     Error,
     {
       pages: SitesResponse[];
     },
-    any
+    SitesResponse,
+    readonly unknown[],
+    unknown
   >
 ) => {
   return useInfiniteQuery({

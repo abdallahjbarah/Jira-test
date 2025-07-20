@@ -62,7 +62,7 @@ function WishlistPage(): React.ReactElement {
               height='h-[4.8125rem]'
               className='mt-[6.375rem] rounded-custom-16'
               icon={null}
-              onClick={() => { }}
+              onClick={() => {}}
               buttonType='button'
               isDisable={false}
             />
@@ -79,7 +79,10 @@ function WishlistPage(): React.ReactElement {
           <span className='text-primary_1'>{t('wishlist.wishlist')}</span>
         </h2>
         <p className='text-custom-30 font-custom-500 text-[#000000] mt-[7.625rem]'>
-          You have <span className='text-primary_1'>{favoriteCollections?.length}</span> Collection{favoriteCollections?.length === 1 ? '' : 's'} - <span className='text-primary_1'>{savedCount}</span> Saved
+          You have{' '}
+          <span className='text-primary_1'>{favoriteCollections?.length}</span>{' '}
+          Collection{favoriteCollections?.length === 1 ? '' : 's'} -{' '}
+          <span className='text-primary_1'>{savedCount}</span> Saved
         </p>
         <WishlistItemsContainer className='mt-[3.563rem]'>
           {favoriteCollections?.map(item => (

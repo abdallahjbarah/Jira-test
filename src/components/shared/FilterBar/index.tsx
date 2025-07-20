@@ -1,4 +1,5 @@
 'use client';
+
 import CustomSvg from '@/components/ui/CustomSvg';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { useFetchSearchDestination } from '@/lib/apis/shared/useFetchSearchDestination';
@@ -6,7 +7,8 @@ import debounce from '@/utils/helpers/debounce';
 import {
   buildFiltersFromSearchParams,
   buildSearchParamsFromFilters,
-  CollectionFilter,
+  convertToBackendFilters,
+  FrontendFilter,
   FilterFormValues,
   getFormDefaultsFromSearchParams,
   getDefaultFilterValues,
@@ -56,8 +58,11 @@ const FilterBar = () => {
 
   const debouncedUpdateUrl = React.useMemo(
     () =>
-      debounce((filters: CollectionFilter) => {
-        const currentUrlFilters = buildFiltersFromSearchParams(searchParams);
+      debounce((filters: FrontendFilter) => {
+        const currentUrlFilters = buildFiltersFromSearchParams(
+          searchParams,
+          collectionStatus as string
+        );
 
         if (JSON.stringify(currentUrlFilters) !== JSON.stringify(filters)) {
           const params = buildSearchParamsFromFilters(filters, searchParams);
@@ -65,12 +70,12 @@ const FilterBar = () => {
           router.push(newUrl, { scroll: false });
         }
       }, 300),
-    [searchParams, router]
+    [searchParams, router, collectionStatus]
   );
 
   const debouncedFilterUpdate = React.useMemo(
     () =>
-      debounce((updatedFilters: CollectionFilter) => {
+      debounce((updatedFilters: FrontendFilter) => {
         methods.setValue('filters', updatedFilters, { shouldValidate: true });
       }, 150),
     [methods]
@@ -163,7 +168,6 @@ const FilterBar = () => {
     delete updatedFilters.city;
     delete updatedFilters.country;
     delete updatedFilters.destinationText;
-    delete updatedFilters.siteId;
 
     // Update the form
     methods.setValue('filters', updatedFilters, { shouldValidate: true });
@@ -185,7 +189,7 @@ const FilterBar = () => {
     methods.setValue('filters', updatedFilters, { shouldValidate: false });
   };
 
-  const onFilterApply = (filters: any) => {
+  const onFilterApply = (filters: Record<string, unknown>) => {
     const currentFilters = methods.getValues('filters') || {};
     const mergedFilters = {
       ...currentFilters,
@@ -202,7 +206,7 @@ const FilterBar = () => {
 
   const onFilterClear = () => {
     const currentFilters = methods.getValues('filters') || {};
-    const preservedFilters: Record<string, any> = {
+    const preservedFilters: Record<string, unknown> = {
       checkinTime: currentFilters.checkinTime,
       checkoutTime: currentFilters.checkoutTime,
       adults: currentFilters.adults,
@@ -222,10 +226,14 @@ const FilterBar = () => {
     methods.setValue('filters', preservedFilters, { shouldValidate: true });
 
     // Update URL to reflect cleared advanced filters
-    const params = buildSearchParamsFromFilters(preservedFilters, searchParams);
+    const params = buildSearchParamsFromFilters(
+      preservedFilters as FrontendFilter,
+      searchParams
+    );
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     router.push(newUrl, { scroll: false });
   };
+
   const handleClear = () => {
     // Get default filter values based on collection status
     const defaultFilters = getDefaultFilterValues(collectionStatus as string);
@@ -264,7 +272,10 @@ const FilterBar = () => {
   };
 
   React.useEffect(() => {
-    const urlFilters = buildFiltersFromSearchParams(searchParams);
+    const urlFilters = buildFiltersFromSearchParams(
+      searchParams,
+      collectionStatus as string
+    );
     const currentFilters = methods.getValues('filters') || {};
 
     const filtersChanged =
@@ -276,9 +287,9 @@ const FilterBar = () => {
 
       setTimeout(() => setIsUrlSync(false), 100);
     }
-  }, [searchParams, methods, isUrlSync]);
+  }, [searchParams, methods, isUrlSync, collectionStatus]);
 
-  const handleSearchResultSelect = (result: any) => {
+  const handleSearchResultSelect = (result: Record<string, unknown>) => {
     const { searchType } = result;
 
     if (searchType === 'site') {
@@ -298,12 +309,10 @@ const FilterBar = () => {
       const updatedFilters = { ...currentFilters };
 
       if (searchType === 'city') {
-        updatedFilters.city = result.city; // Use city name for API
-        updatedFilters.country = result.countryId;
-        delete updatedFilters.siteId;
+        updatedFilters.city = result.city as string; // Use city name for API
+        updatedFilters.country = result.countryId as string;
       } else if (searchType === 'country') {
-        updatedFilters.country = result._id;
-        delete updatedFilters.siteId;
+        updatedFilters.country = result._id as string;
         delete updatedFilters.city;
       }
 
@@ -335,7 +344,9 @@ const FilterBar = () => {
         ...filterData,
       };
       methods.setValue('filters', updatedFilters, { shouldValidate: false });
-    } catch (e) {}
+    } catch (e) {
+      // Silent fail for invalid JSON
+    }
   };
 
   const handleFilterSelect = (filterKey: string) => {

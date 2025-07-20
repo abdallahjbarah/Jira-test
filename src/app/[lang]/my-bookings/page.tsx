@@ -76,15 +76,21 @@ const MyBookingsPage = () => {
 
   // Calculate counts for each status
   const upcomingCount = React.useMemo(() => {
-    return bookings.filter((booking: Booking) => booking.status === BookingStatus.PENDING).length;
+    return bookings.filter(
+      (booking: Booking) => booking.status === BookingStatus.PENDING
+    ).length;
   }, [bookings]);
 
   const completedCount = React.useMemo(() => {
-    return bookings.filter((booking: Booking) => booking.status === BookingStatus.COMPLETED).length;
+    return bookings.filter(
+      (booking: Booking) => booking.status === BookingStatus.COMPLETED
+    ).length;
   }, [bookings]);
 
   const cancelledCount = React.useMemo(() => {
-    return bookings.filter((booking: Booking) => booking.status === BookingStatus.CANCELLED).length;
+    return bookings.filter(
+      (booking: Booking) => booking.status === BookingStatus.CANCELLED
+    ).length;
   }, [bookings]);
 
   const handleIntersect = React.useCallback(() => {

@@ -281,7 +281,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                 </p>
                 <div className='flex justify-between items-center mt-2'>
                   <p className='font-custom-400 font-sans text-custom-20 laptopM:text-custom-25 text-gray_3'>
-                    {`${country?.name  }, ${  city}`}
+                    {`${country?.name}, ${city}`}
                   </p>
                   <div className='text-custom-14 text-right'>
                     {bookagriBadge && (
@@ -305,7 +305,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                 <>
                   <Divider className='w-full my-8' />
                   <LocationSection
-                    location={`${name  } in ${  country?.name  }, ${  city}`}
+                    location={`${name} in ${country?.name}, ${city}`}
                     latitude={location.coordinates[0]}
                     longitude={location.coordinates[1]}
                   />

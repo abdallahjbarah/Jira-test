@@ -5,7 +5,10 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import { useFetchInfiniteCollections } from '@/lib/apis/collections/useFetchCollections';
 import { Site, SitesResponse } from '@/lib/types';
 import { COLLECTION_STATUS, COLLECTION_STATUS_LIST } from '@/utils/constants';
-import { buildFiltersFromSearchParams } from '@/utils/helpers/filterHelpers';
+import {
+  buildFiltersFromSearchParams,
+  convertToBackendFilters,
+} from '@/utils/helpers/filterHelpers';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
@@ -81,39 +84,45 @@ function CollectionsListing(): React.ReactElement {
     [currentCollectionStatus]
   );
 
-  const filters = React.useMemo(() => {
-    // Only pass a type if not 'all'
-    const baseType =
-      collectionObject?.filterValue && collectionObject?.filterValue !== 'all'
-        ? collectionObject?.filterValue
-        : undefined;
+  // Build frontend filters from URL search parameters
+  const frontendFilters = React.useMemo(() => {
+    return buildFiltersFromSearchParams(
+      searchParams,
+      collectionStatus as string
+    );
+  }, [searchParams, collectionStatus]);
 
-    const baseFilters = buildFiltersFromSearchParams(searchParams, baseType);
+  // Convert frontend filters to backend API parameters
+  const backendFilters = React.useMemo(() => {
+    const backendParams = convertToBackendFilters(
+      frontendFilters,
+      collectionStatus as string
+    );
 
+    // Add pagination parameters
     return {
-      ...baseFilters,
+      ...backendParams,
       limit: isMapView ? 100 : 20,
     };
-  }, [collectionObject?.filterValue, searchParams, isMapView]);
+  }, [frontendFilters, collectionStatus, isMapView]);
 
   // Create base filters without search parameters for "You May Also Like"
-  const baseFilters = React.useMemo(() => {
-    // Only pass a type if not 'all'
-    const baseType =
-      collectionObject?.filterValue && collectionObject?.filterValue !== 'all'
-        ? collectionObject?.filterValue
-        : undefined;
+  const baseBackendFilters = React.useMemo(() => {
+    // Only pass collection type for base filters
+    const baseFrontendFilters = {
+      type: collectionStatus as string,
+    };
 
-    const baseFilters = buildFiltersFromSearchParams(
-      new URLSearchParams() as any, // Empty search params
-      baseType
+    const baseBackendParams = convertToBackendFilters(
+      baseFrontendFilters,
+      collectionStatus as string
     );
 
     return {
-      ...baseFilters,
+      ...baseBackendParams,
       limit: 8, // Show fewer items for "You May Also Like"
     };
-  }, [collectionObject?.filterValue]);
+  }, [collectionStatus]);
 
   const {
     data: collectionsResponse,
@@ -121,11 +130,11 @@ function CollectionsListing(): React.ReactElement {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useFetchInfiniteCollections(filters);
+  } = useFetchInfiniteCollections(backendFilters);
 
   // Fetch base collections for "You May Also Like"
   const { data: baseCollectionsResponse, isLoading: isLoadingBase } =
-    useFetchInfiniteCollections(baseFilters);
+    useFetchInfiniteCollections(baseBackendFilters);
 
   const collections = React.useMemo(() => {
     if (!collectionsResponse?.pages) return [];
@@ -249,43 +258,29 @@ function CollectionsListing(): React.ReactElement {
             height={20}
             alt='Map Icon'
           />
-          <span className='text-white text-custom-30'>{t('mapLabel')}</span>
+          <span className='text-white font-medium text-sm'>
+            {t('map.showMapView')}
+          </span>
         </MapToggleWidget>
       )}
 
       {isMapView ? (
-        <>
-          <CollectionTypeLabel />
-          <div ref={mapContainerRef} className='mt-[31px]'>
-            <MapView
-              collections={collections}
-              isLoading={isLoading}
-              onBackToList={handleBackToList}
-            />
-          </div>
-        </>
+        <div ref={mapContainerRef}>
+          <MapView collections={collections} onBackToList={handleBackToList} />
+        </div>
       ) : (
         <>
           <CollectionTypeLabel />
           {collectionsGrid}
-          {hasNextPage ? (
-            <div className='flex justify-center items-center py-5'>
+          {hasNextPage && (
+            <div className='flex justify-center mt-8'>
               <button
-                className='bg-primary_1 text-white px-4 py-2 rounded-md'
                 onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                className='px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50'
               >
-                {t('loadMore')}
+                {isFetchingNextPage ? 'Loading...' : 'Load More'}
               </button>
-            </div>
-          ) : (
-            <div className='text-center text-gray-500 text-lg py-10'>
-              No more results
-            </div>
-          )}
-
-          {isFetchingNextPage && (
-            <div className='flex justify-center items-center py-5'>
-              <CircularLoader size={50} />
             </div>
           )}
         </>
@@ -294,4 +289,4 @@ function CollectionsListing(): React.ReactElement {
   );
 }
 
-export default React.memo(CollectionsListing);
+export default CollectionsListing;
