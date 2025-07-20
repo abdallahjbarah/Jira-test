@@ -33,7 +33,7 @@ const CollectionNavItem = ({
       path={collectionStatus.path}
       className={cn(
         'transition-all duration-300 flex items-center gap-2 text-[#999999] rounded-full px-3 py-1 hover:text-primary_4 hover:bg-primary_2',
-        isActiveItem && 'text-primary_4 bg-primary_2',
+        isActiveItem && 'text-primary_4 bg-primary_2'
       )}
     >
       {collectionStatus.icon && (

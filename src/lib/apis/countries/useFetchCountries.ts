@@ -8,7 +8,7 @@ const fetchCountries = async (): Promise<Country[]> => {
 };
 
 export const useFetchCountries = (
-  queryOptions?: UseQueryOptions<Country[], Error>,
+  queryOptions?: UseQueryOptions<Country[], Error>
 ) => {
   return useQuery({
     queryKey: ['countries'],

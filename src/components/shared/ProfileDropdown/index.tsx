@@ -19,9 +19,7 @@ function ProfileDropdown(): React.ReactElement {
         <h3 className='text-lg font-semibold text-text_1 mb-2'>
           {t('welcome')} {t('to')} Bookagri
         </h3>
-        <p className='text-sm text-text_3'>
-          {t('dont-have-account')}
-        </p>
+        <p className='text-sm text-text_3'>{t('dont-have-account')}</p>
       </div>
 
       <div className='space-y-3'>

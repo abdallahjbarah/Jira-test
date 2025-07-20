@@ -17,7 +17,7 @@ export const usePublicContext = (): PublicContextType => {
   const context = useContext(PublicContext);
   if (!context) {
     throw new Error(
-      'usePublicContext must be used within a ReactPublicContextProvider',
+      'usePublicContext must be used within a ReactPublicContextProvider'
     );
   }
   return context;

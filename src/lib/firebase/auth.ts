@@ -33,7 +33,7 @@ const createProvider = (providerName: string) => {
 };
 
 export const signInWithProvider = async (
-  providerName: string,
+  providerName: string
 ): Promise<SSOProvider> => {
   try {
     const auth = await getFirebaseAuth();

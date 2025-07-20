@@ -38,7 +38,9 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   params,
 }) => {
   // Helper function to format guest information
-  const formatGuestInfo = (guests: { adults: number; children: number; infants: number } | undefined) => {
+  const formatGuestInfo = (
+    guests: { adults: number; children: number; infants: number } | undefined
+  ) => {
     if (!guests) return '';
 
     const parts = [];
@@ -95,12 +97,12 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     bookingData,
     availability: bookingData?.availability,
     guests: bookingData?.guests,
-    type: bookingData?.type
+    type: bookingData?.type,
   });
 
   const { mutate: bookCollection, isPending: isBookingCollectionPending } =
     useMutateBooking({
-      onSuccess: (data) => {
+      onSuccess: data => {
         toast.success(t('booking.financialReceipt.success'));
         clearBookingData(params.id);
         router.push(`/my-bookings/${data._id}`);
@@ -112,7 +114,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     });
 
   const { mutate: uploadFile, isPending: isUploadingFile } = useUploadFile({
-    onSuccess: (data) => {
+    onSuccess: data => {
       bookCollection({
         siteId: detailsData?.data?._id || '',
         availabilityId:
@@ -132,12 +134,12 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     },
   });
 
-  const onSubmit: SubmitHandler<BookingFormData> = (data) => {
+  const onSubmit: SubmitHandler<BookingFormData> = data => {
     console.log('Form submitted with data:', data);
 
     // Check if selected payment method is on-site payment
     const selectedPaymentMethodObj = (paymentMethods || []).find(
-      (m) => m._id === data.selectedPaymentMethod
+      m => m._id === data.selectedPaymentMethod
     );
     const isOnSitePayment = isPayOnSite(selectedPaymentMethodObj?.name);
 
@@ -171,7 +173,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
         return;
       }
     }
-
 
     if (data.financialReceipt) {
       console.log('Uploading file for non-on-site payment');
@@ -212,16 +213,16 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
   // Find the selected payment method object
   const selectedPaymentMethodObj = (paymentMethods || []).find(
-    (m) => m._id === selectedPaymentMethod
+    m => m._id === selectedPaymentMethod
   );
   const disableAttachment = isPayOnSite(selectedPaymentMethodObj?.name);
 
-  const enabledPaymentMethods = (paymentMethods || []).filter((m) => m.isEnabled);
+  const enabledPaymentMethods = (paymentMethods || []).filter(m => m.isEnabled);
 
   return (
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
-        <form id="booking-form" onSubmit={handleSubmit(onSubmit)}>
+        <form id='booking-form' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-32'>
             <h1 className='text-5xl font-custom-700 text-text_1 font-gellix-Bold'>
               Complete your booking and pay
@@ -231,38 +232,40 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 <BookingDetails
                   time={`${new Date(
                     bookingData?.availability?.startDateTime ||
-                    detailsData?.data?.schedule.startDateTime || '',
+                      detailsData?.data?.schedule.startDateTime ||
+                      ''
                   ).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
                   })} - ${new Date(
                     bookingData?.availability?.endDateTime ||
-                    detailsData?.data?.schedule.endDateTime || '',
+                      detailsData?.data?.schedule.endDateTime ||
+                      ''
                   ).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}`}
                   date={`${new Date(
                     bookingData?.availability?.startDateTime ||
-                    detailsData?.data?.schedule.startDateTime ||
-                    '',
+                      detailsData?.data?.schedule.startDateTime ||
+                      ''
                   ).toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'short',
                     day: 'numeric',
                   })} - ${new Date(
                     bookingData?.availability?.endDateTime ||
-                    detailsData?.data?.schedule.endDateTime ||
-                    '',
+                      detailsData?.data?.schedule.endDateTime ||
+                      ''
                   ).toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'short',
                     day: 'numeric',
                   })}`}
                   people={formatGuestInfo(bookingData?.guests)}
-                  onGuestUpdate={(guests) => {
+                  onGuestUpdate={guests => {
                     updateBookingData(params.id, {
-                      guests: guests,
+                      guests,
                     });
                   }}
                 />
@@ -270,14 +273,14 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 <AdditionalServices
                   transportationChecked={transportationChecked}
                   guideChecked={guideChecked}
-                  onTransportationChange={(checked) =>
+                  onTransportationChange={checked =>
                     setValue('transportationChecked', checked)
                   }
-                  onGuideChange={(checked) => setValue('guideChecked', checked)}
+                  onGuideChange={checked => setValue('guideChecked', checked)}
                   guidePrice='JOD 50'
                   siteInfo={detailsData?.data}
                   airportChecked={airportChecked}
-                  onAirportChange={(checked) =>
+                  onAirportChange={checked =>
                     setValue('airportChecked', checked)
                   }
                 />
@@ -328,7 +331,9 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                     <PaymentMethods
                       methods={enabledPaymentMethods}
                       selectedMethod={selectedPaymentMethod || ''}
-                      onMethodChange={(method) => setValue('selectedPaymentMethod', method)}
+                      onMethodChange={method =>
+                        setValue('selectedPaymentMethod', method)
+                      }
                     />
                     <Divider className='w-full my-8' />
                   </>
@@ -344,7 +349,8 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 ) : (
                   <div className='mb-24 p-4 bg-green-50 border border-green-200 rounded-lg'>
                     <p className='text-green-800 text-sm'>
-                      No file attachment required for on-site payment methods. You can proceed with your booking.
+                      No file attachment required for on-site payment methods.
+                      You can proceed with your booking.
                     </p>
                   </div>
                 )}

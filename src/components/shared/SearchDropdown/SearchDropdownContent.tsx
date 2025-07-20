@@ -166,7 +166,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
       <div className='block tabletM:hidden mb-4'>
         <SearchInput
           value={filtersValue?.destinationText || ''}
-          onChange={(value) => {
+          onChange={value => {
             if (!value) {
               const currentFilters = getValues('filters') || {};
               const updatedFilters = {

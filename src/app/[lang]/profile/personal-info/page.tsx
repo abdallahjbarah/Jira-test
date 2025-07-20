@@ -42,7 +42,7 @@ export default function PersonalInfoPage() {
   const { userData } = useUser();
   const { data: countries } = useFetchCountries();
   const { mutate: editUser, isPending: isEditUserLoading } = useEditUser({
-    onSuccess: (data) => {
+    onSuccess: data => {
       queryClient.setQueryData(['user'], (oldData: any) => {
         return {
           ...oldData,
@@ -51,14 +51,14 @@ export default function PersonalInfoPage() {
       });
       toast.success(t('profile.updateUser.personalInfoUpdated'));
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(t('profile.updateUser.personalInfoUpdateFailed'));
     },
   });
 
   const nationalityObject = React.useMemo(() => {
     return countries?.find(
-      (country: Country) => country._id === userData?.user.nationality,
+      (country: Country) => country._id === userData?.user.nationality
     );
   }, [countries, userData?.user.nationality]);
 
@@ -67,7 +67,7 @@ export default function PersonalInfoPage() {
 
   const cityObject = React.useMemo(() => {
     return cities?.find(
-      (city: City) => city.id === Number(userData?.user.city),
+      (city: City) => city.id === Number(userData?.user.city)
     );
   }, [cities, userData?.user.city]);
 
@@ -104,14 +104,14 @@ export default function PersonalInfoPage() {
   });
 
   const { data: citiesForSelectedCountry } = useFetchCities(
-    selectedCountry?.value || '',
+    selectedCountry?.value || ''
   );
 
   const uploadFileMutation = useUploadFile({
-    onSuccess: (data) => {
+    onSuccess: data => {
       updateUserWithImage(data);
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(t('auth.welcome.profileImageUploadFailed'));
     },
   });
@@ -254,7 +254,7 @@ export default function PersonalInfoPage() {
                   <FloatingLabelSelect
                     {...field}
                     id='gender'
-                    options={GENDER_OPTIONS.map((option) => ({
+                    options={GENDER_OPTIONS.map(option => ({
                       ...option,
                       label: option.label[locale],
                     }))}

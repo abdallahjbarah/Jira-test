@@ -58,7 +58,7 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({
 
   return (
     <div className={`flex justify-between ${className}`}>
-      {continents?.map((continent) => (
+      {continents?.map(continent => (
         <div
           key={continent._id}
           onClick={() => onSelectRegion(continent._id as Region)}

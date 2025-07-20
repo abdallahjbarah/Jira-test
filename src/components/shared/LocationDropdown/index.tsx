@@ -37,7 +37,7 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
   const defaultCountry = useMemo(() => {
     if (!defaultValues?.country || !continents) return null;
     return (
-      continents.find((continent) => continent._id === defaultValues.country) ||
+      continents.find(continent => continent._id === defaultValues.country) ||
       null
     );
   }, [defaultValues?.country, continents]);
@@ -64,17 +64,17 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
   const { data: cities } = useFetchCities(
     selectedCountry?._id === JORDAN_COUNTRY_ID
       ? selectedCountry?.countries[0]._id || ''
-      : '',
+      : ''
   );
 
   const isJordanSelected = useMemo(
     () => selectedCountry?._id === JORDAN_COUNTRY_ID,
-    [selectedCountry],
+    [selectedCountry]
   );
 
   useEffect(() => {
     if (cities && defaultValues?.city && !selectedCity) {
-      const defaultCity = cities.find((city) => city.id === defaultValues.city);
+      const defaultCity = cities.find(city => city.id === defaultValues.city);
       if (defaultCity) {
         setValue('city', defaultCity);
       }
@@ -94,7 +94,7 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
         city: city?.id,
       });
     },
-    [onChange],
+    [onChange]
   );
 
   const handleCountrySelect = useCallback(
@@ -110,7 +110,7 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
 
       notifyParent(continent, newCity);
     },
-    [setValue, selectedCity, notifyParent],
+    [setValue, selectedCity, notifyParent]
   );
 
   const handleCitySelect = useCallback(
@@ -118,19 +118,19 @@ const LocationDropdown: React.FC<LocationDropdownProps> = ({
       setValue('city', city);
       notifyParent(selectedCountry, city);
     },
-    [setValue, selectedCountry, notifyParent],
+    [setValue, selectedCountry, notifyParent]
   );
 
   const handleRegionSelect = useCallback(
     (region: Region) => {
       if (!continents) return;
 
-      const continent = continents.find((c) => c._id === region);
+      const continent = continents.find(c => c._id === region);
       if (continent) {
         handleCountrySelect(continent);
       }
     },
-    [continents, handleCountrySelect],
+    [continents, handleCountrySelect]
   );
 
   const onSubmit = useCallback(() => {}, []);

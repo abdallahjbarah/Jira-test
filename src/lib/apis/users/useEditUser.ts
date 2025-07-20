@@ -22,7 +22,7 @@ const editUser = async (data: EditUserData) => {
 };
 
 export const useEditUser = (
-  mutationArgs?: UseMutationOptions<any, any, EditUserData, any>,
+  mutationArgs?: UseMutationOptions<any, any, EditUserData, any>
 ) => {
   return useMutation({
     mutationFn: (data: EditUserData) => editUser(data),

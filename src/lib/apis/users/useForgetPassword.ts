@@ -11,7 +11,7 @@ const forgetPassword = async (data: ForgetPasswordData) => {
 };
 
 export const useForgetPassword = (
-  mutationArgs?: UseMutationOptions<any, any, ForgetPasswordData, any>,
+  mutationArgs?: UseMutationOptions<any, any, ForgetPasswordData, any>
 ) => {
   return useMutation({
     mutationFn: (data: ForgetPasswordData) => forgetPassword(data),

@@ -23,9 +23,7 @@ export const fetchAllowedGuests = async ({
     queryParams.append('children', children.toString());
   if (infants !== undefined) queryParams.append('infants', infants.toString());
   if (availabilityIds?.length) {
-    availabilityIds.forEach((id) =>
-      queryParams.append('availabilityIds[]', id),
-    );
+    availabilityIds.forEach(id => queryParams.append('availabilityIds[]', id));
   }
 
   const queryString = queryParams.toString();
@@ -45,7 +43,7 @@ export const useFetchAllowedGuests = (
       readonly ['allowedGuests', string, AllowedGuestsParams]
     >,
     'queryKey' | 'queryFn' | 'enabled'
-  >,
+  >
 ) => {
   return useQuery({
     queryKey: ['allowedGuests', params.siteId, params] as const,

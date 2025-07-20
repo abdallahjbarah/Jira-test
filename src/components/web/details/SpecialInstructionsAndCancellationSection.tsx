@@ -1,4 +1,3 @@
-
 const SpecialInstructionsAndCancellationSection = ({
   specialInstructions,
   cancellationPolicy,

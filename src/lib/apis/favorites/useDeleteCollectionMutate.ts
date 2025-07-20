@@ -10,7 +10,7 @@ const deleteCollection = async (id: string) => {
 };
 
 export const useDeleteCollectionMutate = (
-  options?: UseMutationOptions<any, Error, string>,
+  options?: UseMutationOptions<any, Error, string>
 ) => {
   return useMutation({
     mutationFn: deleteCollection,

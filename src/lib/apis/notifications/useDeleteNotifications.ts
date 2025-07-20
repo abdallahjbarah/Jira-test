@@ -17,7 +17,7 @@ const deleteNotification = async (id: string) => {
 };
 
 export const useDeleteNotifications = (
-  mutationArgs?: UseMutationOptions<any, any, string, any>,
+  mutationArgs?: UseMutationOptions<any, any, string, any>
 ) => {
   return useMutation({
     mutationFn: (id: string) => deleteNotification(id),

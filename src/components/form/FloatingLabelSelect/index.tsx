@@ -57,7 +57,7 @@ const FloatingLabelSelect: React.FC<FloatingLabelSelectProps> = ({
         ? styles.valueContainer(provided, state)
         : {}),
     }),
-    input: (provided) => ({
+    input: provided => ({
       ...provided,
       margin: '0',
       paddingTop: '8px',
@@ -78,15 +78,15 @@ const FloatingLabelSelect: React.FC<FloatingLabelSelectProps> = ({
         color: 'white',
       },
     }),
-    singleValue: (provided) => ({
+    singleValue: provided => ({
       ...provided,
       marginTop: '6px',
     }),
-    indicatorSeparator: (provided) => ({
+    indicatorSeparator: provided => ({
       ...provided,
       display: 'none',
     }),
-    menu: (provided) => ({
+    menu: provided => ({
       ...provided,
       zIndex: 1000,
     }),

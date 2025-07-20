@@ -21,7 +21,7 @@ const deleteAllNotifications = async () => {
 };
 
 export const useDeleteAllNotifications = (
-  mutationArgs?: UseMutationOptions<any, any, any, any>,
+  mutationArgs?: UseMutationOptions<any, any, any, any>
 ) => {
   const queryClient = useQueryClient();
 

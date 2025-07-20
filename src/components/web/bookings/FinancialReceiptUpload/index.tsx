@@ -66,14 +66,14 @@ const FinancialReceiptUpload = <T extends FieldValues = FieldValues>({
       setUploadError(null);
       onChange(file);
     },
-    [onChange],
+    [onChange]
   );
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       handleFileSelect(e.target.files);
     },
-    [handleFileSelect],
+    [handleFileSelect]
   );
 
   const handleRemoveFile = useCallback(() => {

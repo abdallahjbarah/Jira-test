@@ -1,6 +1,5 @@
 'use client';
 
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 import CustomLink from '@components/ui/CustomLink';
 import BookagriLogoSvg from '@SVGs/shared/BookagriLogoSvg.svg';
 import {
@@ -73,7 +72,7 @@ export default function Header(): React.ReactElement {
                       (item.path === '/' && pathname === `/${lang}`)
                     }
                   />
-                ),
+                )
             )}
           </ul>
         </div>
@@ -155,7 +154,7 @@ export default function Header(): React.ReactElement {
                   <ul className='grid gap-y-4'>
                     {LINKS_DATA?.map((item, index) => (
                       <HeaderLink
-                        key={item?.name[lang] + index + 'Nav'}
+                        key={`${item?.name[lang] + index  }Nav`}
                         path={item?.path}
                         text={item?.name[lang]}
                         isActive={
@@ -164,7 +163,6 @@ export default function Header(): React.ReactElement {
                         }
                       />
                     ))}
-
                   </ul>
                 </div>
               </div>

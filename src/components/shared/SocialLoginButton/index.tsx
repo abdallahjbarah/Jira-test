@@ -61,7 +61,7 @@ export default function SocialLoginButton({
     useFirebase();
 
   const { mutate: firebaseSSO } = useFirebaseSSO(userType, {
-    onSuccess: (data) => {
+    onSuccess: data => {
       try {
         queryClient.setQueryData(['user'], data);
 
@@ -79,22 +79,22 @@ export default function SocialLoginButton({
 
         if (data.profileCompletionRequired) {
           toast.info(
-            `${t('auth.profile.completionRequired')}. ${t('auth.profile.missingFields')}: ${data.missingFields?.join(', ')}`,
+            `${t('auth.profile.completionRequired')}. ${t('auth.profile.missingFields')}: ${data.missingFields?.join(', ')}`
           );
 
           router.push(
-            `/auth/complete-profile?email=${encodeURIComponent(data.user.email)}&isNewUser=${data.isNewUser}`,
+            `/auth/complete-profile?email=${encodeURIComponent(data.user.email)}&isNewUser=${data.isNewUser}`
           );
         } else {
           toast.success(
             data.isNewUser
               ? t('auth.login.accountCreatedSuccess')
-              : t('auth.login.loggedInSuccess'),
+              : t('auth.login.loggedInSuccess')
           );
 
           if (data.user && data.user.status === 3) {
             router.push(
-              `/auth/verify?email=${encodeURIComponent(data.user.email)}`,
+              `/auth/verify?email=${encodeURIComponent(data.user.email)}`
             );
           } else {
             router.push('/');
@@ -120,7 +120,7 @@ export default function SocialLoginButton({
   const handleSocialLogin = async () => {
     if (disabled || isLoading || !isFirebaseInitialized) {
       if (!isFirebaseInitialized && firebaseError) {
-        toast.error(t('auth.login.loginFailed') + ': Firebase not initialized');
+        toast.error(`${t('auth.login.loginFailed')  }: Firebase not initialized`);
       }
       return;
     }

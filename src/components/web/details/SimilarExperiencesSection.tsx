@@ -17,7 +17,7 @@ const SimilarExperiencesSection: React.FC<SimilarExperiencesSectionProps> = ({
       If you enjoyed this, you might also like
     </p>
     <div className='flex gap-6 overflow-x-auto hide-scrollbar'>
-      {collections.map((collection) => (
+      {collections.map(collection => (
         <div
           key={collection.id}
           className='min-w-[19.5rem] max-w-[19.5rem] flex-shrink-0'

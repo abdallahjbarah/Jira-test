@@ -22,12 +22,12 @@ export const username = (val: string): boolean =>
 
 export const url = (val: string): boolean =>
   /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(
-    val,
+    val
   );
 
 export const positiveNumbers = (val: string): boolean =>
   /^[+]?([1-9][0-9]*(?:[\.][0-9]*)?|0*\.0*[1-9][0-9]*)(?:[eE][+-][0-9]+)?$/.test(
-    val,
+    val
   );
 
 export const validateImageFile = (imageExtension: string): boolean =>

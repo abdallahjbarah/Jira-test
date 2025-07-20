@@ -46,7 +46,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   };
 
   const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>,
+    e: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
     e.currentTarget.src = '/SVGs/shared/profile-2user.svg';
   };

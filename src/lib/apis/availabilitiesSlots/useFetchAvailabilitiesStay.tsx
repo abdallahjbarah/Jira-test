@@ -37,7 +37,7 @@ export const useFetchAvailabilityStaySlots = (
       ]
     >,
     'queryKey' | 'queryFn' | 'enabled'
-  >,
+  >
 ) => {
   return useQuery({
     ...queryOptions,

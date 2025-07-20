@@ -76,9 +76,9 @@ function CollectionsListing(): React.ReactElement {
   const collectionObject = React.useMemo(
     () =>
       COLLECTION_STATUS_LIST.find(
-        (collection) => collection.value === currentCollectionStatus,
+        collection => collection.value === currentCollectionStatus
       ),
-    [currentCollectionStatus],
+    [currentCollectionStatus]
   );
 
   const filters = React.useMemo(() => {
@@ -106,7 +106,7 @@ function CollectionsListing(): React.ReactElement {
 
     const baseFilters = buildFiltersFromSearchParams(
       new URLSearchParams() as any, // Empty search params
-      baseType,
+      baseType
     );
 
     return {
@@ -124,22 +124,20 @@ function CollectionsListing(): React.ReactElement {
   } = useFetchInfiniteCollections(filters);
 
   // Fetch base collections for "You May Also Like"
-  const {
-    data: baseCollectionsResponse,
-    isLoading: isLoadingBase,
-  } = useFetchInfiniteCollections(baseFilters);
+  const { data: baseCollectionsResponse, isLoading: isLoadingBase } =
+    useFetchInfiniteCollections(baseFilters);
 
   const collections = React.useMemo(() => {
     if (!collectionsResponse?.pages) return [];
     return collectionsResponse.pages.flatMap(
-      (page: SitesResponse) => page.sites.data,
+      (page: SitesResponse) => page.sites.data
     );
   }, [collectionsResponse?.pages]);
 
   const baseCollections = React.useMemo(() => {
     if (!baseCollectionsResponse?.pages) return [];
     return baseCollectionsResponse.pages.flatMap(
-      (page: SitesResponse) => page.sites.data,
+      (page: SitesResponse) => page.sites.data
     );
   }, [baseCollectionsResponse?.pages]);
 

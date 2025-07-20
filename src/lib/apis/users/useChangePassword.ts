@@ -17,7 +17,7 @@ const changePassword = async (data: ChangePasswordData): Promise<any> => {
 };
 
 export const useChangePassword = (
-  mutationArgs?: UseMutationOptions<any, any, any, any>,
+  mutationArgs?: UseMutationOptions<any, any, any, any>
 ) => {
   return useMutation({
     mutationFn: (data: ChangePasswordData) => changePassword(data),

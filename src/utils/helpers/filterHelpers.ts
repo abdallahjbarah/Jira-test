@@ -1,6 +1,21 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { clearObject } from './clearObject';
 
+/**
+ * Maps frontend field names to backend API field names
+ */
+const getBackendFieldName = (frontendKey: string): string => {
+  const fieldMapping: Record<string, string> = {
+    beds: 'numberOfBeds',
+    bedrooms: 'numberOfBedrooms',
+    bathrooms: 'numberOfBathrooms',
+    experienceLevel: 'levelOfDifficulty',
+    bookingOptions: 'bookOptions',
+  };
+
+  return fieldMapping[frontendKey] || frontendKey;
+};
+
 export interface CollectionFilter {
   type?: string;
   checkinTime?: string;
@@ -39,7 +54,7 @@ export interface CollectionFilter {
   duration?: string[];
   packageDuration?: string[];
 
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface FilterFormValues {
@@ -79,7 +94,9 @@ export const buildFiltersFromSearchParams = (
     try {
       const parsedFilters = JSON.parse(advancedFilters);
       Object.assign(baseFilter, parsedFilters);
-    } catch (error) {}
+    } catch (error) {
+      // Silent fail for invalid JSON
+    }
   }
 
   return clearObject(baseFilter);
@@ -103,7 +120,8 @@ export const buildSearchParamsFromFilters = (
   }
 
   // Calculate total capacity from guests (adults + children + infants)
-  const totalGuests = (filters.adults || 0) + (filters.children || 0) + (filters.infants || 0);
+  const totalGuests =
+    (filters.adults || 0) + (filters.children || 0) + (filters.infants || 0);
   if (totalGuests > 0) {
     params.set('capacity', totalGuests.toString());
   }
@@ -190,26 +208,7 @@ export const buildSearchParamsFromFilters = (
     }
 
     // Map frontend field names to backend field names
-    let backendKey = key;
-    switch (key) {
-      case 'beds':
-        backendKey = 'numberOfBeds';
-        break;
-      case 'bedrooms':
-        backendKey = 'numberOfBedrooms';
-        break;
-      case 'bathrooms':
-        backendKey = 'numberOfBathrooms';
-        break;
-      case 'experienceLevel':
-        backendKey = 'levelOfDifficulty';
-        break;
-      case 'bookingOptions':
-        backendKey = 'bookOptions';
-        break;
-      default:
-        backendKey = key;
-    }
+    const backendKey = getBackendFieldName(key);
 
     if (Array.isArray(value)) {
       // Only add non-empty array values
@@ -233,7 +232,7 @@ export const getFormDefaultsFromSearchParams = (
   const filters = buildFiltersFromSearchParams(searchParams);
 
   return {
-    filters: filters,
+    filters,
   };
 };
 

@@ -21,8 +21,8 @@ const spin = keyframes`
 `;
 
 const LoaderContainer = styled.div<CircularLoaderProps>`
-  width: ${(props) => props.size}px;
-  height: ${(props) => props.size}px;
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
   position: relative;
   display: inline-block;
 `;
@@ -34,9 +34,9 @@ const Spinner = styled.div<StyledSpinnerProps>`
   left: 0;
   width: 100%;
   height: 100%;
-  border: ${(props) => props.$thickness}px solid rgba(0, 0, 0, 0.1);
+  border: ${props => props.$thickness}px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
-  border-top-color: ${(props) => props.color};
+  border-top-color: ${props => props.color};
   animation: ${spin} 0.8s linear infinite;
 `;
 

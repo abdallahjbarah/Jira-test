@@ -52,7 +52,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
           // For price range, count as 1 if modified
           if (key === 'priceRange') {
             const [min, max] = value;
-            return count + ((min > 0 || max < 100) ? 1 : 0);
+            return count + (min > 0 || max < 100 ? 1 : 0);
           }
           // For other arrays, count each item
           return count + value.length;
@@ -98,7 +98,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   const clearAllFilters = () => {
     // Get default filter values for advanced filters only
     const defaultFilters = getDefaultFilterValues(filterType);
-    
+
     // Extract only the advanced filter properties
     const emptyValues = {
       priceRange: defaultFilters.priceRange,
@@ -130,13 +130,13 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
     if (dropdownContentRef.current) {
       dropdownContentRef.current.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     }
   };
 
   const filterTrigger = (
-    <div className="relative">
+    <div className='relative'>
       <CustomSvg
         src='/SVGs/shared/filter-icon.svg'
         className='!w-[57px] !h-[57px] text-text_2 block'
@@ -145,7 +145,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
       />
       {activeFiltersCount > 0 && (
         <div
-  className="
+          className='
     absolute -top-2 -right-2
     bg-[#FF3A1E] text-white rounded-full
     min-w-[24px] h-[24px]
@@ -153,12 +153,10 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
     text-sm font-semibold
     px-1
     shadow-lg
-  "
->
-  {activeFiltersCount}
-</div>
-
-
+  '
+        >
+          {activeFiltersCount}
+        </div>
       )}
     </div>
   );
@@ -180,7 +178,10 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
 
   const filterContent = (
     <div className='bg-white rounded-xl shadow-2xl w-full relative'>
-      <div ref={dropdownContentRef} className='p-6 max-h-[calc(80vh-80px)] tabletM:max-h-[calc(500px-80px)] overflow-y-auto'>
+      <div
+        ref={dropdownContentRef}
+        className='p-6 max-h-[calc(80vh-80px)] tabletM:max-h-[calc(500px-80px)] overflow-y-auto'
+      >
         <h3 className='text-lg text-center font-semibold'>
           {t('filter.filter')}
         </h3>

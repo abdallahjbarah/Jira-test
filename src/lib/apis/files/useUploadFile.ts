@@ -19,7 +19,7 @@ const uploadFile = async (data: UploadFileData) => {
 };
 
 export const useUploadFile = (
-  mutationArgs: UseMutationOptions<any, any, UploadFileData, any>,
+  mutationArgs: UseMutationOptions<any, any, UploadFileData, any>
 ) => {
   return useMutation({
     mutationFn: (data: UploadFileData) => uploadFile(data),

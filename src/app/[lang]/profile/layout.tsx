@@ -45,7 +45,7 @@ export default function ProfileLayout({
           <div className='w-full md:w-1/4'>
             <div className='bg-white rounded-lg shadow border border-solid border-secondary_2 p-4'>
               <ul className='space-y-2'>
-                {tabs.map((tab) => {
+                {tabs.map(tab => {
                   const isActive = pathname.includes(tab.id);
                   return (
                     <li key={tab.id}>

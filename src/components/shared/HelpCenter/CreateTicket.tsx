@@ -48,7 +48,7 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
         toast.error(t('helpCenter.errorMessage'));
         setPendingFormData(null);
       },
-    },
+    }
   );
 
   const { mutate: uploadFile, isPending: isUploadingFile } = useUploadFile({
@@ -71,7 +71,7 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
     fileInputRef.current?.click();
   };
 
-  const onSubmitForm: SubmitHandler<FormData> = (data) => {
+  const onSubmitForm: SubmitHandler<FormData> = data => {
     if (data.file && data.file[0]) {
       setPendingFormData(data);
       uploadFile({
@@ -138,7 +138,7 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
           type='file'
           className='hidden'
           {...register('file')}
-          ref={(e) => {
+          ref={e => {
             register('file').ref(e);
             fileInputRef.current = e;
           }}

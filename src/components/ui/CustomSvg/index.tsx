@@ -29,15 +29,15 @@ const CustomSvg: React.FC<CustomSvgProps> = ({
       let cached = svgCache[cacheKey];
       cached = cached.replace(
         /width="[^"]*" height="[^"]*"/,
-        `width="${width}" height="${height}"`,
+        `width="${width}" height="${height}"`
       );
       setSvgContent(cached);
       return;
     }
 
     fetch(src)
-      .then((res) => res.text())
-      .then((text) => {
+      .then(res => res.text())
+      .then(text => {
         let updated = text;
 
         if (text.includes('fill="') || text.includes('stroke="')) {
@@ -47,7 +47,7 @@ const CustomSvg: React.FC<CustomSvgProps> = ({
         // Add a style to the <svg> tag
         updated = updated.replace(
           /<svg([^>]*)>/,
-          `<svg$1 style="color: ${color};" width="${width}" height="${height}">`,
+          `<svg$1 style="color: ${color};" width="${width}" height="${height}">`
         );
 
         // Store in cache

@@ -32,7 +32,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
     <label
       className={cn(
         'flex items-center justify-between cursor-pointer',
-        className,
+        className
       )}
       htmlFor={id}
       onClick={handleChange}

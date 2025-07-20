@@ -51,12 +51,12 @@ export default function ResetPasswordPage() {
       },
       onError: (error: WretchError) => {
         toast.error(
-          error?.json?.message || t('auth.resetPassword.resetFailed'),
+          error?.json?.message || t('auth.resetPassword.resetFailed')
         );
       },
     });
 
-  const onSubmit: SubmitHandler<ResetPasswordFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<ResetPasswordFormValues> = async data => {
     const { confirmPassword, ...rest } = data;
     resetPassword({
       email: email || '',

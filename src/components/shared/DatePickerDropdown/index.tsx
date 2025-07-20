@@ -51,7 +51,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
 }) => {
   const { t, locale } = useTranslation();
   const [selectedDates, setSelectedDates] = useState<Date[]>(
-    initialDate ? [initialDate] : [],
+    initialDate ? [initialDate] : []
   );
   const [isOpen, setIsOpen] = useState(false);
 
@@ -59,7 +59,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
     if (!schedule?.days) return { enabledDays: [], daySlots: new Map() };
 
     const days = schedule.days
-      .map((day) => {
+      .map(day => {
         let dayNumber = -1;
         switch (day.name) {
           case 'Sunday':
@@ -86,7 +86,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
         }
         return dayNumber;
       })
-      .filter((day) => day !== -1);
+      .filter(day => day !== -1);
 
     return { enabledDays: days };
   }, [schedule]);
@@ -94,12 +94,12 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   const startDate = useMemo(
     () =>
       schedule?.startDateTime ? new Date(schedule.startDateTime) : undefined,
-    [schedule],
+    [schedule]
   );
 
   const endDate = useMemo(
     () => (schedule?.endDateTime ? new Date(schedule.endDateTime) : undefined),
-    [schedule],
+    [schedule]
   );
 
   useEffect(() => {
@@ -111,7 +111,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
         } else {
           setSelectedDates([new Date(value)]);
         }
-      } catch (e) { }
+      } catch (e) {}
     } else if (!value && selectedDates.length > 0) {
       setSelectedDates([]);
     }
@@ -137,7 +137,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
       return date.toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US', {
         month: 'short',
         day: 'numeric',
-        ...(isCurrentYear ? {} : { year: 'numeric' })
+        ...(isCurrentYear ? {} : { year: 'numeric' }),
       });
     };
 
@@ -193,7 +193,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
           <FilterBarItem
             title={title || { en: '', ar: '' }}
             value={getDisplayValue()}
-            onClick={onClick || (() => { })}
+            onClick={onClick || (() => {})}
             className={`${className || ''} ${isOpen ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}`}
           />
         )

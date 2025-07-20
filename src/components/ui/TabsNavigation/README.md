@@ -30,7 +30,7 @@ const tabs: TabItem[] = [
 <TabsNavigation
   tabs={tabs}
   defaultActiveTab='upcoming'
-  onChange={(tabId) => console.log('Tab changed to:', tabId)}
+  onChange={tabId => console.log('Tab changed to:', tabId)}
 />;
 ```
 

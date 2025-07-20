@@ -207,7 +207,7 @@ function MapView({ collections, isLoading, onBackToList }: MapViewProps) {
 
   const markers = useMemo(() => {
     return collections
-      .filter((site) => site.location?.coordinates?.length === 2)
+      .filter(site => site.location?.coordinates?.length === 2)
       .map((site, index) => ({
         id: site._id,
         position: {
@@ -238,7 +238,7 @@ function MapView({ collections, isLoading, onBackToList }: MapViewProps) {
         south: markers[0].position.lat,
         east: markers[0].position.lng,
         west: markers[0].position.lng,
-      },
+      }
     );
 
     const centerLat = (bounds.north + bounds.south) / 2;
@@ -263,7 +263,7 @@ function MapView({ collections, isLoading, onBackToList }: MapViewProps) {
         south: markers[0].position.lat,
         east: markers[0].position.lng,
         west: markers[0].position.lng,
-      },
+      }
     );
 
     const latSpan = bounds.north - bounds.south;
@@ -331,7 +331,7 @@ function MapView({ collections, isLoading, onBackToList }: MapViewProps) {
         </div>
       </InfoWindowContent>
     ),
-    [handleViewDetails, currency],
+    [handleViewDetails, currency]
   );
 
   if (isLoading) {
@@ -383,7 +383,7 @@ function MapView({ collections, isLoading, onBackToList }: MapViewProps) {
             ],
           }}
         >
-          {markers.map((marker) => (
+          {markers.map(marker => (
             <OverlayView
               key={marker.id}
               position={marker.position}

@@ -27,7 +27,7 @@ class ErrorBoundary extends React.Component<
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void { }
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {}
 
   render(): React.ReactNode {
     if (this.state.hasError) {
@@ -60,9 +60,9 @@ class ErrorBoundary extends React.Component<
               Coming Soon...
             </h1>
             <p className='text-custom-32 mt-2 font-custom-700'>
-          We are working hard to bring you something amazing.
-          <br /> Stay tuned!
-        </p>
+              We are working hard to bring you something amazing.
+              <br /> Stay tuned!
+            </p>
             <FilledButton
               path='/'
               text='Go To Home'

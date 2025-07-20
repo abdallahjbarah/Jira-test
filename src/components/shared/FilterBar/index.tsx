@@ -31,7 +31,7 @@ const FilterBar = () => {
   const [showSearchPopup, setShowSearchPopup] = React.useState(false);
   const [selectedLocation, setSelectedLocation] = React.useState<string>('');
   const [selectedFilter, setSelectedFilter] = React.useState(
-    collectionStatus || 'all',
+    collectionStatus || 'all'
   );
 
   // Add state to track active filter buttons
@@ -65,7 +65,7 @@ const FilterBar = () => {
           router.push(newUrl, { scroll: false });
         }
       }, 300),
-    [searchParams, router],
+    [searchParams, router]
   );
 
   const debouncedFilterUpdate = React.useMemo(
@@ -73,7 +73,7 @@ const FilterBar = () => {
       debounce((updatedFilters: CollectionFilter) => {
         methods.setValue('filters', updatedFilters, { shouldValidate: true });
       }, 150),
-    [methods],
+    [methods]
   );
 
   const getCheckInDate = (): Date | undefined => {
@@ -212,7 +212,7 @@ const FilterBar = () => {
       city: currentFilters.city,
     };
 
-    Object.keys(preservedFilters).forEach((key) => {
+    Object.keys(preservedFilters).forEach(key => {
       if (preservedFilters[key] === undefined) {
         delete preservedFilters[key];
       }
@@ -286,11 +286,11 @@ const FilterBar = () => {
     } else if (collectionStatus === 'experiences') {
       if (searchType === 'city') {
         router.push(
-          `/${searchParams.get('lang') || 'en'}/experiences?city=${result.city}&country=${result.country}`,
+          `/${searchParams.get('lang') || 'en'}/experiences?city=${result.city}&country=${result.country}`
         );
       } else if (searchType === 'country') {
         router.push(
-          `/${searchParams.get('lang') || 'en'}/experiences?country=${result.country}`,
+          `/${searchParams.get('lang') || 'en'}/experiences?country=${result.country}`
         );
       }
     } else {

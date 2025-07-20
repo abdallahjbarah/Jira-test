@@ -45,48 +45,48 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
     title: string;
     description: string;
   }[] = [
-      {
-        icon: '/SVGs/shared/details-icons/timeCircle.svg',
-        title: 'Duration',
-        description: '2hrs 30m',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/sun.svg',
-        title: 'Time of Day',
-        description: 'Morning (before 12 pm) - Evening (after 5 pm)',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/guideIcon.svg',
-        title: 'Guide (Upon Request)',
-        description: 'Extra fees applied',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
-        title: 'Level of Difficulty',
-        description: 'Easy (relaxed tour, easy walk)',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
-        title: 'Age Suitability',
-        description: '3+',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/transportationIcon.svg',
-        title: 'Transportation (Upon Request)',
-        description: 'Extra fees applied',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
-        title: 'Spoken Language',
-        description:
-          'Arabic, English (Download a language translator app to communicate with host!)',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
-        title: 'Wheelchair Accessible',
-        description: '',
-      },
-    ];
+    {
+      icon: '/SVGs/shared/details-icons/timeCircle.svg',
+      title: 'Duration',
+      description: '2hrs 30m',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/sun.svg',
+      title: 'Time of Day',
+      description: 'Morning (before 12 pm) - Evening (after 5 pm)',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/guideIcon.svg',
+      title: 'Guide (Upon Request)',
+      description: 'Extra fees applied',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
+      title: 'Level of Difficulty',
+      description: 'Easy (relaxed tour, easy walk)',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
+      title: 'Age Suitability',
+      description: '3+',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/transportationIcon.svg',
+      title: 'Transportation (Upon Request)',
+      description: 'Extra fees applied',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
+      title: 'Spoken Language',
+      description:
+        'Arabic, English (Download a language translator app to communicate with host!)',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
+      title: 'Wheelchair Accessible',
+      description: '',
+    },
+  ];
 
   const {
     data: detailsData,
@@ -114,7 +114,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
       setCurrentImageIndex(index);
       setIsLightboxOpen(true);
     },
-    [detailsData?.booking?.siteId?.images],
+    [detailsData?.booking?.siteId?.images]
   );
 
   const handleCloseLightbox = React.useCallback(() => {
@@ -125,14 +125,14 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
     const images = detailsData?.booking?.siteId?.images;
     if (!images) return;
     setCurrentImageIndex(
-      (current) => (current + images.length - 1) % images.length,
+      current => (current + images.length - 1) % images.length
     );
   }, [detailsData?.booking?.siteId?.images]);
 
   const handleMoveNext = React.useCallback(() => {
     const images = detailsData?.booking?.siteId?.images;
     if (!images) return;
-    setCurrentImageIndex((current) => (current + 1) % images.length);
+    setCurrentImageIndex(current => (current + 1) % images.length);
   }, [detailsData?.booking?.siteId?.images]);
 
   const handleFavoriteToggle = (e: React.MouseEvent) => {
@@ -245,7 +245,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                     key={idx}
                     onClick={() => handleImageClick(idx + 1)}
                     className='max-h-[292px] shadow-md relative border-0 p-0 bg-transparent'
-                    onKeyDown={(e) => {
+                    onKeyDown={e => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         handleImageClick(idx + 1);
@@ -273,7 +273,6 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
             </div>
           </div>
 
-
           <div className='flex  items-start mt-20'>
             <div className='flex flex-col gap-2 max-w-[60rem] w-full'>
               <div className='flex flex-col'>
@@ -282,7 +281,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                 </p>
                 <div className='flex justify-between items-center mt-2'>
                   <p className='font-custom-400 font-sans text-custom-20 laptopM:text-custom-25 text-gray_3'>
-                    {country?.name + ', ' + city}
+                    {`${country?.name  }, ${  city}`}
                   </p>
                   <div className='text-custom-14 text-right'>
                     {bookagriBadge && (
@@ -306,7 +305,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                 <>
                   <Divider className='w-full my-8' />
                   <LocationSection
-                    location={name + ' in ' + country?.name + ', ' + city}
+                    location={`${name  } in ${  country?.name  }, ${  city}`}
                     latitude={location.coordinates[0]}
                     longitude={location.coordinates[1]}
                   />
@@ -377,7 +376,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
       {/* Lightbox for Image Gallery */}
       {images && images.length > 0 && (
         <Lightbox
-          slides={images.map((image) => ({ src: image }))}
+          slides={images.map(image => ({ src: image }))}
           open={isLightboxOpen}
           index={currentImageIndex}
           close={handleCloseLightbox}
