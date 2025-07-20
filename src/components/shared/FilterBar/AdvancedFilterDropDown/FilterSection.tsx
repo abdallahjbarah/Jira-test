@@ -36,7 +36,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
       onChange([value]);
     } else {
       if (selectedValues.includes(value)) {
-        onChange(selectedValues.filter((v) => v !== value));
+        onChange(selectedValues.filter(v => v !== value));
       } else {
         onChange([...selectedValues, value]);
       }
@@ -60,7 +60,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
       titleClassName='text-text_2 !font-custom-700'
     >
       <div className='space-y-3'>
-        {visibleOptions.map((option) =>
+        {visibleOptions.map(option =>
           type === 'radio' ? (
             <RadioButton
               key={option.value}
@@ -83,7 +83,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
               checkBoxPosition='right'
               checkBoxClassName='ml-auto'
             />
-          ),
+          )
         )}
 
         {hasMoreOptions && (

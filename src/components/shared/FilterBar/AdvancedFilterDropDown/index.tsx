@@ -4,6 +4,7 @@ import CustomSvg from '@/components/ui/CustomSvg';
 import Dropdown from '@/components/ui/Dropdown';
 import FilledButton from '@/components/ui/buttons/FilledButton';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { getDefaultFilterValues } from '@/utils/helpers/filterHelpers';
 import React, { useMemo, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import EventsFilter from './EventsFilter';
@@ -95,20 +96,31 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   };
 
   const clearAllFilters = () => {
-    // Reset form with empty values
+    // Get default filter values for advanced filters only
+    const defaultFilters = getDefaultFilterValues(filterType);
+    
+    // Extract only the advanced filter properties
     const emptyValues = {
-      priceRange: [0, 100],
-      languages: [],
-      amenities: [],
-      bookingOptions: [],
-      accessibilityFeatures: [],
-      bookagriBadge: false,
-      specialOffers: undefined,
-      bedrooms: 0,
-      beds: 0,
-      bathrooms: 0,
-      includesExperience: undefined,
-      collectionType: undefined
+      priceRange: defaultFilters.priceRange,
+      languages: defaultFilters.languages,
+      amenities: defaultFilters.amenities,
+      bookingOptions: defaultFilters.bookingOptions,
+      accessibilityFeatures: defaultFilters.accessibilityFeatures,
+      bookagriBadge: defaultFilters.bookagriBadge,
+      specialOffers: defaultFilters.specialOffers,
+      bedrooms: defaultFilters.bedrooms,
+      beds: defaultFilters.beds,
+      bathrooms: defaultFilters.bathrooms,
+      includesExperience: defaultFilters.includesExperience,
+      collectionType: defaultFilters.collectionType,
+      experienceTypes: defaultFilters.experienceTypes,
+      levelOfDifficulty: defaultFilters.levelOfDifficulty,
+      ageSuitability: defaultFilters.ageSuitability,
+      timeOfDay: defaultFilters.timeOfDay,
+      duration: defaultFilters.duration,
+      minPrice: defaultFilters.minPrice,
+      maxPrice: defaultFilters.maxPrice,
+      accessProvider: defaultFilters.accessProvider,
     };
 
     reset(emptyValues);

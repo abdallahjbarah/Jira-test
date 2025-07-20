@@ -163,7 +163,7 @@ const CommonFilters: React.FC = () => {
       />
 
       <Controller
-        name='bookingOptions'
+        name='bookOptions'
         control={control}
         render={({ field }) => (
           <FilterSection

@@ -6,15 +6,28 @@
     "plugin:jsx-a11y/recommended",
     "plugin:import/warnings",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "eslint-config-next"
   ],
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
   "plugins": ["@typescript-eslint", "unused-imports"],
   "rules": {
-    "react-hooks/exhaustive-deps": "off",
+    // TypeScript rules
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/explicit-function-return-type": "warn",
+    "@typescript-eslint/no-non-null-assertion": "warn",
+    "@typescript-eslint/no-empty-function": "warn",
+    "@typescript-eslint/prefer-const": "warn",
+    "@typescript-eslint/no-var-requires": "error",
+
+    // Import rules
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
-      "warn",
+      "error",
       {
         "vars": "all",
         "varsIgnorePattern": "^_",
@@ -22,14 +35,23 @@
         "argsIgnorePattern": "^_"
       }
     ],
-    "@typescript-eslint/no-unused-vars": "off",
-    "no-console": "warn",
-    "no-debugger": "error",
-    "prefer-const": "error",
-    "no-var": "error",
+
+    // React rules
+    "react-hooks/exhaustive-deps": "warn",
+    "react/no-unused-state": "error",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
-    "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-empty-function": "warn"
+
+    // General rules
+    "no-console": "error",
+    "no-debugger": "error",
+    "no-unused-vars": "off",
+    "prefer-const": "error",
+    "no-var": "error",
+    "no-warning-comments": "error",
+    "no-magic-numbers": "warn",
+    "prefer-template": "error",
+    "object-shorthand": "error",
+    "prefer-arrow-callback": "error"
   }
 }

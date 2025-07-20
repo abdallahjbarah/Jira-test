@@ -11,6 +11,34 @@ export interface CollectionFilter {
   country?: string;
   city?: number | string;
   destinationText?: string;
+  capacity?: number;
+
+  // Advanced filters - aligned with backend API
+  priceRange?: [number, number];
+  minPrice?: number;
+  maxPrice?: number;
+  languages?: string[];
+  amenities?: string[];
+  bookOptions?: string[];
+  accessibilityFeatures?: string[];
+  bookagriBadge?: boolean;
+  specialOffers?: boolean;
+
+  // Stay-specific filters - aligned with backend field names
+  numberOfBedrooms?: number;
+  numberOfBeds?: number;
+  numberOfBathrooms?: number;
+  includesExperience?: boolean;
+  accessProvider?: boolean;
+
+  // Experience-specific filters
+  experienceTypes?: string[];
+  levelOfDifficulty?: string;
+  ageSuitability?: string[];
+  timeOfDay?: string[];
+  duration?: string[];
+  packageDuration?: string[];
+
   [key: string]: any;
 }
 
@@ -20,7 +48,7 @@ export interface FilterFormValues {
 
 export const buildFiltersFromSearchParams = (
   searchParams: ReadonlyURLSearchParams,
-  baseType?: string | null,
+  baseType?: string | null
 ): CollectionFilter => {
   const baseFilter: CollectionFilter = {
     type: baseType ?? undefined,
@@ -33,6 +61,7 @@ export const buildFiltersFromSearchParams = (
   const infants = searchParams.get('infants');
   const country = searchParams.get('country');
   const city = searchParams.get('city');
+  const capacity = searchParams.get('capacity');
   const advancedFilters = searchParams.get('filters');
   const experienceTypes = searchParams.get('experienceTypes');
 
@@ -43,13 +72,14 @@ export const buildFiltersFromSearchParams = (
   if (infants) baseFilter.infants = Number(infants);
   if (country) baseFilter.country = country;
   if (city) baseFilter.city = city;
-  if (experienceTypes) baseFilter.experienceTypes = experienceTypes;
+  if (capacity) baseFilter.capacity = Number(capacity);
+  if (experienceTypes) baseFilter.experienceTypes = [experienceTypes];
 
   if (advancedFilters) {
     try {
       const parsedFilters = JSON.parse(advancedFilters);
       Object.assign(baseFilter, parsedFilters);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   return clearObject(baseFilter);
@@ -57,100 +87,198 @@ export const buildFiltersFromSearchParams = (
 
 export const buildSearchParamsFromFilters = (
   filters: CollectionFilter,
-  currentParams: ReadonlyURLSearchParams,
+  currentParams: ReadonlyURLSearchParams
 ): URLSearchParams => {
-  const params = new URLSearchParams(currentParams);
+  // Create a new URLSearchParams instance instead of copying currentParams
+  // This ensures we start with a clean slate
+  const params = new URLSearchParams();
 
+  // Handle basic filters
   if (filters.checkinTime) {
     params.set('checkinTime', filters.checkinTime);
-  } else {
-    params.delete('checkinTime');
   }
 
   if (filters.checkoutTime) {
     params.set('checkoutTime', filters.checkoutTime);
-  } else {
-    params.delete('checkoutTime');
   }
 
-  if (filters.adults && filters.adults > 0) {
-    params.set('adults', filters.adults.toString());
-  } else {
-    params.delete('adults');
-  }
-
-  if (filters.children && filters.children > 0) {
-    params.set('children', filters.children.toString());
-  } else {
-    params.delete('children');
-  }
-
-  if (filters.infants && filters.infants > 0) {
-    params.set('infants', filters.infants.toString());
-  } else {
-    params.delete('infants');
+  // Calculate total capacity from guests (adults + children + infants)
+  const totalGuests = (filters.adults || 0) + (filters.children || 0) + (filters.infants || 0);
+  if (totalGuests > 0) {
+    params.set('capacity', totalGuests.toString());
   }
 
   if (filters.country) {
     params.set('country', filters.country);
-  } else {
-    params.delete('country');
   }
 
   if (filters.city) {
     params.set('city', filters.city.toString());
-  } else {
-    params.delete('city');
   }
 
-  if (filters.experienceTypes) {
-    params.set('experienceTypes', filters.experienceTypes);
-  } else {
-    params.delete('experienceTypes');
+  if (filters.experienceTypes && Array.isArray(filters.experienceTypes)) {
+    filters.experienceTypes.forEach(type => {
+      params.append('experienceTypes', type);
+    });
   }
 
-  // Remove known filters from advancedFilters
+  // Handle capacity parameter (which might be set separately)
+  if (filters.capacity && filters.capacity > 0) {
+    params.set('capacity', filters.capacity.toString());
+  }
+
+  // Handle price range - convert to minPrice and maxPrice for backend
+  if (
+    filters.priceRange &&
+    Array.isArray(filters.priceRange) &&
+    filters.priceRange.length === 2
+  ) {
+    const [minPrice, maxPrice] = filters.priceRange;
+    if (minPrice > 0) {
+      params.set('minPrice', minPrice.toString());
+    }
+    if (maxPrice < 100) {
+      params.set('maxPrice', maxPrice.toString());
+    }
+  }
+
+  // Handle all other advanced filters
   const advancedFilters = { ...filters };
   delete advancedFilters.type;
   delete advancedFilters.checkinTime;
   delete advancedFilters.checkoutTime;
-  delete advancedFilters.adults;
-  delete advancedFilters.children;
-  delete advancedFilters.infants;
+  delete advancedFilters.adults; // Remove from advanced filters since we handle it as capacity
+  delete advancedFilters.children; // Remove from advanced filters since we handle it as capacity
+  delete advancedFilters.infants; // Remove from advanced filters since we handle it as capacity
   delete advancedFilters.country;
   delete advancedFilters.city;
   delete advancedFilters.destinationText;
   delete advancedFilters.experienceTypes;
+  delete advancedFilters.capacity; // Remove since we calculate it from guests
+  delete advancedFilters.priceRange;
 
-  // Instead of serializing advancedFilters as JSON, add each as its own query param
+  // Add each advanced filter as its own query param - only meaningful values
   Object.entries(advancedFilters).forEach(([key, value]) => {
+    // Skip default/empty values
     if (value === undefined || value === null || value === '') {
-      params.delete(key);
-    } else if (Array.isArray(value)) {
-      // Remove any existing values for this key
-      params.delete(key);
-      value.forEach((v) => {
-        if (v !== undefined && v !== null && v !== '') {
-          params.append(key, v.toString());
-        }
+      return;
+    }
+
+    // Skip default numeric values
+    if (typeof value === 'number' && value === 0) {
+      return;
+    }
+
+    // Skip default boolean values
+    if (typeof value === 'boolean' && value === false) {
+      return;
+    }
+
+    // Skip default arrays
+    if (Array.isArray(value) && value.length === 0) {
+      return;
+    }
+
+    // Skip default price range
+    if (
+      Array.isArray(value) &&
+      value.length === 2 &&
+      value[0] === 0 &&
+      value[1] === 100
+    ) {
+      return;
+    }
+
+    // Map frontend field names to backend field names
+    let backendKey = key;
+    switch (key) {
+      case 'beds':
+        backendKey = 'numberOfBeds';
+        break;
+      case 'bedrooms':
+        backendKey = 'numberOfBedrooms';
+        break;
+      case 'bathrooms':
+        backendKey = 'numberOfBathrooms';
+        break;
+      case 'experienceLevel':
+        backendKey = 'levelOfDifficulty';
+        break;
+      case 'bookingOptions':
+        backendKey = 'bookOptions';
+        break;
+      default:
+        backendKey = key;
+    }
+
+    if (Array.isArray(value)) {
+      // Only add non-empty array values
+      const nonEmptyValues = value.filter(
+        v => v !== undefined && v !== null && v !== '' && v !== 0
+      );
+      nonEmptyValues.forEach(v => {
+        params.append(backendKey, v.toString());
       });
     } else {
-      params.set(key, value.toString());
+      params.set(backendKey, value.toString());
     }
   });
-
-  // Remove the old 'filters' param if present
-  params.delete('filters');
 
   return params;
 };
 
 export const getFormDefaultsFromSearchParams = (
-  searchParams: ReadonlyURLSearchParams,
+  searchParams: ReadonlyURLSearchParams
 ): FilterFormValues => {
   const filters = buildFiltersFromSearchParams(searchParams);
 
   return {
     filters: filters,
   };
+};
+
+export const getDefaultFilterValues = (
+  collectionStatus?: string
+): CollectionFilter => {
+  const defaultFilters: CollectionFilter = {
+    adults: 0,
+    children: 0,
+    infants: 0,
+    capacity: 0,
+    checkinTime: '',
+    checkoutTime: '',
+    city: undefined,
+    country: undefined,
+    destinationText: '',
+    siteId: undefined,
+    // Clear all advanced filters - use undefined instead of default values
+    priceRange: undefined,
+    languages: undefined,
+    amenities: undefined,
+    bookOptions: undefined,
+    accessibilityFeatures: undefined,
+    bookagriBadge: undefined,
+    specialOffers: undefined,
+    numberOfBedrooms: undefined,
+    numberOfBeds: undefined,
+    numberOfBathrooms: undefined,
+    includesExperience: undefined,
+    collectionType: undefined,
+    experienceTypes: undefined,
+    levelOfDifficulty: undefined,
+    ageSuitability: undefined,
+    timeOfDay: undefined,
+    duration: undefined,
+    packageDuration: undefined,
+    minPrice: undefined,
+    maxPrice: undefined,
+    accessProvider: undefined,
+  };
+
+  // Remove checkout time for experiences
+  if (collectionStatus === 'experiences') {
+    delete defaultFilters.checkoutTime;
+  }
+
+  return defaultFilters;
 };
