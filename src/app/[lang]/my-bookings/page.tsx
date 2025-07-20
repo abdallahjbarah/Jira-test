@@ -63,7 +63,7 @@ const MyBookingsPage = () => {
         skip: 0,
       });
     }, 500),
-    [filter],
+    [filter]
   );
 
   const bookings = React.useMemo(() => {

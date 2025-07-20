@@ -19,7 +19,7 @@ const useModal = (initialState = false): UseModalReturn => {
   }, []);
 
   const toggleModal = useCallback(() => {
-    setIsOpen((prev) => !prev);
+    setIsOpen(prev => !prev);
   }, []);
 
   useEffect(() => {

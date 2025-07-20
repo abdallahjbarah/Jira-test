@@ -16,7 +16,7 @@ const signup = async (data: SignupData) => {
 };
 
 export const useSignup = (
-  mutationArgs: UseMutationOptions<any, any, SignupData, any>,
+  mutationArgs: UseMutationOptions<any, any, SignupData, any>
 ) => {
   return useMutation({
     mutationFn: (data: SignupData) => signup(data),

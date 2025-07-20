@@ -86,7 +86,7 @@ function processDirectory(dirPath) {
       const fullPath = path.join(currentPath, entry);
       const relativePath = path.relative(process.cwd(), fullPath);
 
-      if (EXCLUDE_DIRS.some((dir) => relativePath.includes(dir))) {
+      if (EXCLUDE_DIRS.some(dir => relativePath.includes(dir))) {
         continue;
       }
 

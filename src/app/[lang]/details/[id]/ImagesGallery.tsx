@@ -33,7 +33,7 @@ const ImagesGallery = ({ images }: { images: string[] }) => {
             alt='Main property image'
             className='rounded-[6px] h-full cursor-pointer w-full object-cover hover:brightness-75 transition-all duration-200'
             unoptimized
-            onError={(e) => {}}
+            onError={e => {}}
           />
         </div>
         <div className='hidden lg:grid lg:grid-cols-2 lg:col-span-4 lg:gap-[16px]'>
@@ -44,7 +44,7 @@ const ImagesGallery = ({ images }: { images: string[] }) => {
                   key={idx}
                   onClick={() => handleClick(idx + 1)}
                   className='max-h-[292px] shadow-md relative border-0 p-0 bg-transparent'
-                  onKeyDown={(e) => {
+                  onKeyDown={e => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
                       handleClick(idx + 1);
@@ -58,7 +58,7 @@ const ImagesGallery = ({ images }: { images: string[] }) => {
                     height={292}
                     className='h-full w-full rounded-[6px] cursor-pointer bg-propy-overlay object-cover hover:brightness-75 transition-all duration-200'
                     unoptimized
-                    onError={(e) => {}}
+                    onError={e => {}}
                   />
                   {idx === 3 && galleryImages.length > 4 && (
                     <div className='bg-propy-overlay rounded-[6px] w-full h-full text-center bottom-[100%] relative flex items-center justify-center cursor-pointer'>
@@ -74,7 +74,7 @@ const ImagesGallery = ({ images }: { images: string[] }) => {
       </div>
       <div className=''>
         <Lightbox
-          slides={slides.map((slide) => ({ src: slide }))}
+          slides={slides.map(slide => ({ src: slide }))}
           open={index >= 0}
           index={index}
           close={() => setIndex(-1)}

@@ -41,7 +41,7 @@ function CollectionCard({
       collection._id,
       collection,
       openFavouritesModal,
-    ],
+    ]
   );
 
   const slickProps = React.useMemo(
@@ -55,7 +55,7 @@ function CollectionCard({
       pauseOnHover: true,
       autoplaySpeed: 2000,
     }),
-    [collection.images.length],
+    [collection.images.length]
   );
 
   const imageProps = React.useMemo(
@@ -64,7 +64,7 @@ function CollectionCard({
       height: 500,
       className: 'object-cover w-full h-full',
     }),
-    [],
+    []
   );
 
   const locationString = React.useMemo(() => {

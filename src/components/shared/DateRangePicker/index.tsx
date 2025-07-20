@@ -40,21 +40,21 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
       date.setHours(12, 0, 0, 0);
       return date;
     },
-    [],
+    []
   );
 
   const [internalSelection, setInternalSelection] =
     useState<Date[]>(selectedDates);
 
   useEffect(() => {
-    const normalizedDates = selectedDates.map((date) =>
-      createNormalizedDate(date.getFullYear(), date.getMonth(), date.getDate()),
+    const normalizedDates = selectedDates.map(date =>
+      createNormalizedDate(date.getFullYear(), date.getMonth(), date.getDate())
     );
     setInternalSelection(normalizedDates);
   }, [selectedDates, createNormalizedDate]);
 
   const [currentMonth, setCurrentMonth] = useState<Date>(
-    selectedDates[0] || new Date(),
+    selectedDates[0] || new Date()
   );
 
   const monthYearString = currentMonth.toLocaleDateString(
@@ -63,18 +63,18 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
       month: 'long',
       year: 'numeric',
       calendar: 'gregory',
-    },
+    }
   );
 
   const prevMonth = () => {
     setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1),
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
     );
   };
 
   const nextMonth = () => {
     setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1),
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
     );
   };
 
@@ -113,8 +113,8 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
   const isDateSelected = (date: Date) => {
     if (!date) return false;
-    return internalSelection.some((selectedDate) =>
-      isSameDate(date, selectedDate),
+    return internalSelection.some(selectedDate =>
+      isSameDate(date, selectedDate)
     );
   };
 
@@ -178,7 +178,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     const normalizedDate = createNormalizedDate(
       date.getFullYear(),
       date.getMonth(),
-      date.getDate(),
+      date.getDate()
     );
 
     let newSelectedDates = [...internalSelection];
@@ -234,7 +234,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     <div
       className={cn(
         'bg-white rounded-lg shadow-lg p-4 w-full max-w-[320px]',
-        className,
+        className
       )}
     >
       <div className='flex justify-between items-center mb-4'>
@@ -262,7 +262,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
       </div>
 
       <div className='grid grid-cols-7 gap-1'>
-        {daysOfWeek.map((day) => (
+        {daysOfWeek.map(day => (
           <div
             key={day}
             className='text-center text-sm font-medium text-gray-500 py-1'

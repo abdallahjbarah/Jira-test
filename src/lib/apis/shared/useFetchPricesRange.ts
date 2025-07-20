@@ -8,7 +8,7 @@ export const fetchPricesRange = async (): Promise<PricesRange> => {
 };
 
 export const useFetchPricesRange = (
-  queryOptions?: UseQueryOptions<PricesRange, Error>,
+  queryOptions?: UseQueryOptions<PricesRange, Error>
 ) => {
   return useQuery({
     queryKey: ['prices-range'],

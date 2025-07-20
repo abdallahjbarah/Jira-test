@@ -12,7 +12,7 @@ const passwordSchema = (requiredMessage: string): Yup.StringSchema => {
     .min(8, 'Weak password. Must contain at least 8 characters.')
     .max(
       50,
-      'Too Long password. The password must be between 8 and 50 characters long.',
+      'Too Long password. The password must be between 8 and 50 characters long.'
     )
     .matches(hasSpaces, {
       message: 'The password must not contain spaces.',
@@ -99,7 +99,7 @@ export const resetPasswordForgotSchema = Yup.object().shape({
 export const changePasswordSchema = Yup.object().shape({
   oldPassword: isValidPasswordSchema('Old Password is required').notOneOf(
     [Yup.ref('newPassword')],
-    "Old Password and new Password can't be same.",
+    "Old Password and new Password can't be same."
   ),
   newPassword: passwordSchema('New Password is required'),
   confirmNewPassword: Yup.string()
@@ -121,7 +121,7 @@ export const ResetPasswordSchema = Yup.object().shape({
     .min(8, 'Password must be at least 8 characters')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-      'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character',
+      'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character'
     ),
   confirmPassword: Yup.string()
     .required('Please confirm your password')

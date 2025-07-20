@@ -19,7 +19,7 @@ export const useFetchPaymentMethods = (
       readonly ['paymentMethods']
     >,
     'queryKey' | 'queryFn'
-  >,
+  >
 ) => {
   return useQuery({
     ...queryOptions,

@@ -23,9 +23,9 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
   onMethodChange,
 }) => {
   const allMethods: PaymentMethodWithIcon[] =
-    methods?.map((method) => {
+    methods?.map(method => {
       const staticMethod = staticPaymentMethods.find(
-        (staticMethod) => staticMethod.name === method.name,
+        staticMethod => staticMethod.name === method.name
       );
       return {
         ...method,
@@ -42,8 +42,9 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
     }
   }, [selectedMethod, onMethodChange, allMethods]);
 
-  const selectedMethodObj = allMethods.find((m) => m.value === selectedMethod);
-  const disableAttachment = selectedMethodObj && isPayOnSite(selectedMethodObj.name);
+  const selectedMethodObj = allMethods.find(m => m.value === selectedMethod);
+  const disableAttachment =
+    selectedMethodObj && isPayOnSite(selectedMethodObj.name);
 
   return (
     <div className='flex flex-col gap-14'>

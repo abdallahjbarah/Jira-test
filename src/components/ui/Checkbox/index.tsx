@@ -36,7 +36,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
       className={cn(
         'flex items-start gap-2 cursor-pointer select-none',
         disabled && 'cursor-not-allowed opacity-50',
-        className,
+        className
       )}
       htmlFor={id}
       onClick={handleClick}
@@ -49,7 +49,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
             checkBoxClassName,
             checked
               ? 'bg-primary_1 border-primary_1'
-              : 'bg-white border-secondary_3',
+              : 'bg-white border-secondary_3'
           )}
         >
           {checked && <CheckIcon className='w-4 h-4 text-white' />}
@@ -69,7 +69,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
             checkBoxClassName,
             checked
               ? 'bg-primary_1 border-primary_1'
-              : 'bg-white border-secondary_3',
+              : 'bg-white border-secondary_3'
           )}
         >
           {checked && <CheckIcon className='w-4 h-4 text-white' />}

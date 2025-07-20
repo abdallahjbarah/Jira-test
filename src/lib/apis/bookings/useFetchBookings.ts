@@ -21,7 +21,7 @@ interface BookingResponse {
 }
 
 const fetchBookings = async (
-  filters: UseFetchBookingsFilters,
+  filters: UseFetchBookingsFilters
 ): Promise<BookingResponse> => {
   const response = await api
     .url(`/booking/user`)
@@ -39,7 +39,7 @@ export const useFetchBookings = (filters: UseFetchBookingsFilters) => {
 
 export const useFetchInfiniteBookings = (
   filter?: UseFetchBookingsFilters,
-  queryOptions?: UseInfiniteQueryOptions<any, Error>,
+  queryOptions?: UseInfiniteQueryOptions<any, Error>
 ) =>
   useInfiniteQuery({
     queryKey: ['bookings', filter],

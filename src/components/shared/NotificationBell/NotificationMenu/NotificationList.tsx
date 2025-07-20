@@ -31,7 +31,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
 }) => {
   const groupedNotifications = useMemo(
     () => groupNotificationsByDate(notifications),
-    [notifications],
+    [notifications]
   );
 
   return (

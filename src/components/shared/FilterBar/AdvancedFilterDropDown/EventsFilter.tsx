@@ -61,7 +61,7 @@ const EventsFilter: React.FC = () => {
       />
 
       <Controller
-        name='experienceLevel'
+        name='levelOfDifficulty'
         control={control}
         render={({ field }) => (
           <FilterSection

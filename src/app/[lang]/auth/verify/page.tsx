@@ -54,12 +54,12 @@ export default function VerifyPage(): React.ReactElement {
 
   const handleSubmit = async (
     values: VerificationFormValues,
-    { setSubmitting }: FormikHelpers<VerificationFormValues>,
+    { setSubmitting }: FormikHelpers<VerificationFormValues>
   ): Promise<void> => {
     const code = Object.keys(values)
-      .filter((key) => key.startsWith('code'))
+      .filter(key => key.startsWith('code'))
       .sort()
-      .map((key) => values[key as keyof VerificationFormValues])
+      .map(key => values[key as keyof VerificationFormValues])
       .join('');
 
     verifyCode({
@@ -115,7 +115,7 @@ export default function VerifyPage(): React.ReactElement {
                 <div className='space-y-4 w-full' dir='ltr'>
                   <div className='relative'>
                     <div className='flex justify-center gap-3 sm:gap-4'>
-                      {[0, 1, 2, 3].map((index) => (
+                      {[0, 1, 2, 3].map(index => (
                         <input
                           key={index}
                           type='text'
@@ -129,7 +129,7 @@ export default function VerifyPage(): React.ReactElement {
                               `code${index}` as keyof VerificationFormValues
                             ]
                           }
-                          onChange={(e) => {
+                          onChange={e => {
                             const value = e.target.value;
                             if (/^[0-9]?$/.test(value)) {
                               handleChange(e);
@@ -141,7 +141,7 @@ export default function VerifyPage(): React.ReactElement {
                               }
                             }
                           }}
-                          onKeyDown={(e) => {
+                          onKeyDown={e => {
                             if (
                               e.key === 'Backspace' &&
                               !e.currentTarget.value &&
@@ -183,10 +183,10 @@ export default function VerifyPage(): React.ReactElement {
                 <button
                   type='submit'
                   disabled={
-                    isVerifyCodeLoading || Object.values(values).some((v) => !v)
+                    isVerifyCodeLoading || Object.values(values).some(v => !v)
                   }
                   className={`w-full h-[44px] sm:h-[48px] rounded-[8px] bg-[#47C409] text-[13px] sm:text-[14px] font-bold leading-[17px] text-white text-center shadow-[0px_3px_20px_rgba(0,0,0,0.08)] transition-all hover:bg-[#3ba007] hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 ${
-                    isVerifyCodeLoading || Object.values(values).some((v) => !v)
+                    isVerifyCodeLoading || Object.values(values).some(v => !v)
                       ? 'cursor-not-allowed opacity-70'
                       : 'hover:bg-[#3ba007] focus:outline-none focus:ring-2 focus:ring-[#47C409] focus:ring-offset-2'
                   }`}

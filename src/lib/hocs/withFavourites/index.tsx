@@ -122,10 +122,10 @@ export interface WithFavouritesProps {
 }
 
 function withFavourites<P extends object>(
-  WrappedComponent: ComponentType<P>,
+  WrappedComponent: ComponentType<P>
 ): ComponentType<Omit<P, keyof WithFavouritesProps>> {
   const WithFavouritesComponent = (
-    props: Omit<P, keyof WithFavouritesProps>,
+    props: Omit<P, keyof WithFavouritesProps>
   ) => {
     const { t } = useTranslation();
     const { isOpen, openModal, closeModal } = useModal();
@@ -134,7 +134,7 @@ function withFavourites<P extends object>(
     const router = useRouter();
 
     const [currentSiteId, setCurrentSiteId] = React.useState<string | null>(
-      null,
+      null
     );
     const [selectedCollectionId, setSelectedCollectionId] = React.useState<
       string | null
@@ -156,7 +156,7 @@ function withFavourites<P extends object>(
         refetchCollections();
         handleCloseModal();
       },
-      onError: (error) => {
+      onError: error => {
         toast.error(t('favorites.addError'));
         setIsLoading(false);
       },
@@ -185,7 +185,7 @@ function withFavourites<P extends object>(
         setNewCollectionName(site.name);
         openModal();
       },
-      [isFavorite, openModal, t],
+      [isFavorite, openModal, t]
     );
 
     const handleCollectionSelect = (collectionId: string) => {
@@ -245,7 +245,7 @@ function withFavourites<P extends object>(
                 <FormInput
                   label={t('favorites.collectionName')}
                   value={newCollectionName || ''}
-                  onChange={(e) => {
+                  onChange={e => {
                     setNewCollectionName(e.target.value);
                     setSelectedCollectionId(null);
                   }}
@@ -271,7 +271,7 @@ function withFavourites<P extends object>(
                   {t('favorites.selectExistingCollection')}
                 </SectionTitle>
                 <CollectionsList>
-                  {favoriteCollections.map((collection) => (
+                  {favoriteCollections.map(collection => (
                     <CollectionItemWrapper
                       key={collection._id}
                       isSelected={selectedCollectionId === collection._id}

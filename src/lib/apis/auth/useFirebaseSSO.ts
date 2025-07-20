@@ -5,7 +5,7 @@ import { FirebaseSSOData, FirebaseSSOResponse } from '@/lib/types';
 
 const firebaseSSO = async (
   data: FirebaseSSOData,
-  userType: 'guest' | 'partner' = 'guest',
+  userType: 'guest' | 'partner' = 'guest'
 ): Promise<FirebaseSSOResponse> => {
   const response = await api
     .url(`/auth/firebase/sso?userType=${userType}`)
@@ -22,7 +22,7 @@ export const useFirebaseSSO = (
     any,
     { provider: string; additionalData?: any },
     any
-  >,
+  >
 ) => {
   return useMutation({
     mutationFn: async ({

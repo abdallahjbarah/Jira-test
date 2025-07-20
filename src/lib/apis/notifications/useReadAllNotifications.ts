@@ -12,7 +12,7 @@ const readAllNotifications = async () => {
 };
 
 export const useReadAllNotifications = (
-  mutationArgs?: UseMutationOptions<any, any, any, any>,
+  mutationArgs?: UseMutationOptions<any, any, any, any>
 ) => {
   const queryClient = useQueryClient();
 

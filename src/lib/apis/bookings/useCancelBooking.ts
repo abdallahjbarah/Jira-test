@@ -9,7 +9,7 @@ interface CancelBookingPayload {
 }
 
 const cancelBooking = async (
-  data: CancelBookingPayload,
+  data: CancelBookingPayload
 ): Promise<CancelBookingPayload> => {
   const { bookingID, ...rest } = data;
 
@@ -24,7 +24,7 @@ export const useCancelBooking = (
     CancelBookingPayload,
     WretchError,
     CancelBookingPayload
-  >,
+  >
 ) => {
   return useMutation({
     mutationFn: (data: CancelBookingPayload) => cancelBooking(data),

@@ -28,7 +28,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
     debounce((value: string) => {
       setDebouncedInput(value);
     }, 300),
-    [],
+    []
   );
 
   React.useEffect(() => {
@@ -89,7 +89,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
             adults: 0,
             children: 0,
             infants: 0,
-          }),
+          })
         );
       } else if (option.data.searchType === 'city') {
         onChange(
@@ -101,7 +101,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
             adults: 0,
             children: 0,
             infants: 0,
-          }),
+          })
         );
       }
 
@@ -130,17 +130,20 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
     <div
       ref={innerRef}
       {...innerProps}
-      className={`w-full text-left px-4 py-3 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0 focus:outline-none focus:bg-gray-100 ${locale === 'ar' ? 'text-right' : 'text-left'
-        }`}
+      className={`w-full text-left px-4 py-3 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0 focus:outline-none focus:bg-gray-100 ${
+        locale === 'ar' ? 'text-right' : 'text-left'
+      }`}
     >
       <div
-        className={`flex items-center ${locale === 'ar' ? 'justify-end' : 'justify-between'
-          }`}
+        className={`flex items-center ${
+          locale === 'ar' ? 'justify-end' : 'justify-between'
+        }`}
       >
         <div className='flex flex-col items-center gap-2'>
           <div
-            className={`flex items-center gap-2 ${locale === 'ar' ? 'flex-row-reverse' : 'flex-row'
-              }`}
+            className={`flex items-center gap-2 ${
+              locale === 'ar' ? 'flex-row-reverse' : 'flex-row'
+            }`}
           >
             <Image
               src={ExperienceIcon}
@@ -201,7 +204,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
       openMenuOnFocus={false}
       openMenuOnClick={false}
       styles={{
-        control: (base) => ({
+        control: base => ({
           ...base,
           minHeight: '48px',
           width: '200px',
@@ -212,17 +215,17 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
             borderColor: '#9CA3AF',
           },
         }),
-        menu: (base) => ({
+        menu: base => ({
           ...base,
           width: '300px',
           zIndex: 50,
           direction: locale === 'ar' ? 'rtl' : 'ltr',
         }),
-        dropdownIndicator: (base) => ({
+        dropdownIndicator: base => ({
           ...base,
           display: 'none',
         }),
-        indicatorSeparator: (base) => ({
+        indicatorSeparator: base => ({
           ...base,
           display: 'none',
         }),

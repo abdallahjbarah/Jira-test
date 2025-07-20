@@ -4,6 +4,7 @@ import CustomSvg from '@/components/ui/CustomSvg';
 import Dropdown from '@/components/ui/Dropdown';
 import FilledButton from '@/components/ui/buttons/FilledButton';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { getDefaultFilterValues } from '@/utils/helpers/filterHelpers';
 import React, { useMemo, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import EventsFilter from './EventsFilter';
@@ -51,7 +52,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
           // For price range, count as 1 if modified
           if (key === 'priceRange') {
             const [min, max] = value;
-            return count + ((min > 0 || max < 100) ? 1 : 0);
+            return count + (min > 0 || max < 100 ? 1 : 0);
           }
           // For other arrays, count each item
           return count + value.length;
@@ -95,20 +96,31 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   };
 
   const clearAllFilters = () => {
-    // Reset form with empty values
+    // Get default filter values for advanced filters only
+    const defaultFilters = getDefaultFilterValues(filterType);
+
+    // Extract only the advanced filter properties
     const emptyValues = {
-      priceRange: [0, 100],
-      languages: [],
-      amenities: [],
-      bookingOptions: [],
-      accessibilityFeatures: [],
-      bookagriBadge: false,
-      specialOffers: undefined,
-      bedrooms: 0,
-      beds: 0,
-      bathrooms: 0,
-      includesExperience: undefined,
-      collectionType: undefined
+      priceRange: defaultFilters.priceRange,
+      languages: defaultFilters.languages,
+      amenities: defaultFilters.amenities,
+      bookingOptions: defaultFilters.bookingOptions,
+      accessibilityFeatures: defaultFilters.accessibilityFeatures,
+      bookagriBadge: defaultFilters.bookagriBadge,
+      specialOffers: defaultFilters.specialOffers,
+      bedrooms: defaultFilters.bedrooms,
+      beds: defaultFilters.beds,
+      bathrooms: defaultFilters.bathrooms,
+      includesExperience: defaultFilters.includesExperience,
+      collectionType: defaultFilters.collectionType,
+      experienceTypes: defaultFilters.experienceTypes,
+      levelOfDifficulty: defaultFilters.levelOfDifficulty,
+      ageSuitability: defaultFilters.ageSuitability,
+      timeOfDay: defaultFilters.timeOfDay,
+      duration: defaultFilters.duration,
+      minPrice: defaultFilters.minPrice,
+      maxPrice: defaultFilters.maxPrice,
+      accessProvider: defaultFilters.accessProvider,
     };
 
     reset(emptyValues);
@@ -118,13 +130,13 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
     if (dropdownContentRef.current) {
       dropdownContentRef.current.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     }
   };
 
   const filterTrigger = (
-    <div className="relative">
+    <div className='relative'>
       <CustomSvg
         src='/SVGs/shared/filter-icon.svg'
         className='!w-[57px] !h-[57px] text-text_2 block'
@@ -133,7 +145,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
       />
       {activeFiltersCount > 0 && (
         <div
-  className="
+          className='
     absolute -top-2 -right-2
     bg-[#FF3A1E] text-white rounded-full
     min-w-[24px] h-[24px]
@@ -141,12 +153,10 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
     text-sm font-semibold
     px-1
     shadow-lg
-  "
->
-  {activeFiltersCount}
-</div>
-
-
+  '
+        >
+          {activeFiltersCount}
+        </div>
       )}
     </div>
   );
@@ -168,7 +178,10 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
 
   const filterContent = (
     <div className='bg-white rounded-xl shadow-2xl w-full relative'>
-      <div ref={dropdownContentRef} className='p-6 max-h-[calc(80vh-80px)] tabletM:max-h-[calc(500px-80px)] overflow-y-auto'>
+      <div
+        ref={dropdownContentRef}
+        className='p-6 max-h-[calc(80vh-80px)] tabletM:max-h-[calc(500px-80px)] overflow-y-auto'
+      >
         <h3 className='text-lg text-center font-semibold'>
           {t('filter.filter')}
         </h3>

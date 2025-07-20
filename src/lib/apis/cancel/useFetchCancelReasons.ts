@@ -8,7 +8,7 @@ const fetchCancelReasons = async (): Promise<CancelReason[]> => {
 };
 
 export const useFetchCancelReasons = (
-  queryOptions?: UseQueryOptions<CancelReason[], Error>,
+  queryOptions?: UseQueryOptions<CancelReason[], Error>
 ) => {
   return useQuery({
     queryKey: ['cancel-reason'],

@@ -1,10 +1,10 @@
 import { api } from '@/lib/apis';
 import { SitesResponse } from '@/lib/types';
 import {
-    useInfiniteQuery,
-    UseInfiniteQueryOptions,
-    useQuery,
-    UseQueryOptions,
+  useInfiniteQuery,
+  UseInfiniteQueryOptions,
+  useQuery,
+  UseQueryOptions,
 } from '@tanstack/react-query';
 
 const fetchCollections = async (filter: any): Promise<SitesResponse> => {
@@ -18,7 +18,7 @@ const fetchCollections = async (filter: any): Promise<SitesResponse> => {
 
 export const useFetchCollections = (
   filter: any,
-  queryOptions?: UseQueryOptions<SitesResponse, Error>,
+  queryOptions?: UseQueryOptions<SitesResponse, Error>
 ) => {
   return useQuery({
     ...queryOptions,
@@ -37,7 +37,7 @@ export const useFetchInfiniteCollections = (
       pages: SitesResponse[];
     },
     any
-  >,
+  >
 ) => {
   return useInfiniteQuery({
     queryKey: ['collections-infinite', filter],

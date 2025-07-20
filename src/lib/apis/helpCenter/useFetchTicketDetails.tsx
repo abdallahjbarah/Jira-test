@@ -12,7 +12,7 @@ const fetchTicketDetails = async (id: string): Promise<Ticket> => {
 
 export const useFetchTicketDetails = (
   id: string,
-  queryOptions?: UseQueryOptions<Ticket, Error>,
+  queryOptions?: UseQueryOptions<Ticket, Error>
 ) =>
   useQuery({
     queryKey: ['help-center-details', id],

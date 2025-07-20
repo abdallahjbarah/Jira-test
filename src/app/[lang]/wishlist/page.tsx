@@ -28,9 +28,9 @@ function WishlistPage(): React.ReactElement {
     () =>
       favoriteCollections?.reduce(
         (acc, collection) => acc + collection.sites.length,
-        0,
+        0
       ),
-    [favoriteCollections],
+    [favoriteCollections]
   );
 
   if (isLoading) {
@@ -82,7 +82,7 @@ function WishlistPage(): React.ReactElement {
           You have <span className='text-primary_1'>{favoriteCollections?.length}</span> Collection{favoriteCollections?.length === 1 ? '' : 's'} - <span className='text-primary_1'>{savedCount}</span> Saved
         </p>
         <WishlistItemsContainer className='mt-[3.563rem]'>
-          {favoriteCollections?.map((item) => (
+          {favoriteCollections?.map(item => (
             <CustomLink
               key={item._id}
               path={`/wishlist/${item._id}`}

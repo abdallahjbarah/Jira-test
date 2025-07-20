@@ -25,10 +25,10 @@ export default function ForgotPasswordPage() {
       onSuccess: () => {
         toast.success(t('auth.forgotPassword.verificationSent'));
         router.push(
-          `/${locale}/auth/verify?email=${encodeURIComponent(watch('email'))}&type=forgot-password`,
+          `/${locale}/auth/verify?email=${encodeURIComponent(watch('email'))}&type=forgot-password`
         );
       },
-      onError: (error) => {
+      onError: error => {
         toast.error(error.message || t('auth.forgotPassword.sendFailed'));
       },
     });
@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
     },
   });
 
-  const onSubmit: SubmitHandler<ForgotPasswordFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<ForgotPasswordFormValues> = async data => {
     forgotPassword(data);
   };
 

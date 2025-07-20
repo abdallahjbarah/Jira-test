@@ -8,7 +8,7 @@ export const fetchAmenities = async (): Promise<Amenity[]> => {
 };
 
 export const useFetchAmenities = (
-  queryOptions?: UseQueryOptions<Amenity[], Error>,
+  queryOptions?: UseQueryOptions<Amenity[], Error>
 ) => {
   return useQuery({
     queryKey: ['amenities'],

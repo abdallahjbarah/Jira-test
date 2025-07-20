@@ -31,17 +31,17 @@ export default function WelcomePage(): React.ReactElement {
   const [loading, setLoading] = useState(false);
 
   const uploadFileMutation = useUploadFile({
-    onSuccess: (data) => {
+    onSuccess: data => {
       updateUserWithImage(data);
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(t('auth.welcome.profileImageUploadFailed'));
       setLoading(false);
     },
   });
 
   const editUserMutation = useEditUser({
-    onSuccess: (data) => {
+    onSuccess: data => {
       setLoading(false);
       queryClient.setQueryData(['user'], (oldData: any) => {
         return {
@@ -76,13 +76,13 @@ export default function WelcomePage(): React.ReactElement {
   const profileImage = watch('profileImage');
 
   const handleImageUpload = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ): void => {
     const file = event.target.files?.[0];
     if (file) {
       setImageFile(file);
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         setValue('profileImage', e.target?.result as string);
       };
       reader.readAsDataURL(file);
@@ -108,7 +108,7 @@ export default function WelcomePage(): React.ReactElement {
     });
   };
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = data => {
     setLoading(true);
 
     if (imageFile) {
@@ -252,11 +252,11 @@ export default function WelcomePage(): React.ReactElement {
                   <div className='absolute top-full left-0 mt-2 z-50'>
                     <DateRangePicker
                       selectedDates={[]}
-                      onChange={(dates) => {
+                      onChange={dates => {
                         if (dates.length > 0) {
                           setValue(
                             'birthDate',
-                            dates[0].toISOString().split('T')[0],
+                            dates[0].toISOString().split('T')[0]
                           );
                           setIsDatePickerOpen(false);
                         }
@@ -278,7 +278,7 @@ export default function WelcomePage(): React.ReactElement {
                 rules={{ required: 'Please select your gender' }}
                 render={({ field, fieldState }) => (
                   <div className='flex items-center gap-4 w-[296px]'>
-                    {GENDER_OPTIONS.map((option) => (
+                    {GENDER_OPTIONS.map(option => (
                       <div key={option.value} className='flex items-center'>
                         <RadioButton
                           id={option.value}

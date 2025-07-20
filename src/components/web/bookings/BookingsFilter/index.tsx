@@ -67,8 +67,8 @@ const BookingsFilter = ({
           tabs={tabs}
           defaultActiveTab={BookingStatus.PENDING}
           containerClassName='w-full laptopM:w-auto'
-          showContent={true}
-          onChange={(tabId) => {
+          showContent={false}
+          onChange={tabId => {
             formMethods.setValue('status', tabId);
             onFilterChange(tabId);
           }}

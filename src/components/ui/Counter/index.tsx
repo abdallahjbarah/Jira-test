@@ -40,7 +40,7 @@ const Counter: React.FC<CounterProps> = ({
             'w-8 h-8 bg-white rounded-[20px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] flex items-center justify-center hover:shadow-lg',
             isDecrementDisabled
               ? 'text-gray-300 cursor-not-allowed'
-              : 'text-gray-400 cursor-pointer',
+              : 'text-gray-400 cursor-pointer'
           )}
           disabled={isDecrementDisabled}
           type='button'
@@ -55,7 +55,7 @@ const Counter: React.FC<CounterProps> = ({
             'w-8 h-8 bg-white rounded-[20px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] flex items-center justify-center hover:shadow-lg',
             isIncrementDisabled
               ? 'text-gray-300 cursor-not-allowed'
-              : 'text-gray-400 cursor-pointer',
+              : 'text-gray-400 cursor-pointer'
           )}
           disabled={isIncrementDisabled}
           type='button'

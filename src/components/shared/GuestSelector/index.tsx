@@ -37,7 +37,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
   });
 
   const handleCountChange = (category: GuestCategory, increment: boolean) => {
-    setGuests((prev) => {
+    setGuests(prev => {
       const newGuests = {
         ...prev,
         [category]: increment

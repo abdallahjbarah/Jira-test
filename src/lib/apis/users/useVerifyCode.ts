@@ -12,7 +12,7 @@ const verifyCode = async (data: VerifyCodeData) => {
 };
 
 export const useVerifyCode = (
-  mutationArgs?: UseMutationOptions<any, any, VerifyCodeData, any>,
+  mutationArgs?: UseMutationOptions<any, any, VerifyCodeData, any>
 ) => {
   return useMutation({
     mutationFn: (data: VerifyCodeData) => verifyCode(data),

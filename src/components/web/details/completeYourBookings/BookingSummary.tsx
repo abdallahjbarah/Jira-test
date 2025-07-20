@@ -1,7 +1,6 @@
 'use client';
 import CustomSvg from '@/components/ui/CustomSvg';
 import Divider from '@/components/ui/Divider';
-import FilledButton from '@/components/ui/buttons/FilledButton';
 import withFavourites from '@/lib/hocs/withFavourites';
 import { Site } from '@/lib/types';
 import useCurrency from '@/utils/hooks/useCurrency';
@@ -58,7 +57,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         }
       }
     },
-    [isCollectionFavorite, removeFavorite, siteInfo, openFavouritesModal],
+    [isCollectionFavorite, removeFavorite, siteInfo, openFavouritesModal]
   );
 
   const heartIconSrc = React.useMemo(() => {
@@ -83,7 +82,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       siteInfo.pricingInformation,
       bookingData.guests,
       siteInfo.extras,
-      numberOfNights,
+      numberOfNights
     );
 
     return formatPriceBreakdownForDisplay(breakdown, currency, numberOfNights);
@@ -104,7 +103,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       siteInfo.pricingInformation,
       bookingData.guests,
       siteInfo.extras,
-      numberOfNights,
+      numberOfNights
     );
 
     const grandTotal = calculateGrandTotal(breakdown);

@@ -38,7 +38,9 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   params,
 }) => {
   // Helper function to format guest information
-  const formatGuestInfo = (guests: { adults: number; children: number; infants: number } | undefined) => {
+  const formatGuestInfo = (
+    guests: { adults: number; children: number; infants: number } | undefined
+  ) => {
     if (!guests) return '';
 
     const parts = [];
@@ -98,8 +100,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     availability: bookingData?.availability,
     guests: bookingData?.guests,
     type: bookingData?.type,
-    detailsType: detailsData?.data?.type,
-    detailsSchedule: detailsData?.data?.schedule
   });
 
   // Helper function to get the correct date/time based on site type
@@ -107,7 +107,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     console.log('🔍 Debug - getBookingDateTime called with:', {
       bookingData,
       detailsData: detailsData?.data,
-      availability: bookingData?.availability
+      availability: bookingData?.availability,
     });
 
     if (!bookingData?.availability) {
@@ -116,7 +116,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
         startTime: detailsData?.data?.schedule?.startDateTime || '',
         endTime: detailsData?.data?.schedule?.endDateTime || '',
         startDate: detailsData?.data?.schedule?.startDateTime || '',
-        endDate: detailsData?.data?.schedule?.endDateTime || ''
+        endDate: detailsData?.data?.schedule?.endDateTime || '',
       };
     }
 
@@ -124,20 +124,48 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     if (detailsData?.data?.type === 'Stay') {
       console.log('🏠 Stay type detected, using startDate/endDate');
       return {
-        startTime: bookingData.availability.startDate || bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '',
-        endTime: bookingData.availability.endDate || bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || '',
-        startDate: bookingData.availability.startDate || bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '',
-        endDate: bookingData.availability.endDate || bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || ''
+        startTime:
+          bookingData.availability.startDate ||
+          bookingData.availability.startDateTime ||
+          detailsData?.data?.schedule?.startDateTime ||
+          '',
+        endTime:
+          bookingData.availability.endDate ||
+          bookingData.availability.endDateTime ||
+          detailsData?.data?.schedule?.endDateTime ||
+          '',
+        startDate:
+          bookingData.availability.startDate ||
+          bookingData.availability.startDateTime ||
+          detailsData?.data?.schedule?.startDateTime ||
+          '',
+        endDate:
+          bookingData.availability.endDate ||
+          bookingData.availability.endDateTime ||
+          detailsData?.data?.schedule?.endDateTime ||
+          '',
       };
     }
 
     // For experiences, use startDateTime/endDateTime from the selected slot
     console.log('🎯 Experience type detected, using startDateTime/endDateTime');
     return {
-      startTime: bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '',
-      endTime: bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || '',
-      startDate: bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '',
-      endDate: bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || ''
+      startTime:
+        bookingData.availability.startDateTime ||
+        detailsData?.data?.schedule?.startDateTime ||
+        '',
+      endTime:
+        bookingData.availability.endDateTime ||
+        detailsData?.data?.schedule?.endDateTime ||
+        '',
+      startDate:
+        bookingData.availability.startDateTime ||
+        detailsData?.data?.schedule?.startDateTime ||
+        '',
+      endDate:
+        bookingData.availability.endDateTime ||
+        detailsData?.data?.schedule?.endDateTime ||
+        '',
     };
   };
 
@@ -145,7 +173,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
   const { mutate: bookCollection, isPending: isBookingCollectionPending } =
     useMutateBooking({
-      onSuccess: (data) => {
+      onSuccess: data => {
         toast.success(t('booking.financialReceipt.success'));
         clearBookingData(params.id);
         router.push(`/my-bookings/${data._id}`);
@@ -157,7 +185,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     });
 
   const { mutate: uploadFile, isPending: isUploadingFile } = useUploadFile({
-    onSuccess: (data) => {
+    onSuccess: data => {
       bookCollection({
         siteId: detailsData?.data?._id || '',
         availabilityId:
@@ -177,7 +205,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     },
   });
 
-  const onSubmit: SubmitHandler<BookingFormData> = (data) => {
+  const onSubmit: SubmitHandler<BookingFormData> = data => {
     console.log('Form submitted with data:', data);
     console.log('Financial receipt from data:', data.financialReceipt);
     console.log('Financial receipt from watch:', financialReceipt);
@@ -190,7 +218,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
     // Check if selected payment method is on-site payment
     const selectedPaymentMethodObj = (paymentMethods || []).find(
-      (m) => m._id === data.selectedPaymentMethod
+      m => m._id === data.selectedPaymentMethod
     );
     const isOnSitePayment = isPayOnSite(selectedPaymentMethodObj?.name);
 
@@ -233,9 +261,22 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
       return;
     }
 
-    // If we reach here, it's a non-on-site payment with no file attached
-    console.log('File attachment required for non-on-site payment but not provided');
-    toast.error('Please attach a financial receipt to proceed with your booking.');
+    if (disableAttachment) {
+      // For other payment methods, require file attachment
+      if (!data.financialReceipt) {
+        console.log('File attachment required but not provided');
+        toast.error(t('booking.financialReceipt.error'));
+        return;
+      }
+    }
+
+    if (data.financialReceipt) {
+      console.log('Uploading file for non-on-site payment');
+      uploadFile({
+        file: data.financialReceipt,
+        folderName: FileFolder.PAYMENT_INFO,
+      });
+    }
   };
 
   const {
@@ -268,16 +309,16 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
   // Find the selected payment method object
   const selectedPaymentMethodObj = (paymentMethods || []).find(
-    (m) => m._id === selectedPaymentMethod
+    m => m._id === selectedPaymentMethod
   );
   const disableAttachment = isPayOnSite(selectedPaymentMethodObj?.name);
 
-  const enabledPaymentMethods = (paymentMethods || []).filter((m) => m.isEnabled);
+  const enabledPaymentMethods = (paymentMethods || []).filter(m => m.isEnabled);
 
   return (
     <InnerPagesLayout headerProps={{ withNavItems: false }}>
       <main className='container'>
-        <form id="booking-form" onSubmit={handleSubmit(onSubmit)}>
+        <form id='booking-form' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-32'>
             <h1 className='text-5xl font-custom-700 text-text_1 font-gellix-Bold'>
               Complete your booking and pay
@@ -285,26 +326,42 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
             <div className='flex flex-col lg:flex-row justify-between w-full gap-20'>
               <div className='flex flex-col gap-2 flex-1'>
                 <BookingDetails
-                  time={`${new Date(bookingDateTime.startTime).toLocaleTimeString('en-US', {
+                  time={`${new Date(
+                    bookingData?.availability?.startDateTime ||
+                      detailsData?.data?.schedule.startDateTime ||
+                      ''
+                  ).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
-                  })} - ${new Date(bookingDateTime.endTime).toLocaleTimeString('en-US', {
+                  })} - ${new Date(
+                    bookingData?.availability?.endDateTime ||
+                      detailsData?.data?.schedule.endDateTime ||
+                      ''
+                  ).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}`}
-                  date={`${new Date(bookingDateTime.startDate).toLocaleDateString('en-US', {
+                  date={`${new Date(
+                    bookingData?.availability?.startDateTime ||
+                      detailsData?.data?.schedule.startDateTime ||
+                      ''
+                  ).toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'short',
                     day: 'numeric',
-                  })} - ${new Date(bookingDateTime.endDate).toLocaleDateString('en-US', {
+                  })} - ${new Date(
+                    bookingData?.availability?.endDateTime ||
+                      detailsData?.data?.schedule.endDateTime ||
+                      ''
+                  ).toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'short',
                     day: 'numeric',
                   })}`}
                   people={formatGuestInfo(bookingData?.guests)}
-                  onGuestUpdate={(guests) => {
+                  onGuestUpdate={guests => {
                     updateBookingData(params.id, {
-                      guests: guests,
+                      guests,
                     });
                   }}
                 />
@@ -312,14 +369,14 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 <AdditionalServices
                   transportationChecked={transportationChecked}
                   guideChecked={guideChecked}
-                  onTransportationChange={(checked) =>
+                  onTransportationChange={checked =>
                     setValue('transportationChecked', checked)
                   }
-                  onGuideChange={(checked) => setValue('guideChecked', checked)}
+                  onGuideChange={checked => setValue('guideChecked', checked)}
                   guidePrice='JOD 50'
                   siteInfo={detailsData?.data}
                   airportChecked={airportChecked}
-                  onAirportChange={(checked) =>
+                  onAirportChange={checked =>
                     setValue('airportChecked', checked)
                   }
                 />
@@ -370,7 +427,9 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                     <PaymentMethods
                       methods={enabledPaymentMethods}
                       selectedMethod={selectedPaymentMethod || ''}
-                      onMethodChange={(method) => setValue('selectedPaymentMethod', method)}
+                      onMethodChange={method =>
+                        setValue('selectedPaymentMethod', method)
+                      }
                     />
                     <Divider className='w-full my-8' />
                   </>
@@ -381,7 +440,8 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                     {!financialReceipt && (
                       <div className='mb-2'>
                         <p className='text-sm text-red-600 font-medium'>
-                          * Financial receipt is required for this payment method
+                          * Financial receipt is required for this payment
+                          method
                         </p>
                       </div>
                     )}
@@ -394,7 +454,8 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 ) : (
                   <div className='mb-24 p-4 bg-green-50 border border-green-200 rounded-lg'>
                     <p className='text-green-800 text-sm'>
-                      No file attachment required for on-site payment methods. You can proceed with your booking.
+                      No file attachment required for on-site payment methods.
+                      You can proceed with your booking.
                     </p>
                   </div>
                 )}

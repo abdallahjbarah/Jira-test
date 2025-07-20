@@ -13,7 +13,7 @@ const userLogin = async (data: UserLoginData): Promise<UserLoginResponse> => {
 };
 
 export const useUserLogin = (
-  mutationArgs?: UseMutationOptions<any, any, UserLoginData, any>,
+  mutationArgs?: UseMutationOptions<any, any, UserLoginData, any>
 ) => {
   return useMutation({
     mutationFn: (data: UserLoginData) => userLogin(data),

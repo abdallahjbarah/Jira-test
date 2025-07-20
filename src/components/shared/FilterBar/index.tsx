@@ -9,6 +9,7 @@ import {
   CollectionFilter,
   FilterFormValues,
   getFormDefaultsFromSearchParams,
+  getDefaultFilterValues,
 } from '@/utils/helpers/filterHelpers';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
@@ -29,7 +30,9 @@ const FilterBar = () => {
   // Add state for SearchPopup
   const [showSearchPopup, setShowSearchPopup] = React.useState(false);
   const [selectedLocation, setSelectedLocation] = React.useState<string>('');
-  const [selectedFilter, setSelectedFilter] = React.useState(collectionStatus || 'all');
+  const [selectedFilter, setSelectedFilter] = React.useState(
+    collectionStatus || 'all'
+  );
 
   // Add state to track active filter buttons
   const [activeButton, setActiveButton] = React.useState<string | null>(null);
@@ -46,7 +49,7 @@ const FilterBar = () => {
 
   const [showSearchResults, setShowSearchResults] = React.useState(false);
 
-  useEffect(() => { }, [searchDestinationData]);
+  useEffect(() => {}, [searchDestinationData]);
 
   const [isUrlSync, setIsUrlSync] = React.useState(false);
   const isInitialMount = React.useRef(true);
@@ -62,7 +65,7 @@ const FilterBar = () => {
           router.push(newUrl, { scroll: false });
         }
       }, 300),
-    [searchParams, router],
+    [searchParams, router]
   );
 
   const debouncedFilterUpdate = React.useMemo(
@@ -70,7 +73,7 @@ const FilterBar = () => {
       debounce((updatedFilters: CollectionFilter) => {
         methods.setValue('filters', updatedFilters, { shouldValidate: true });
       }, 150),
-    [methods],
+    [methods]
   );
 
   const getCheckInDate = (): Date | undefined => {
@@ -82,7 +85,7 @@ const FilterBar = () => {
     }
   };
 
-  const onSubmit = (data: FilterFormValues) => { };
+  const onSubmit = (data: FilterFormValues) => {};
 
   const handleCheckInChange = (dateString: string, dates: Date[]) => {
     const currentFilters = methods.getValues('filters') || {};
@@ -118,7 +121,12 @@ const FilterBar = () => {
     setActiveButton(null); // Clear active button after selecting checkout
   };
 
-  const handleLocationSelect = (location: { type: string; id?: string; name: string; searchType: string }) => {
+  const handleLocationSelect = (location: {
+    type: string;
+    id?: string;
+    name: string;
+    searchType: string;
+  }) => {
     setSelectedLocation(location.name);
 
     const currentFilters = methods.getValues('filters') || {};
@@ -204,28 +212,27 @@ const FilterBar = () => {
       city: currentFilters.city,
     };
 
-    Object.keys(preservedFilters).forEach((key) => {
+    Object.keys(preservedFilters).forEach(key => {
       if (preservedFilters[key] === undefined) {
         delete preservedFilters[key];
       }
     });
 
-    debouncedFilterUpdate(preservedFilters);
+    // Update form with preserved filters
+    methods.setValue('filters', preservedFilters, { shouldValidate: true });
+
+    // Update URL to reflect cleared advanced filters
+    const params = buildSearchParamsFromFilters(preservedFilters, searchParams);
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    router.push(newUrl, { scroll: false });
   };
   const handleClear = () => {
-    // Reset form and all filters
+    // Get default filter values based on collection status
+    const defaultFilters = getDefaultFilterValues(collectionStatus as string);
+
+    // Reset form with default values
     methods.reset({
-      filters: {
-        adults: 0,
-        children: 0,
-        infants: 0,
-        checkinTime: '',
-        ...(collectionStatus !== 'experiences' && { checkoutTime: '' }),
-        city: undefined,
-        country: undefined,
-        destinationText: '',
-        siteId: undefined
-      }
+      filters: defaultFilters,
     });
 
     // Reset all state
@@ -234,8 +241,10 @@ const FilterBar = () => {
     setActiveButton(null);
     setShowSearchResults(false);
 
-    // Reset URL to base
-    // router.push(`/${searchParams.get('lang') || 'en'}`);
+    // Update URL to reflect cleared filters
+    const params = buildSearchParamsFromFilters(defaultFilters, searchParams);
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    router.push(newUrl, { scroll: false });
   };
 
   const handleSearchDropdownSubmit = (data: any) => {
@@ -277,11 +286,11 @@ const FilterBar = () => {
     } else if (collectionStatus === 'experiences') {
       if (searchType === 'city') {
         router.push(
-          `/${searchParams.get('lang') || 'en'}/experiences?city=${result.city}&country=${result.country}`,
+          `/${searchParams.get('lang') || 'en'}/experiences?city=${result.city}&country=${result.country}`
         );
       } else if (searchType === 'country') {
         router.push(
-          `/${searchParams.get('lang') || 'en'}/experiences?country=${result.country}`,
+          `/${searchParams.get('lang') || 'en'}/experiences?country=${result.country}`
         );
       }
     } else {
@@ -326,7 +335,7 @@ const FilterBar = () => {
         ...filterData,
       };
       methods.setValue('filters', updatedFilters, { shouldValidate: false });
-    } catch (e) { }
+    } catch (e) {}
   };
 
   const handleFilterSelect = (filterKey: string) => {
@@ -336,7 +345,7 @@ const FilterBar = () => {
       const currentFilters = methods.getValues('filters') || {};
       const updatedFilters = {
         ...currentFilters,
-        checkoutTime: ''
+        checkoutTime: '',
       };
       methods.setValue('filters', updatedFilters, { shouldValidate: false });
     }
@@ -356,7 +365,11 @@ const FilterBar = () => {
             title={{ en: 'Where', ar: 'أين' }}
             value={selectedLocation || 'Search Destinations'}
             onClick={() => setShowSearchPopup(true)}
-            className={showSearchPopup ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
+            className={
+              showSearchPopup
+                ? 'bg-white rounded-full [&_span]:!text-green-600'
+                : ''
+            }
           />
 
           <DatePickerDropdown
@@ -370,7 +383,11 @@ const FilterBar = () => {
                 ? new Date(filtersValue.checkoutTime)
                 : new Date(new Date().setFullYear(new Date().getFullYear() + 1))
             }
-            className={activeButton === 'date' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
+            className={
+              activeButton === 'date'
+                ? 'bg-white rounded-full [&_span]:!text-green-600'
+                : ''
+            }
           />
 
           {selectedFilter !== 'experiences' && (
@@ -382,7 +399,11 @@ const FilterBar = () => {
               checkInDate={getCheckInDate()}
               minDate={new Date()}
               value={filtersValue?.checkoutTime || ''}
-              className={activeButton === 'checkout' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
+              className={
+                activeButton === 'checkout'
+                  ? 'bg-white rounded-full [&_span]:!text-green-600'
+                  : ''
+              }
             />
           )}
 
@@ -396,18 +417,20 @@ const FilterBar = () => {
             }}
           />
 
-          <div className={`relative flex-1 flex items-center justify-end gap-4 ${locale === 'ar' ? 'ml-6' : 'mr-6'}`}>
+          <div
+            className={`relative flex-1 flex items-center justify-end gap-4 ${locale === 'ar' ? 'ml-6' : 'mr-6'}`}
+          >
             <button
-              type="button"
+              type='button'
               onClick={handleMainSearch}
-              className="flex items-center justify-center p-3 bg-transparent rounded-full border-transparent transition-colors group"
+              className='flex items-center justify-center p-3 bg-transparent rounded-full border-transparent transition-colors group'
             >
               <CustomSvg
-                src="/SVGs/home/search-bar-logo.svg"
+                src='/SVGs/home/search-bar-logo.svg'
                 width={33}
                 height={33}
-                className="opacity-100 group-hover:text-black"
-                color="white"
+                className='opacity-100 group-hover:text-black'
+                color='white'
               />
             </button>
             {!showSearchPopup && (
@@ -455,7 +478,7 @@ const FilterBar = () => {
           defaultValues={filtersValue}
         />
       </form>
-    </FormProvider >
+    </FormProvider>
   );
 };
 

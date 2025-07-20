@@ -12,7 +12,7 @@ const fetchCities = async (countryId: string): Promise<City[]> => {
 };
 export const useFetchCities = (
   countryId: string,
-  queryOptions?: UseQueryOptions<City[], Error>,
+  queryOptions?: UseQueryOptions<City[], Error>
 ) =>
   useQuery({
     queryKey: ['cities', countryId],

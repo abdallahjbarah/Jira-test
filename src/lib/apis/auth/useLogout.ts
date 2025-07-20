@@ -14,7 +14,7 @@ const logout = async (data: LogoutData) => {
 };
 
 export const useLogout = (
-  mutationArgs?: UseMutationOptions<any, any, LogoutData, any>,
+  mutationArgs?: UseMutationOptions<any, any, LogoutData, any>
 ) => {
   return useMutation({
     mutationFn: (data: LogoutData) => logout(data),

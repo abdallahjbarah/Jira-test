@@ -50,23 +50,23 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({
         </p>
       </div>
     </div>
-          <div className='flex gap-4 items-start'>
-        <div className='rounded-full w-20 h-20 flex-shrink-0'>
-          <Image
-            src={coHosts?.image || '/images/placeholder.jpg'}
-            alt='co-host'
-            width={80}
-            height={80}
-            className='w-full h-full object-cover rounded-full'
-          />
-        </div>
+    <div className='flex gap-4 items-start'>
+      <div className='rounded-full w-20 h-20 flex-shrink-0'>
+        <Image
+          src={coHosts?.image || '/images/placeholder.jpg'}
+          alt='co-host'
+          width={80}
+          height={80}
+          className='w-full h-full object-cover rounded-full'
+        />
+      </div>
       <div className='flex flex-col gap-1 justify-start'>
         <p className='font-custom-700 text-text_1 text-custom-22 laptopM:text-custom-30'>
           Co-Host information
         </p>
         <p className='font-custom-400 font-sems text-text_3 text-custom-16 laptopM:text-custom-20'>
           {coHosts?.firstName} {coHosts?.lastName} • Hosted in{' '}
-          {coHosts?.languages.map((language) => language.nameEn).join(', ')}
+          {coHosts?.languages.map(language => language.nameEn).join(', ')}
         </p>
         <p className='font-custom-400 font-sems text-text_3 text-custom-16 laptopM:text-custom-20'>
           {coHosts?.description}

@@ -7,7 +7,7 @@ interface UpdateCollectionDetailsPayload {
 }
 
 const updateCollectionDetails = async (
-  data: UpdateCollectionDetailsPayload,
+  data: UpdateCollectionDetailsPayload
 ): Promise<UpdateCollectionDetailsPayload> => {
   const { id, ...rest } = data;
   const response = await api.url(`/users/favorites/${id}`).patch(rest).json();
@@ -19,7 +19,7 @@ export const useUpdateCollectionDetails = (
     UpdateCollectionDetailsPayload,
     Error,
     UpdateCollectionDetailsPayload
-  >,
+  >
 ) => {
   return useMutation({
     mutationFn: updateCollectionDetails,

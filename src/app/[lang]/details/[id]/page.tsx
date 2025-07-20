@@ -40,48 +40,48 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     title: string;
     description: string;
   }[] = [
-      {
-        icon: '/SVGs/shared/details-icons/timeCircle.svg',
-        title: 'Duration',
-        description: '2hrs 30m',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/sun.svg',
-        title: 'Time of Day',
-        description: 'Morning (before 12 pm) - Evening (after 5 pm)',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/guideIcon.svg',
-        title: 'Guide (Upon Request)',
-        description: 'Extra fees applied',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
-        title: 'Level of Difficulty',
-        description: 'Easy (relaxed tour, easy walk)',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
-        title: 'Age Suitability',
-        description: '3+',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/transportationIcon.svg',
-        title: 'Transportation (Upon Request)',
-        description: 'Extra fees applied',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
-        title: 'Spoken Language',
-        description:
-          'Arabic, English (Download a language translator app to communicate with host!)',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
-        title: 'Wheelchair Accessible',
-        description: '',
-      },
-    ];
+    {
+      icon: '/SVGs/shared/details-icons/timeCircle.svg',
+      title: 'Duration',
+      description: '2hrs 30m',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/sun.svg',
+      title: 'Time of Day',
+      description: 'Morning (before 12 pm) - Evening (after 5 pm)',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/guideIcon.svg',
+      title: 'Guide (Upon Request)',
+      description: 'Extra fees applied',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
+      title: 'Level of Difficulty',
+      description: 'Easy (relaxed tour, easy walk)',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
+      title: 'Age Suitability',
+      description: '3+',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/transportationIcon.svg',
+      title: 'Transportation (Upon Request)',
+      description: 'Extra fees applied',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
+      title: 'Spoken Language',
+      description:
+        'Arabic, English (Download a language translator app to communicate with host!)',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
+      title: 'Wheelchair Accessible',
+      description: '',
+    },
+  ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -117,7 +117,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
 
   const loadImageDimensions = React.useCallback(
     (imageUrl: string): Promise<{ width: number; height: number }> => {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         const img = new Image();
         img.onload = () => {
           resolve({ width: img.naturalWidth, height: img.naturalHeight });
@@ -128,7 +128,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
         img.src = imageUrl;
       });
     },
-    [],
+    []
   );
 
   React.useEffect(() => {
@@ -170,7 +170,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
       params.id,
       openFavouritesModal,
       detailsData?.data,
-    ],
+    ]
   );
 
   const handleImageClick = React.useCallback(
@@ -185,7 +185,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
         setIsLightboxOpen(true);
       }, 10);
     },
-    [detailsData?.data?.images],
+    [detailsData?.data?.images]
   );
 
   const handleCloseLightbox = React.useCallback(() => {
@@ -196,14 +196,14 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     const images = detailsData?.data?.images;
     if (!images) return;
     setCurrentImageIndex(
-      (current) => (current + images.length - 1) % images.length,
+      current => (current + images.length - 1) % images.length
     );
   }, [detailsData?.data?.images]);
 
   const handleMoveNext = React.useCallback(() => {
     const images = detailsData?.data?.images;
     if (!images) return;
-    setCurrentImageIndex((current) => (current + 1) % images.length);
+    setCurrentImageIndex(current => (current + 1) % images.length);
   }, [detailsData?.data?.images]);
 
   if (isLoading) {
@@ -299,7 +299,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                 </p>
                 <div className='flex justify-between items-center mt-2'>
                   <p className='font-custom-400 font-sans text-custom-25 text-gray_3'>
-                    {country?.name + ', ' + city}
+                    {`${country?.name  }, ${  city}`}
                   </p>
                   <div className='text-custom-14 text-right'>
                     {bookagriBadge && (
@@ -324,7 +324,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                   <Divider className='w-full my-8' />
 
                   <LocationSection
-                    location={name + ' in ' + country?.name + ', ' + city}
+                    location={`${name  } in ${  country?.name  }, ${  city}`}
                     latitude={location.coordinates[0]}
                     longitude={location.coordinates[1]}
                   />

@@ -30,9 +30,9 @@ const CountriesModal: React.FC<CountriesModalProps> = ({
 
   const filteredCountries = React.useMemo(() => {
     return countriesData.filter(
-      (country) =>
+      country =>
         country.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        country.dialCode.includes(searchQuery),
+        country.dialCode.includes(searchQuery)
     );
   }, [countriesData, searchQuery]);
 
@@ -63,7 +63,7 @@ const CountriesModal: React.FC<CountriesModalProps> = ({
             type='text'
             placeholder={modalSearchPlaceholder}
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             className='w-[312px] h-[48px] rounded-[24px] border-none bg-white px-4 text-gray-700 shadow-[0px_3px_20px_rgba(0,0,0,0.08)] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:border-[#47C409] focus:outline-none focus:ring-1 focus:ring-[#47C409] transform transition-all hover:shadow-lg'
           />
           <div className='mt-6 h-[1px] w-[312px] bg-[#EEEEEE]'></div>

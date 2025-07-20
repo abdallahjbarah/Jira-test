@@ -41,7 +41,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     <label
       className={clsx(
         'flex items-center bg-primary_4 rounded-full shadow-customShadow_1 px-6 py-4 cursor-pointer',
-        className,
+        className
       )}
     >
       <CustomSvg src='/SVGs/shared/search-normal.svg' className='text-gray_3' />

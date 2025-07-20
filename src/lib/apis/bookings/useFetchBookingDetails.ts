@@ -9,7 +9,7 @@ const fetchBookingDetails = async (id: string): Promise<BookingDetails> => {
 
 export const useFetchBookingDetails = (
   id: string,
-  queryOptions?: UseQueryOptions<BookingDetails, Error>,
+  queryOptions?: UseQueryOptions<BookingDetails, Error>
 ) => {
   return useQuery({
     queryKey: ['bookingDetails', id],

@@ -14,7 +14,7 @@ export interface LocalizedNotification extends Notification {
 }
 
 export const reshapeNotification = (
-  notification: Notification,
+  notification: Notification
 ): LocalizedNotification => {
   return {
     ...notification,
@@ -36,7 +36,7 @@ export const reshapeNotification = (
 export const formatTimestamp = (timestamp: Date): string => {
   const now = new Date();
   const diffInMinutes = Math.floor(
-    (now.getTime() - timestamp.getTime()) / (1000 * 60),
+    (now.getTime() - timestamp.getTime()) / (1000 * 60)
   );
 
   if (diffInMinutes < 60) {
@@ -58,7 +58,7 @@ export const formatDateHeader = (category: string): string => {
 };
 
 export const groupNotificationsByDate = (
-  notifications: Notification[],
+  notifications: Notification[]
 ): Record<string, Notification[]> => {
   if (!notifications || notifications.length === 0)
     return {
@@ -94,12 +94,12 @@ export const groupNotificationsByDate = (
       [NotificationCategory.TODAY]: [],
       [NotificationCategory.YESTERDAY]: [],
       [NotificationCategory.PREVIOUS_DAYS]: [],
-    } as Record<string, Notification[]>,
+    } as Record<string, Notification[]>
   );
 };
 
 export const getNotificationPath = (
-  notification: LocalizedNotification,
+  notification: LocalizedNotification
 ): string => {
   const path = notification.path;
 

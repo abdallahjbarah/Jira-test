@@ -30,7 +30,7 @@ const CommonFilters: React.FC = () => {
 
   const accessibilityFeaturesList = React.useMemo(() => {
     return (
-      accessibilityFeatures?.map((accessibilityFeature) => ({
+      accessibilityFeatures?.map(accessibilityFeature => ({
         value: accessibilityFeature._id,
         label: {
           en: accessibilityFeature.nameEn,
@@ -42,7 +42,7 @@ const CommonFilters: React.FC = () => {
 
   const bookOptionsList = React.useMemo(() => {
     return (
-      bookOptions?.map((bookOption) => ({
+      bookOptions?.map(bookOption => ({
         value: bookOption._id,
         label: { en: bookOption.nameEn, ar: bookOption.nameAr },
       })) ?? []
@@ -51,7 +51,7 @@ const CommonFilters: React.FC = () => {
 
   const languagesList = React.useMemo(() => {
     return (
-      languages?.map((language) => ({
+      languages?.map(language => ({
         value: language._id,
         label: { en: language.nameEn, ar: language.nameAr },
       })) ?? []
@@ -60,7 +60,7 @@ const CommonFilters: React.FC = () => {
 
   const amenitiesList = React.useMemo(() => {
     return (
-      amenities?.map((amenity) => ({
+      amenities?.map(amenity => ({
         value: amenity._id,
         label: { en: amenity.nameEn, ar: amenity.nameAr },
       })) ?? []
@@ -163,7 +163,7 @@ const CommonFilters: React.FC = () => {
       />
 
       <Controller
-        name='bookingOptions'
+        name='bookOptions'
         control={control}
         render={({ field }) => (
           <FilterSection

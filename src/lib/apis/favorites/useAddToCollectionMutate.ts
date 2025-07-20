@@ -20,7 +20,7 @@ export const useAddToCollectionMutate = (
     AddToCollectionPayload,
     Error,
     AddToCollectionPayload
-  >,
+  >
 ) => {
   return useMutation({
     mutationFn: addToCollection,

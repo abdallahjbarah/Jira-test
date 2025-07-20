@@ -39,7 +39,7 @@ const AmenitiesPopup: React.FC<AmenitiesPopupProps> = ({
       acc[categoryId].items.push(amenity);
       return acc;
     },
-    {} as Record<string, { name: string; items: Amenity[] }>,
+    {} as Record<string, { name: string; items: Amenity[] }>
   );
 
   return (
@@ -54,13 +54,13 @@ const AmenitiesPopup: React.FC<AmenitiesPopupProps> = ({
         </h2>
 
         <div className='space-y-8'>
-          {Object.values(groupedAmenities).map((category) => (
+          {Object.values(groupedAmenities).map(category => (
             <div key={category.name} className='space-y-6'>
               <h3 className='font-custom-700 text-custom-24 text-text_1 font-gellix-Bold'>
                 {category.name}
               </h3>
               <div className='flex flex-col gap-6'>
-                {category.items.map((amenity) => (
+                {category.items.map(amenity => (
                   <div
                     key={amenity._id}
                     className='flex justify-start items-center gap-2'
