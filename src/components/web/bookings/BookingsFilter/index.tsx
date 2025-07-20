@@ -8,9 +8,18 @@ import { BookingStatus } from '@/lib/enums';
 interface BookingsFilterProps {
   onFilterChange: (tabId: number) => void;
   onSearch: (query: string) => void;
+  upcomingCount?: number;
+  completedCount?: number;
+  cancelledCount?: number;
 }
 
-const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
+const BookingsFilter = ({
+  onFilterChange,
+  onSearch,
+  upcomingCount = 0,
+  completedCount = 0,
+  cancelledCount = 0
+}: BookingsFilterProps) => {
   const { t } = useTranslation();
 
   const tabs: TabItem[] = [
@@ -20,8 +29,7 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
       content: (
         <div className='mt-8'>
           <p className='text-custom-30 font-custom-500 text-[#000000]'>
-            {t('myBookings.description')} 14{' '}
-            {t('myBookings.descriptionSecondLine')}
+            You have <span className='text-[#47C409]'>{upcomingCount}</span> upcoming {upcomingCount === 1 ? 'booking' : 'bookings'}
           </p>
         </div>
       ),
@@ -32,8 +40,7 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
       content: (
         <div className='mt-8'>
           <p className='text-custom-30 font-custom-500 text-[#000000]'>
-            {t('myBookings.completedDescription') ||
-              'Your completed bookings will appear here.'}
+            You have <span className='text-[#47C409]'>{completedCount}</span> completed {completedCount === 1 ? 'booking' : 'bookings'}
           </p>
         </div>
       ),
@@ -44,8 +51,7 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
       content: (
         <div className='mt-8'>
           <p className='text-custom-30 font-custom-500 text-[#000000]'>
-            {t('myBookings.cancelledDescription') ||
-              'Your cancelled bookings will appear here.'}
+            You have <span className='text-[#47C409]'>{cancelledCount}</span> cancelled {cancelledCount === 1 ? 'booking' : 'bookings'}
           </p>
         </div>
       ),
@@ -61,7 +67,7 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
           tabs={tabs}
           defaultActiveTab={BookingStatus.PENDING}
           containerClassName='w-full laptopM:w-auto'
-          showContent={false}
+          showContent={true}
           onChange={(tabId) => {
             formMethods.setValue('status', tabId);
             onFilterChange(tabId);
@@ -69,9 +75,7 @@ const BookingsFilter = ({ onFilterChange, onSearch }: BookingsFilterProps) => {
         />
 
         <SearchBar
-          placeholder={
-            t('myBookings.searchPlaceholder') || 'Search bookings...'
-          }
+          placeholder='Search'
           onChange={onSearch}
           className='laptopM:max-w-[19.5rem] w-full'
         />
