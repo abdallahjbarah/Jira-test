@@ -7,7 +7,6 @@ import RangeSlider from '@/components/ui/RangeSlider';
 import RadioButton from '@/components/ui/RadioButton';
 import FilterSection from './FilterSection';
 import ToggleSwitch from '@/components/ui/ToggleSwitch';
-
 import CustomSvg from '@/components/ui/CustomSvg';
 import { useFetchPricesRange } from '@/lib/apis/shared/useFetchPricesRange';
 import { useFetchLanguages } from '@/lib/apis/shared/useFetchLanguages';

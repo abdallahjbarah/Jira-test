@@ -140,7 +140,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
         width='100%'
         height='100%'
       />
-      {activeFiltersCount > 0 && (
+      {activeFiltersCount > 1 && (
         <div
           className='
     absolute -top-2 -right-2
@@ -152,7 +152,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
     shadow-lg
   '
         >
-          {activeFiltersCount}
+          {activeFiltersCount - 1}
         </div>
       )}
     </div>

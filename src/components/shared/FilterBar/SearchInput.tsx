@@ -61,12 +61,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
 
   const handleInputChange = (newValue: string) => {
     setInputValue(newValue);
-
-    if (newValue.length > 0) {
-      setIsMenuOpen(true);
-    } else {
-      setIsMenuOpen(false);
-    }
+    setIsMenuOpen(newValue.length > 0);
   };
 
   const handleChange = (option: any) => {
