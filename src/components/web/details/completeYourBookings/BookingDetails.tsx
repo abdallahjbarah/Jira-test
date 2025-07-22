@@ -49,24 +49,28 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({
 
   return (
     <div className='flex flex-col gap-5'>
-      <div className='flex gap-1 items-center'>
-        <CustomSvg
-          src={'/SVGs/shared/details-icons/timeCircle.svg'}
-          width={30}
-          height={30}
-          color='black'
-        />
-        <p className='font-custom-400 text-text_1 font-sans text-3xl'>{time}</p>
-      </div>
-      <div className='flex gap-1 items-center'>
-        <CustomSvg
-          src={'/SVGs/shared/details-icons/calendar.svg'}
-          width={30}
-          height={30}
-          color='black'
-        />
-        <p className='font-custom-400 text-text_1 font-sans text-3xl'>{date}</p>
-      </div>
+      {time && (
+        <div className='flex gap-1 items-center'>
+          <CustomSvg
+            src={'/SVGs/shared/details-icons/timeCircle.svg'}
+            width={30}
+            height={30}
+            color='black'
+          />
+          <p className='font-custom-400 text-text_1 font-sans text-3xl'>{time}</p>
+        </div>
+      )}
+      {date && (
+        <div className='flex gap-1 items-center'>
+          <CustomSvg
+            src={'/SVGs/shared/details-icons/calendar.svg'}
+            width={30}
+            height={30}
+            color='black'
+          />
+          <p className='font-custom-400 text-text_1 font-sans text-3xl'>{date}</p>
+        </div>
+      )}
       <div className='flex gap-1 items-center'>
         <CustomSvg
           src={'/SVGs/shared/details-icons/adultsIcon.svg'}

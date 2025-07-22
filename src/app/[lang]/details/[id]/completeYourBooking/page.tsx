@@ -21,6 +21,7 @@ import useMutateBooking from '@/lib/apis/bookings/useMutateBooking';
 import { useUploadFile } from '@/lib/apis/files/useUploadFile';
 import { FileFolder } from '@/lib/enums';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
 interface CompleteYourBookingProps {
   params: { lang: Locale; id: string };
@@ -92,6 +93,13 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     useBookingData();
   const bookingData = getBookingData(params.id);
 
+  // Redirect to details page if bookingData is missing
+  React.useEffect(() => {
+    if (!bookingData) {
+      router.replace(`/${params.lang}/details/${params.id}`);
+    }
+  }, [bookingData, params.lang, params.id, router]);
+
   // Debug log to help troubleshoot data issues
   console.log('📊 Booking Data Retrieved:', {
     bookingData,
@@ -147,12 +155,13 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     useMutateBooking({
       onSuccess: (data) => {
         toast.success(t('booking.financialReceipt.success'));
-        clearBookingData(params.id);
         router.push(`/my-bookings/${data._id}`);
+        setTimeout(() => {
+          clearBookingData(params.id);
+        }, 200); // Delay to allow navigation to complete
       },
-      onError: () => {
-        console.log('hamza error');
-        toast.error(t('booking.financialReceipt.error'));
+      onError: (error) => {
+        toast.error(error.json.message);
       },
     });
 

@@ -88,7 +88,8 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
     const firstDayOfWeek = firstDay.getDay();
 
-    const offset = (firstDayOfWeek === 0 ? 7 : firstDayOfWeek) - 1;
+    // Use the standard JavaScript Date.getDay() numbering (0=Sunday, 1=Monday, etc.)
+    const offset = firstDayOfWeek;
 
     const days = [];
 
@@ -219,13 +220,13 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   };
 
   const daysOfWeek = [
-    t('datePicker.dayAbbreviations.sa'),
-    t('datePicker.dayAbbreviations.su'),
-    t('datePicker.dayAbbreviations.mo'),
-    t('datePicker.dayAbbreviations.tu'),
-    t('datePicker.dayAbbreviations.we'),
-    t('datePicker.dayAbbreviations.th'),
-    t('datePicker.dayAbbreviations.fr'),
+    t('datePicker.dayAbbreviations.su'), // Sunday (0)
+    t('datePicker.dayAbbreviations.mo'), // Monday (1)
+    t('datePicker.dayAbbreviations.tu'), // Tuesday (2)
+    t('datePicker.dayAbbreviations.we'), // Wednesday (3)
+    t('datePicker.dayAbbreviations.th'), // Thursday (4)
+    t('datePicker.dayAbbreviations.fr'), // Friday (5)
+    t('datePicker.dayAbbreviations.sa'), // Saturday (6)
   ];
 
   const days = getDaysInMonth();
@@ -277,13 +278,12 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             type='button'
             onClick={() => date && handleDateClick(date)}
             disabled={!date || isDateDisabled(date)}
-            className={`relative h-10 w-10 flex items-center justify-center ${
-              !date
-                ? 'invisible'
-                : isDateDisabled(date)
-                  ? 'text-gray-300 cursor-not-allowed'
-                  : ''
-            }`}
+            className={`relative h-10 w-10 flex items-center justify-center ${!date
+              ? 'invisible'
+              : isDateDisabled(date)
+                ? 'text-gray-300 cursor-not-allowed'
+                : ''
+              }`}
           >
             {date &&
               (mode === 'range' || mode === 'both') &&
@@ -305,16 +305,15 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
               )}
 
             <span
-              className={`relative z-10 flex items-center justify-center h-8 w-8 rounded-full ${
-                date &&
+              className={`relative z-10 flex items-center justify-center h-8 w-8 rounded-full ${date &&
                 (isStartDate(date) ||
                   isEndDate(date) ||
                   (mode === 'single' && isDateSelected(date)))
-                  ? 'bg-black text-white'
-                  : date && !isDateDisabled(date)
-                    ? 'hover:bg-gray-100 text-gray-800'
-                    : ''
-              }`}
+                ? 'bg-black text-white'
+                : date && !isDateDisabled(date)
+                  ? 'hover:bg-gray-100 text-gray-800'
+                  : ''
+                }`}
             >
               {date?.getDate()}
             </span>
