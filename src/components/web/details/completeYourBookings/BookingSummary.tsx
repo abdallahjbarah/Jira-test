@@ -1,7 +1,6 @@
 'use client';
 import CustomSvg from '@/components/ui/CustomSvg';
 import Divider from '@/components/ui/Divider';
-import FilledButton from '@/components/ui/buttons/FilledButton';
 import withFavourites from '@/lib/hocs/withFavourites';
 import { Site } from '@/lib/types';
 import useCurrency from '@/utils/hooks/useCurrency';

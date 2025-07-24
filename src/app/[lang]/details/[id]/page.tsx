@@ -25,6 +25,8 @@ import useFavorite from '@/utils/hooks/useFavorite';
 import { Site } from '@/lib/types';
 import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
 import ImagesGallery from './ImagesGallery';
+import { useFetchSimilar } from '@/lib/apis/details/useFetchSimillarExperiencde';
+import SimilarExperiencesSection from '@/components/web/details/SimilarExperiencesSection';
 
 interface DetailsIdProps {
   params: { lang: Locale; id: string };
@@ -55,6 +57,9 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     isError,
     error,
   } = useFetchDetails(params.id);
+
+  const { data: similarData, isLoading: isSimilarLoading } = useFetchSimilar(params.id);
+  console.log("similarData", similarData);
 
   const { isFavorite, removeFavorite } = useFavorite();
 
@@ -216,6 +221,10 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     ageSuitability,
     timeOfDay,
     wheelChair,
+    transportationIsIncluded,
+    transportationIsMandatory,
+    guideIsIncluded,
+    guideIsMandatory
   } = detailsData.data;
 
   const galleryImages =
@@ -228,6 +237,8 @@ const DetailsId: React.FC<DetailsIdProps> = ({
         thumbnail: image,
       };
     }) || [];
+
+  console.log("guideIsIncluded", guideIsIncluded);
 
   const features: {
     icon: string;
@@ -244,11 +255,11 @@ const DetailsId: React.FC<DetailsIdProps> = ({
         title: 'Time of Day',
         description: timeOfDay?.map((time: string) => time.charAt(0).toUpperCase() + time.slice(1)).join(', ') + "",
       },
-      {
+      ...guideIsIncluded ? [{
         icon: '/SVGs/shared/details-icons/guideIcon.svg',
-        title: 'Guide (Upon Request)',
+        title: guideIsMandatory ? 'Guide' : 'Guide (Upon Request)',
         description: 'Extra fees applied',
-      },
+      }] : [],
       {
         icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
         title: 'Level of Difficulty',
@@ -259,11 +270,11 @@ const DetailsId: React.FC<DetailsIdProps> = ({
         title: 'Age Suitability',
         description: ageSuitability + '+',
       },
-      {
+      ...transportationIsIncluded ? [{
         icon: '/SVGs/shared/details-icons/transportationIcon.svg',
-        title: 'Transportation (Upon Request)',
+        title: transportationIsMandatory ? 'Transportation' : 'Transportation (Upon Request)',
         description: 'Extra fees applied',
-      },
+      }] : [],
       {
         icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
         title: 'Spoken Language',
@@ -282,7 +293,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
       <main className='container'>
         <div className='flex flex-col'>
           <div className='relative'>
-            <div className='w-full flex justify-center'>
+            <div className='w-full flex justify-center '>
               <ImagesGallery images={images} />
             </div>
             <button
@@ -386,7 +397,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
 
               <WhatToExpectSection
                 description={whatToExpect?.description}
-                images={images}
+                images={whatToExpect?.images || []}
               />
             </>
           )}
@@ -410,6 +421,12 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                 />
               </div>
             </>
+          )}
+          <Divider className='w-full my-8 content-center' />
+          {isSimilarLoading ? (
+            <CircularLoader size={50} />
+          ) : (
+            <SimilarExperiencesSection similarExperiences={similarData?.similarSites || []} />
           )}
         </div>
       </main>

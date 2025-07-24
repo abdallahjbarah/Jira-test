@@ -294,23 +294,63 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
             <div className='flex flex-col lg:flex-row justify-between w-full gap-20'>
               <div className='flex flex-col gap-2 flex-1'>
                 <BookingDetails
-                  time={`${new Date(bookingDateTime.startTime).toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })} - ${new Date(bookingDateTime.endTime).toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}`}
-                  date={`${new Date(bookingDateTime.startDate).toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'short',
-                    day: 'numeric',
-                  })} - ${new Date(bookingDateTime.endDate).toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'short',
-                    day: 'numeric',
-                  })}`}
-                  people={formatGuestInfo(bookingData?.guests)}
+                  time={
+                    detailsData?.data?.type === 'Stay'
+                      ? `${new Date(bookingDateTime.startTime).toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })} - ${new Date(bookingDateTime.endTime).toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}`
+                      : '02:00 PM - 04:00 PM'
+                  }
+                  date={(() => {
+                    if (detailsData?.data?.type === 'Stay') {
+                      return `${new Date(bookingDateTime.startDate).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        month: 'short',
+                        day: 'numeric',
+                      })} - ${new Date(bookingDateTime.endDate).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        month: 'short',
+                        day: 'numeric',
+                      })}`;
+                    } else {
+                      const start = new Date(bookingDateTime.startDate);
+                      const end = new Date(bookingDateTime.endDate);
+                      if (
+                        start.getFullYear() === end.getFullYear() &&
+                        start.getMonth() === end.getMonth() &&
+                        start.getDate() === end.getDate()
+                      ) {
+                        return `(${start.toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          month: 'short',
+                          day: 'numeric',
+                        })})`;
+                      } else {
+                        return `(${start.toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          month: 'short',
+                          day: 'numeric',
+                        })} - ${end.toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          month: 'short',
+                          day: 'numeric',
+                        })})`;
+                      }
+                    }
+                  })()}
+                  people={(() => {
+                    const guests = bookingData?.guests;
+                    if (!guests) return '';
+                    const parts = [];
+                    if (guests.adults > 0) parts.push(`${guests.adults} Adult${guests.adults > 1 ? 's' : ''}`);
+                    if (guests.children > 0) parts.push(`${guests.children} Child${guests.children > 1 ? 'ren' : ''}`);
+                    if (guests.infants > 0) parts.push(`${guests.infants} Infant${guests.infants > 1 ? 's' : ''}`);
+                    return parts.join(', ');
+                  })()}
                   onGuestUpdate={(guests) => {
                     updateBookingData(params.id, {
                       guests: guests,
