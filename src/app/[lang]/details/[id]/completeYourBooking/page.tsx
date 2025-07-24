@@ -284,7 +284,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   const enabledPaymentMethods = (paymentMethods || []).filter((m) => m.isEnabled);
 
   return (
-    <InnerPagesLayout headerProps={{ withNavItems: false }}>
+    <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main className='container'>
         <form id="booking-form" onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-32'>

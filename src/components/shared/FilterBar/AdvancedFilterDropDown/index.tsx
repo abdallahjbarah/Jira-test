@@ -35,7 +35,18 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   const { handleSubmit, reset, watch } = methods;
   const formValues = watch();
 
-  // Calculate number of active filters
+  const MAIN_FILTER_KEYS = [
+    'checkinTime',
+    'checkoutTime',
+    'adults',
+    'children',
+    'infants',
+    'city',
+    'country',
+    'destinationText',
+    'siteId',
+  ];
+
   const activeFiltersCount = useMemo(() => {
     if (!formValues) return 0;
 
@@ -43,6 +54,9 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
       if (!obj || typeof obj !== 'object') return 0;
 
       return Object.entries(obj).reduce((count, [key, value]) => {
+        // Skip main filter bar fields
+        if (MAIN_FILTER_KEYS.includes(key)) return count;
+
         // Skip null/undefined
         if (value === null || value === undefined) return count;
 
@@ -133,7 +147,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
       />
       {activeFiltersCount > 0 && (
         <div
-  className="
+          className="
     absolute -top-2 -right-2
     bg-[#FF3A1E] text-white rounded-full
     min-w-[24px] h-[24px]
@@ -142,9 +156,9 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
     px-1
     shadow-lg
   "
->
-  {activeFiltersCount}
-</div>
+        >
+          {activeFiltersCount}
+        </div>
 
 
       )}

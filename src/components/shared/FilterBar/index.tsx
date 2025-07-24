@@ -15,7 +15,6 @@ import React, { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import DatePickerDropdown from '../DatePickerDropdown';
 import GuestFilterItem from '../GuestFilterItem';
-import MobileSearchDropdown from '../SearchDropdown/MobileSearchDropDown';
 import AdvancedFilterDropDown from './AdvancedFilterDropDown';
 import FilterBarItem from './FilterBarItem';
 import WherePopup from './WherePopup';
@@ -346,115 +345,205 @@ const FilterBar = () => {
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
-        className={`flex items-center gap-[2px] laptopM:gap-[5px] w-full tabletM:w-auto mt-4 ${locale === 'ar' ? 'rtl' : 'ltr'}`}
+        className={`w-full tabletM:w-auto mt-4 ${locale === 'ar' ? 'rtl' : 'ltr'}`}
+        style={{ width: '100%' }}
       >
-        <div
-          className={`relative bg-primary_1 hidden flex-col tabletM:flex-row justify-center items-center gap-[2px] laptopM:gap-[5px] mx-auto tabletM:rounded-full w-full tabletM:flex ${locale === 'ar' ? 'rtl' : 'ltr'}`}
-        >
-          {/* Where/Search destinations button */}
-          <FilterBarItem
-            title={{ en: 'Where', ar: 'أين' }}
-            value={selectedLocation || 'Search Destinations'}
-            onClick={() => setShowSearchPopup(true)}
-            className={showSearchPopup ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
-          />
-
-          <DatePickerDropdown
-            title={{ en: t('search.check-in'), ar: t('search.check-in') }}
-            onChange={handleCheckInChange}
-            mode='single'
-            minDate={new Date()}
-            value={filtersValue?.checkinTime || ''}
-            maxDate={
-              filtersValue?.checkoutTime
-                ? new Date(filtersValue.checkoutTime)
-                : new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-            }
-            className={activeButton === 'date' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
-          />
-
-          {selectedFilter !== 'experiences' && (
-            <DatePickerDropdown
-              title={{ en: t('search.check-out'), ar: t('search.check-out') }}
-              onChange={handleCheckOutChange}
-              mode='single'
-              isCheckout={true}
-              checkInDate={getCheckInDate()}
-              minDate={new Date()}
-              value={filtersValue?.checkoutTime || ''}
-              className={activeButton === 'checkout' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
-            />
-          )}
-
-          <GuestFilterItem
-            title={{ en: t('search.who'), ar: t('search.who') }}
-            onChange={handleGuestChange}
-            initialValues={{
-              adults: filtersValue?.adults || 0,
-              children: filtersValue?.children || 0,
-              infants: filtersValue?.infants || 0,
-            }}
-          />
-
-          <div className={`relative flex-1 flex items-center justify-end gap-4 ${locale === 'ar' ? 'ml-6' : 'mr-6'}`}>
-            <button
-              type="button"
-              onClick={handleMainSearch}
-              className="flex items-center justify-center p-3 bg-transparent rounded-full border-transparent transition-colors group"
+        <div className="filterbar-bar-adv-outer">
+          <div className="filterbar-bar-adv-inner">
+            <div
+              className={`filterbar-layout bg-primary_1 mx-auto w-full`}
+              style={{ position: 'relative' }}
             >
-              <CustomSvg
-                src="/SVGs/home/search-bar-logo.svg"
-                width={33}
-                height={33}
-                className="opacity-100 group-hover:text-black"
-                color="white"
-              />
-            </button>
-            {!showSearchPopup && (
-              <button
-                type='button'
-                onClick={handleClear}
-                className='flex items-center justify-center p-3 bg-transparent rounded-full border-transparent transition-colors group'
-                aria-label='Clear filters'
-              >
-                <svg
-                  className='w-[35px] h-[35px] text-white'
-                  stroke='currentColor'
-                  fill='currentColor'
-                  strokeWidth='0'
-                  viewBox='0 0 1024 1024'
-                  version='1.1'
-                  xmlns='http://www.w3.org/2000/svg'
-                >
-                  <defs></defs>
-                  <path d='M899.1 869.6l-53-305.6H864c14.4 0 26-11.6 26-26V346c0-14.4-11.6-26-26-26H618V138c0-14.4-11.6-26-26-26H432c-14.4 0-26 11.6-26 26v182H160c-14.4 0-26 11.6-26 26v192c0-14.4 11.6-26 26-26h17.9l-53 305.6c-0.3 1.5-0.4 3-0.4 4.4 0 14.4 11.6 26 26 26h723c1.5 0 3-0.1 4.4-0.4 14.2-2.4 23.7-15.9 21.2-30zM204 390h272V182h72v208h272v104H204V390z m468 440V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H416V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H202.8l45.1-260H776l45.1 260H672z'></path>
-                </svg>
-              </button>
-            )}
-            {/* Render WherePopup */}
-            <WherePopup
-              isOpen={showSearchPopup}
-              onClose={() => setShowSearchPopup(false)}
-              currentCollectionStatus={collectionStatus as string}
-              onNext={handleLocationSelect}
-              onClear={handleLocationClear}
-              onFilterSelect={handleFilterSelect}
-              filtersValue={filtersValue}
+              {/* Where/Search destinations button */}
+              <div className="filterbar-grid-item filterbar-where">
+                <FilterBarItem
+                  title={{ en: 'Where', ar: 'أين' }}
+                  value={selectedLocation || 'Search Destinations'}
+                  onClick={() => setShowSearchPopup(true)}
+                  className={showSearchPopup ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
+                />
+              </div>
+              <div className="filterbar-grid-item filterbar-checkin">
+                <DatePickerDropdown
+                  title={{ en: t('search.check-in'), ar: t('search.check-in') }}
+                  onChange={handleCheckInChange}
+                  mode='single'
+                  minDate={new Date()}
+                  value={filtersValue?.checkinTime || ''}
+                  maxDate={
+                    filtersValue?.checkoutTime
+                      ? new Date(filtersValue.checkoutTime)
+                      : new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+                  }
+                  className={activeButton === 'date' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
+                />
+              </div>
+              {selectedFilter !== 'experiences' && (
+                <div className="filterbar-grid-item filterbar-checkout">
+                  <DatePickerDropdown
+                    title={{ en: t('search.check-out'), ar: t('search.check-out') }}
+                    onChange={handleCheckOutChange}
+                    mode='single'
+                    isCheckout={true}
+                    checkInDate={getCheckInDate()}
+                    minDate={new Date()}
+                    value={filtersValue?.checkoutTime || ''}
+                    className={activeButton === 'checkout' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
+                  />
+                </div>
+              )}
+              <div className="filterbar-grid-item filterbar-guests">
+                <GuestFilterItem
+                  title={{ en: t('search.who'), ar: t('search.who') }}
+                  onChange={handleGuestChange}
+                  initialValues={{
+                    adults: filtersValue?.adults || 0,
+                    children: filtersValue?.children || 0,
+                    infants: filtersValue?.infants || 0,
+                  }}
+                />
+              </div>
+              <div className="filterbar-grid-item filterbar-actions" style={{ gridColumn: '1 / span 2' }}>
+                <div className={`relative flex items-center justify-center gap-4 w-full`}>
+                  <button
+                    type="button"
+                    onClick={handleMainSearch}
+                    className="flex items-center justify-center p-3 bg-transparent rounded-full border-transparent transition-colors group"
+                  >
+                    <CustomSvg
+                      src="/SVGs/home/search-bar-logo.svg"
+                      width={33}
+                      height={33}
+                      className="opacity-100 group-hover:text-black"
+                      color="white"
+                    />
+                  </button>
+                  {!showSearchPopup && (
+                    <button
+                      type='button'
+                      onClick={handleClear}
+                      className='flex items-center justify-center p-3 bg-transparent rounded-full border-transparent transition-colors group'
+                      aria-label='Clear filters'
+                    >
+                      <svg
+                        className='w-[35px] h-[35px] text-white'
+                        stroke='currentColor'
+                        fill='currentColor'
+                        strokeWidth='0'
+                        viewBox='0 0 1024 1024'
+                        version='1.1'
+                        xmlns='http://www.w3.org/2000/svg'
+                      >
+                        <defs></defs>
+                        <path d='M899.1 869.6l-53-305.6H864c14.4 0 26-11.6 26-26V346c0-14.4-11.6-26-26-26H618V138c0-14.4-11.6-26-26-26H432c-14.4 0-26 11.6-26 26v182H160c-14.4 0-26 11.6-26 26v192c0-14.4 11.6-26 26-26h17.9l-53 305.6c-0.3 1.5-0.4 3-0.4 4.4 0 14.4 11.6 26 26 26h723c1.5 0 3-0.1 4.4-0.4 14.2-2.4 23.7-15.9 21.2-30zM204 390h272V182h72v208h272v104H204V390z m468 440V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H416V674c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v156H202.8l45.1-260H776l45.1 260H672z'></path>
+                      </svg>
+                    </button>
+                  )}
+                  {/* Render WherePopup */}
+                  <WherePopup
+                    isOpen={showSearchPopup}
+                    onClose={() => setShowSearchPopup(false)}
+                    currentCollectionStatus={collectionStatus as string}
+                    onNext={handleLocationSelect}
+                    onClear={handleLocationClear}
+                    onFilterSelect={handleFilterSelect}
+                    filtersValue={filtersValue}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="filterbar-advanced-desktop">
+            <AdvancedFilterDropDown
+              filterType={
+                collectionStatus as 'experiences' | 'events' | 'stays' | 'offers'
+              }
+              onFilterApply={onFilterApply}
+              onFilterClear={onFilterClear}
+              defaultValues={filtersValue}
+            />
+          </div>
+          {/* Advanced filter for grid layout (small screen) */}
+          <div className="filterbar-advanced-mobile">
+            <AdvancedFilterDropDown
+              filterType={
+                collectionStatus as 'experiences' | 'events' | 'stays' | 'offers'
+              }
+              onFilterApply={onFilterApply}
+              onFilterClear={onFilterClear}
+              defaultValues={filtersValue}
             />
           </div>
         </div>
-        <div className='block tabletM:hidden w-full'>
-          <MobileSearchDropdown onSubmit={handleSearchDropdownSubmit} />
-        </div>
-        <AdvancedFilterDropDown
-          filterType={
-            collectionStatus as 'experiences' | 'events' | 'stays' | 'offers'
-          }
-          onFilterApply={onFilterApply}
-          onFilterClear={onFilterClear}
-          defaultValues={filtersValue}
-        />
       </form>
+      <style>{`
+        .filterbar-bar-adv-outer {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+        }
+        .filterbar-bar-adv-inner {
+          flex: 1 1 0;
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+        }
+        .filterbar-layout {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          gap: 2px;
+          width: 100%;
+          max-width: 1100px;
+          border-radius: 9999px;
+          position: relative;
+        }
+        .filterbar-grid-item { flex: 1 1 0; min-width: 0; }
+        .filterbar-advanced-desktop {
+          display: flex;
+          align-items: center;
+          margin-left: 16px;
+          margin-top: 0;
+        }
+        .filterbar-advanced-mobile {
+          display: none;
+        }
+        @media (max-width: 1100px) {
+          .filterbar-bar-adv-outer {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .filterbar-bar-adv-inner {
+            width: 100%;
+          }
+          .filterbar-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 2px;
+            align-items: stretch;
+            width: 100%;
+            max-width: 700px;
+            border-radius: 45px;
+          }
+          .filterbar-where { grid-row: 1; grid-column: 1; }
+          .filterbar-checkin { grid-row: 1; grid-column: 2; }
+          .filterbar-checkout { grid-row: 2; grid-column: 1; }
+          .filterbar-guests { grid-row: 2; grid-column: 2; }
+          .filterbar-actions { grid-row: 3; grid-column: 1 / span 2; }
+          .filterbar-advanced-desktop {
+            display: none;
+          }
+          .filterbar-advanced-mobile {
+            display: flex;
+            justify-content: center;
+            margin-top: 16px;
+            width: 100%;
+          }
+        }
+      `}</style>
     </FormProvider >
   );
 };

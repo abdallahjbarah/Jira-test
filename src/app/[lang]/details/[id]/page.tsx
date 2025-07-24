@@ -378,6 +378,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               type={type}
               name={name}
             />
+
           </div>
           {type != 'Stay' && (
             <>

@@ -4,7 +4,7 @@ import { WretchError } from 'wretch';
 
 interface CancelBookingPayload {
   bookingID: string;
-  cancelReasonID?: string;
+  cancelReasonID?: string | null;
   cancelReasonOther?: string;
 }
 

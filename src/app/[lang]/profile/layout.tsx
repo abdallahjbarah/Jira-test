@@ -39,7 +39,7 @@ export default function ProfileLayout({
 
   return (
     <>
-      <InnerHeader withNavItems={false} />
+      <InnerHeader withNavItems={true} />
       <div className='desktop:max-w-[1440px] mx-auto py-8 px-4'>
         <div className='flex flex-col md:flex-row gap-8'>
           <div className='w-full md:w-1/4'>
@@ -51,11 +51,10 @@ export default function ProfileLayout({
                     <li key={tab.id}>
                       <Link
                         href={tab.href}
-                        className={`block p-3 rounded-lg transition-all ${
-                          isActive
+                        className={`block p-3 rounded-lg transition-all ${isActive
                             ? 'bg-primary_1 text-white'
                             : 'hover:bg-gray-100'
-                        }`}
+                          }`}
                       >
                         {tab.label}
                       </Link>
