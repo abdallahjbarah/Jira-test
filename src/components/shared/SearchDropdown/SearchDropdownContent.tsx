@@ -12,8 +12,8 @@ interface SearchFormData {
   location: string | null;
   country: any;
   checkInAndOut: any;
-  checkinTime: string;
-  checkoutTime: string;
+  startDateTime: number;
+  endDateTime: number;
   guests: any;
 }
 
@@ -80,19 +80,19 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
   };
 
   const getSelectedDates = (): Date[] => {
-    const checkinTime = filtersValue?.checkinTime;
-    const checkoutTime = filtersValue?.checkoutTime;
+    const startDateTime = filtersValue?.startDateTime;
+    const endDateTime = filtersValue?.endDateTime;
     const dateArray: Date[] = [];
 
-    if (checkinTime) {
+    if (startDateTime) {
       try {
-        dateArray.push(new Date(checkinTime));
+        dateArray.push(new Date(startDateTime));
       } catch (e) {}
     }
 
-    if (checkoutTime) {
+    if (endDateTime) {
       try {
-        dateArray.push(new Date(checkoutTime));
+        dateArray.push(new Date(endDateTime));
       } catch (e) {}
     }
 
@@ -113,15 +113,15 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
     const updatedFilters = { ...currentFilters };
 
     if (dates.length > 0) {
-      updatedFilters.checkinTime = dates[0].toISOString().split('T')[0];
+      updatedFilters.startDateTime = dates[0].getTime();
       if (dates.length > 1) {
-        updatedFilters.checkoutTime = dates[1].toISOString().split('T')[0];
+        updatedFilters.endDateTime = dates[1].getTime();
       } else {
-        updatedFilters.checkoutTime = '';
+        updatedFilters.endDateTime = undefined;
       }
     } else {
-      updatedFilters.checkinTime = '';
-      updatedFilters.checkoutTime = '';
+      updatedFilters.startDateTime = undefined;
+      updatedFilters.endDateTime = undefined;
     }
 
     setValue('filters', updatedFilters, { shouldValidate: false });
@@ -135,8 +135,8 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
     onSubmit({
       country: currentFilters.country,
       city: currentFilters.city,
-      checkinTime: currentFilters.checkinTime || '',
-      checkoutTime: currentFilters.checkoutTime || '',
+      startDateTime: currentFilters.startDateTime || 0,
+      endDateTime: currentFilters.endDateTime || 0,
       adults: currentFilters.adults || 0,
       children: currentFilters.children || 0,
       infants: currentFilters.infants || 0,
@@ -189,7 +189,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
         />
       </div>
 
-      {(!filtersValue?.checkinTime || !filtersValue?.checkoutTime) && (
+      {(!filtersValue?.startDateTime || !filtersValue?.endDateTime) && (
         <Collapsible
           title={t('search.when')}
           defaultOpen={true}

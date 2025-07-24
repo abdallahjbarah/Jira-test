@@ -7,8 +7,8 @@ import MobileSearchTrigger from './MobileSearchTrigger';
 
 interface SearchFormData {
   country: any;
-  checkinTime: string;
-  checkoutTime: string;
+  startDateTime: number;
+  endDateTime: number;
   adults: number;
   children: number;
   infants: number;

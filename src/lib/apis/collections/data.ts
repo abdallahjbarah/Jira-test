@@ -23,8 +23,8 @@ export interface Collection {
   }[];
   type: CollectionStatus;
   bookable: boolean;
-  checkinTime?: string;
-  checkoutTime?: string;
+  startDateTime?: number;
+  endDateTime?: number;
   languages?: {
     nameAr: string;
     nameEn: string;
@@ -365,8 +365,8 @@ export const collectionsData: Record<CollectionStatus, Collection[]> = {
       ],
       type: 'stays',
       bookable: true,
-      checkinTime: '13:00',
-      checkoutTime: '15:00',
+          startDateTime: new Date().setHours(13, 0, 0, 0),
+    endDateTime: new Date().setHours(15, 0, 0, 0),
       languages: [
         {
           nameAr: 'العربية',

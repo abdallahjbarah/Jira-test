@@ -79,8 +79,8 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
         onChange(
           JSON.stringify({
             country: option.data._id,
-            checkinTime: '',
-            checkoutTime: '',
+            startDateTime: undefined,
+            endDateTime: undefined,
             adults: 0,
             children: 0,
             infants: 0,
@@ -91,8 +91,8 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
           JSON.stringify({
             city: option.data.city,
             country: option.data.countryId,
-            checkinTime: '',
-            checkoutTime: '',
+            startDateTime: undefined,
+            endDateTime: undefined,
             adults: 0,
             children: 0,
             infants: 0,

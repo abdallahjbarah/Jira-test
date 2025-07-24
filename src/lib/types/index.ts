@@ -256,8 +256,8 @@ export interface Site {
   paymentMethod: string[];
   accessProvider: boolean;
   timeOfDay: any[];
-  checkinTime?: string;
-  checkoutTime?: string;
+  startDateTime?: number;
+  endDateTime?: number;
   stayDetails?: {
     description: string;
     numberOfBeds: number;

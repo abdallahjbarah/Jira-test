@@ -187,8 +187,8 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
     images,
     bookagriBadge,
     type,
-    checkinTime,
-    checkoutTime,
+    startDateTime,
+    endDateTime,
     languages,
     host,
     coHost,
@@ -329,8 +329,8 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                 <>
                   <Divider className='w-full my-8' />
                   <StaysFeature
-                    checkinTime={checkinTime}
-                    checkoutTime={checkoutTime}
+                    startDateTime={startDateTime}
+                    endDateTime={endDateTime}
                     languages={languages}
                   />
                 </>

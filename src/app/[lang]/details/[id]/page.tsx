@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CollectionStatus, Locale } from '@utils/constants';
+import { Locale } from '@utils/constants';
 import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import { useFetchDetails } from '@/lib/apis/details/useFetchDetails';
 import CircularLoader from '@/components/ui/CircularLoader';
@@ -247,8 +247,8 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     images,
     bookagriBadge,
     type,
-    checkinTime,
-    checkoutTime,
+    startDateTime,
+    endDateTime,
     languages,
     host,
     coHost,
@@ -351,8 +351,8 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                 <>
                   <Divider className='w-full my-8' />
                   <StaysFeature
-                    checkinTime={checkinTime}
-                    checkoutTime={checkoutTime}
+                    startDateTime={startDateTime}
+                    endDateTime={endDateTime}
                     languages={languages}
                   />
                 </>

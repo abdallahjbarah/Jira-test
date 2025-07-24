@@ -29,8 +29,8 @@ export interface BackendFilterParams {
   languages?: string[];
 
   // Date filters
-  checkinTime?: string;
-  checkoutTime?: string;
+  startDateTime?: number;
+  endDateTime?: number;
 
   // Price filters
   minPrice?: number;
@@ -51,10 +51,6 @@ export interface BackendFilterParams {
 
   // Location filters
   coordinates?: number[];
-
-  // Time filters
-  startDateTime?: number;
-  endDateTime?: number;
 }
 
 /**
@@ -63,8 +59,8 @@ export interface BackendFilterParams {
 export interface FrontendFilter {
   // Basic filters
   type?: string;
-  checkinTime?: string;
-  checkoutTime?: string;
+  startDateTime?: number;
+  endDateTime?: number;
   adults?: number;
   children?: number;
   infants?: number;
@@ -151,12 +147,12 @@ export const convertToBackendFilters = (
   }
 
   // Handle basic filters
-  if (frontendFilters.checkinTime) {
-    backendFilters.checkinTime = frontendFilters.checkinTime;
+  if (frontendFilters.startDateTime) {
+    backendFilters.startDateTime = frontendFilters.startDateTime;
   }
 
-  if (frontendFilters.checkoutTime) {
-    backendFilters.checkoutTime = frontendFilters.checkoutTime;
+  if (frontendFilters.endDateTime) {
+    backendFilters.endDateTime = frontendFilters.endDateTime;
   }
 
   if (frontendFilters.country) {
@@ -299,8 +295,8 @@ export const buildFiltersFromSearchParams = (
   }
 
   // Handle basic filters
-  const checkinTime = searchParams.get('checkinTime');
-  const checkoutTime = searchParams.get('checkoutTime');
+  const startDateTime = searchParams.get('startDateTime');
+  const endDateTime = searchParams.get('endDateTime');
   const adults = searchParams.get('adults');
   const children = searchParams.get('children');
   const infants = searchParams.get('infants');
@@ -308,8 +304,8 @@ export const buildFiltersFromSearchParams = (
   const city = searchParams.get('city');
   const capacity = searchParams.get('capacity');
 
-  if (checkinTime) filters.checkinTime = checkinTime;
-  if (checkoutTime) filters.checkoutTime = checkoutTime;
+  if (startDateTime) filters.startDateTime = Number(startDateTime);
+  if (endDateTime) filters.endDateTime = Number(endDateTime);
   if (adults) filters.adults = Number(adults);
   if (children) filters.children = Number(children);
   if (infants) filters.infants = Number(infants);
@@ -422,12 +418,12 @@ export const buildSearchParamsFromFilters = (
     params.set('type', filters.type);
   }
 
-  if (filters.checkinTime) {
-    params.set('checkinTime', filters.checkinTime);
+  if (filters.startDateTime) {
+    params.set('startDateTime', filters.startDateTime.toString());
   }
 
-  if (filters.checkoutTime) {
-    params.set('checkoutTime', filters.checkoutTime);
+  if (filters.endDateTime) {
+    params.set('endDateTime', filters.endDateTime.toString());
   }
 
   if (filters.country) {
@@ -589,8 +585,8 @@ export const getDefaultFilterValues = (
     adults: 0,
     children: 0,
     infants: 0,
-    checkinTime: '',
-    checkoutTime: '',
+    startDateTime: undefined,
+    endDateTime: undefined,
     city: undefined,
     country: undefined,
     destinationText: '',
@@ -620,9 +616,9 @@ export const getDefaultFilterValues = (
     defaultFilters.type = collectionStatus;
   }
 
-  // Remove checkout time for experiences
+  // Remove end date time for experiences
   if (collectionStatus === 'experiences') {
-    delete defaultFilters.checkoutTime;
+    delete defaultFilters.endDateTime;
   }
 
   return defaultFilters;

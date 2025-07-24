@@ -82,9 +82,9 @@ const FilterBar = () => {
   );
 
   const getCheckInDate = (): Date | undefined => {
-    if (!filtersValue?.checkinTime) return undefined;
+    if (!filtersValue?.startDateTime) return undefined;
     try {
-      return new Date(filtersValue.checkinTime);
+      return new Date(filtersValue.startDateTime);
     } catch (e) {
       return undefined;
     }
@@ -96,13 +96,13 @@ const FilterBar = () => {
     const currentFilters = methods.getValues('filters') || {};
     const updatedFilters = {
       ...currentFilters,
-      checkinTime: dateString,
+      startDateTime: dates[0] ? dates[0].getTime() : undefined,
     };
 
-    if (currentFilters.checkoutTime && dates[0]) {
-      const checkOut = new Date(currentFilters.checkoutTime);
+    if (currentFilters.endDateTime && dates[0]) {
+      const checkOut = new Date(currentFilters.endDateTime);
       if (checkOut < dates[0]) {
-        updatedFilters.checkoutTime = '';
+        updatedFilters.endDateTime = undefined;
       }
     }
 
@@ -119,7 +119,7 @@ const FilterBar = () => {
     const currentFilters = methods.getValues('filters') || {};
     const updatedFilters = {
       ...currentFilters,
-      checkoutTime: dateString,
+      endDateTime: dates[1] ? dates[1].getTime() : undefined,
     };
 
     methods.setValue('filters', updatedFilters, { shouldValidate: false });
@@ -207,8 +207,8 @@ const FilterBar = () => {
   const onFilterClear = () => {
     const currentFilters = methods.getValues('filters') || {};
     const preservedFilters: Record<string, unknown> = {
-      checkinTime: currentFilters.checkinTime,
-      checkoutTime: currentFilters.checkoutTime,
+      startDateTime: currentFilters.startDateTime,
+      endDateTime: currentFilters.endDateTime,
       adults: currentFilters.adults,
       children: currentFilters.children,
       infants: currentFilters.infants,
@@ -351,12 +351,12 @@ const FilterBar = () => {
 
   const handleFilterSelect = (filterKey: string) => {
     setSelectedFilter(filterKey);
-    // Clear checkout time if switching to experiences
+    // Clear end date time if switching to experiences
     if (filterKey === 'experiences') {
       const currentFilters = methods.getValues('filters') || {};
       const updatedFilters = {
         ...currentFilters,
-        checkoutTime: '',
+        endDateTime: undefined,
       };
       methods.setValue('filters', updatedFilters, { shouldValidate: false });
     }
@@ -388,10 +388,10 @@ const FilterBar = () => {
             onChange={handleCheckInChange}
             mode='single'
             minDate={new Date()}
-            value={filtersValue?.checkinTime || ''}
+            value={filtersValue?.startDateTime ? new Date(filtersValue.startDateTime).toISOString().split('T')[0] : ''}
             maxDate={
-              filtersValue?.checkoutTime
-                ? new Date(filtersValue.checkoutTime)
+              filtersValue?.endDateTime
+                ? new Date(filtersValue.endDateTime)
                 : new Date(new Date().setFullYear(new Date().getFullYear() + 1))
             }
             className={
@@ -409,7 +409,7 @@ const FilterBar = () => {
               isCheckout={true}
               checkInDate={getCheckInDate()}
               minDate={new Date()}
-              value={filtersValue?.checkoutTime || ''}
+              value={filtersValue?.endDateTime ? new Date(filtersValue.endDateTime).toISOString().split('T')[0] : ''}
               className={
                 activeButton === 'checkout'
                   ? 'bg-white rounded-full [&_span]:!text-green-600'
