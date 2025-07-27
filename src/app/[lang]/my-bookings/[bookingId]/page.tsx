@@ -160,7 +160,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
 
   if (isError) {
     return (
-      <InnerPagesLayout headerProps={{ withNavItems: false }}>
+      <InnerPagesLayout headerProps={{ withNavItems: true }}>
         <main className='container py-[6.25rem]'>
           <div>Error fetching booking details: {error?.message}</div>
         </main>
@@ -170,7 +170,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
 
   if (!detailsData?.booking) {
     return (
-      <InnerPagesLayout headerProps={{ withNavItems: false }}>
+      <InnerPagesLayout headerProps={{ withNavItems: true }}>
         <main className='container py-[6.25rem]'>
           <div>Booking details not found.</div>
         </main>
@@ -203,7 +203,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
   } = detailsData.booking.siteId;
 
   return (
-    <InnerPagesLayout headerProps={{ withNavItems: false }}>
+    <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main className='container'>
         <div className='flex flex-col'>
           {/* Responsive Image Grid replacing Swiper */}

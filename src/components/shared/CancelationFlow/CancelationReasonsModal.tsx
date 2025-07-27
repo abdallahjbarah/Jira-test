@@ -82,11 +82,13 @@ const CancelationReasonsModal: React.FC<CancelationReasonsModalProps> = ({
       cancelBooking({
         bookingID: bookingId,
         cancelReasonOther: data.cancelReasonOther,
+        cancelReasonID: null,
       });
     } else {
       cancelBooking({
         bookingID: bookingId,
         cancelReasonID: data.cancelReasonID,
+        cancelReasonOther: "",
       });
     }
   };

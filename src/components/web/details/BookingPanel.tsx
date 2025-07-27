@@ -390,8 +390,9 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                   <TimeSlotCard
                     key={slot._id}
                     timeRange={`${formatTime(slot.startDateTime)} - ${formatTime(slot.endDateTime)}`}
-                    adultPrice={price}
-                    childrenPrice={10}
+                    adultPrice={pricingInformation.find(info => info.personType === 'adults')?.price ?? null}
+                    childrenPrice={pricingInformation.find(info => info.personType === 'children')?.price ?? null}
+                    infantsPrice={pricingInformation.find(info => info.personType === 'infants')?.price ?? null}
                     onChoose={() => {
                       if (
                         guests.adults + guests.children + guests.infants >

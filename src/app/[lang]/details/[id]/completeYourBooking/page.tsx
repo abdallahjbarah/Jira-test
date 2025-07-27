@@ -21,6 +21,7 @@ import useMutateBooking from '@/lib/apis/bookings/useMutateBooking';
 import { useUploadFile } from '@/lib/apis/files/useUploadFile';
 import { FileFolder } from '@/lib/enums';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
 interface CompleteYourBookingProps {
   params: { lang: Locale; id: string };
@@ -93,6 +94,13 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   const { getBookingData, updateBookingData, clearBookingData } =
     useBookingData();
   const bookingData = getBookingData(params.id);
+
+  // Redirect to details page if bookingData is missing
+  React.useEffect(() => {
+    if (!bookingData) {
+      router.replace(`/${params.lang}/details/${params.id}`);
+    }
+  }, [bookingData, params.lang, params.id, router]);
 
   // Debug log to help troubleshoot data issues
   console.log('📊 Booking Data Retrieved:', {
@@ -175,12 +183,13 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     useMutateBooking({
       onSuccess: data => {
         toast.success(t('booking.financialReceipt.success'));
-        clearBookingData(params.id);
         router.push(`/my-bookings/${data._id}`);
+        setTimeout(() => {
+          clearBookingData(params.id);
+        }, 200); // Delay to allow navigation to complete
       },
-      onError: () => {
-        console.log('hamza error');
-        toast.error(t('booking.financialReceipt.error'));
+      onError: (error) => {
+        toast.error(error.json.message);
       },
     });
 
@@ -316,7 +325,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   const enabledPaymentMethods = (paymentMethods || []).filter(m => m.isEnabled);
 
   return (
-    <InnerPagesLayout headerProps={{ withNavItems: false }}>
+    <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main className='container'>
         <form id='booking-form' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-32'>
@@ -326,40 +335,64 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
             <div className='flex flex-col lg:flex-row justify-between w-full gap-20'>
               <div className='flex flex-col gap-2 flex-1'>
                 <BookingDetails
-                  time={`${new Date(
-                    bookingData?.availability?.startDateTime ||
-                      detailsData?.data?.schedule.startDateTime ||
-                      ''
-                  ).toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })} - ${new Date(
-                    bookingData?.availability?.endDateTime ||
-                      detailsData?.data?.schedule.endDateTime ||
-                      ''
-                  ).toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}`}
-                  date={`${new Date(
-                    bookingData?.availability?.startDateTime ||
-                      detailsData?.data?.schedule.startDateTime ||
-                      ''
-                  ).toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'short',
-                    day: 'numeric',
-                  })} - ${new Date(
-                    bookingData?.availability?.endDateTime ||
-                      detailsData?.data?.schedule.endDateTime ||
-                      ''
-                  ).toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'short',
-                    day: 'numeric',
-                  })}`}
-                  people={formatGuestInfo(bookingData?.guests)}
-                  onGuestUpdate={guests => {
+                  time={
+                    detailsData?.data?.type === 'Stay'
+                      ? `${new Date(bookingDateTime.startTime).toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })} - ${new Date(bookingDateTime.endTime).toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}`
+                      : '02:00 PM - 04:00 PM'
+                  }
+                  date={(() => {
+                    if (detailsData?.data?.type === 'Stay') {
+                      return `${new Date(bookingDateTime.startDate).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        month: 'short',
+                        day: 'numeric',
+                      })} - ${new Date(bookingDateTime.endDate).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        month: 'short',
+                        day: 'numeric',
+                      })}`;
+                    } else {
+                      const start = new Date(bookingDateTime.startDate);
+                      const end = new Date(bookingDateTime.endDate);
+                      if (
+                        start.getFullYear() === end.getFullYear() &&
+                        start.getMonth() === end.getMonth() &&
+                        start.getDate() === end.getDate()
+                      ) {
+                        return `(${start.toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          month: 'short',
+                          day: 'numeric',
+                        })})`;
+                      } else {
+                        return `(${start.toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          month: 'short',
+                          day: 'numeric',
+                        })} - ${end.toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          month: 'short',
+                          day: 'numeric',
+                        })})`;
+                      }
+                    }
+                  })()}
+                  people={(() => {
+                    const guests = bookingData?.guests;
+                    if (!guests) return '';
+                    const parts = [];
+                    if (guests.adults > 0) parts.push(`${guests.adults} Adult${guests.adults > 1 ? 's' : ''}`);
+                    if (guests.children > 0) parts.push(`${guests.children} Child${guests.children > 1 ? 'ren' : ''}`);
+                    if (guests.infants > 0) parts.push(`${guests.infants} Infant${guests.infants > 1 ? 's' : ''}`);
+                    return parts.join(', ');
+                  })()}
+                  onGuestUpdate={(guests) => {
                     updateBookingData(params.id, {
                       guests,
                     });

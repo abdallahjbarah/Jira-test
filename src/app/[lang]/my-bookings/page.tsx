@@ -100,7 +100,7 @@ const MyBookingsPage = () => {
   }, [hasNextPage, fetchNextPage]);
 
   return (
-    <InnerPagesLayout headerProps={{ withNavItems: false }}>
+    <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main className='container pt-[1rem] pb-[3rem] laptopM:pb-[5rem]'>
         <h2 className='text-center text-custom-40 font-custom-700 font-gellix-Bold text-text_1 mb-[4rem]'>
           {t('myBookings.my')}{' '}

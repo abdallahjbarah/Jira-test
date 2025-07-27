@@ -2,8 +2,9 @@ import React from 'react';
 
 interface TimeSlotCardProps {
   timeRange: string;
-  adultPrice: number;
-  childrenPrice: number;
+  adultPrice: number | null;
+  childrenPrice: number | null;
+  infantsPrice: number | null;
   onChoose: () => void;
   currency?: string;
   type?: 'Stay' | 'Regular';
@@ -14,11 +15,13 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
   timeRange,
   adultPrice,
   childrenPrice,
+  infantsPrice,
   onChoose,
   currency = 'JOD',
   type = 'Regular',
   title,
 }) => {
+  console.log("infantsPrice", infantsPrice);
   if (type === 'Stay') {
     return (
       <div className='w-full bg-white border border-[#F3F1F1] rounded-[6px] shadow-[0px_4px_4px_rgba(184,184,184,0.25)] px-[21px] py-[15px] mb-[0.3rem]'>
@@ -47,16 +50,22 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
           <div className='font-custom-400 text-sm font-sans text-text_1'>
             {timeRange}
           </div>
-          <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
-            {currency} {adultPrice} /<span className='font-sans'>adult</span>
-          </div>
-          <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
-            {currency} {childrenPrice} /
-            <span className='font-sans'>children</span>
-          </div>
-          <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
-            Free /<span className='font-sans'>infant</span>
-          </div>
+          {adultPrice != null && (
+            <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
+              {currency} {adultPrice} /<span className='font-sans'>adult</span>
+            </div>
+          )}
+          {childrenPrice != null && (
+            <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
+              {currency} {childrenPrice} /
+              <span className='font-sans'>children</span>
+            </div>
+          )}
+          {infantsPrice != null && (
+            <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
+              {currency} {infantsPrice === 0 ? 'Free' : infantsPrice} /<span className='font-sans'>infant</span>
+            </div>
+          )}
         </div>
         <button
           onClick={onChoose}

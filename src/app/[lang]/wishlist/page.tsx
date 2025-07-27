@@ -72,7 +72,7 @@ function WishlistPage(): React.ReactElement {
     );
 
   return (
-    <InnerPagesLayout headerProps={{ withNavItems: false }}>
+    <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main className='container py-[6.25rem]'>
         <h2 className='text-center text-custom-50 font-custom-700 font-gellix-Bold text-text_1'>
           {t('wishlist.your')}{' '}

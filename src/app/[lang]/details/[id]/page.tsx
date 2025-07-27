@@ -25,6 +25,8 @@ import useFavorite from '@/utils/hooks/useFavorite';
 import { Site } from '@/lib/types';
 import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
 import ImagesGallery from './ImagesGallery';
+import { useFetchSimilar } from '@/lib/apis/details/useFetchSimillarExperiencde';
+import SimilarExperiencesSection from '@/components/web/details/SimilarExperiencesSection';
 
 interface DetailsIdProps {
   params: { lang: Locale; id: string };
@@ -35,53 +37,6 @@ const DetailsId: React.FC<DetailsIdProps> = ({
   params,
   openFavouritesModal,
 }) => {
-  const features: {
-    icon: string;
-    title: string;
-    description: string;
-  }[] = [
-    {
-      icon: '/SVGs/shared/details-icons/timeCircle.svg',
-      title: 'Duration',
-      description: '2hrs 30m',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/sun.svg',
-      title: 'Time of Day',
-      description: 'Morning (before 12 pm) - Evening (after 5 pm)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/guideIcon.svg',
-      title: 'Guide (Upon Request)',
-      description: 'Extra fees applied',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
-      title: 'Level of Difficulty',
-      description: 'Easy (relaxed tour, easy walk)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
-      title: 'Age Suitability',
-      description: '3+',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/transportationIcon.svg',
-      title: 'Transportation (Upon Request)',
-      description: 'Extra fees applied',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
-      title: 'Spoken Language',
-      description:
-        'Arabic, English (Download a language translator app to communicate with host!)',
-    },
-    {
-      icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
-      title: 'Wheelchair Accessible',
-      description: '',
-    },
-  ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -105,6 +60,9 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     isError,
     error,
   } = useFetchDetails(params.id);
+
+  const { data: similarData, isLoading: isSimilarLoading } = useFetchSimilar(params.id);
+  console.log("similarData", similarData);
 
   const { isFavorite, removeFavorite } = useFavorite();
 
@@ -261,6 +219,15 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     stayDetails,
     stayNearby,
     stayHouseRules,
+    duration,
+    levelOfDifficulty,
+    ageSuitability,
+    timeOfDay,
+    wheelChair,
+    transportationIsIncluded,
+    transportationIsMandatory,
+    guideIsIncluded,
+    guideIsMandatory
   } = detailsData.data;
 
   const galleryImages =
@@ -274,12 +241,62 @@ const DetailsId: React.FC<DetailsIdProps> = ({
       };
     }) || [];
 
+  console.log("guideIsIncluded", guideIsIncluded);
+
+  const features: {
+    icon: string;
+    title: string;
+    description: string;
+  }[] = [
+      {
+        icon: '/SVGs/shared/details-icons/timeCircle.svg',
+        title: 'Duration',
+        description: duration + ' hrs',
+      },
+      {
+        icon: '/SVGs/shared/details-icons/sun.svg',
+        title: 'Time of Day',
+        description: timeOfDay?.map((time: string) => time.charAt(0).toUpperCase() + time.slice(1)).join(', ') + "",
+      },
+      ...guideIsIncluded ? [{
+        icon: '/SVGs/shared/details-icons/guideIcon.svg',
+        title: guideIsMandatory ? 'Guide' : 'Guide (Upon Request)',
+        description: 'Extra fees applied',
+      }] : [],
+      {
+        icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
+        title: 'Level of Difficulty',
+        description: levelOfDifficulty + "",
+      },
+      {
+        icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
+        title: 'Age Suitability',
+        description: ageSuitability + '+',
+      },
+      ...transportationIsIncluded ? [{
+        icon: '/SVGs/shared/details-icons/transportationIcon.svg',
+        title: transportationIsMandatory ? 'Transportation' : 'Transportation (Upon Request)',
+        description: 'Extra fees applied',
+      }] : [],
+      {
+        icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
+        title: 'Spoken Language',
+        description:
+          languages?.map((language: { nameAr: string; nameEn: string; }) => language.nameEn.charAt(0).toUpperCase() + language.nameEn.slice(1)).join(', ') + ' (Download a language translator app to communicate with host!)',
+      },
+      ...(wheelChair ? [{
+        icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
+        title: 'Wheelchair Accessible',
+        description: '',
+      }] : []),
+    ];
+
   return (
     <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main className='container'>
         <div className='flex flex-col'>
           <div className='relative'>
-            <div className='w-full flex justify-center'>
+            <div className='w-full flex justify-center '>
               <ImagesGallery images={images} />
             </div>
             <button
@@ -375,6 +392,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               type={type}
               name={name}
             />
+
           </div>
           {type != 'Stay' && (
             <>
@@ -382,7 +400,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
 
               <WhatToExpectSection
                 description={whatToExpect?.description}
-                images={images}
+                images={whatToExpect?.images || []}
               />
             </>
           )}
@@ -406,6 +424,12 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                 />
               </div>
             </>
+          )}
+          <Divider className='w-full my-8 content-center' />
+          {isSimilarLoading ? (
+            <CircularLoader size={50} />
+          ) : (
+            <SimilarExperiencesSection similarExperiences={similarData?.similarSites || []} />
           )}
         </div>
       </main>
