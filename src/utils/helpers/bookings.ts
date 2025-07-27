@@ -26,7 +26,7 @@ interface PriceBreakdownItem {
   guestCount: number;
   isFree: boolean;
   pricePerPerson: number;
-  type?: 'guest' | 'extra' | 'nights';
+  type?: 'guest' | 'extra' | 'nights' | 'transportation' | 'guide';
 }
 
 export const calculatePriceBreakdown = (
@@ -34,6 +34,10 @@ export const calculatePriceBreakdown = (
   guests: GuestData,
   extras?: Extra[],
   numberOfNights?: number,
+  transportationFee?: number,
+  guideFee?: number,
+  hasTransportation?: boolean,
+  hasGuide?: boolean,
 ): PriceBreakdownItem[] => {
   const breakdown: PriceBreakdownItem[] = [];
 
@@ -109,6 +113,42 @@ export const calculatePriceBreakdown = (
     });
   }
 
+  // Add transportation fee if selected
+  if (hasTransportation && transportationFee !== undefined) {
+    const nights = numberOfNights || 1;
+    const totalTransportationAmount = transportationFee * nights;
+    const isFree = transportationFee === 0;
+
+    breakdown.push({
+      label: 'Transportation',
+      amount: totalTransportationAmount,
+      originalPrice: transportationFee,
+      discount: null,
+      guestCount: 1,
+      isFree: isFree,
+      pricePerPerson: transportationFee,
+      type: 'transportation',
+    });
+  }
+
+  // Add guide fee if selected
+  if (hasGuide && guideFee !== undefined) {
+    const nights = numberOfNights || 1;
+    const totalGuideAmount = guideFee * nights;
+    const isFree = guideFee === 0;
+
+    breakdown.push({
+      label: 'Guide',
+      amount: totalGuideAmount,
+      originalPrice: guideFee,
+      discount: null,
+      guestCount: 1,
+      isFree: isFree,
+      pricePerPerson: guideFee,
+      type: 'guide',
+    });
+  }
+
   return breakdown;
 };
 
@@ -139,6 +179,22 @@ export const formatPriceBreakdownForDisplay = (
     }
 
     if (item.type === 'extra') {
+      const result: { label: string; amount: string; discount?: string } = {
+        label: item.label,
+        amount: item.isFree ? 'Free' : `${currency} ${item.amount.toFixed(0)}`,
+      };
+      return result;
+    }
+
+    if (item.type === 'transportation') {
+      const result: { label: string; amount: string; discount?: string } = {
+        label: item.label,
+        amount: item.isFree ? 'Free' : `${currency} ${item.amount.toFixed(0)}`,
+      };
+      return result;
+    }
+
+    if (item.type === 'guide') {
       const result: { label: string; amount: string; discount?: string } = {
         label: item.label,
         amount: item.isFree ? 'Free' : `${currency} ${item.amount.toFixed(0)}`,

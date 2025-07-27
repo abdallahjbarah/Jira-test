@@ -1,6 +1,5 @@
 'use client';
 
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 import CustomLink from '@components/ui/CustomLink';
 import BookagriLogoSvg from '@SVGs/shared/BookagriLogoSvg.svg';
 import {
@@ -152,20 +151,37 @@ export default function Header(): React.ReactElement {
                   </div>
                 </div>
                 <div className='mt-6'>
-                  <ul className='grid gap-y-4'>
-                    {LINKS_DATA?.map((item, index) => (
-                      <HeaderLink
-                        key={item?.name[lang] + index + 'Nav'}
-                        path={item?.path}
-                        text={item?.name[lang]}
-                        isActive={
-                          item?.path === pathname.replace(`/${lang}`, '') ||
-                          (item.path === '/' && pathname === `/${lang}`)
-                        }
-                      />
-                    ))}
-
-                  </ul>
+                  {/* Menu Items */}
+                  <div className='flex-1 overflow-y-auto py-4'>
+                    <ul className='space-y-2 px-4'>
+                      {LINKS_DATA?.map((item, index) => (
+                        <li key={item?.name[lang] + index + 'Nav'}>
+                          <HeaderLink
+                            path={item?.path}
+                            text={item?.name[lang]}
+                            isActive={
+                              item?.path === pathname.replace(`/${lang}`, '') ||
+                              (item.path === '/' && pathname === `/${lang}`)
+                            }
+                          />
+                        </li>
+                      ))}
+                      
+                      {/* Collection Links */}
+                      {COLLECTIONS_LINKS?.map((item, index) => (
+                        <li key={item?.name[lang] + index + 'CollectionNav'}>
+                          <HeaderLink
+                            path={item?.path}
+                            text={item?.name[lang]}
+                            isActive={
+                              item?.path === pathname.replace(`/${lang}`, '') ||
+                              (item.path === '/' && pathname === `/${lang}`)
+                            }
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
