@@ -388,7 +388,8 @@ const FilterBar = () => {
                     checkInDate={getCheckInDate()}
                     minDate={new Date()}
                     value={filtersValue?.checkoutTime || ''}
-                    className={activeButton === 'checkout' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
+                    className={`${activeButton === 'checkout' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''} ${!filtersValue?.checkinTime ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={!filtersValue?.checkinTime}
                   />
                 </div>
               )}
@@ -482,6 +483,9 @@ const FilterBar = () => {
           display: flex;
           flex-direction: row;
           align-items: center;
+          justify-content: center;
+          max-width: 1200px;
+          margin: 0 auto;
         }
         .filterbar-bar-adv-inner {
           flex: 1 1 0;
@@ -499,13 +503,16 @@ const FilterBar = () => {
           max-width: 1100px;
           border-radius: 9999px;
           position: relative;
+          min-height: 70px;
         }
         .filterbar-grid-item { flex: 1 1 0; min-width: 0; }
         .filterbar-advanced-desktop {
           display: flex;
           align-items: center;
-          margin-left: 16px;
+          margin-left: 8px;
           margin-top: 0;
+          max-width: 1200px;
+          margin-right: auto;
         }
         .filterbar-advanced-mobile {
           display: none;
