@@ -4,6 +4,7 @@ import CustomLink from '@components/ui/CustomLink';
 import BookagriLogoSvg from '@SVGs/shared/BookagriLogoSvg.svg';
 import {
   COLLECTIONS_LINKS,
+  COLLECTION_STATUS_LIST,
   DEFAULT_LOCALE,
   LINKS_DATA,
   Locale,
@@ -23,9 +24,25 @@ interface LinkData {
 
 export default function Header(): React.ReactElement {
   const [open, setOpen] = useState(false);
+  const [collectionsOpen, setCollectionsOpen] = useState(false);
   const pathname = usePathname();
   const params = useParams<{ lang: Locale }>();
   const lang = params.lang || DEFAULT_LOCALE;
+
+  // Close collections dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (collectionsOpen && !target.closest('.collections-dropdown')) {
+        setCollectionsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [collectionsOpen]);
 
   return (
     <header className='relative'>
@@ -58,8 +75,34 @@ export default function Header(): React.ReactElement {
             </li>
           </ul>
 
-          {/* Right links */}
-          <ul className='flex items-center gap-6 flex-shrink-0 pr-6'>
+          {/* Collections Hamburger Menu */}
+          <div className='flex laptopS:hidden items-center gap-6 flex-shrink-0 pr-6 collections-dropdown'>
+            <button
+              type='button'
+              className='bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-600 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary_1 shadow-sm border border-gray-200'
+              onClick={() => setCollectionsOpen(!collectionsOpen)}
+            >
+              <span className='sr-only'>Open collections menu</span>
+              <svg
+                className='h-6 w-6'
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+                aria-hidden='true'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M4 6h16M4 12h16M4 18h16'
+                />
+              </svg>
+            </button>
+          </div>
+
+          {/* Desktop Collections Links */}
+          <ul className='hidden laptopS:flex items-center gap-6 flex-shrink-0 pr-6'>
             {COLLECTIONS_LINKS?.map(
               (item, index) =>
                 index != 5 && (
@@ -78,6 +121,34 @@ export default function Header(): React.ReactElement {
         </div>
       </nav>
 
+      {/* Collections Dropdown Menu */}
+      {collectionsOpen && (
+        <div className='laptopS:hidden absolute top-full right-0 mt-2 z-50 collections-dropdown'>
+          <div className='bg-white rounded-lg shadow-lg border border-gray-200 min-w-[200px]'>
+            <div className='py-2'>
+              {/* All Collections */}
+              <CustomLink
+                path={COLLECTION_STATUS_LIST[0].path}
+                className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors'
+              >
+                {COLLECTION_STATUS_LIST[0].label[lang]}
+              </CustomLink>
+              
+              {/* Collection Items */}
+              {COLLECTIONS_LINKS?.map((item, index) => (
+                <CustomLink
+                  key={item?.name[lang] + index + 'Collection'}
+                  path={item?.path}
+                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors'
+                >
+                  {item?.name[lang]}
+                </CustomLink>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+          
       <nav className='z-50 absolute w-full'>
         <div className='laptopS:hidden flex items-end justify-end p-4'>
           <button
@@ -151,10 +222,12 @@ export default function Header(): React.ReactElement {
                   </div>
                 </div>
                 <div className='mt-6'>
-                  <ul className='grid gap-y-4'>
+                  {/* Menu Items */}
+                  <div className='flex-1 overflow-y-auto py-4'>
+                    <ul className='space-y-2 px-4'>
                     {LINKS_DATA?.map((item, index) => (
+                        <li key={item?.name[lang] + index + 'Nav'}>
                       <HeaderLink
-                        key={`${item?.name[lang] + index}Nav`}
                         path={item?.path}
                         text={item?.name[lang]}
                         isActive={
@@ -162,8 +235,24 @@ export default function Header(): React.ReactElement {
                           (item.path === '/' && pathname === `/${lang}`)
                         }
                       />
-                    ))}
+                        </li>
+                      ))}
+                      
+                      {/* Collection Links */}
+                      {COLLECTIONS_LINKS?.map((item, index) => (
+                        <li key={item?.name[lang] + index + 'CollectionNav'}>
+                          <HeaderLink
+                            path={item?.path}
+                            text={item?.name[lang]}
+                            isActive={
+                              item?.path === pathname.replace(`/${lang}`, '') ||
+                              (item.path === '/' && pathname === `/${lang}`)
+                            }
+                          />
+                        </li>
+                      ))}
                   </ul>
+                  </div>
                 </div>
               </div>
             </div>

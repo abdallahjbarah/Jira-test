@@ -66,6 +66,18 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
   const { t } = useTranslation();
 
+  // Initialize form with default values based on mandatory status
+  const getDefaultValues = () => {
+    const siteInfo = detailsData?.data;
+    return {
+      transportationChecked: siteInfo?.transportationIsMandatory ?? false,
+      guideChecked: siteInfo?.guideIsMandatory ?? false,
+      airportChecked: false, // Airport is always optional
+      selectedPaymentMethod: null,
+      financialReceipt: null,
+    };
+  };
+
   const {
     control,
     handleSubmit,
@@ -73,21 +85,58 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     setValue,
     formState: { errors },
   } = useForm<BookingFormData>({
-    defaultValues: {
-      transportationChecked: true,
-      guideChecked: true,
-      airportChecked: true,
-      selectedPaymentMethod: null,
-      financialReceipt: null,
-    },
+    defaultValues: getDefaultValues(),
     mode: 'onChange',
   });
+
+  // Update form values when site data is loaded
+  React.useEffect(() => {
+    if (detailsData?.data) {
+      const siteInfo = detailsData.data;
+      setValue('transportationChecked', siteInfo.transportationIsMandatory ?? false);
+      setValue('guideChecked', siteInfo.guideIsMandatory ?? false);
+    }
+  }, [detailsData?.data, setValue]);
+
+  // Handlers that prevent unchecking mandatory items
+  const handleTransportationChange = (checked: boolean) => {
+    const siteInfo = detailsData?.data;
+    // If mandatory, always keep it checked
+    if (siteInfo?.transportationIsMandatory) {
+      setValue('transportationChecked', true);
+    } else {
+      setValue('transportationChecked', checked);
+    }
+  };
+
+  const handleGuideChange = (checked: boolean) => {
+    const siteInfo = detailsData?.data;
+    // If mandatory, always keep it checked
+    if (siteInfo?.guideIsMandatory) {
+      setValue('guideChecked', true);
+    } else {
+      setValue('guideChecked', checked);
+    }
+  };
 
   const transportationChecked = watch('transportationChecked');
   const guideChecked = watch('guideChecked');
   const airportChecked = watch('airportChecked');
   const selectedPaymentMethod = watch('selectedPaymentMethod');
   const financialReceipt = watch('financialReceipt');
+
+  // Ensure mandatory items stay checked
+  React.useEffect(() => {
+    if (detailsData?.data) {
+      const siteInfo = detailsData.data;
+      if (siteInfo.transportationIsMandatory && !transportationChecked) {
+        setValue('transportationChecked', true);
+      }
+      if (siteInfo.guideIsMandatory && !guideChecked) {
+        setValue('guideChecked', true);
+      }
+    }
+  }, [detailsData?.data, transportationChecked, guideChecked, setValue]);
 
   const router = useRouter();
 
@@ -116,6 +165,8 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
       bookingData,
       detailsData: detailsData?.data,
       availability: bookingData?.availability,
+      siteType: detailsData?.data?.type,
+      schedule: detailsData?.data?.schedule
     });
 
     if (!bookingData?.availability) {
@@ -131,53 +182,50 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     // For stays, the structure is different - availability contains startDate/endDate
     if (detailsData?.data?.type === 'Stay') {
       console.log('🏠 Stay type detected, using startDate/endDate');
+      // For stays, the availability data structure is different
+      const startTime = bookingData.availability.startDate || bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '';
+      const endTime = bookingData.availability.endDate || bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || '';
+      const startDate = bookingData.availability.startDate || bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '';
+      const endDate = bookingData.availability.endDate || bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || '';
+      
+      console.log('🏠 Stay datetime values:', { startTime, endTime, startDate, endDate });
+      
       return {
-        startTime:
-          bookingData.availability.startDate ||
-          bookingData.availability.startDateTime ||
-          detailsData?.data?.schedule?.startDateTime ||
-          '',
-        endTime:
-          bookingData.availability.endDate ||
-          bookingData.availability.endDateTime ||
-          detailsData?.data?.schedule?.endDateTime ||
-          '',
-        startDate:
-          bookingData.availability.startDate ||
-          bookingData.availability.startDateTime ||
-          detailsData?.data?.schedule?.startDateTime ||
-          '',
-        endDate:
-          bookingData.availability.endDate ||
-          bookingData.availability.endDateTime ||
-          detailsData?.data?.schedule?.endDateTime ||
-          '',
+        startTime,
+        endTime,
+        startDate,
+        endDate
       };
     }
 
     // For experiences, use startDateTime/endDateTime from the selected slot
     console.log('🎯 Experience type detected, using startDateTime/endDateTime');
+    // For experiences, the availability data contains startDateTime and endDateTime directly
+    const startTime = bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '';
+    const endTime = bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || '';
+    const startDate = bookingData.availability.startDateTime || detailsData?.data?.schedule?.startDateTime || '';
+    const endDate = bookingData.availability.endDateTime || detailsData?.data?.schedule?.endDateTime || '';
+    
+    console.log('🎯 Experience datetime values:', { startTime, endTime, startDate, endDate });
+    
     return {
-      startTime:
-        bookingData.availability.startDateTime ||
-        detailsData?.data?.schedule?.startDateTime ||
-        '',
-      endTime:
-        bookingData.availability.endDateTime ||
-        detailsData?.data?.schedule?.endDateTime ||
-        '',
-      startDate:
-        bookingData.availability.startDateTime ||
-        detailsData?.data?.schedule?.startDateTime ||
-        '',
-      endDate:
-        bookingData.availability.endDateTime ||
-        detailsData?.data?.schedule?.endDateTime ||
-        '',
+      startTime,
+      endTime,
+      startDate,
+      endDate
     };
   };
 
   const bookingDateTime = getBookingDateTime();
+
+  // Debug the final bookingDateTime object
+  console.log('📅 Final bookingDateTime object:', bookingDateTime);
+  console.log('📅 bookingDateTime validation:', {
+    startTimeValid: bookingDateTime.startTime && !isNaN(new Date(bookingDateTime.startTime).getTime()),
+    endTimeValid: bookingDateTime.endTime && !isNaN(new Date(bookingDateTime.endTime).getTime()),
+    startDateValid: bookingDateTime.startDate && !isNaN(new Date(bookingDateTime.startDate).getTime()),
+    endDateValid: bookingDateTime.endDate && !isNaN(new Date(bookingDateTime.endDate).getTime()),
+  });
 
   const { mutate: bookCollection, isPending: isBookingCollectionPending } =
     useMutateBooking({
@@ -337,49 +385,176 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 <BookingDetails
                   time={
                     detailsData?.data?.type === 'Stay'
-                      ? `${new Date(bookingDateTime.startTime).toLocaleTimeString('en-US', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })} - ${new Date(bookingDateTime.endTime).toLocaleTimeString('en-US', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}`
-                      : '02:00 PM - 04:00 PM'
+                      ? (() => {
+                          try {
+                            // For stays, use checkin/checkout times if available
+                            if (detailsData?.data?.checkinTime && detailsData?.data?.checkoutTime) {
+                              return `${detailsData.data.checkinTime} - ${detailsData.data.checkoutTime}`;
+                            }
+                            
+                            const startTime = new Date(bookingDateTime.startTime);
+                            const endTime = new Date(bookingDateTime.endTime);
+                            
+                            console.log('🕐 Stay time formatting:', {
+                              startTime: bookingDateTime.startTime,
+                              endTime: bookingDateTime.endTime,
+                              startTimeObj: startTime,
+                              endTimeObj: endTime,
+                              isValidStart: !isNaN(startTime.getTime()),
+                              isValidEnd: !isNaN(endTime.getTime())
+                            });
+                            
+                            if (!isNaN(startTime.getTime()) && !isNaN(endTime.getTime())) {
+                              return `${startTime.toLocaleTimeString('en-US', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })} - ${endTime.toLocaleTimeString('en-US', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}`;
+                            } else {
+                              console.log('⚠️ Invalid time values, using fallback');
+                              return 'Check-in/Check-out times';
+                            }
+                          } catch (error) {
+                            console.error('❌ Error formatting stay time:', error);
+                            return 'Check-in/Check-out times';
+                          }
+                        })()
+                      : (() => {
+                          try {
+                            const startTime = new Date(bookingDateTime.startTime);
+                            const endTime = new Date(bookingDateTime.endTime);
+                            
+                            console.log('🕐 Experience time formatting:', {
+                              startTime: bookingDateTime.startTime,
+                              endTime: bookingDateTime.endTime,
+                              startTimeObj: startTime,
+                              endTimeObj: endTime,
+                              isValidStart: !isNaN(startTime.getTime()),
+                              isValidEnd: !isNaN(endTime.getTime())
+                            });
+                            
+                            if (!isNaN(startTime.getTime()) && !isNaN(endTime.getTime())) {
+                              return `${startTime.toLocaleTimeString('en-US', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })} - ${endTime.toLocaleTimeString('en-US', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}`;
+                            } else {
+                              console.log('⚠️ Invalid time values, using fallback');
+                              // Try to get time from site schedule as fallback
+                              if (detailsData?.data?.schedule?.startDateTime && detailsData?.data?.schedule?.endDateTime) {
+                                const scheduleStart = new Date(detailsData.data.schedule.startDateTime);
+                                const scheduleEnd = new Date(detailsData.data.schedule.endDateTime);
+                                if (!isNaN(scheduleStart.getTime()) && !isNaN(scheduleEnd.getTime())) {
+                                  return `${scheduleStart.toLocaleTimeString('en-US', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                  })} - ${scheduleEnd.toLocaleTimeString('en-US', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                  })}`;
+                                }
+                              }
+                              return '02:00 PM - 04:00 PM';
+                            }
+                          } catch (error) {
+                            console.error('❌ Error formatting experience time:', error);
+                            return '02:00 PM - 04:00 PM';
+                          }
+                        })()
                   }
                   date={(() => {
                     if (detailsData?.data?.type === 'Stay') {
-                      return `${new Date(bookingDateTime.startDate).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        month: 'short',
-                        day: 'numeric',
-                      })} - ${new Date(bookingDateTime.endDate).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        month: 'short',
-                        day: 'numeric',
-                      })}`;
+                      try {
+                        const startDate = new Date(bookingDateTime.startDate);
+                        const endDate = new Date(bookingDateTime.endDate);
+                        
+                        console.log('📅 Stay date formatting:', {
+                          startDate: bookingDateTime.startDate,
+                          endDate: bookingDateTime.endDate,
+                          startDateObj: startDate,
+                          endDateObj: endDate,
+                          isValidStart: !isNaN(startDate.getTime()),
+                          isValidEnd: !isNaN(endDate.getTime())
+                        });
+                        
+                        if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
+                          return `${startDate.toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            month: 'short',
+                            day: 'numeric',
+                          })} - ${endDate.toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            month: 'short',
+                            day: 'numeric',
+                          })}`;
+                        } else {
+                          console.log('⚠️ Invalid date values, using fallback');
+                          return 'Check-in - Check-out';
+                        }
+                      } catch (error) {
+                        console.error('❌ Error formatting stay date:', error);
+                        return 'Check-in - Check-out';
+                      }
                     } else {
-                      const start = new Date(bookingDateTime.startDate);
-                      const end = new Date(bookingDateTime.endDate);
-                      if (
-                        start.getFullYear() === end.getFullYear() &&
-                        start.getMonth() === end.getMonth() &&
-                        start.getDate() === end.getDate()
-                      ) {
-                        return `(${start.toLocaleDateString('en-US', {
-                          weekday: 'long',
-                          month: 'short',
-                          day: 'numeric',
-                        })})`;
-                      } else {
-                        return `(${start.toLocaleDateString('en-US', {
-                          weekday: 'long',
-                          month: 'short',
-                          day: 'numeric',
-                        })} - ${end.toLocaleDateString('en-US', {
-                          weekday: 'long',
-                          month: 'short',
-                          day: 'numeric',
-                        })})`;
+                      try {
+                        const start = new Date(bookingDateTime.startDate);
+                        const end = new Date(bookingDateTime.endDate);
+                        
+                        console.log('📅 Experience date formatting:', {
+                          startDate: bookingDateTime.startDate,
+                          endDate: bookingDateTime.endDate,
+                          startDateObj: start,
+                          endDateObj: end,
+                          isValidStart: !isNaN(start.getTime()),
+                          isValidEnd: !isNaN(end.getTime())
+                        });
+                        
+                        if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+                          if (
+                            start.getFullYear() === end.getFullYear() &&
+                            start.getMonth() === end.getMonth() &&
+                            start.getDate() === end.getDate()
+                          ) {
+                            return `(${start.toLocaleDateString('en-US', {
+                              weekday: 'long',
+                              month: 'short',
+                              day: 'numeric',
+                            })})`;
+                          } else {
+                            return `(${start.toLocaleDateString('en-US', {
+                              weekday: 'long',
+                              month: 'short',
+                              day: 'numeric',
+                            })} - ${end.toLocaleDateString('en-US', {
+                              weekday: 'long',
+                              month: 'short',
+                              day: 'numeric',
+                            })})`;
+                          }
+                        } else {
+                          console.log('⚠️ Invalid date values, using fallback');
+                          // Try to get date from site schedule as fallback
+                          if (detailsData?.data?.schedule?.startDateTime && detailsData?.data?.schedule?.endDateTime) {
+                            const scheduleStart = new Date(detailsData.data.schedule.startDateTime);
+                            const scheduleEnd = new Date(detailsData.data.schedule.endDateTime);
+                            if (!isNaN(scheduleStart.getTime()) && !isNaN(scheduleEnd.getTime())) {
+                              return `(${scheduleStart.toLocaleDateString('en-US', {
+                                weekday: 'long',
+                                month: 'short',
+                                day: 'numeric',
+                              })})`;
+                            }
+                          }
+                          return '(Selected Date)';
+                        }
+                      } catch (error) {
+                        console.error('❌ Error formatting experience date:', error);
+                        return '(Selected Date)';
                       }
                     }
                   })()}
@@ -402,11 +577,8 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 <AdditionalServices
                   transportationChecked={transportationChecked}
                   guideChecked={guideChecked}
-                  onTransportationChange={checked =>
-                    setValue('transportationChecked', checked)
-                  }
-                  onGuideChange={checked => setValue('guideChecked', checked)}
-                  guidePrice='JOD 50'
+                  onTransportationChange={handleTransportationChange}
+                  onGuideChange={handleGuideChange}
                   siteInfo={detailsData?.data}
                   airportChecked={airportChecked}
                   onAirportChange={checked =>
@@ -507,6 +679,9 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 bookingData={bookingData}
                 isBookingCollectionPending={isBookingCollectionPending}
                 isUploadingFile={isUploadingFile}
+                transportationChecked={transportationChecked}
+                guideChecked={guideChecked}
+                airportChecked={airportChecked}
               />
             </div>
           </div>

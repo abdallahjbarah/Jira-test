@@ -21,6 +21,7 @@ interface DatePickerDropdownProps {
   triggerComponent?: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  disabled?: boolean;
   schedule?: {
     startDateTime: number;
     endDateTime: number;
@@ -47,6 +48,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   triggerComponent,
   className,
   onClick,
+  disabled,
   schedule,
 }) => {
   const { t, locale } = useTranslation();
@@ -149,6 +151,8 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   };
 
   const handleDateChange = (dates: Date[]) => {
+    if (disabled) return; // Prevent date changes when disabled
+    
     setSelectedDates(dates);
 
     if (onChange) {
@@ -186,6 +190,23 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
     </div>
   );
 
+  const handleTriggerClick = () => {
+    if (disabled) return; // Prevent opening when disabled
+    onClick?.();
+  };
+
+  // If disabled, render just the trigger without the dropdown functionality
+  if (disabled) {
+    return (
+      <FilterBarItem
+        title={title || { en: '', ar: '' }}
+        value={getDisplayValue()}
+        onClick={() => {}} // No-op function
+        className={`${className || ''} ${disabled ? 'cursor-not-allowed' : ''}`}
+      />
+    );
+  }
+
   return (
     <Dropdown
       trigger={
@@ -193,7 +214,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
           <FilterBarItem
             title={title || { en: '', ar: '' }}
             value={getDisplayValue()}
-            onClick={onClick || (() => {})}
+            onClick={handleTriggerClick}
             className={`${className || ''} ${isOpen ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}`}
           />
         )

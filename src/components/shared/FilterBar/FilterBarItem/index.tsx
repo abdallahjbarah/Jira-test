@@ -7,7 +7,7 @@ const FilterBarItemContainer = Styled.div<{ $isOpen?: boolean }>`
   align-items: center;
   gap: 7px;
   cursor: pointer;
-  padding: 20px 55px;
+  padding: 20px 48px;
   border-radius: 9999px;
   background: ${props => (props.$isOpen ? 'white' : 'transparent')};
   transition: all 0.3s ease-in-out;

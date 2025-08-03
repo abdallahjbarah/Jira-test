@@ -27,6 +27,9 @@ interface BookingSummaryProps {
   bookingData: any | undefined;
   isBookingCollectionPending: boolean;
   isUploadingFile: boolean;
+  transportationChecked?: boolean;
+  guideChecked?: boolean;
+  airportChecked?: boolean;
 }
 
 const BookingSummary: React.FC<BookingSummaryProps> = ({
@@ -38,6 +41,9 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   siteInfo,
   isBookingCollectionPending,
   isUploadingFile,
+  transportationChecked = false,
+  guideChecked = false,
+  airportChecked = false,
 }) => {
   const { currency } = useCurrency();
   const { isFavorite, removeFavorite } = useFavorite();
@@ -82,7 +88,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       siteInfo.pricingInformation,
       bookingData.guests,
       siteInfo.extras,
-      numberOfNights
+      numberOfNights,
+      siteInfo.transportation?.price,
+      siteInfo.guide?.price,
+      transportationChecked,
+      guideChecked,
     );
 
     return formatPriceBreakdownForDisplay(breakdown, currency, numberOfNights);
@@ -90,8 +100,12 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     bookingData?.guests,
     siteInfo?.pricingInformation,
     siteInfo?.extras,
+    siteInfo?.transportation?.price,
+    siteInfo?.guide?.price,
     currency,
     numberOfNights,
+    transportationChecked,
+    guideChecked,
   ]);
 
   const dynamicTotalAmount = React.useMemo(() => {
@@ -103,7 +117,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       siteInfo.pricingInformation,
       bookingData.guests,
       siteInfo.extras,
-      numberOfNights
+      numberOfNights,
+      siteInfo.transportation?.price,
+      siteInfo.guide?.price,
+      transportationChecked,
+      guideChecked,
     );
 
     const grandTotal = calculateGrandTotal(breakdown);
@@ -112,8 +130,12 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     bookingData?.guests,
     siteInfo?.pricingInformation,
     siteInfo?.extras,
+    siteInfo?.transportation?.price,
+    siteInfo?.guide?.price,
     currency,
     numberOfNights,
+    transportationChecked,
+    guideChecked,
   ]);
 
   return (

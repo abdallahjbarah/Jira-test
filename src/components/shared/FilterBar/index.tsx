@@ -399,10 +399,10 @@ const FilterBar = () => {
                   onChange={handleCheckInChange}
                   mode='single'
                   minDate={new Date()}
-                  value={filtersValue?.checkinTime || ''}
+                  value={filtersValue?.startDateTime || ''}
                   maxDate={
-                    filtersValue?.checkoutTime
-                      ? new Date(filtersValue.checkoutTime)
+                    filtersValue?.endDateTime
+                      ? new Date(filtersValue.endDateTime)
                       : new Date(
                           new Date().setFullYear(new Date().getFullYear() + 1)
                         )
@@ -426,12 +426,17 @@ const FilterBar = () => {
                     isCheckout={true}
                     checkInDate={getCheckInDate()}
                     minDate={new Date()}
-                    value={filtersValue?.checkoutTime || ''}
-                    className={
+                    value={filtersValue?.endDateTime || ''}
+                    className={`${
                       activeButton === 'checkout'
                         ? 'bg-white rounded-full [&_span]:!text-green-600'
                         : ''
-                    }
+                    } ${
+                      !filtersValue?.startDateTime
+                        ? 'opacity-50 cursor-not-allowed'
+                        : ''
+                    }`}
+                    disabled={!filtersValue?.startDateTime}
                   />
                 </div>
               )}
@@ -538,6 +543,9 @@ const FilterBar = () => {
           display: flex;
           flex-direction: row;
           align-items: center;
+          justify-content: center;
+          max-width: 1200px;
+          margin: 0 auto;
         }
         .filterbar-bar-adv-inner {
           flex: 1 1 0;
@@ -555,13 +563,16 @@ const FilterBar = () => {
           max-width: 1100px;
           border-radius: 9999px;
           position: relative;
+          min-height: 70px;
         }
         .filterbar-grid-item { flex: 1 1 0; min-width: 0; }
         .filterbar-advanced-desktop {
           display: flex;
           align-items: center;
-          margin-left: 16px;
+          margin-left: 8px;
           margin-top: 0;
+          max-width: 1200px;
+          margin-right: auto;
         }
         .filterbar-advanced-mobile {
           display: none;
