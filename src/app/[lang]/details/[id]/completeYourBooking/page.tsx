@@ -288,52 +288,39 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     const hasFile = data.financialReceipt || financialReceipt;
     console.log('Has file (combined check):', !!hasFile);
 
-    // Allow submission if:
-    // 1. It's an on-site payment (no file needed), OR
-    // 2. A file is attached (for any payment method)
-    if (isOnSitePayment || hasFile) {
-      if (isOnSitePayment) {
-        console.log('Proceeding with on-site payment without file attachment');
-        bookCollection({
-          siteId: detailsData?.data?._id || '',
-          availabilityId:
-            detailsData?.data?.type === 'Stay'
-              ? bookingData?.availability?.availabilitiesIds
-              : bookingData?.availability?.slotIds[0] || '',
-          paymentMethod: data.selectedPaymentMethod || '',
-          guests: bookingData?.guests,
-          hasGuide: data.guideChecked,
-          hasTransportation: data.transportationChecked,
-          hasAirport: data.airportChecked,
-          attachment: null, // No attachment for on-site payments
-        });
-      } else {
-        console.log('Proceeding with file attachment for non-on-site payment');
-        const fileToUpload = data.financialReceipt || financialReceipt;
-        uploadFile({
-          file: fileToUpload!,
-          folderName: FileFolder.PAYMENT_INFO,
-        });
-      }
+    // If it's an on-site payment, proceed without file attachment
+    if (isOnSitePayment) {
+      console.log('Proceeding with on-site payment without file attachment');
+      bookCollection({
+        siteId: detailsData?.data?._id || '',
+        availabilityId:
+          detailsData?.data?.type === 'Stay'
+            ? bookingData?.availability?.availabilitiesIds
+            : bookingData?.availability?.slotIds[0] || '',
+        paymentMethod: data.selectedPaymentMethod || '',
+        guests: bookingData?.guests,
+        hasGuide: data.guideChecked,
+        hasTransportation: data.transportationChecked,
+        hasAirport: data.airportChecked,
+        attachment: null, // No attachment for on-site payments
+      });
       return;
     }
 
-    if (disableAttachment) {
-      // For other payment methods, require file attachment
-      if (!data.financialReceipt) {
-        console.log('File attachment required but not provided');
-        toast.error(t('booking.financialReceipt.error'));
-        return;
-      }
+    // For non-on-site payments, check if file is attached
+    if (!hasFile) {
+      console.log('File attachment required but not provided');
+      toast.error('Please attach a financial receipt to proceed with your booking.');
+      return;
     }
 
-    if (data.financialReceipt) {
-      console.log('Uploading file for non-on-site payment');
-      uploadFile({
-        file: data.financialReceipt,
-        folderName: FileFolder.PAYMENT_INFO,
-      });
-    }
+    // Proceed with file attachment for non-on-site payment
+    console.log('Proceeding with file attachment for non-on-site payment');
+    const fileToUpload = data.financialReceipt || financialReceipt;
+    uploadFile({
+      file: fileToUpload!,
+      folderName: FileFolder.PAYMENT_INFO,
+    });
   };
 
   const {

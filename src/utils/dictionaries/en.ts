@@ -566,7 +566,7 @@ const en = {
     city: 'City',
   },
   map: {
-    showMapView: 'Show Map View',
+    showMapView: 'Map',
   },
 };
 

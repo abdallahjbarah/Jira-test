@@ -38,7 +38,7 @@ const LoaderContainer = Styled.div`
 
 const MapToggleWidget = Styled.div`
   position: fixed;
-  right: -72px;
+  right: -60px;
   top: 40%;
   transform: translateY(-50%) rotate(270deg);
   z-index: 1000;
@@ -46,21 +46,44 @@ const MapToggleWidget = Styled.div`
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  padding: 2px 30px;
+  padding: 4px 30px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 12px;
+  min-width: 120px;
+  max-width: 200px;
 
   &:hover {
     box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
     transform: translateY(-50%) rotate(270deg) scale(1.05);
   }
 
+  @media (max-width: 1024px) {
+    right: -55px;
+    padding: 6px 16px;
+    gap: 10px;
+    min-width: 100px;
+    max-width: 160px;
+  }
+
   @media (max-width: 768px) {
-    transform: translateY(-50%) rotate(270deg) scale(0.6);
-    right: -77px;
+    right: -50px;
+    transform: translateY(-50%) rotate(270deg) scale(0.8);
+    padding: 4px 12px;
+    gap: 8px;
+    min-width: 80px;
+    max-width: 120px;
+  }
+
+  @media (max-width: 480px) {
+    right: -45px;
+    transform: translateY(-50%) rotate(270deg) scale(0.7);
+    padding: 3px 10px;
+    gap: 6px;
+    min-width: 70px;
+    max-width: 100px;
   }
 
 `;
