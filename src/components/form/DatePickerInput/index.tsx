@@ -43,7 +43,7 @@ const DatePickerInput = forwardRef<HTMLInputElement, DatePickerInputProps>(
       isBirthdate = false,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -108,7 +108,7 @@ const DatePickerInput = forwardRef<HTMLInputElement, DatePickerInputProps>(
         />
       </div>
     );
-  }
+  },
 );
 
 DatePickerInput.displayName = 'DatePickerInput';

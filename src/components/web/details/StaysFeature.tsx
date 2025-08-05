@@ -8,8 +8,8 @@ interface InfoItemProps {
 }
 
 interface StaysFeatureProps {
-  startDateTime?: number;
-  endDateTime?: number;
+  checkinTime?: string;
+  checkoutTime?: string;
   languages?: {
     nameAr: string;
     nameEn: string;
@@ -31,29 +31,27 @@ const InfoItem: React.FC<InfoItemProps> = ({ icon, title, description }) => (
 );
 
 const StaysFeature: React.FC<StaysFeatureProps> = ({
-  startDateTime,
-  endDateTime,
+  checkinTime,
+  checkoutTime,
   languages,
 }) => {
   const infoItems = [
     {
       icon: '/SVGs/shared/details-icons/timeCircle.svg',
       title: 'Check-in',
-              description: `${startDateTime ? new Date(startDateTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '3:00'} PM`,
+      description: `${checkinTime} PM`,
     },
     {
       icon: '/SVGs/shared/details-icons/timeCircle.svg',
       title: 'Check-out',
-              description: `${endDateTime ? new Date(endDateTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '11:00'} PM`,
+      description: `${checkoutTime} PM`,
     },
     {
       icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
       title: 'Spoken Language',
-      description: `${languages
-        ?.map(language => language.nameEn)
-        .join(
-          ', '
-        )} (Download a language translator app to communicate with host!)`,
+      description:
+        languages?.map((language) => language.nameEn).join(', ') +
+        ' (Download a language translator app to communicate with host!)',
     },
   ];
 

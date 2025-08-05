@@ -48,7 +48,7 @@ function InnerHeader({
       </CustomLink>
       {withNavItems && (
         <div className='hidden laptopM:flex items-center gap-2.5'>
-          {COLLECTION_STATUS_LIST.map(item => (
+          {COLLECTION_STATUS_LIST.map((item) => (
             <CollectionNavItem key={item.value} collectionStatus={item} />
           ))}
         </div>

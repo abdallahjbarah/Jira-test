@@ -3,7 +3,7 @@ import { api } from '@/lib/apis';
 import { FavoriteCollection } from '@/lib/types';
 
 const fetchCollectionDetails = async (
-  collectionId: string
+  collectionId: string,
 ): Promise<FavoriteCollection> => {
   const response = await api
     .url(`/users/collection/${collectionId}`)
@@ -14,7 +14,7 @@ const fetchCollectionDetails = async (
 
 export const useFetchCollectionDetails = (
   collectionId: string,
-  queryOptions?: UseQueryOptions<FavoriteCollection, Error>
+  queryOptions?: UseQueryOptions<FavoriteCollection, Error>,
 ) => {
   return useQuery({
     queryKey: ['collectionDetails', collectionId],

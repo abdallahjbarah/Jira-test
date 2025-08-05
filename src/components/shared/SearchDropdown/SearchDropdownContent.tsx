@@ -12,8 +12,8 @@ interface SearchFormData {
   location: string | null;
   country: any;
   checkInAndOut: any;
-  startDateTime: number;
-  endDateTime: number;
+  checkinTime: string;
+  checkoutTime: string;
   guests: any;
 }
 
@@ -67,8 +67,10 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
         const cityValue = result.city;
         updatedFilters.city = cityValue;
         updatedFilters.country = result.countryId;
+        delete updatedFilters.siteId;
       } else if (searchType === 'country') {
         updatedFilters.country = result._id;
+        delete updatedFilters.siteId;
         delete updatedFilters.city;
       }
 
@@ -80,19 +82,19 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
   };
 
   const getSelectedDates = (): Date[] => {
-    const startDateTime = filtersValue?.startDateTime;
-    const endDateTime = filtersValue?.endDateTime;
+    const checkinTime = filtersValue?.checkinTime;
+    const checkoutTime = filtersValue?.checkoutTime;
     const dateArray: Date[] = [];
 
-    if (startDateTime) {
+    if (checkinTime) {
       try {
-        dateArray.push(new Date(startDateTime));
+        dateArray.push(new Date(checkinTime));
       } catch (e) {}
     }
 
-    if (endDateTime) {
+    if (checkoutTime) {
       try {
-        dateArray.push(new Date(endDateTime));
+        dateArray.push(new Date(checkoutTime));
       } catch (e) {}
     }
 
@@ -113,15 +115,15 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
     const updatedFilters = { ...currentFilters };
 
     if (dates.length > 0) {
-      updatedFilters.startDateTime = dates[0].getTime();
+      updatedFilters.checkinTime = dates[0].toISOString().split('T')[0];
       if (dates.length > 1) {
-        updatedFilters.endDateTime = dates[1].getTime();
+        updatedFilters.checkoutTime = dates[1].toISOString().split('T')[0];
       } else {
-        updatedFilters.endDateTime = undefined;
+        updatedFilters.checkoutTime = '';
       }
     } else {
-      updatedFilters.startDateTime = undefined;
-      updatedFilters.endDateTime = undefined;
+      updatedFilters.checkinTime = '';
+      updatedFilters.checkoutTime = '';
     }
 
     setValue('filters', updatedFilters, { shouldValidate: false });
@@ -135,8 +137,8 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
     onSubmit({
       country: currentFilters.country,
       city: currentFilters.city,
-      startDateTime: currentFilters.startDateTime || 0,
-      endDateTime: currentFilters.endDateTime || 0,
+      checkinTime: currentFilters.checkinTime || '',
+      checkoutTime: currentFilters.checkoutTime || '',
       adults: currentFilters.adults || 0,
       children: currentFilters.children || 0,
       infants: currentFilters.infants || 0,
@@ -164,7 +166,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
       <div className='block tabletM:hidden mb-4'>
         <SearchInput
           value={filtersValue?.destinationText || ''}
-          onChange={value => {
+          onChange={(value) => {
             if (!value) {
               const currentFilters = getValues('filters') || {};
               const updatedFilters = {
@@ -189,7 +191,7 @@ const SearchDropdownContent: React.FC<SearchDropdownContentProps> = ({
         />
       </div>
 
-      {(!filtersValue?.startDateTime || !filtersValue?.endDateTime) && (
+      {(!filtersValue?.checkinTime || !filtersValue?.checkoutTime) && (
         <Collapsible
           title={t('search.when')}
           defaultOpen={true}

@@ -11,7 +11,7 @@ export const fetchExperienceType = async (filter: {
 
 export const useFetchExperienceType = (
   filter: { isStayType: boolean },
-  queryOptions?: UseQueryOptions<ExperienceType[], Error>
+  queryOptions?: UseQueryOptions<ExperienceType[], Error>,
 ) => {
   return useQuery({
     queryKey: ['experience-type', filter],

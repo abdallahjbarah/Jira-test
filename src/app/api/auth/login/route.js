@@ -22,7 +22,7 @@ export async function POST(request) {
   } catch (error) {
     return NextResponse.json(
       { message: error.message || 'Authentication failed' },
-      { status: 401 }
+      { status: 401 },
     );
   }
 }

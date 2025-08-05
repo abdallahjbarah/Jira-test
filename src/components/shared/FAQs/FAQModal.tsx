@@ -53,7 +53,7 @@ const FAQModal: React.FC<FAQModalProps> = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={onClose} title='FAQs' width='550px'>
       <div>
         <div className='space-y-4'>
-          {reshapedFaqs?.map(faq => (
+          {reshapedFaqs?.map((faq) => (
             <Collapsible
               key={faq._id}
               title={faq.question[locale]}

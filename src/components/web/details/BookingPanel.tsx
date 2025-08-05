@@ -130,12 +130,10 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
             type === 'Stay'
               ? availabilityStaySlots?.data
               : {
-                  slotIds,
-                  startDateTime:
-                    selectedSlot?.startDateTime || searchDates.startDateTime,
-                  endDateTime:
-                    selectedSlot?.endDateTime || searchDates.endDateTime,
-                },
+                slotIds,
+                startDateTime: selectedSlot?.startDateTime || searchDates.startDateTime,
+                endDateTime: selectedSlot?.endDateTime || searchDates.endDateTime,
+              },
           type,
           name,
         };
@@ -171,7 +169,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
 
       if (!acc[dateKey]) {
         acc[dateKey] = {
-          date,
+          date: date,
           slots: [],
         };
       }
@@ -238,7 +236,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
   };
 
   const allowedGuestsField = React.useMemo(() => {
-    return pricingInformation.map(info => info.personType);
+    return pricingInformation.map((info) => info.personType);
   }, [pricingInformation]);
 
   const getGuestDisplay = () => {
@@ -246,16 +244,9 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
     if (totalGuests === 0) return 'Select guests';
 
     const guestParts = [];
-    if (guests.adults > 0)
-      guestParts.push(`${guests.adults} adult${guests.adults > 1 ? 's' : ''}`);
-    if (guests.children > 0)
-      guestParts.push(
-        `${guests.children} child${guests.children > 1 ? 'ren' : ''}`
-      );
-    if (guests.infants > 0)
-      guestParts.push(
-        `${guests.infants} infant${guests.infants > 1 ? 's' : ''}`
-      );
+    if (guests.adults > 0) guestParts.push(`${guests.adults} adult${guests.adults > 1 ? 's' : ''}`);
+    if (guests.children > 0) guestParts.push(`${guests.children} child${guests.children > 1 ? 'ren' : ''}`);
+    if (guests.infants > 0) guestParts.push(`${guests.infants} infant${guests.infants > 1 ? 's' : ''}`);
 
     return guestParts.join(', ');
   };
@@ -298,7 +289,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                 readOnly
               />
             }
-            onChange={guests => {
+            onChange={(guests) => {
               setGuests({
                 adults: guests.adults,
                 children: guests.children,
@@ -329,14 +320,14 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
               <>
                 <p className='text-sm font-custom-400 text-text_1 font-sans'>
                   {new Date(
-                    availabilityStaySlots.data.startDate
+                    availabilityStaySlots.data.startDate,
                   ).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
                   })}{' '}
                   -{' '}
                   {new Date(
-                    availabilityStaySlots.data.endDate
+                    availabilityStaySlots.data.endDate,
                   ).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
@@ -344,12 +335,12 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                 </p>
                 <TimeSlotCard
                   timeRange={`${new Date(
-                    availabilityStaySlots.data.startDate
+                    availabilityStaySlots.data.startDate,
                   ).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
                   })} - ${new Date(
-                    availabilityStaySlots.data.endDate
+                    availabilityStaySlots.data.endDate,
                   ).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
@@ -386,7 +377,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                     month: 'short',
                   })}
                 </p>
-                {slots.map(slot => (
+                {slots.map((slot) => (
                   <TimeSlotCard
                     key={slot._id}
                     timeRange={`${formatTime(slot.startDateTime)} - ${formatTime(slot.endDateTime)}`}

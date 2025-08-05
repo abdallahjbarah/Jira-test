@@ -124,7 +124,7 @@ const EditCollectionModal: React.FC<EditCollectionModalProps> = ({
           <FormInput
             label={t('wishlist.editModal.collectionNameLabel')}
             value={collectionName}
-            onChange={e => setCollectionName(e.target.value)}
+            onChange={(e) => setCollectionName(e.target.value)}
             error={error}
             placeholder={t('wishlist.editModal.collectionNamePlaceholder')}
             disabled={isPending}

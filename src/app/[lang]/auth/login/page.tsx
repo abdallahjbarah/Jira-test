@@ -32,7 +32,7 @@ export default function LoginPage() {
   const queryClient = useQueryClient();
 
   const { mutate: login, isPending } = useUserLogin({
-    onSuccess: data => {
+    onSuccess: (data) => {
       queryClient.setQueryData(['user'], data);
       setCookie(TOKEN_NAME, data.token);
       setCookie('userStatus', data.user.status);
@@ -57,7 +57,7 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit: SubmitHandler<LoginFormValues> = async data => {
+  const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     login(data);
   };
 

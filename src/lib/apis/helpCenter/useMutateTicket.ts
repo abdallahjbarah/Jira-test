@@ -14,7 +14,7 @@ const createTicket = async (data: CreateTicketPayload) => {
 };
 
 export const useCreateTicket = (
-  options?: UseMutationOptions<Ticket, Error, CreateTicketPayload>
+  options?: UseMutationOptions<Ticket, Error, CreateTicketPayload>,
 ) => {
   return useMutation({
     mutationFn: createTicket,

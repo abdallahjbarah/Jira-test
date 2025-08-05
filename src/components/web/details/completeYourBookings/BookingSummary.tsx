@@ -63,7 +63,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         }
       }
     },
-    [isCollectionFavorite, removeFavorite, siteInfo, openFavouritesModal]
+    [isCollectionFavorite, removeFavorite, siteInfo, openFavouritesModal],
   );
 
   const heartIconSrc = React.useMemo(() => {

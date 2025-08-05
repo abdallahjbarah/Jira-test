@@ -489,7 +489,7 @@ const en = {
     'check-out': 'Check-out',
     'add-date': 'Add date',
     'add-guests': 'Add guests',
-    who: 'Who',
+    'who': 'Who',
     search_for_country: 'Search for a country...',
     search: 'Search',
     when: 'When',

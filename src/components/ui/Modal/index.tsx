@@ -114,7 +114,7 @@ const Modal: React.FC<ModalProps> = ({
       <ModalContainer
         ref={modalRef}
         width={width}
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         className={containerClassName}
       >
         {canClose && (

@@ -9,8 +9,7 @@ const HouseRulesSection: React.FC<HouseRulesSectionProps> = ({ rules }) => {
     if (!rulesText) return '';
 
     // Handle existing HTML tags and wrap text ending with colon
-    return rulesText.replace(
-      /(<[^>]*>)?([^<]*:)(<\/[^>]*>)?/g,
+    return rulesText.replace(/(<[^>]*>)?([^<]*:)(<\/[^>]*>)?/g,
       (match, openTag, text, closeTag) => {
         const styledText = `<br><span class="font-custom-700" style="color: #000000 !important; font-weight: 700;">${text}</span>`;
         return `${openTag || ''}${styledText}${closeTag || ''}`;

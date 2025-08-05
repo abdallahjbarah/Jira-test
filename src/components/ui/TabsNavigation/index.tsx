@@ -28,7 +28,7 @@ const TabsNavigation: React.FC<TabsNavigationProps> = ({
   showContent = true,
 }) => {
   const [activeTab, setActiveTab] = useState<number>(
-    defaultActiveTab || (tabs.length > 0 ? tabs[0].id : 0)
+    defaultActiveTab || (tabs.length > 0 ? tabs[0].id : 0),
   );
 
   const handleTabChange = (tabId: number) => {
@@ -36,17 +36,17 @@ const TabsNavigation: React.FC<TabsNavigationProps> = ({
     onChange && onChange(tabId);
   };
 
-  const activeTabItem = tabs.find(tab => tab.id === activeTab);
+  const activeTabItem = tabs.find((tab) => tab.id === activeTab);
 
   return (
     <div className={clsx('', containerClassName)}>
       <div
         className={clsx(
           'flex rounded-[1.5rem] overflow-hidden shadow-customShadow_1 bg-primary_7',
-          tabsContainerClassName
+          tabsContainerClassName,
         )}
       >
-        {tabs.map(tab => (
+        {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => handleTabChange(tab.id)}
@@ -54,7 +54,7 @@ const TabsNavigation: React.FC<TabsNavigationProps> = ({
               'flex-1 py-[11px] px-[30px] text-custom-18 font-custom-600 transition-all duration-200 rounded-[1.5rem] leading-full',
               tab.id === activeTab
                 ? 'bg-primary_4 text-primary_7 font-custom-800'
-                : ' text-primary_4 hover:bg-opacity-90 '
+                : ' text-primary_4 hover:bg-opacity-90 ',
             )}
           >
             {tab.label}

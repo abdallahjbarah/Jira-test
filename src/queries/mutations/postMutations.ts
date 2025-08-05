@@ -10,7 +10,7 @@ type PostContactUsData = {
 };
 
 const postContactUs = async (
-  data: PostContactUsData
+  data: PostContactUsData,
 ): Promise<PostContactUsData> => {
   const response = await api.url('/users/contact-form').post(data);
   return response.json();
@@ -21,7 +21,7 @@ export const usePostContactUs = (
     PostContactUsData,
     Error,
     PostContactUsData
-  >
+  >,
 ) => {
   return useMutation({
     mutationFn: postContactUs,

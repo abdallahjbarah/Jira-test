@@ -13,8 +13,9 @@ const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const shouldTruncate = description && description.length > 223;
-  const displayText =
-    shouldTruncate && !isExpanded ? description.substring(0, 223) : description;
+  const displayText = shouldTruncate && !isExpanded
+    ? description.substring(0, 223)
+    : description;
 
   return (
     <div className='flex flex-col gap-11'>

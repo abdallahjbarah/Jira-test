@@ -15,8 +15,8 @@ const useFavorite = () => {
   });
 
   const isFavorite = (siteId: string) => {
-    return userFavoriteCollectionsQuery.data?.some(collection =>
-      collection.sites.some(site => site._id === siteId)
+    return userFavoriteCollectionsQuery.data?.some((collection) =>
+      collection.sites.some((site) => site._id === siteId),
     );
   };
 

@@ -20,7 +20,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       defaultValue,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false);
 
@@ -68,11 +68,11 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               bg-transparent
               ${className}
             `}
-            onFocus={e => {
+            onFocus={(e) => {
               setIsFocused(true);
               props.onFocus && props.onFocus(e);
             }}
-            onBlur={e => {
+            onBlur={(e) => {
               setIsFocused(false);
               props.onBlur && props.onBlur(e);
             }}
@@ -81,7 +81,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         {error && <p className='mt-1 text-sm text-red-600'>{error}</p>}
       </div>
     );
-  }
+  },
 );
 
 FormInput.displayName = 'FormInput';

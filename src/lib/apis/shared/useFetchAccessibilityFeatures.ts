@@ -10,7 +10,7 @@ export const fetchAccessibilityFeatures = async (): Promise<
 };
 
 export const useFetchAccessibilityFeatures = (
-  queryOptions?: UseQueryOptions<AccessibilityFeature[], Error>
+  queryOptions?: UseQueryOptions<AccessibilityFeature[], Error>,
 ) => {
   return useQuery({
     queryKey: ['accessibility-features'],

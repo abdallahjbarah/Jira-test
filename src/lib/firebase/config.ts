@@ -10,7 +10,7 @@ export const getFirebaseConfig = async () => {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/firebase/config`
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/firebase/config`,
     );
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);

@@ -11,7 +11,7 @@ interface CookieOptions {
 export const setCookie = (
   name: string,
   value: string | object,
-  options?: CookieOptions
+  options?: CookieOptions,
 ): void => {
   const stringValue = typeof value === 'object' ? JSON.stringify(value) : value;
   Cookies.set(name, stringValue, options);
@@ -19,7 +19,7 @@ export const setCookie = (
 
 export const getCookie = <T>(
   name: string,
-  parseJSON = false
+  parseJSON = false,
 ): T | string | undefined => {
   const value = Cookies.get(name);
 
@@ -38,7 +38,7 @@ export const getCookie = <T>(
 
 export const removeCookie = (
   name: string,
-  options?: Pick<CookieOptions, 'path' | 'domain'>
+  options?: Pick<CookieOptions, 'path' | 'domain'>,
 ): void => {
   Cookies.remove(name, options);
 };
@@ -50,7 +50,7 @@ export const hasCookie = (name: string): boolean => {
 export const setJSONCookie = <T>(
   name: string,
   value: T,
-  options?: CookieOptions
+  options?: CookieOptions,
 ): void => {
   setCookie(name, JSON.stringify(value), options);
 };
@@ -64,10 +64,10 @@ export const getAllCookies = (): Record<string, string> => {
 };
 
 export const clearAllCookies = (
-  options?: Pick<CookieOptions, 'path' | 'domain'>
+  options?: Pick<CookieOptions, 'path' | 'domain'>,
 ): void => {
   const cookies = getAllCookies();
-  Object.keys(cookies).forEach(cookieName => {
+  Object.keys(cookies).forEach((cookieName) => {
     removeCookie(cookieName, options);
   });
 };

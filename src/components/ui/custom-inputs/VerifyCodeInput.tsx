@@ -41,14 +41,14 @@ const VerifyCodeInput = ({
       }
     }
 
-    if (newOtp.every(digit => digit)) {
+    if (newOtp.every((digit) => digit)) {
       onComplete(newOtp.join(''));
     }
   };
 
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ): void => {
     if (event.key === 'Backspace' && !otp[index]) {
       if (index > 0 && inputRefs.current[index - 1]) {
@@ -65,7 +65,7 @@ const VerifyCodeInput = ({
       {otp.map((value, index) => (
         <input
           key={index}
-          ref={el => {
+          ref={(el) => {
             if (el) inputRefs.current[index] = el;
           }}
           type='text'
@@ -74,8 +74,8 @@ const VerifyCodeInput = ({
           maxLength={1}
           value={value}
           placeholder={placeholder}
-          onChange={e => handleChange(e.target, index)}
-          onKeyDown={e => handleKeyDown(e, index)}
+          onChange={(e) => handleChange(e.target, index)}
+          onKeyDown={(e) => handleKeyDown(e, index)}
           className='h-[3.813rem] w-full border border-x-0 border-t-0 border-gray-300 text-center text-[2rem] text-primary_2 outline-none'
           autoComplete='off'
         />

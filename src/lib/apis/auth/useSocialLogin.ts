@@ -20,7 +20,7 @@ const socialLogin = async (data: SocialLoginData) => {
 };
 
 export const useSocialLogin = (
-  mutationArgs: UseMutationOptions<any, any, SocialLoginData, any>
+  mutationArgs: UseMutationOptions<any, any, SocialLoginData, any>,
 ) => {
   return useMutation({
     mutationFn: (data: SocialLoginData) => socialLogin(data),

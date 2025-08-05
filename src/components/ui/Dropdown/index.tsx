@@ -180,7 +180,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       >
         {content}
       </div>,
-      document.body
+      document.body,
     );
   };
 

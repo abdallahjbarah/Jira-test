@@ -28,13 +28,13 @@ const useConfirmationModal = (): UseConfirmationModalReturn => {
 
   const openConfirmation = useCallback(
     (confirmationConfig: ConfirmationConfig): Promise<boolean> => {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         setConfig(confirmationConfig);
         setIsOpen(true);
         setResolvePromise(() => resolve);
       });
     },
-    []
+    [],
   );
 
   const closeConfirmation = useCallback(() => {

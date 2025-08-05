@@ -45,13 +45,14 @@ export const calculatePriceBreakdown = (
     if (!guestCount || guestCount <= 0) return;
 
     const guestTypePricing = pricingInformation.filter(
-      pricing => pricing.personType === guestType
+      (pricing) => pricing.personType === guestType,
     );
 
     if (guestTypePricing.length === 0) return;
 
     const applicablePricing = guestTypePricing.find(
-      pricing => guestCount >= pricing.minUnit && guestCount <= pricing.maxUnit
+      (pricing) =>
+        guestCount >= pricing.minUnit && guestCount <= pricing.maxUnit,
     );
 
     if (!applicablePricing) return;
@@ -71,10 +72,10 @@ export const calculatePriceBreakdown = (
     breakdown.push({
       label: `${guestType.charAt(0).toUpperCase() + guestType.slice(1)} (${guestCount})`,
       amount: totalAmount,
-      originalPrice,
-      discount,
-      guestCount,
-      isFree,
+      originalPrice: originalPrice,
+      discount: discount,
+      guestCount: guestCount,
+      isFree: isFree,
       pricePerPerson: finalPricePerPerson,
       type: 'guest',
     });
@@ -94,7 +95,7 @@ export const calculatePriceBreakdown = (
   }
 
   if (extras && extras.length > 0) {
-    extras.forEach(extra => {
+    extras.forEach((extra) => {
       const nights = numberOfNights || 1;
       const totalAmount = extra.price * nights;
       const isFree = extra.price === 0;
@@ -105,7 +106,7 @@ export const calculatePriceBreakdown = (
         originalPrice: extra.price,
         discount: null,
         guestCount: 1,
-        isFree,
+        isFree: isFree,
         pricePerPerson: extra.price,
         type: 'extra',
       });
@@ -152,14 +153,14 @@ export const calculatePriceBreakdown = (
 };
 
 export const calculateTotalAmount = (
-  breakdown: PriceBreakdownItem[]
+  breakdown: PriceBreakdownItem[],
 ): number => {
   return breakdown.reduce((total, item) => total + item.amount, 0);
 };
 
 export const calculateTax = (
   subtotal: number,
-  taxRate: number = 0.05
+  taxRate: number = 0.05,
 ): number => {
   return subtotal * taxRate;
 };
@@ -167,9 +168,9 @@ export const calculateTax = (
 export const formatPriceBreakdownForDisplay = (
   breakdown: PriceBreakdownItem[],
   currency: string = 'JOD',
-  numberOfNights?: number
+  numberOfNights?: number,
 ): Array<{ label: string; amount: string; discount?: string }> => {
-  const formattedBreakdown = breakdown.map(item => {
+  const formattedBreakdown = breakdown.map((item) => {
     if (item.type === 'nights') {
       return {
         label: item.label,
@@ -226,7 +227,7 @@ export const formatPriceBreakdownForDisplay = (
 };
 
 export const calculateGrandTotal = (
-  breakdown: PriceBreakdownItem[]
+  breakdown: PriceBreakdownItem[],
 ): number => {
   return calculateTotalAmount(breakdown);
 };

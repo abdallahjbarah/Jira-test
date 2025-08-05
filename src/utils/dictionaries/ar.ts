@@ -10,7 +10,7 @@ const ar = {
   'check-out': 'تسجيل المغادرة',
   'add-date': 'إضافة تاريخ',
   'add-guests': 'إضافة ضيوف',
-  who: 'من',
+  'who': 'من',
   where: 'الوجهة',
   background: 'الخلفية',
   leaf: 'الورقة',

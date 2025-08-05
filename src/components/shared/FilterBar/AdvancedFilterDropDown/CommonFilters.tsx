@@ -7,6 +7,7 @@ import RangeSlider from '@/components/ui/RangeSlider';
 import RadioButton from '@/components/ui/RadioButton';
 import FilterSection from './FilterSection';
 import ToggleSwitch from '@/components/ui/ToggleSwitch';
+
 import CustomSvg from '@/components/ui/CustomSvg';
 import { useFetchPricesRange } from '@/lib/apis/shared/useFetchPricesRange';
 import { useFetchLanguages } from '@/lib/apis/shared/useFetchLanguages';
@@ -29,7 +30,7 @@ const CommonFilters: React.FC = () => {
 
   const accessibilityFeaturesList = React.useMemo(() => {
     return (
-      accessibilityFeatures?.map(accessibilityFeature => ({
+      accessibilityFeatures?.map((accessibilityFeature) => ({
         value: accessibilityFeature._id,
         label: {
           en: accessibilityFeature.nameEn,
@@ -41,7 +42,7 @@ const CommonFilters: React.FC = () => {
 
   const bookOptionsList = React.useMemo(() => {
     return (
-      bookOptions?.map(bookOption => ({
+      bookOptions?.map((bookOption) => ({
         value: bookOption._id,
         label: { en: bookOption.nameEn, ar: bookOption.nameAr },
       })) ?? []
@@ -50,7 +51,7 @@ const CommonFilters: React.FC = () => {
 
   const languagesList = React.useMemo(() => {
     return (
-      languages?.map(language => ({
+      languages?.map((language) => ({
         value: language._id,
         label: { en: language.nameEn, ar: language.nameAr },
       })) ?? []
@@ -59,7 +60,7 @@ const CommonFilters: React.FC = () => {
 
   const amenitiesList = React.useMemo(() => {
     return (
-      amenities?.map(amenity => ({
+      amenities?.map((amenity) => ({
         value: amenity._id,
         label: { en: amenity.nameEn, ar: amenity.nameAr },
       })) ?? []
@@ -162,7 +163,7 @@ const CommonFilters: React.FC = () => {
       />
 
       <Controller
-        name='bookOptions'
+        name='bookingOptions'
         control={control}
         render={({ field }) => (
           <FilterSection

@@ -3,7 +3,7 @@ import { api } from '../index';
 import { Site, SiteByIdResponse } from '@/lib/types';
 
 const fetchDetails = async (
-  id: string
+  id: string,
 ): Promise<{ data: Site | undefined }> => {
   const response = await api.url(`/sites/${id}`).get().json<SiteByIdResponse>();
   return { data: response.site };
@@ -19,7 +19,7 @@ export const useFetchDetails = (
       readonly ['details', string]
     >,
     'queryKey' | 'queryFn' | 'enabled'
-  >
+  >,
 ) => {
   return useQuery({
     ...queryOptions,

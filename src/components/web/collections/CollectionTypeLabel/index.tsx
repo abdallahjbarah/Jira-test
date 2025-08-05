@@ -13,7 +13,7 @@ function CollectionTypeLabel(): React.ReactElement {
 
   const collectionObject = React.useMemo(() => {
     return COLLECTION_STATUS_LIST.find(
-      item => item.value === currentCollectionStatus
+      (item) => item.value === currentCollectionStatus,
     );
   }, [currentCollectionStatus]);
 

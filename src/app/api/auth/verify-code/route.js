@@ -15,7 +15,7 @@ export async function POST(request) {
     console.error('Verification error:', error);
     return NextResponse.json(
       { message: error.message || 'Invalid verification code' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Slider, { Settings as SlickSettings } from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
@@ -55,7 +55,7 @@ const defaultSettings: SlickSettings = {
 
     return (
       <div
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
         }}
         style={{
@@ -81,8 +81,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
   isHovered: isHoveredProp,
 }) => {
   const [isHoveredInternal, setIsHoveredInternal] = useState(false);
-  const isHovered =
-    isHoveredProp !== undefined ? isHoveredProp : isHoveredInternal;
+  const isHovered = isHoveredProp !== undefined ? isHoveredProp : isHoveredInternal;
   const sliderRef = React.useRef<Slider>(null);
 
   // Remove handleMouseEnter/Leave if using prop
@@ -124,17 +123,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
   return (
     <div
       className={className}
-      onClick={e => e.stopPropagation()}
-      onMouseEnter={
-        isHoveredProp === undefined
-          ? () => setIsHoveredInternal(true)
-          : undefined
-      }
-      onMouseLeave={
-        isHoveredProp === undefined
-          ? () => setIsHoveredInternal(false)
-          : undefined
-      }
+      onClick={(e) => e.stopPropagation()}
+      onMouseEnter={isHoveredProp === undefined ? () => setIsHoveredInternal(true) : undefined}
+      onMouseLeave={isHoveredProp === undefined ? () => setIsHoveredInternal(false) : undefined}
     >
       <style jsx global>{`
         .slick-custom-arrows .slick-prev,
@@ -176,7 +167,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
           background-size: 18px;
           background-repeat: no-repeat;
           background-position: center;
-          background-color: #47c409;
+          background-color: #47C409;
           border-radius: 50%;
           opacity: 1;
           display: block;

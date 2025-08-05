@@ -13,7 +13,7 @@ const CollectionTypeField: React.FC = () => {
 
   const collectionStatusObject = React.useMemo(() => {
     return COLLECTION_STATUS_LIST.find(
-      status => status.value === collectionStatus
+      (status) => status.value === collectionStatus,
     );
   }, [collectionStatus]);
 
@@ -23,7 +23,7 @@ const CollectionTypeField: React.FC = () => {
 
   const experienceTypesList = React.useMemo(() => {
     return (
-      experienceTypes?.map(type => ({
+      experienceTypes?.map((type) => ({
         value: type._id,
         label: { en: type.nameEn, ar: type.nameAr },
       })) ?? []

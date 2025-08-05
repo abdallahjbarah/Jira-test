@@ -1,5 +1,4 @@
 'use client';
-
 import CustomSvg from '@/components/ui/CustomSvg';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { useFetchSearchDestination } from '@/lib/apis/shared/useFetchSearchDestination';
@@ -7,11 +6,9 @@ import debounce from '@/utils/helpers/debounce';
 import {
   buildFiltersFromSearchParams,
   buildSearchParamsFromFilters,
-  convertToBackendFilters,
-  FrontendFilter,
+  CollectionFilter,
   FilterFormValues,
   getFormDefaultsFromSearchParams,
-  getDefaultFilterValues,
 } from '@/utils/helpers/filterHelpers';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
@@ -31,9 +28,7 @@ const FilterBar = () => {
   // Add state for SearchPopup
   const [showSearchPopup, setShowSearchPopup] = React.useState(false);
   const [selectedLocation, setSelectedLocation] = React.useState<string>('');
-  const [selectedFilter, setSelectedFilter] = React.useState(
-    collectionStatus || 'all'
-  );
+  const [selectedFilter, setSelectedFilter] = React.useState(collectionStatus || 'all');
 
   // Add state to track active filter buttons
   const [activeButton, setActiveButton] = React.useState<string | null>(null);
@@ -50,18 +45,15 @@ const FilterBar = () => {
 
   const [showSearchResults, setShowSearchResults] = React.useState(false);
 
-  useEffect(() => {}, [searchDestinationData]);
+  useEffect(() => { }, [searchDestinationData]);
 
   const [isUrlSync, setIsUrlSync] = React.useState(false);
   const isInitialMount = React.useRef(true);
 
   const debouncedUpdateUrl = React.useMemo(
     () =>
-      debounce((filters: FrontendFilter) => {
-        const currentUrlFilters = buildFiltersFromSearchParams(
-          searchParams,
-          collectionStatus as string
-        );
+      debounce((filters: CollectionFilter) => {
+        const currentUrlFilters = buildFiltersFromSearchParams(searchParams);
 
         if (JSON.stringify(currentUrlFilters) !== JSON.stringify(filters)) {
           const params = buildSearchParamsFromFilters(filters, searchParams);
@@ -69,39 +61,39 @@ const FilterBar = () => {
           router.push(newUrl, { scroll: false });
         }
       }, 300),
-    [searchParams, router, collectionStatus]
+    [searchParams, router],
   );
 
   const debouncedFilterUpdate = React.useMemo(
     () =>
-      debounce((updatedFilters: FrontendFilter) => {
+      debounce((updatedFilters: CollectionFilter) => {
         methods.setValue('filters', updatedFilters, { shouldValidate: true });
       }, 150),
-    [methods]
+    [methods],
   );
 
   const getCheckInDate = (): Date | undefined => {
-    if (!filtersValue?.startDateTime) return undefined;
+    if (!filtersValue?.checkinTime) return undefined;
     try {
-      return new Date(filtersValue.startDateTime);
+      return new Date(filtersValue.checkinTime);
     } catch (e) {
       return undefined;
     }
   };
 
-  const onSubmit = (data: FilterFormValues) => {};
+  const onSubmit = (data: FilterFormValues) => { };
 
   const handleCheckInChange = (dateString: string, dates: Date[]) => {
     const currentFilters = methods.getValues('filters') || {};
     const updatedFilters = {
       ...currentFilters,
-      startDateTime: dates[0] ? dates[0].getTime() : undefined,
+      checkinTime: dateString,
     };
 
-    if (currentFilters.endDateTime && dates[0]) {
-      const checkOut = new Date(currentFilters.endDateTime);
+    if (currentFilters.checkoutTime && dates[0]) {
+      const checkOut = new Date(currentFilters.checkoutTime);
       if (checkOut < dates[0]) {
-        updatedFilters.endDateTime = undefined;
+        updatedFilters.checkoutTime = '';
       }
     }
 
@@ -118,19 +110,14 @@ const FilterBar = () => {
     const currentFilters = methods.getValues('filters') || {};
     const updatedFilters = {
       ...currentFilters,
-      endDateTime: dates[1] ? dates[1].getTime() : undefined,
+      checkoutTime: dateString,
     };
 
     methods.setValue('filters', updatedFilters, { shouldValidate: false });
     setActiveButton(null); // Clear active button after selecting checkout
   };
 
-  const handleLocationSelect = (location: {
-    type: string;
-    id?: string;
-    name: string;
-    searchType: string;
-  }) => {
+  const handleLocationSelect = (location: { type: string; id?: string; name: string; searchType: string }) => {
     setSelectedLocation(location.name);
 
     const currentFilters = methods.getValues('filters') || {};
@@ -167,6 +154,7 @@ const FilterBar = () => {
     delete updatedFilters.city;
     delete updatedFilters.country;
     delete updatedFilters.destinationText;
+    delete updatedFilters.siteId;
 
     // Update the form
     methods.setValue('filters', updatedFilters, { shouldValidate: true });
@@ -188,7 +176,7 @@ const FilterBar = () => {
     methods.setValue('filters', updatedFilters, { shouldValidate: false });
   };
 
-  const onFilterApply = (filters: Record<string, unknown>) => {
+  const onFilterApply = (filters: any) => {
     const currentFilters = methods.getValues('filters') || {};
     const mergedFilters = {
       ...currentFilters,
@@ -205,9 +193,9 @@ const FilterBar = () => {
 
   const onFilterClear = () => {
     const currentFilters = methods.getValues('filters') || {};
-    const preservedFilters: Record<string, unknown> = {
-      startDateTime: currentFilters.startDateTime,
-      endDateTime: currentFilters.endDateTime,
+    const preservedFilters: Record<string, any> = {
+      checkinTime: currentFilters.checkinTime,
+      checkoutTime: currentFilters.checkoutTime,
       adults: currentFilters.adults,
       children: currentFilters.children,
       infants: currentFilters.infants,
@@ -215,31 +203,28 @@ const FilterBar = () => {
       city: currentFilters.city,
     };
 
-    Object.keys(preservedFilters).forEach(key => {
+    Object.keys(preservedFilters).forEach((key) => {
       if (preservedFilters[key] === undefined) {
         delete preservedFilters[key];
       }
     });
 
-    // Update form with preserved filters
-    methods.setValue('filters', preservedFilters, { shouldValidate: true });
-
-    // Update URL to reflect cleared advanced filters
-    const params = buildSearchParamsFromFilters(
-      preservedFilters as FrontendFilter,
-      searchParams
-    );
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    router.push(newUrl, { scroll: false });
+    debouncedFilterUpdate(preservedFilters);
   };
-
   const handleClear = () => {
-    // Get default filter values based on collection status
-    const defaultFilters = getDefaultFilterValues(collectionStatus as string);
-
-    // Reset form with default values
+    // Reset form and all filters
     methods.reset({
-      filters: defaultFilters,
+      filters: {
+        adults: 0,
+        children: 0,
+        infants: 0,
+        checkinTime: '',
+        ...(collectionStatus !== 'experiences' && { checkoutTime: '' }),
+        city: undefined,
+        country: undefined,
+        destinationText: '',
+        siteId: undefined
+      }
     });
 
     // Reset all state
@@ -248,10 +233,8 @@ const FilterBar = () => {
     setActiveButton(null);
     setShowSearchResults(false);
 
-    // Update URL to reflect cleared filters
-    const params = buildSearchParamsFromFilters(defaultFilters, searchParams);
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    router.push(newUrl, { scroll: false });
+    // Reset URL to base
+    // router.push(`/${searchParams.get('lang') || 'en'}`);
   };
 
   const handleSearchDropdownSubmit = (data: any) => {
@@ -271,10 +254,7 @@ const FilterBar = () => {
   };
 
   React.useEffect(() => {
-    const urlFilters = buildFiltersFromSearchParams(
-      searchParams,
-      collectionStatus as string
-    );
+    const urlFilters = buildFiltersFromSearchParams(searchParams);
     const currentFilters = methods.getValues('filters') || {};
 
     const filtersChanged =
@@ -286,9 +266,9 @@ const FilterBar = () => {
 
       setTimeout(() => setIsUrlSync(false), 100);
     }
-  }, [searchParams, methods, isUrlSync, collectionStatus]);
+  }, [searchParams, methods, isUrlSync]);
 
-  const handleSearchResultSelect = (result: Record<string, unknown>) => {
+  const handleSearchResultSelect = (result: any) => {
     const { searchType } = result;
 
     if (searchType === 'site') {
@@ -296,15 +276,11 @@ const FilterBar = () => {
     } else if (collectionStatus === 'experiences') {
       if (searchType === 'city') {
         router.push(
-          `/${searchParams.get('lang') || 'en'}/experiences?city=${
-            result.city
-          }&country=${result.country}`
+          `/${searchParams.get('lang') || 'en'}/experiences?city=${result.city}&country=${result.country}`,
         );
       } else if (searchType === 'country') {
         router.push(
-          `/${searchParams.get('lang') || 'en'}/experiences?country=${
-            result.country
-          }`
+          `/${searchParams.get('lang') || 'en'}/experiences?country=${result.country}`,
         );
       }
     } else {
@@ -312,10 +288,12 @@ const FilterBar = () => {
       const updatedFilters = { ...currentFilters };
 
       if (searchType === 'city') {
-        updatedFilters.city = result.city as string; // Use city name for API
-        updatedFilters.country = result.countryId as string;
+        updatedFilters.city = result.city; // Use city name for API
+        updatedFilters.country = result.countryId;
+        delete updatedFilters.siteId;
       } else if (searchType === 'country') {
-        updatedFilters.country = result._id as string;
+        updatedFilters.country = result._id;
+        delete updatedFilters.siteId;
         delete updatedFilters.city;
       }
 
@@ -347,19 +325,17 @@ const FilterBar = () => {
         ...filterData,
       };
       methods.setValue('filters', updatedFilters, { shouldValidate: false });
-    } catch (e) {
-      // Silent fail for invalid JSON
-    }
+    } catch (e) { }
   };
 
   const handleFilterSelect = (filterKey: string) => {
     setSelectedFilter(filterKey);
-    // Clear end date time if switching to experiences
+    // Clear checkout time if switching to experiences
     if (filterKey === 'experiences') {
       const currentFilters = methods.getValues('filters') || {};
       const updatedFilters = {
         ...currentFilters,
-        endDateTime: undefined,
+        checkoutTime: ''
       };
       methods.setValue('filters', updatedFilters, { shouldValidate: false });
     }
@@ -369,78 +345,55 @@ const FilterBar = () => {
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
-        className={`w-full tabletM:w-auto mt-4 ${
-          locale === 'ar' ? 'rtl' : 'ltr'
-        }`}
+        className={`w-full tabletM:w-auto mt-4 ${locale === 'ar' ? 'rtl' : 'ltr'}`}
         style={{ width: '100%' }}
       >
-        <div className='filterbar-bar-adv-outer'>
-          <div className='filterbar-bar-adv-inner'>
+        <div className="filterbar-bar-adv-outer">
+          <div className="filterbar-bar-adv-inner">
             <div
               className={`filterbar-layout bg-primary_1 mx-auto w-full`}
               style={{ position: 'relative' }}
             >
               {/* Where/Search destinations button */}
-              <div className='filterbar-grid-item filterbar-where'>
+              <div className="filterbar-grid-item filterbar-where">
                 <FilterBarItem
                   title={{ en: 'Where', ar: 'أين' }}
                   value={selectedLocation || 'Search Destinations'}
                   onClick={() => setShowSearchPopup(true)}
-                  className={
-                    showSearchPopup
-                      ? 'bg-white rounded-full [&_span]:!text-green-600'
-                      : ''
-                  }
+                  className={showSearchPopup ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
                 />
               </div>
-              <div className='filterbar-grid-item filterbar-checkin'>
+              <div className="filterbar-grid-item filterbar-checkin">
                 <DatePickerDropdown
                   title={{ en: t('search.check-in'), ar: t('search.check-in') }}
                   onChange={handleCheckInChange}
                   mode='single'
                   minDate={new Date()}
-                  value={filtersValue?.startDateTime || ''}
+                  value={filtersValue?.checkinTime || ''}
                   maxDate={
-                    filtersValue?.endDateTime
-                      ? new Date(filtersValue.endDateTime)
-                      : new Date(
-                          new Date().setFullYear(new Date().getFullYear() + 1)
-                        )
+                    filtersValue?.checkoutTime
+                      ? new Date(filtersValue.checkoutTime)
+                      : new Date(new Date().setFullYear(new Date().getFullYear() + 1))
                   }
-                  className={
-                    activeButton === 'date'
-                      ? 'bg-white rounded-full [&_span]:!text-green-600'
-                      : ''
-                  }
+                  className={activeButton === 'date' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}
                 />
               </div>
               {selectedFilter !== 'experiences' && (
-                <div className='filterbar-grid-item filterbar-checkout'>
+                <div className="filterbar-grid-item filterbar-checkout">
                   <DatePickerDropdown
-                    title={{
-                      en: t('search.check-out'),
-                      ar: t('search.check-out'),
-                    }}
+                    title={{ en: t('search.check-out'), ar: t('search.check-out') }}
                     onChange={handleCheckOutChange}
                     mode='single'
                     isCheckout={true}
                     checkInDate={getCheckInDate()}
                     minDate={new Date()}
-                    value={filtersValue?.endDateTime || ''}
-                    className={`${
-                      activeButton === 'checkout'
-                        ? 'bg-white rounded-full [&_span]:!text-green-600'
-                        : ''
-                    } ${
-                      !filtersValue?.startDateTime
-                        ? 'opacity-50 cursor-not-allowed'
-                        : ''
-                    }`}
-                    disabled={!filtersValue?.startDateTime}
+                    value={filtersValue?.checkoutTime || ''}
+                    className={`${activeButton === 'checkout' ? 'bg-white rounded-full [&_span]:!text-green-600' : ''} ${!filtersValue?.checkinTime ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={!filtersValue?.checkinTime}
                   />
                 </div>
               )}
-              <div className='filterbar-grid-item filterbar-guests'>
+              <div className="filterbar-grid-item filterbar-guests">
                 <GuestFilterItem
                   title={{ en: t('search.who'), ar: t('search.who') }}
                   onChange={handleGuestChange}
@@ -451,24 +404,19 @@ const FilterBar = () => {
                   }}
                 />
               </div>
-              <div
-                className='filterbar-grid-item filterbar-actions'
-                style={{ gridColumn: '1 / span 2' }}
-              >
-                <div
-                  className={`relative flex items-center justify-center gap-4 w-full`}
-                >
+              <div className="filterbar-grid-item filterbar-actions" style={{ gridColumn: '1 / span 2' }}>
+                <div className={`relative flex items-center justify-center gap-4 w-full`}>
                   <button
-                    type='button'
+                    type="button"
                     onClick={handleMainSearch}
-                    className='flex items-center justify-center p-3 bg-transparent rounded-full border-transparent transition-colors group'
+                    className="flex items-center justify-center p-3 bg-transparent rounded-full border-transparent transition-colors group"
                   >
                     <CustomSvg
-                      src='/SVGs/home/search-bar-logo.svg'
+                      src="/SVGs/home/search-bar-logo.svg"
                       width={33}
                       height={33}
-                      className='opacity-100 group-hover:text-black'
-                      color='white'
+                      className="opacity-100 group-hover:text-black"
+                      color="white"
                     />
                   </button>
                   {!showSearchPopup && (
@@ -506,14 +454,10 @@ const FilterBar = () => {
               </div>
             </div>
           </div>
-          <div className='filterbar-advanced-desktop'>
+          <div className="filterbar-advanced-desktop">
             <AdvancedFilterDropDown
               filterType={
-                collectionStatus as
-                  | 'experiences'
-                  | 'events'
-                  | 'stays'
-                  | 'offers'
+                collectionStatus as 'experiences' | 'events' | 'stays' | 'offers'
               }
               onFilterApply={onFilterApply}
               onFilterClear={onFilterClear}
@@ -521,14 +465,10 @@ const FilterBar = () => {
             />
           </div>
           {/* Advanced filter for grid layout (small screen) */}
-          <div className='filterbar-advanced-mobile'>
+          <div className="filterbar-advanced-mobile">
             <AdvancedFilterDropDown
               filterType={
-                collectionStatus as
-                  | 'experiences'
-                  | 'events'
-                  | 'stays'
-                  | 'offers'
+                collectionStatus as 'experiences' | 'events' | 'stays' | 'offers'
               }
               onFilterApply={onFilterApply}
               onFilterClear={onFilterClear}
@@ -611,7 +551,7 @@ const FilterBar = () => {
           }
         }
       `}</style>
-    </FormProvider>
+    </FormProvider >
   );
 };
 

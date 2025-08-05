@@ -8,7 +8,7 @@ export const fetchContinent = async (): Promise<Continent[]> => {
 };
 
 export const useFetchContinent = (
-  queryOptions?: UseQueryOptions<Continent[], Error>
+  queryOptions?: UseQueryOptions<Continent[], Error>,
 ) => {
   return useQuery({
     queryKey: ['continent'],

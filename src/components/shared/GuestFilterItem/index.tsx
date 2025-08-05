@@ -122,8 +122,8 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
           <FilterBarItem
             title={title || { en: '', ar: '' }}
             value={getGuestDisplayText()}
-            onClick={() => {}}
-            className={`${isOpen || guests.adults > 0 || guests.children > 0 || guests.infants > 0 ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}`}
+            onClick={() => { }}
+            className={`${isOpen || (guests.adults > 0 || guests.children > 0 || guests.infants > 0) ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}`}
           />
         )
       }

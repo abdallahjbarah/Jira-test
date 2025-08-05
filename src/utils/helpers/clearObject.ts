@@ -4,7 +4,7 @@ export const clearObject = (obj: any): any => {
   }
 
   if (Array.isArray(obj)) {
-    return obj.map(item => clearObject(item));
+    return obj.map((item) => clearObject(item));
   }
 
   return Object.fromEntries(
@@ -13,7 +13,7 @@ export const clearObject = (obj: any): any => {
       .map(([key, value]) => [
         key,
         typeof value === 'object' ? clearObject(value) : value,
-      ])
+      ]),
   );
 };
 
@@ -24,8 +24,8 @@ export const deepClearObject = (obj: any): any => {
 
   if (Array.isArray(obj)) {
     return obj
-      .map(item => deepClearObject(item))
-      .filter(item => {
+      .map((item) => deepClearObject(item))
+      .filter((item) => {
         if (typeof item === 'string') {
           return item !== '';
         }
@@ -41,6 +41,6 @@ export const deepClearObject = (obj: any): any => {
         }
         return value !== undefined && value !== null;
       })
-      .map(([key, value]) => [key, deepClearObject(value)])
+      .map(([key, value]) => [key, deepClearObject(value)]),
   );
 };

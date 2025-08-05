@@ -25,7 +25,7 @@ export const IntersectionObserverTrigger = React.memo(
           onIntersect();
         }
       },
-      [onIntersect]
+      [onIntersect],
     );
 
     useEffect(() => {
@@ -56,7 +56,7 @@ export const IntersectionObserverTrigger = React.memo(
     }, [enabled, handleIntersection, rootMargin, threshold]);
 
     return <div ref={ref} className={className} />;
-  }
+  },
 );
 
 IntersectionObserverTrigger.displayName = 'IntersectionObserverTrigger';

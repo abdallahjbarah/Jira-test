@@ -13,7 +13,7 @@ const NearbySurroundingsSection: React.FC<NearbySurroundingsSectionProps> = ({
         Nearby & Surroundings
       </p>
       <div
-        className='font-custom-400 text-custom-16 laptopM:text-custom-20 text-text_2 max-w-[1000px]'
+         className='font-custom-400 text-custom-16 laptopM:text-custom-20 text-text_2 max-w-[1000px]'
         dangerouslySetInnerHTML={{ __html: details || '' }}
       />
     </div>

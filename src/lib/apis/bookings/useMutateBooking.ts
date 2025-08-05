@@ -24,7 +24,7 @@ const postBooking = async (data: BookingFormData) => {
 };
 
 const useMutateBooking = (
-  mutateOptions: UseMutationOptions<any, WretchError, BookingFormData, unknown>
+  mutateOptions: UseMutationOptions<any, WretchError, BookingFormData, unknown>,
 ) => {
   return useMutation({
     mutationFn: (data: BookingFormData) => postBooking(data),

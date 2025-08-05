@@ -31,7 +31,7 @@ const NumberSelector: React.FC<NumberSelectorProps> = ({
         >
           {t('filter.any')}
         </button>
-        {numbers.map(num => (
+        {numbers.map((num) => (
           <button
             key={num}
             type='button'

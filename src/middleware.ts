@@ -19,7 +19,8 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   const pathnameIsMissingLocale = locales.every(
-    locale => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+    (locale) =>
+      !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
   );
 
   if (
@@ -39,22 +40,22 @@ export function middleware(request: NextRequest) {
 
   const isLoggedIn = request.cookies.get(TOKEN_NAME)?.value;
 
-  const isProfilePath = locales.some(loc =>
-    pathname.startsWith(`/${loc}/profile`)
+  const isProfilePath = locales.some((loc) =>
+    pathname.startsWith(`/${loc}/profile`),
   );
 
-  const isMyBookingsPath = locales.some(loc =>
-    pathname.startsWith(`/${loc}/my-bookings`)
+  const isMyBookingsPath = locales.some((loc) =>
+    pathname.startsWith(`/${loc}/my-bookings`),
   );
 
-  const isWishlistPath = locales.some(loc =>
-    pathname.startsWith(`/${loc}/wishlist`)
+  const isWishlistPath = locales.some((loc) =>
+    pathname.startsWith(`/${loc}/wishlist`),
   );
 
   const isAuthPath = locales.some(
-    loc =>
+    (loc) =>
       pathname.startsWith(`/${loc}/auth/login`) ||
-      pathname.startsWith(`/${loc}/auth/signup`)
+      pathname.startsWith(`/${loc}/auth/signup`),
   );
 
   if (
@@ -62,13 +63,13 @@ export function middleware(request: NextRequest) {
     (isProfilePath || isMyBookingsPath || isWishlistPath)
   ) {
     return NextResponse.redirect(
-      new URL(`/${locale}/auth/verify${request.nextUrl.search}`, request.url)
+      new URL(`/${locale}/auth/verify${request.nextUrl.search}`, request.url),
     );
   }
 
   if (isLoggedIn && isAuthPath) {
     return NextResponse.redirect(
-      new URL(`/${locale}${request.nextUrl.search}`, request.url)
+      new URL(`/${locale}${request.nextUrl.search}`, request.url),
     );
   }
 
@@ -76,8 +77,8 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(
         `/${locale}${pathname === '/' ? '' : pathname}${request.nextUrl.search}`,
-        request.url
-      )
+        request.url,
+      ),
     );
   }
 

@@ -14,7 +14,7 @@ export default function LanguageSwitcher({
 
   const handleLocaleChange = () => {
     changeLocale(
-      locale === LocaleValues.EN ? LocaleValues.AR : LocaleValues.EN
+      locale === LocaleValues.EN ? LocaleValues.AR : LocaleValues.EN,
     );
   };
 

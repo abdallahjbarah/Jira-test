@@ -36,16 +36,16 @@ const ImageWithFallback = ({
 
   const handleError = React.useCallback(() => {
     const fallback = fallbackSrc || FallbackImage;
-    setState(prev => ({ ...prev, imgSrc: fallback }));
+    setState((prev) => ({ ...prev, imgSrc: fallback as ImageSource }));
   }, [fallbackSrc]);
 
   const handleLoad = React.useCallback(() => {
-    setState(prev => ({ ...prev, isLoading: false }));
+    setState((prev) => ({ ...prev, isLoading: false }));
   }, []);
 
   React.useEffect(() => {
     if (src) {
-      setState(prev => ({ ...prev, imgSrc: src }));
+      setState((prev) => ({ ...prev, imgSrc: src }));
     }
   }, [src]);
 

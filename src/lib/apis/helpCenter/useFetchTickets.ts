@@ -8,7 +8,7 @@ const fetchTickets = async (): Promise<Ticket[]> => {
 };
 
 export const useFetchTickets = (
-  queryOptions?: Partial<UseQueryOptions<Ticket[], Error>>
+  queryOptions?: Partial<UseQueryOptions<Ticket[], Error>>,
 ) =>
   useQuery({
     queryKey: ['help-center'],

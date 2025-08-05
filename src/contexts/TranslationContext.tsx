@@ -13,7 +13,7 @@ interface TranslationContextType {
 }
 
 const TranslationContext = createContext<TranslationContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function TranslationProvider({
@@ -41,7 +41,7 @@ export function TranslationProvider({
       try {
         const result = nestedKey.reduce(
           (acc: any, curr) => acc && acc[curr],
-          dictionary
+          dictionary,
         );
         return result || key;
       } catch (error) {

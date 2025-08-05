@@ -115,7 +115,7 @@ export default function Header(): React.ReactElement {
                       (item.path === '/' && pathname === `/${lang}`)
                     }
                   />
-                )
+                ),
             )}
           </ul>
         </div>

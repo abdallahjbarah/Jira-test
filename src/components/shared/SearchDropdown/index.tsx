@@ -7,8 +7,8 @@ import SearchTrigger from './SearchTrigger';
 
 interface SearchFormData {
   country: any;
-  startDateTime: number;
-  endDateTime: number;
+  checkinTime: string;
+  checkoutTime: string;
   adults: number;
   children: number;
   infants: number;

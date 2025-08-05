@@ -13,7 +13,7 @@ export async function POST(request) {
   } catch (error) {
     return NextResponse.json(
       { message: error.message || 'Failed to send reset link' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

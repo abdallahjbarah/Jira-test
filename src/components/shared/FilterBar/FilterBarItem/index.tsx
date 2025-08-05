@@ -9,12 +9,10 @@ const FilterBarItemContainer = Styled.div<{ $isOpen?: boolean }>`
   cursor: pointer;
   padding: 20px 48px;
   border-radius: 9999px;
-  background: ${props => (props.$isOpen ? 'white' : 'transparent')};
+  background: ${props => props.$isOpen ? 'white' : 'transparent'};
   transition: all 0.3s ease-in-out;
 
-  ${props =>
-    props.$isOpen &&
-    `
+  ${props => props.$isOpen && `
     span {
       color: #16a34a !important;
       transition: color 0.3s ease-in-out;
@@ -32,21 +30,12 @@ interface FilterBarItemProps {
   className?: string;
 }
 
-const FilterBarItem = ({
-  title,
-  value,
-  onClick,
-  className,
-}: FilterBarItemProps) => {
+const FilterBarItem = ({ title, value, onClick, className }: FilterBarItemProps) => {
   const { locale } = useTranslation();
   const isOpen = className?.includes('bg-white');
 
   return (
-    <FilterBarItemContainer
-      onClick={onClick}
-      className={className}
-      $isOpen={isOpen}
-    >
+    <FilterBarItemContainer onClick={onClick} className={className} $isOpen={isOpen}>
       <span className='text-[22px] font-custom-500 text-[#ffffff] text-center'>
         {title[locale]}
       </span>

@@ -48,7 +48,7 @@ const StaysFilter: React.FC = () => {
       />
 
       <Controller
-        name='numberOfBedrooms'
+        name='bedrooms'
         control={control}
         render={({ field }) => (
           <NumberSelector
@@ -60,7 +60,7 @@ const StaysFilter: React.FC = () => {
       />
 
       <Controller
-        name='numberOfBeds'
+        name='beds'
         control={control}
         render={({ field }) => (
           <NumberSelector
@@ -72,7 +72,7 @@ const StaysFilter: React.FC = () => {
       />
 
       <Controller
-        name='numberOfBathrooms'
+        name='bathrooms'
         control={control}
         render={({ field }) => (
           <NumberSelector

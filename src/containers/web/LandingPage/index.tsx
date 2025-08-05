@@ -3,6 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Header from '@/components/layout/Header';
+import InnerHeader from '@/components/layout/InnerHeader';
 import Footer from '@/components/layout/Footer';
 import FilledButton from '@/components/ui/buttons/FilledButton';
 import ContactUs from '@/components/web/landing-page/ContactUs';
@@ -11,6 +12,7 @@ import DiscoverBookagri from '@/components/web/landing-page/DiscoverBookagri';
 import AboutUs from '@/components/web/landing-page/AboutUs';
 import DownloadApp from '@/components/web/landing-page/DownloadApp';
 import Statistics from '@/components/web/landing-page/Statistics';
+import heroStyles from '@/components/web/landing-page/Hero/style.module.scss';
 
 interface LandingPageProps {
   // Add props here when needed
@@ -21,7 +23,7 @@ const HomePageContainer = styled.div`
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: #ffffff;
+  background: #FFFFFF;
   overflow-x: hidden;
 `;
 
@@ -36,12 +38,12 @@ const HeroSection = styled.div`
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
-
+  
   @media (max-width: 768px) {
     height: 80vh;
     min-height: 500px;
   }
-
+  
   @media (max-width: 480px) {
     height: 70vh;
     min-height: 400px;
@@ -72,7 +74,7 @@ const HeroContent = styled.div`
   position: absolute;
   z-index: 2;
   text-align: left;
-  color: #ffffff;
+  color: #FFFFFF;
   width: 100%;
   max-width: 800px;
   top: 65%;
@@ -82,14 +84,14 @@ const HeroContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-
+  
   @media (max-width: 768px) {
     max-width: 90%;
     top: 60%;
     left: 5%;
     transform: translateY(-50%);
   }
-
+  
   @media (max-width: 480px) {
     max-width: 95%;
     top: 65%;
@@ -103,14 +105,14 @@ const HeroTitle = styled.h1`
   font-weight: 700;
   font-size: 56px;
   line-height: 68px;
-  color: #ffffff;
+  color: #FFFFFF;
   margin: 0 0 20px 0;
-
+  
   @media (max-width: 768px) {
     font-size: 42px;
     line-height: 50px;
   }
-
+  
   @media (max-width: 480px) {
     font-size: 32px;
     line-height: 38px;
@@ -122,16 +124,16 @@ const HeroSubtitle = styled.p`
   font-weight: 400;
   font-size: 26px;
   line-height: 30px;
-  color: #ffffff;
+  color: #FFFFFF;
   margin: 0 0 40px 0;
   max-width: 500px;
-
+  
   @media (max-width: 768px) {
     font-size: 20px;
     line-height: 24px;
     max-width: 100%;
   }
-
+  
   @media (max-width: 480px) {
     font-size: 16px;
     line-height: 20px;
@@ -140,16 +142,16 @@ const HeroSubtitle = styled.p`
 `;
 
 const SearchButton = styled.button`
-  background: #47c409;
+  background: #47C409;
   border-radius: 16px;
   border: none;
-
+  
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
   line-height: 29px;
   text-align: center;
-  color: #ffffff;
+  color: #FFFFFF;
   cursor: pointer;
   padding: 20px 40px;
 `;
@@ -159,11 +161,11 @@ const ContentSection = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   text-align: center;
-
+  
   @media (max-width: 768px) {
     padding: 60px 20px;
   }
-
+  
   @media (max-width: 480px) {
     padding: 40px 15px;
   }
@@ -176,12 +178,12 @@ const ContentTitle = styled.h2`
   line-height: 58px;
   color: #222222;
   margin: 0 0 20px 0;
-
+  
   @media (max-width: 768px) {
     font-size: 36px;
     line-height: 44px;
   }
-
+  
   @media (max-width: 480px) {
     font-size: 28px;
     line-height: 34px;
@@ -195,12 +197,12 @@ const ContentText = styled.p`
   line-height: 29px;
   color: #999999;
   margin: 0;
-
+  
   @media (max-width: 768px) {
     font-size: 20px;
     line-height: 24px;
   }
-
+  
   @media (max-width: 480px) {
     font-size: 16px;
     line-height: 20px;
@@ -217,21 +219,16 @@ const LandingPage: React.FC<LandingPageProps> = () => {
           <Header />
         </HeaderContainer>
         <HeroContent>
-          <HeroTitle>
-            Connecting you with
-            <br />a world of agritourism
-          </HeroTitle>
-          <HeroSubtitle>
-            Book or become a host for agritourism experiences and rural stays
-          </HeroSubtitle>
+          <HeroTitle>Connecting you with<br />a world of agritourism</HeroTitle>
+          <HeroSubtitle>Book or become a host for agritourism experiences and rural stays</HeroSubtitle>
           <FilledButton
-            text='Discover More'
-            width='w-[200px]'
-            height='h-[60px]'
-            buttonType='button'
+            text="Discover More"
+            width="w-[200px]"
+            height="h-[60px]"
+            buttonType="button"
             isButton={false}
-            path='/collections'
-            className='rounded-custom-16'
+            path="/collections"
+            className="rounded-custom-16"
           />
         </HeroContent>
       </HeroSection>

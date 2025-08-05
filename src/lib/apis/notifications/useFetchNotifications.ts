@@ -17,7 +17,7 @@ const fetchNotifications = async (
   filter?: {
     page: number;
     limit: number;
-  }
+  },
 ): Promise<FetchNotificationsResponse> => {
   const response = await api
     .url(`/notification/list/${userId}`)
@@ -33,7 +33,7 @@ export const useFetchNotifications = (
     page: number;
     limit: number;
   },
-  queryOptions?: UseQueryOptions<FetchNotificationsResponse, Error>
+  queryOptions?: UseQueryOptions<FetchNotificationsResponse, Error>,
 ) =>
   useQuery({
     queryKey: ['notifications', userId, filter],
@@ -48,7 +48,7 @@ export const useFetchInfiniteNotifications = (
   filter?: {
     limit: number;
   },
-  queryOptions?: UseInfiniteQueryOptions<any, Error>
+  queryOptions?: UseInfiniteQueryOptions<any, Error>,
 ) =>
   useInfiniteQuery({
     queryKey: ['notifications', userId, filter],

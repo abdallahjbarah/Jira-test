@@ -47,14 +47,14 @@ export default function SignUpPage(): React.ReactElement {
   });
 
   const { mutate: signUpMutate, isPending: isSignUpLoading } = useSignup({
-    onSuccess: data => {
+    onSuccess: (data) => {
       setCookie(TOKEN_NAME, data.token);
       setCookie('userStatus', data.user.status);
       queryClient.setQueryData(['user'], data);
 
       toast.success(t('auth.signup.accountCreatedSuccess'));
       router.push(
-        `/auth/verify?email=${encodeURIComponent(data?.user?.email)}`
+        `/auth/verify?email=${encodeURIComponent(data?.user?.email)}`,
       );
     },
     onError: (error: WretchError) => {
@@ -63,7 +63,7 @@ export default function SignUpPage(): React.ReactElement {
     },
   });
 
-  const onSubmit: SubmitHandler<SignUpFormValues> = async data => {
+  const onSubmit: SubmitHandler<SignUpFormValues> = async (data) => {
     signUpMutate({
       firstName: data.firstName,
       lastName: data.lastName,
@@ -199,7 +199,7 @@ export default function SignUpPage(): React.ReactElement {
                     </span>
                   }
                   checked={signUpForm.watch('agreeToTerms')}
-                  onChange={checked =>
+                  onChange={(checked) =>
                     signUpForm.setValue('agreeToTerms', checked)
                   }
                 />

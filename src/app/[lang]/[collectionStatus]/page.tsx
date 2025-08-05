@@ -28,7 +28,7 @@ export default function CollectionStatusPage({
   }
 
   const collectionStatusItem = COLLECTION_STATUS_LIST.find(
-    item => item.value === collectionStatus
+    (item) => item.value === collectionStatus,
   );
 
   if (!collectionStatusItem) {

@@ -114,7 +114,7 @@ export const NotificationTypeIndicator = styled.div<{ read?: boolean }>`
 
   &::before {
     content: '';
-    display: ${props => (props.read ? 'none' : 'inline-block')};
+    display: ${(props) => (props.read ? 'none' : 'inline-block')};
     width: 8px;
     height: 8px;
     background-color: #4caf50;
@@ -154,13 +154,13 @@ export const ActionButton = styled.button<{ isDelete?: boolean }>`
   border: none;
   cursor: pointer;
   font-size: 14px;
-  color: ${props => (props.isDelete ? '#f44336' : '#333')};
+  color: ${(props) => (props.isDelete ? '#f44336' : '#333')};
   padding: 8px 12px;
   border-radius: 6px;
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: ${props => (props.isDelete ? '#ffebee' : '#f5f5f5')};
+    background-color: ${(props) => (props.isDelete ? '#ffebee' : '#f5f5f5')};
     transform: translateY(-1px);
   }
 
@@ -198,11 +198,11 @@ export const DropdownItem = styled.button<{ isDelete?: boolean }>`
   border: none;
   font-size: 14px;
   cursor: pointer;
-  color: ${props => (props.isDelete ? '#f44336' : '#333')};
+  color: ${(props) => (props.isDelete ? '#f44336' : '#333')};
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: ${props => (props.isDelete ? '#ffebee' : '#f8f9fa')};
+    background-color: ${(props) => (props.isDelete ? '#ffebee' : '#f8f9fa')};
     transform: translateX(2px);
   }
 

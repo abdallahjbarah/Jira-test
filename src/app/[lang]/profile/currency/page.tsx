@@ -42,7 +42,7 @@ export default function CurrencyPage() {
   const { userData } = useUser();
 
   const { mutate: editUser, isPending: isEditing } = useEditUser({
-    onSuccess: data => {
+    onSuccess: (data) => {
       queryClient.setQueryData(['user'], (old: any) => {
         return {
           ...old,
@@ -83,7 +83,7 @@ export default function CurrencyPage() {
             control={control}
             render={({ field }) => (
               <div className='flex flex-col gap-4'>
-                {currencyOptions.map(currency => (
+                {currencyOptions.map((currency) => (
                   <div
                     key={currency.value}
                     className='border-b border-gray-100 last:border-b-0'
@@ -95,7 +95,7 @@ export default function CurrencyPage() {
                       description={currency.description}
                       value={currency.value}
                       checked={field.value === currency.value}
-                      onChange={value => field.onChange(value)}
+                      onChange={(value) => field.onChange(value)}
                       className='w-full text-base'
                     />
                   </div>

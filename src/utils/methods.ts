@@ -21,12 +21,12 @@ interface PasswordStrengthResult {
 
 export const customTimeStampToDate = (
   date: number | string,
-  format: string
+  format: string,
 ): string => dayjs(date).format(format);
 
 export const customDateToTimeStamp = (
   dateString: string,
-  dateFormat: string
+  dateFormat: string,
 ): number => dayjs(dateString, { format: dateFormat }).valueOf();
 
 export const customConvertTime24HoursTo12 = (stringTime24: string): string => {
@@ -51,7 +51,7 @@ export const customConvertTime24HoursTo12 = (stringTime24: string): string => {
 export const addToObjectDate = (
   objectDate: Date | string | number,
   unit: dayjs.ManipulateType,
-  number: number
+  number: number,
 ): Date => {
   const date = dayjs(objectDate);
   const result = date.add(number, unit);
@@ -60,7 +60,7 @@ export const addToObjectDate = (
 
 export function capitalizeFirstLetterOfEachWord(input?: string): string {
   try {
-    return input?.replace(/\b\w/g, match => match.toUpperCase()) || '';
+    return input?.replace(/\b\w/g, (match) => match.toUpperCase()) || '';
   } catch (error) {
     return '';
   }
@@ -88,7 +88,7 @@ export function timeToMilliseconds(time: string): number {
 }
 
 export function measurePasswordStrength(
-  password: string
+  password: string,
 ): PasswordStrengthResult {
   const commonPatterns: string[] = [
     'password',
@@ -198,7 +198,7 @@ export function isTimestamp(value: string | number): boolean {
 }
 
 export const calculateAgeFromTimestamp = (
-  timestamp: number | string
+  timestamp: number | string,
 ): number | string => {
   try {
     const age =
@@ -211,7 +211,7 @@ export const calculateAgeFromTimestamp = (
 };
 
 export const generateQueryString = (
-  properties: Record<string, any>
+  properties: Record<string, any>,
 ): string => {
   if (!properties) {
     return '';
@@ -250,7 +250,7 @@ export const convertDecimalTime = (decimalTime: number): string => {
 
 export const removeDuplicateObjects = <T>(arr: T[]): T[] => {
   const seen = new Set<string>();
-  return arr.filter(item => {
+  return arr.filter((item) => {
     const itemStr = JSON.stringify(item);
     if (seen.has(itemStr)) {
       return false;

@@ -8,7 +8,7 @@ export const fetchPolicies = async (): Promise<Policies> => {
 };
 
 export const useFetchPolicies = (
-  queryOptions?: UseQueryOptions<Policies, Error>
+  queryOptions?: UseQueryOptions<Policies, Error>,
 ) => {
   return useQuery({
     queryKey: ['policies'],

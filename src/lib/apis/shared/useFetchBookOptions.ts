@@ -13,7 +13,7 @@ export const useFetchBookOptions = (
   filter: {
     isStayType: boolean;
   },
-  queryOptions?: UseQueryOptions<BookOption[], Error>
+  queryOptions?: UseQueryOptions<BookOption[], Error>,
 ) => {
   return useQuery({
     queryKey: ['book-options', filter],

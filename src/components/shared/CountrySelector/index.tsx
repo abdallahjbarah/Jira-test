@@ -27,7 +27,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
   const { data: countries = [], isLoading } = useFetchCountries();
   const defaultPlaceholder = placeholder || t('form.searchForCountry');
 
-  const countryOptions: CountryOption[] = countries.map(country => ({
+  const countryOptions: CountryOption[] = countries.map((country) => ({
     value: country._id,
     label: country.name,
     country,
@@ -42,7 +42,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
   };
 
   const currentValue = selectedCountry
-    ? countryOptions.find(option => option.value === selectedCountry)
+    ? countryOptions.find((option) => option.value === selectedCountry)
     : null;
 
   return (
@@ -54,8 +54,8 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
         placeholder={defaultPlaceholder}
         isClearable
         isSearchable
-        getOptionValue={option => option?.value}
-        getOptionLabel={option => option?.label}
+        getOptionValue={(option) => option?.value}
+        getOptionLabel={(option) => option?.label}
         isLoading={isLoading}
         noOptionsMessage={({ inputValue }) =>
           inputValue
@@ -73,7 +73,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
               borderColor: '#10b981',
             },
           }),
-          placeholder: provided => ({
+          placeholder: (provided) => ({
             ...provided,
             color: '#9ca3af',
           }),

@@ -33,7 +33,7 @@ const Collapsible: React.FC<CollapsibleProps> = ({
         type='button'
         className={cn(
           'flex justify-between items-center w-full text-left text-sm font-medium',
-          titleClassName
+          titleClassName,
         )}
         onClick={toggleCollapsible}
       >

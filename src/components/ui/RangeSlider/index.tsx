@@ -30,10 +30,10 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   const { t } = useTranslation();
   const [localValue, setLocalValue] = useState<[number, number]>(value);
   const [minInputValue, setMinInputValue] = useState<string>(
-    Math.max(0, Math.round(value[0])).toString()
+    Math.max(0, Math.round(value[0])).toString(),
   );
   const [maxInputValue, setMaxInputValue] = useState<string>(
-    Math.round(value[1]).toString()
+    Math.round(value[1]).toString(),
   );
 
   useEffect(() => {

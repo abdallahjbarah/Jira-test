@@ -8,7 +8,7 @@ export const fetchLanguages = async (): Promise<Language[]> => {
 };
 
 export const useFetchLanguages = (
-  queryOptions?: UseQueryOptions<Language[], Error>
+  queryOptions?: UseQueryOptions<Language[], Error>,
 ) => {
   return useQuery({
     queryKey: ['languages'],

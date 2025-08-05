@@ -31,7 +31,9 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
         <div>
           <p className='text-sm font-semibold text-text_1'>{label}</p>
           {sublabel && (
-            <p className={`text-xs text-text_3${isHelpCenter ? '' : ''}`}>
+            <p
+              className={`text-xs text-text_3${isHelpCenter ? '' : ''}`}
+            >
               {sublabel}
             </p>
           )}
@@ -44,14 +46,14 @@ const ProfileMenuItem: React.FC<ProfileMenuItemProps> = ({
   if (onClick) {
     return (
       <div
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation(); // Prevent dropdown from closing
           onClick();
         }}
         className='block cursor-pointer'
         role='button'
         tabIndex={0}
-        onKeyDown={e => {
+        onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             onClick();

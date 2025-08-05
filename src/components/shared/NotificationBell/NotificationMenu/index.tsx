@@ -27,7 +27,7 @@ interface NotificationMenuProps {
   isLoading: boolean;
   error: Error | null;
   fetchNextPage: (
-    options?: FetchNextPageOptions
+    options?: FetchNextPageOptions,
   ) => Promise<InfiniteQueryObserverResult>;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;

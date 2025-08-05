@@ -5,10 +5,7 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import { useFetchInfiniteCollections } from '@/lib/apis/collections/useFetchCollections';
 import { Site, SitesResponse } from '@/lib/types';
 import { COLLECTION_STATUS, COLLECTION_STATUS_LIST } from '@/utils/constants';
-import {
-  buildFiltersFromSearchParams,
-  convertToBackendFilters,
-} from '@/utils/helpers/filterHelpers';
+import { buildFiltersFromSearchParams } from '@/utils/helpers/filterHelpers';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
@@ -79,50 +76,44 @@ function CollectionsListing(): React.ReactElement {
   const collectionObject = React.useMemo(
     () =>
       COLLECTION_STATUS_LIST.find(
-        collection => collection.value === currentCollectionStatus
+        (collection) => collection.value === currentCollectionStatus,
       ),
-    [currentCollectionStatus]
+    [currentCollectionStatus],
   );
 
-  // Build frontend filters from URL search parameters
-  const frontendFilters = React.useMemo(() => {
-    return buildFiltersFromSearchParams(
-      searchParams,
-      collectionStatus as string
-    );
-  }, [searchParams, collectionStatus]);
+  const filters = React.useMemo(() => {
+    // Only pass a type if not 'all'
+    const baseType =
+      collectionObject?.filterValue && collectionObject?.filterValue !== 'all'
+        ? collectionObject?.filterValue
+        : undefined;
 
-  // Convert frontend filters to backend API parameters
-  const backendFilters = React.useMemo(() => {
-    const backendParams = convertToBackendFilters(
-      frontendFilters,
-      collectionStatus as string
-    );
+    const baseFilters = buildFiltersFromSearchParams(searchParams, baseType);
 
-    // Add pagination parameters
     return {
-      ...backendParams,
+      ...baseFilters,
       limit: isMapView ? 100 : 20,
     };
-  }, [frontendFilters, collectionStatus, isMapView]);
+  }, [collectionObject?.filterValue, searchParams, isMapView]);
 
   // Create base filters without search parameters for "You May Also Like"
-  const baseBackendFilters = React.useMemo(() => {
-    // Only pass collection type for base filters
-    const baseFrontendFilters = {
-      type: collectionStatus as string,
-    };
+  const baseFilters = React.useMemo(() => {
+    // Only pass a type if not 'all'
+    const baseType =
+      collectionObject?.filterValue && collectionObject?.filterValue !== 'all'
+        ? collectionObject?.filterValue
+        : undefined;
 
-    const baseBackendParams = convertToBackendFilters(
-      baseFrontendFilters,
-      collectionStatus as string
+    const baseFilters = buildFiltersFromSearchParams(
+      new URLSearchParams() as any, // Empty search params
+      baseType,
     );
 
     return {
-      ...baseBackendParams,
+      ...baseFilters,
       limit: 8, // Show fewer items for "You May Also Like"
     };
-  }, [collectionStatus]);
+  }, [collectionObject?.filterValue]);
 
   const {
     data: collectionsResponse,
@@ -130,23 +121,25 @@ function CollectionsListing(): React.ReactElement {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useFetchInfiniteCollections(backendFilters);
+  } = useFetchInfiniteCollections(filters);
 
   // Fetch base collections for "You May Also Like"
-  const { data: baseCollectionsResponse, isLoading: isLoadingBase } =
-    useFetchInfiniteCollections(baseBackendFilters);
+  const {
+    data: baseCollectionsResponse,
+    isLoading: isLoadingBase,
+  } = useFetchInfiniteCollections(baseFilters);
 
   const collections = React.useMemo(() => {
     if (!collectionsResponse?.pages) return [];
     return collectionsResponse.pages.flatMap(
-      (page: SitesResponse) => page.sites.data
+      (page: SitesResponse) => page.sites.data,
     );
   }, [collectionsResponse?.pages]);
 
   const baseCollections = React.useMemo(() => {
     if (!baseCollectionsResponse?.pages) return [];
     return baseCollectionsResponse.pages.flatMap(
-      (page: SitesResponse) => page.sites.data
+      (page: SitesResponse) => page.sites.data,
     );
   }, [baseCollectionsResponse?.pages]);
 
@@ -258,29 +251,43 @@ function CollectionsListing(): React.ReactElement {
             height={20}
             alt='Map Icon'
           />
-          <span className='text-white font-medium text-sm'>
-            {t('map.showMapView')}
-          </span>
+          <span className='text-white text-custom-30'>{t('mapLabel')}</span>
         </MapToggleWidget>
       )}
 
       {isMapView ? (
-        <div ref={mapContainerRef}>
-          <MapView collections={collections} onBackToList={handleBackToList} />
-        </div>
+        <>
+          <CollectionTypeLabel />
+          <div ref={mapContainerRef} className='mt-[31px]'>
+            <MapView
+              collections={collections}
+              isLoading={isLoading}
+              onBackToList={handleBackToList}
+            />
+          </div>
+        </>
       ) : (
         <>
           <CollectionTypeLabel />
           {collectionsGrid}
-          {hasNextPage && (
-            <div className='flex justify-center mt-8'>
+          {hasNextPage ? (
+            <div className='flex justify-center items-center py-5'>
               <button
+                className='bg-primary_1 text-white px-4 py-2 rounded-md'
                 onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
-                className='px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50'
               >
-                {isFetchingNextPage ? 'Loading...' : 'Load More'}
+                {t('loadMore')}
               </button>
+            </div>
+          ) : (
+            <div className='text-center text-gray-500 text-lg py-10'>
+              No more results
+            </div>
+          )}
+
+          {isFetchingNextPage && (
+            <div className='flex justify-center items-center py-5'>
+              <CircularLoader size={50} />
             </div>
           )}
         </>
@@ -289,4 +296,4 @@ function CollectionsListing(): React.ReactElement {
   );
 }
 
-export default CollectionsListing;
+export default React.memo(CollectionsListing);

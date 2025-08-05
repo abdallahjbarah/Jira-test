@@ -118,7 +118,7 @@ const CancelationReasonsModal: React.FC<CancelationReasonsModalProps> = ({
                   required: {
                     value: true,
                     message: t(
-                      'bookingStatus.cancellationReasonsModal.reasonRequired'
+                      'bookingStatus.cancellationReasonsModal.reasonRequired',
                     ),
                   },
                 }}
@@ -129,7 +129,7 @@ const CancelationReasonsModal: React.FC<CancelationReasonsModalProps> = ({
                         (
                           reason: CancelReason & {
                             name: { en: string; ar: string };
-                          }
+                          },
                         ) => (
                           <div
                             key={reason._id}
@@ -141,11 +141,11 @@ const CancelationReasonsModal: React.FC<CancelationReasonsModalProps> = ({
                               label={reason.name[locale]}
                               value={reason._id}
                               checked={field.value === reason._id}
-                              onChange={value => field.onChange(value)}
+                              onChange={(value) => field.onChange(value)}
                               className='w-full text-base'
                             />
                           </div>
-                        )
+                        ),
                       )}
 
                       <div className='border border-solid border-secondary_3 py-3 px-4 rounded-lg'>
@@ -155,7 +155,7 @@ const CancelationReasonsModal: React.FC<CancelationReasonsModalProps> = ({
                           label='Other'
                           value='other'
                           checked={field.value === 'other'}
-                          onChange={value => field.onChange(value)}
+                          onChange={(value) => field.onChange(value)}
                           className='w-full !text-lg'
                         />
 
@@ -169,19 +169,19 @@ const CancelationReasonsModal: React.FC<CancelationReasonsModalProps> = ({
                                 required: {
                                   value: true,
                                   message: t(
-                                    'bookingStatus.cancellationReasonsModal.reasonRequired'
+                                    'bookingStatus.cancellationReasonsModal.reasonRequired',
                                   ),
                                 },
                                 maxLength: {
                                   value: 450,
                                   message: t(
-                                    'bookingStatus.cancellationReasonsModal.maxLength'
+                                    'bookingStatus.cancellationReasonsModal.maxLength',
                                   ),
                                 },
                                 minLength: {
                                   value: 10,
                                   message: t(
-                                    'bookingStatus.cancellationReasonsModal.minLength'
+                                    'bookingStatus.cancellationReasonsModal.minLength',
                                   ),
                                 },
                               }}
