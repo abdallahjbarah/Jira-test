@@ -51,7 +51,10 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
   const activeFiltersCount = useMemo(() => {
     if (!formValues) return 0;
 
-    const countActiveFilters = (obj: any): number => {
+    // Get default filter values for comparison
+    const defaultFilters = getDefaultFilterValues(filterType);
+
+    const countActiveFilters = (obj: any, defaultObj: any): number => {
       if (!obj || typeof obj !== 'object') return 0;
 
       return Object.entries(obj).reduce((count, [key, value]) => {
@@ -61,43 +64,51 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
         // Skip null/undefined
         if (value === null || value === undefined) return count;
 
+        // Get default value for this key
+        const defaultValue = defaultObj[key];
+
         // Handle arrays (like amenities, languages, etc.)
         if (Array.isArray(value)) {
-          // For price range, count as 1 if modified
+          // For price range, count as 1 if modified from default [0, 100]
           if (key === 'priceRange') {
             const [min, max] = value;
-            return count + (min > 0 || max < 100 ? 1 : 0);
+            const [defaultMin, defaultMax] = defaultValue || [0, 100];
+            return count + (min !== defaultMin || max !== defaultMax ? 1 : 0);
           }
-          // For other arrays, count each item
-          return count + value.length;
+          // For other arrays, count only if not empty and different from default
+          const defaultArray = defaultValue || [];
+          return count + (value.length > 0 && JSON.stringify(value.sort()) !== JSON.stringify(defaultArray.sort()) ? value.length : 0);
         }
 
         // Handle boolean values (like radio buttons and checkboxes)
         if (typeof value === 'boolean') {
-          return count + (value ? 1 : 0);
+          const defaultBool = defaultValue || false;
+          return count + (value !== defaultBool ? 1 : 0);
         }
 
         // Handle numbers (like bedrooms, beds, bathrooms)
         if (typeof value === 'number') {
-          return count + (value > 0 ? 1 : 0);
+          const defaultNum = defaultValue || 0;
+          return count + (value !== defaultNum ? 1 : 0);
         }
 
         // Handle strings
         if (typeof value === 'string') {
-          return count + (value.trim() !== '' ? 1 : 0);
+          const defaultStr = defaultValue || '';
+          return count + (value.trim() !== defaultStr.trim() ? 1 : 0);
         }
 
         // Handle nested objects
         if (typeof value === 'object') {
-          return count + countActiveFilters(value);
+          return count + countActiveFilters(value, defaultValue || {});
         }
 
         return count;
       }, 0);
     };
 
-    return countActiveFilters(formValues);
-  }, [formValues]);
+    return countActiveFilters(formValues, defaultFilters);
+  }, [formValues, filterType]);
 
   React.useEffect(() => {
     if (defaultValues) {
@@ -154,7 +165,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
         width='100%'
         height='100%'
       />
-      {activeFiltersCount > 1 && (
+      {activeFiltersCount > 0 && (
         <div
           className='
     absolute -top-2 -right-2
