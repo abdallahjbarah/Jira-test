@@ -16,13 +16,7 @@ definitions:
           - export NODE_ENV=staging
           - export NEXT_PUBLIC_NODE_ENV=deployment
           - export NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-          - docker build \
-              --build-arg NODE_ENV=staging \
-              --build-arg NEXT_PUBLIC_NODE_ENV=deployment \
-              --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-              -f $DOCKERFILE \
-              -t $IMAGE_NAME \
-              -t majali1/bookagri-website:staging-latest .
+          - docker build --build-arg NODE_ENV=staging --build-arg NEXT_PUBLIC_NODE_ENV=deployment --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL -f $DOCKERFILE -t $IMAGE_NAME -t majali1/bookagri-website:staging-latest .
           - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
           - docker push $IMAGE_NAME
           - docker push majali1/bookagri-website:staging-latest
@@ -41,13 +35,7 @@ definitions:
           - export NODE_ENV=production
           - export NEXT_PUBLIC_NODE_ENV=deployment
           - export NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-          - docker build \
-              --build-arg NODE_ENV=production \
-              --build-arg NEXT_PUBLIC_NODE_ENV=deployment \
-              --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-              -f $DOCKERFILE \
-              -t $IMAGE_NAME \
-              -t majali1/bookagri-website:production-latest .
+          - docker build --build-arg NODE_ENV=production --build-arg NEXT_PUBLIC_NODE_ENV=deployment --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL -f $DOCKERFILE -t $IMAGE_NAME -t majali1/bookagri-website:production-latest .
           - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
           - docker push $IMAGE_NAME
           - docker push majali1/bookagri-website:production-latest
@@ -72,13 +60,7 @@ definitions:
                 echo "Pulling latest staging image..."
                 docker pull $IMAGE_NAME
                 echo "Starting new staging container..."
-                docker run -p $SERVER_PORT_STAGING:3000 \
-                  --name $CONTAINERS_TO_STOP_STAGING \
-                  --restart unless-stopped \
-                  -e NODE_ENV=staging \
-                  -e NEXT_PUBLIC_NODE_ENV=deployment \
-                  -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                  -d $IMAGE_NAME
+                docker run -p $SERVER_PORT_STAGING:3000 --name $CONTAINERS_TO_STOP_STAGING --restart unless-stopped -e NODE_ENV=staging -e NEXT_PUBLIC_NODE_ENV=deployment -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL -d $IMAGE_NAME
                 echo "Staging deployment completed successfully"
         services:
           - docker
@@ -100,13 +82,7 @@ definitions:
                 echo "Pulling latest production image..."
                 docker pull $IMAGE_NAME
                 echo "Starting new production container..."
-                docker run -p $SERVER_PORT:3000 \
-                  --name $CONTAINERS_TO_STOP \
-                  --restart unless-stopped \
-                  -e NODE_ENV=production \
-                  -e NEXT_PUBLIC_NODE_ENV=deployment \
-                  -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                  -d $IMAGE_NAME
+                docker run -p $SERVER_PORT:3000 --name $CONTAINERS_TO_STOP --restart unless-stopped -e NODE_ENV=production -e NEXT_PUBLIC_NODE_ENV=deployment -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL -d $IMAGE_NAME
                 echo "Production deployment completed successfully"
         services:
           - docker
@@ -140,12 +116,7 @@ pipelines:
             - export IMAGE_NAME=majali1/bookagri-website:staging-$BITBUCKET_COMMIT
             - export DOCKERFILE=Dockerfile.staging
             - echo "Deploying to STAGING environment"
-            - docker build \
-                --build-arg NODE_ENV=staging \
-                --build-arg NEXT_PUBLIC_NODE_ENV=deployment \
-                --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                -f $DOCKERFILE \
-                -t $IMAGE_NAME .
+            - docker build --build-arg NODE_ENV=staging --build-arg NEXT_PUBLIC_NODE_ENV=deployment --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL -f $DOCKERFILE -t $IMAGE_NAME .
             - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
             - docker push $IMAGE_NAME
             - pipe: atlassian/ssh-run:0.6.1
@@ -156,13 +127,7 @@ pipelines:
                   docker stop $CONTAINERS_TO_STOP_STAGING || true
                   docker rm $CONTAINERS_TO_STOP_STAGING || true
                   docker pull $IMAGE_NAME
-                  docker run -p $SERVER_PORT_STAGING:3000 \
-                    --name $CONTAINERS_TO_STOP_STAGING \
-                    --restart unless-stopped \
-                    -e NODE_ENV=staging \
-                    -e NEXT_PUBLIC_NODE_ENV=deployment \
-                    -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                    -d $IMAGE_NAME
+                  docker run -p $SERVER_PORT_STAGING:3000 --name $CONTAINERS_TO_STOP_STAGING --restart unless-stopped -e NODE_ENV=staging -e NEXT_PUBLIC_NODE_ENV=deployment -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL -d $IMAGE_NAME
           services:
             - docker
 
@@ -174,12 +139,7 @@ pipelines:
             - export IMAGE_NAME=majali1/bookagri-website:production-$BITBUCKET_COMMIT
             - export DOCKERFILE=Dockerfile.production
             - echo "Deploying to PRODUCTION environment"
-            - docker build \
-                --build-arg NODE_ENV=production \
-                --build-arg NEXT_PUBLIC_NODE_ENV=deployment \
-                --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                -f $DOCKERFILE \
-                -t $IMAGE_NAME .
+            - docker build --build-arg NODE_ENV=production --build-arg NEXT_PUBLIC_NODE_ENV=deployment --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL -f $DOCKERFILE -t $IMAGE_NAME .
             - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
             - docker push $IMAGE_NAME
             - pipe: atlassian/ssh-run:0.6.1
@@ -190,12 +150,6 @@ pipelines:
                   docker stop $CONTAINERS_TO_STOP || true
                   docker rm $CONTAINERS_TO_STOP || true
                   docker pull $IMAGE_NAME
-                  docker run -p $SERVER_PORT:3000 \
-                    --name $CONTAINERS_TO_STOP \
-                    --restart unless-stopped \
-                    -e NODE_ENV=production \
-                    -e NEXT_PUBLIC_NODE_ENV=deployment \
-                    -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                    -d $IMAGE_NAME
+                  docker run -p $SERVER_PORT:3000 --name $CONTAINERS_TO_STOP --restart unless-stopped -e NODE_ENV=production -e NEXT_PUBLIC_NODE_ENV=deployment -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL -d $IMAGE_NAME
           services:
             - docker
