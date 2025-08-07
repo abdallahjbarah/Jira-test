@@ -16,9 +16,8 @@ COPY --from=deps /app/node_modules ./node_modules
 
 COPY . .
 
-# Accept build arguments for environment variables
-ARG NODE_ENV=production
-ARG NEXT_PUBLIC_NODE_ENV=deployment
+ARG NODE_ENV
+ARG NEXT_PUBLIC_NODE_ENV
 ARG NEXT_PUBLIC_API_URL
 
 

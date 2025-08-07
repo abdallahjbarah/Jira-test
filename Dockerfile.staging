@@ -16,19 +16,16 @@ COPY --from=deps /app/node_modules ./node_modules
 
 COPY . .
 
-# Accept build arguments for environment variables
-ARG NODE_ENV=staging
-ARG NEXT_PUBLIC_NODE_ENV=deployment
+ARG NODE_ENV
+ARG NEXT_PUBLIC_NODE_ENV
 ARG NEXT_PUBLIC_API_URL
 
-# Set environment variables for build
 ENV NODE_ENV=$NODE_ENV
 ENV NEXT_PUBLIC_NODE_ENV=$NEXT_PUBLIC_NODE_ENV
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV SKIP_TYPE_CHECK=1
 
-# Build with TypeScript checking disabled for staging
 RUN yarn build --no-lint
 
 FROM node:20-alpine AS runner
