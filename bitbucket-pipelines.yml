@@ -1,634 +1,201 @@
-image: node:20-alpine
+# Bitbucket Pipelines configuration for Agribooking Website
+# Supports staging and production deployments with environment-specific configurations
+
+image: node:20
 
 definitions:
-  caches:
-    yarn: ~/.cache/yarn
-    node_modules: node_modules
-    next_cache: .next/cache
-  services:
-    docker:
-      memory: 2048
+  steps:
+    - step: &build-and-push-staging
+        name: Build and Push Staging Docker Image
+        script:
+          - echo "Building Docker image for STAGING environment"
+          - export IMAGE_NAME=majali1/bookagri-website:staging-$BITBUCKET_COMMIT
+          - export DOCKERFILE=Dockerfile.staging
+          - echo "Using Dockerfile: $DOCKERFILE"
+          - echo "Setting up staging environment variables..."
+          - export NODE_ENV=staging
+          - export NEXT_PUBLIC_NODE_ENV=deployment
+          - export NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+          - docker build \
+              --build-arg NODE_ENV=staging \
+              --build-arg NEXT_PUBLIC_NODE_ENV=deployment \
+              --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+              -f $DOCKERFILE \
+              -t $IMAGE_NAME \
+              -t majali1/bookagri-website:staging-latest .
+          - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+          - docker push $IMAGE_NAME
+          - docker push majali1/bookagri-website:staging-latest
+          - echo "Successfully pushed staging image: $IMAGE_NAME"
+        services:
+          - docker
+
+    - step: &build-and-push-production
+        name: Build and Push Production Docker Image
+        script:
+          - echo "Building Docker image for PRODUCTION environment"
+          - export IMAGE_NAME=majali1/bookagri-website:production-$BITBUCKET_COMMIT
+          - export DOCKERFILE=Dockerfile.production
+          - echo "Using Dockerfile: $DOCKERFILE"
+          - echo "Setting up production environment variables..."
+          - export NODE_ENV=production
+          - export NEXT_PUBLIC_NODE_ENV=deployment
+          - export NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+          - docker build \
+              --build-arg NODE_ENV=production \
+              --build-arg NEXT_PUBLIC_NODE_ENV=deployment \
+              --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+              -f $DOCKERFILE \
+              -t $IMAGE_NAME \
+              -t majali1/bookagri-website:production-latest .
+          - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+          - docker push $IMAGE_NAME
+          - docker push majali1/bookagri-website:production-latest
+          - echo "Successfully pushed production image: $IMAGE_NAME"
+        services:
+          - docker
+
+    - step: &deploy-staging
+        name: Deploy to Staging Server
+        script:
+          - export IMAGE_NAME=majali1/bookagri-website:staging-$BITBUCKET_COMMIT
+          - echo "Deploying staging image $IMAGE_NAME"
+          - pipe: atlassian/ssh-run:0.6.1
+            variables:
+              SSH_USER: $SSH_USER
+              SERVER: $SSH_SERVER
+              COMMAND: |
+                echo "Deploying to STAGING environment..."
+                echo "Stopping and removing existing staging containers..."
+                docker stop $CONTAINERS_TO_STOP_STAGING || true
+                docker rm $CONTAINERS_TO_STOP_STAGING || true
+                echo "Pulling latest staging image..."
+                docker pull $IMAGE_NAME
+                echo "Starting new staging container..."
+                docker run -p $SERVER_PORT_STAGING:3000 \
+                  --name $CONTAINERS_TO_STOP_STAGING \
+                  --restart unless-stopped \
+                  -e NODE_ENV=staging \
+                  -e NEXT_PUBLIC_NODE_ENV=deployment \
+                  -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+                  -d $IMAGE_NAME
+                echo "Staging deployment completed successfully"
+        services:
+          - docker
+
+    - step: &deploy-production
+        name: Deploy to Production Server
+        script:
+          - export IMAGE_NAME=majali1/bookagri-website:production-$BITBUCKET_COMMIT
+          - echo "Deploying production image $IMAGE_NAME"
+          - pipe: atlassian/ssh-run:0.6.1
+            variables:
+              SSH_USER: $SSH_USER
+              SERVER: $SSH_SERVER
+              COMMAND: |
+                echo "Deploying to PRODUCTION environment..."
+                echo "Stopping and removing existing production containers..."
+                docker stop $CONTAINERS_TO_STOP || true
+                docker rm $CONTAINERS_TO_STOP || true
+                echo "Pulling latest production image..."
+                docker pull $IMAGE_NAME
+                echo "Starting new production container..."
+                docker run -p $SERVER_PORT:3000 \
+                  --name $CONTAINERS_TO_STOP \
+                  --restart unless-stopped \
+                  -e NODE_ENV=production \
+                  -e NEXT_PUBLIC_NODE_ENV=deployment \
+                  -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+                  -d $IMAGE_NAME
+                echo "Production deployment completed successfully"
+        services:
+          - docker
 
 pipelines:
   branches:
-    main:
-      - step:
-          name: Test & Lint
-          caches:
-            - yarn
-            - node_modules
-          script:
-            - echo "🔍 Starting Test & Lint step..."
-            - echo "📋 Environment Variables:"
-            - echo "  NODE_ENV: $NODE_ENV"
-            - echo "  BITBUCKET_COMMIT: $BITBUCKET_COMMIT"
-            - echo "  BITBUCKET_BRANCH: $BITBUCKET_BRANCH"
-            - echo "  BITBUCKET_REPO_SLUG: $BITBUCKET_REPO_SLUG"
-            - echo "  BITBUCKET_WORKSPACE: $BITBUCKET_WORKSPACE"
-            - echo "  PWD: $(pwd)"
-            - echo "  Node version: $(node --version)"
-            - echo "  Yarn version: $(yarn --version)"
-            - echo ""
-            - echo "📦 Installing dependencies..."
-            - yarn install --frozen-lockfile
-            - echo "✅ Dependencies installed successfully"
-            - echo ""
-            - echo "🔍 Running linting..."
-            - yarn lint
-            - echo "✅ Linting completed"
-            - echo ""
-            - echo "🔍 Running type checking..."
-            - yarn type-check
-            - echo "✅ Type checking completed"
-            - echo ""
-            - echo "🧪 Running tests..."
-            - yarn test:ci
-            - echo "✅ Tests completed"
-            - echo ""
-            - echo "🔒 Running security scan..."
-            - yarn security:scan
-            - echo "✅ Security scan completed"
-            - echo "🎉 Test & Lint step completed successfully!"
-          artifacts:
-            - node_modules/**
-            - .next/cache/**
-      - step:
-          name: Build & Push to Registry
-          services:
-            - docker
-          caches:
-            - yarn
-            - node_modules
-          script:
-            - echo "🐳 Starting Build & Push to Registry step..."
-            - echo "📋 Build Parameters:"
-            - echo "  BITBUCKET_COMMIT: $BITBUCKET_COMMIT"
-            - echo "  BITBUCKET_BRANCH: $BITBUCKET_BRANCH"
-            - echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-            - echo "  DOCKER_HUB_PASSWORD: $DOCKER_HUB_PASSWORD"
-            - echo "  PWD: $(pwd)"
-            - echo "  Docker version: $(docker --version)"
-            - echo ""
-            - export IMAGE_NAME=majali1/bookagri-website:prod-$BITBUCKET_COMMIT
-            - export IMAGE_NAME_LATEST=majali1/bookagri-website:latest
-            - echo "📦 Image Names:"
-            - echo "  IMAGE_NAME: $IMAGE_NAME"
-            - echo "  IMAGE_NAME_LATEST: $IMAGE_NAME_LATEST"
-            - echo ""
-            - echo "🔨 Building Docker image..."
-            - docker build -f Dockerfile.production -t $IMAGE_NAME -t $IMAGE_NAME_LATEST .
-            - echo "✅ Docker build completed successfully"
-            - echo ""
-            - echo "🔐 Logging into Docker Hub..."
-            - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
-            - echo "✅ Docker Hub login successful"
-            - echo ""
-            - echo "📤 Pushing images to registry..."
-            - docker push $IMAGE_NAME
-            - echo "✅ Pushed $IMAGE_NAME"
-            - docker push $IMAGE_NAME_LATEST
-            - echo "✅ Pushed $IMAGE_NAME_LATEST"
-            - echo ""
-            - echo "🧹 Cleaning up local images..."
-            - docker rmi $IMAGE_NAME $IMAGE_NAME_LATEST
-            - echo "✅ Local images cleaned up"
-            - echo "🎉 Build & Push to Registry step completed successfully!"
-          artifacts:
-            - $IMAGE_NAME
-      - step:
-          name: Deploy to Test
-          deployment: test
-          services:
-            - docker
-          script:
-            - echo "🚀 Starting Deploy to Test step..."
-            - echo "📋 Deployment Parameters:"
-            - echo "  BITBUCKET_COMMIT: $BITBUCKET_COMMIT"
-            - echo "  SSH_USER: $SSH_USER"
-            - echo "  SSH_SERVER: $SSH_SERVER"
-            - echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-            - echo "  DOCKER_HUB_PASSWORD: $DOCKER_HUB_PASSWORD"
-            - echo "  CONTAINERS_TO_STOP: $CONTAINERS_TO_STOP"
-            - echo "  SERVER_PORT: $SERVER_PORT"
-            - echo "  NEXT_PUBLIC_API_URL: $NEXT_PUBLIC_API_URL"
-            - echo ""
-            - export IMAGE_NAME=majali1/bookagri-website:prod-$BITBUCKET_COMMIT
-            - echo "📦 Image Name: $IMAGE_NAME"
-            - echo ""
-            - pipe: atlassian/ssh-run:0.8.0
-              variables:
-                SSH_USER: $SSH_USER
-                SERVER: $SSH_SERVER
-                COMMAND: |
-                  set -e
-                  echo "🚀 Starting deployment to test environment..."
-                  echo "📋 Server Parameters:"
-                  echo "  SSH_USER: $SSH_USER"
-                  echo "  SSH_SERVER: $SSH_SERVER"
-                  echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-                  echo "  CONTAINERS_TO_STOP: $CONTAINERS_TO_STOP"
-                  echo "  SERVER_PORT: $SERVER_PORT"
-                  echo "  NEXT_PUBLIC_API_URL: $NEXT_PUBLIC_API_URL"
-                  echo "  IMAGE_NAME: $IMAGE_NAME"
-                  echo ""
-                  echo "🔐 Logging into Docker Hub..."
-                  docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
-                  echo "✅ Docker Hub login successful"
-                  echo ""
-                  echo "📥 Pulling latest image..."
-                  docker pull $IMAGE_NAME
-                  echo "✅ Image pulled successfully"
-                  echo ""
-                  echo "🛑 Stopping existing container..."
-                  docker stop $CONTAINERS_TO_STOP || true
-                  echo "✅ Container stopped"
-                  echo ""
-                  echo "🗑️ Removing old container..."
-                  docker rm $CONTAINERS_TO_STOP || true
-                  echo "✅ Container removed"
-                  echo ""
-                  echo "🚀 Starting new container..."
-                  docker run -d \
-                    --name $CONTAINERS_TO_STOP \
-                    --restart unless-stopped \
-                    -p $SERVER_PORT:3000 \
-                    -e NEXT_PUBLIC_NODE_ENV=test \
-                    -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                    $IMAGE_NAME
-                  echo "✅ Container started successfully"
-                  echo ""
-                  echo "🧹 Cleaning up old images..."
-                  docker system prune -f
-                  echo "✅ Cleanup completed"
-                  echo ""
-                  echo "🏥 Checking container health..."
-                  sleep 10
-                  if curl -f http://localhost:$SERVER_PORT/api/health; then
-                    echo "✅ Health check passed"
-                  else
-                    echo "⚠️ Health check failed, but continuing..."
-                  fi
-                  echo "🎉 Test deployment completed successfully!"
-      - step:
-          name: Deploy to Staging
-          deployment: staging
-          trigger: manual
-          services:
-            - docker
-          script:
-            - echo "🚀 Starting Deploy to Staging step (Manual Trigger)..."
-            - echo "📋 Staging Deployment Parameters:"
-            - echo "  BITBUCKET_COMMIT: $BITBUCKET_COMMIT"
-            - echo "  SSH_USER: $SSH_USER"
-            - echo "  SSH_SERVER: $SSH_SERVER"
-            - echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-            - echo "  DOCKER_HUB_PASSWORD: $DOCKER_HUB_PASSWORD"
-            - echo "  CONTAINERS_TO_STOP_STAGING: $CONTAINERS_TO_STOP_STAGING"
-            - echo "  SERVER_PORT_STAGING: $SERVER_PORT_STAGING"
-            - echo "  NEXT_PUBLIC_API_URL: $NEXT_PUBLIC_API_URL"
-            - echo ""
-            - export IMAGE_NAME=majali1/bookagri-website:prod-$BITBUCKET_COMMIT
-            - echo "📦 Image Name: $IMAGE_NAME"
-            - echo ""
-            - pipe: atlassian/ssh-run:0.8.0
-              variables:
-                SSH_USER: $SSH_USER
-                SERVER: $SSH_SERVER
-                COMMAND: |
-                  set -e
-                  echo "🚀 Starting deployment to staging environment..."
-                  echo "📋 Staging Server Parameters:"
-                  echo "  SSH_USER: $SSH_USER"
-                  echo "  SSH_SERVER: $SSH_SERVER"
-                  echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-                  echo "  CONTAINERS_TO_STOP_STAGING: $CONTAINERS_TO_STOP_STAGING"
-                  echo "  SERVER_PORT_STAGING: $SERVER_PORT_STAGING"
-                  echo "  NEXT_PUBLIC_API_URL: $NEXT_PUBLIC_API_URL"
-                  echo "  IMAGE_NAME: $IMAGE_NAME"
-                  echo ""
-                  echo "🔐 Logging into Docker Hub..."
-                  docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
-                  echo "✅ Docker Hub login successful"
-                  echo ""
-                  echo "📥 Pulling latest image..."
-                  docker pull $IMAGE_NAME
-                  echo "✅ Image pulled successfully"
-                  echo ""
-                  echo "🛑 Stopping existing staging container..."
-                  docker stop $CONTAINERS_TO_STOP_STAGING || true
-                  echo "✅ Staging container stopped"
-                  echo ""
-                  echo "🗑️ Removing old staging container..."
-                  docker rm $CONTAINERS_TO_STOP_STAGING || true
-                  echo "✅ Staging container removed"
-                  echo ""
-                  echo "🚀 Starting new staging container..."
-                  docker run -d \
-                    --name $CONTAINERS_TO_STOP_STAGING \
-                    --restart unless-stopped \
-                    -p $SERVER_PORT_STAGING:3000 \
-                    -e NEXT_PUBLIC_NODE_ENV=staging \
-                    -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                    $IMAGE_NAME
-                  echo "✅ Staging container started successfully"
-                  echo ""
-                  echo "🧹 Cleaning up old images..."
-                  docker system prune -f
-                  echo "✅ Cleanup completed"
-                  echo ""
-                  echo "🏥 Checking staging container health..."
-                  sleep 10
-                  if curl -f http://localhost:$SERVER_PORT_STAGING/api/health; then
-                    echo "✅ Staging health check passed"
-                  else
-                    echo "⚠️ Staging health check failed, but continuing..."
-                  fi
-                  echo "🎉 Staging deployment completed successfully!"
-      - step:
-          name: Deploy to Production
-          deployment: production
-          trigger: manual
-          services:
-            - docker
-          script:
-            - echo "🚀 Starting Deploy to Production step (Manual Trigger)..."
-            - echo "📋 Production Deployment Parameters:"
-            - echo "  BITBUCKET_COMMIT: $BITBUCKET_COMMIT"
-            - echo "  SSH_USER: $SSH_USER"
-            - echo "  SSH_SERVER: $SSH_SERVER"
-            - echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-            - echo "  DOCKER_HUB_PASSWORD: $DOCKER_HUB_PASSWORD"
-            - echo "  CONTAINERS_TO_STOP: $CONTAINERS_TO_STOP"
-            - echo "  SERVER_PORT: $SERVER_PORT"
-            - echo "  NEXT_PUBLIC_API_URL: $NEXT_PUBLIC_API_URL"
-            - echo ""
-            - export IMAGE_NAME=majali1/bookagri-website:prod-$BITBUCKET_COMMIT
-            - echo "📦 Image Name: $IMAGE_NAME"
-            - echo ""
-            - pipe: atlassian/ssh-run:0.8.0
-              variables:
-                SSH_USER: $SSH_USER
-                SERVER: $SSH_SERVER
-                COMMAND: |
-                  set -e
-                  echo "🚀 Starting production deployment..."
-                  echo "📋 Production Server Parameters:"
-                  echo "  SSH_USER: $SSH_USER"
-                  echo "  SSH_SERVER: $SSH_SERVER"
-                  echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-                  echo "  CONTAINERS_TO_STOP: $CONTAINERS_TO_STOP"
-                  echo "  SERVER_PORT: $SERVER_PORT"
-                  echo "  NEXT_PUBLIC_API_URL: $NEXT_PUBLIC_API_URL"
-                  echo "  IMAGE_NAME: $IMAGE_NAME"
-                  echo ""
-                  echo "🔐 Logging into Docker Hub..."
-                  docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
-                  echo "✅ Docker Hub login successful"
-                  echo ""
-                  echo "📥 Pulling latest image..."
-                  docker pull $IMAGE_NAME
-                  echo "✅ Image pulled successfully"
-                  echo ""
-                  echo "💾 Creating backup of current deployment..."
-                  docker tag $CONTAINERS_TO_STOP $CONTAINERS_TO_STOP-backup-$(date +%Y%m%d-%H%M%S) || true
-                  echo "✅ Backup created"
-                  echo ""
-                  echo "🛑 Stopping existing production container..."
-                  docker stop $CONTAINERS_TO_STOP || true
-                  echo "✅ Production container stopped"
-                  echo ""
-                  echo "🗑️ Removing old production container..."
-                  docker rm $CONTAINERS_TO_STOP || true
-                  echo "✅ Production container removed"
-                  echo ""
-                  echo "🚀 Starting new production container..."
-                  docker run -d \
-                    --name $CONTAINERS_TO_STOP \
-                    --restart unless-stopped \
-                    -p $SERVER_PORT:3000 \
-                    -e NEXT_PUBLIC_NODE_ENV=production \
-                    -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                    $IMAGE_NAME
-                  echo "✅ Production container started successfully"
-                  echo ""
-                  echo "🏥 Checking production container health..."
-                  sleep 10
-                  if curl -f http://localhost:$SERVER_PORT/api/health; then
-                    echo "✅ Production health check passed"
-                    echo "🧹 Cleaning up old backups (keep last 3)..."
-                    docker images | grep $CONTAINERS_TO_STOP-backup | tail -n +4 | awk '{print $3}' | xargs -r docker rmi
-                    echo "✅ Old backups cleaned up"
-                  else
-                    echo "❌ Health check failed, rolling back..."
-                    echo "🛑 Stopping new container..."
-                    docker stop $CONTAINERS_TO_STOP
-                    echo "🗑️ Removing new container..."
-                    docker rm $CONTAINERS_TO_STOP
-                    echo "🔄 Restoring backup..."
-                    docker tag $CONTAINERS_TO_STOP-backup-$(date +%Y%m%d-%H%M%S) $CONTAINERS_TO_STOP
-                    echo "🚀 Starting backup container..."
-                    docker run -d \
-                      --name $CONTAINERS_TO_STOP \
-                      --restart unless-stopped \
-                      -p $SERVER_PORT:3000 \
-                      -e NEXT_PUBLIC_NODE_ENV=production \
-                      -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                      $CONTAINERS_TO_STOP
-                    echo "✅ Rollback completed"
-                    exit 1
-                  fi
-                  echo ""
-                  echo "🧹 Cleaning up old images..."
-                  docker system prune -f
-                  echo "✅ Cleanup completed"
-                  echo "🎉 Production deployment completed successfully!"
-
     staging:
-      - step:
-          name: Test & Lint
-          caches:
-            - yarn
-            - node_modules
-          script:
-            - echo "🔍 Starting Test & Lint step (Staging)..."
-            - echo "📋 Environment Variables:"
-            - echo "  NODE_ENV: $NODE_ENV"
-            - echo "  BITBUCKET_COMMIT: $BITBUCKET_COMMIT"
-            - echo "  BITBUCKET_BRANCH: $BITBUCKET_BRANCH"
-            - echo "  PWD: $(pwd)"
-            - echo "  Node version: $(node --version)"
-            - echo "  Yarn version: $(yarn --version)"
-            - echo ""
-            - echo "📦 Installing dependencies..."
-            - yarn install --frozen-lockfile
-            - echo "✅ Dependencies installed successfully"
-            - echo ""
-            - echo "🔍 Running linting..."
-            - yarn lint
-            - echo "✅ Linting completed"
-            - echo ""
-            - echo "🔍 Running type checking..."
-            - yarn type-check
-            - echo "✅ Type checking completed"
-            - echo ""
-            - echo "🧪 Running tests..."
-            - yarn test:ci
-            - echo "✅ Tests completed"
-            - echo "🎉 Test & Lint step completed successfully!"
-          artifacts:
-            - node_modules/**
-            - .next/cache/**
-      - step:
-          name: Build & Push to Registry
-          services:
-            - docker
-          caches:
-            - yarn
-            - node_modules
-          script:
-            - echo "🐳 Starting Build & Push to Registry step (Staging)..."
-            - echo "📋 Build Parameters:"
-            - echo "  BITBUCKET_COMMIT: $BITBUCKET_COMMIT"
-            - echo "  BITBUCKET_BRANCH: $BITBUCKET_BRANCH"
-            - echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-            - echo "  DOCKER_HUB_PASSWORD: $DOCKER_HUB_PASSWORD"
-            - echo "  PWD: $(pwd)"
-            - echo "  Docker version: $(docker --version)"
-            - echo ""
-            - export IMAGE_NAME=majali1/bookagri-website:staging-$BITBUCKET_COMMIT
-            - export IMAGE_NAME_LATEST=majali1/bookagri-website:staging-latest
-            - echo "📦 Image Names:"
-            - echo "  IMAGE_NAME: $IMAGE_NAME"
-            - echo "  IMAGE_NAME_LATEST: $IMAGE_NAME_LATEST"
-            - echo ""
-            - echo "🔨 Building Docker image..."
-            - docker build -f Dockerfile.staging -t $IMAGE_NAME -t $IMAGE_NAME_LATEST .
-            - echo "✅ Docker build completed successfully"
-            - echo ""
-            - echo "🔐 Logging into Docker Hub..."
-            - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
-            - echo "✅ Docker Hub login successful"
-            - echo ""
-            - echo "📤 Pushing images to registry..."
-            - docker push $IMAGE_NAME
-            - echo "✅ Pushed $IMAGE_NAME"
-            - docker push $IMAGE_NAME_LATEST
-            - echo "✅ Pushed $IMAGE_NAME_LATEST"
-            - echo ""
-            - echo "🧹 Cleaning up local images..."
-            - docker rmi $IMAGE_NAME $IMAGE_NAME_LATEST
-            - echo "✅ Local images cleaned up"
-            - echo "🎉 Build & Push to Registry step completed successfully!"
-          artifacts:
-            - $IMAGE_NAME
-      - step:
-          name: Deploy to Staging
-          deployment: staging
-          services:
-            - docker
-          script:
-            - echo "🚀 Starting Deploy to Staging step..."
-            - echo "📋 Staging Deployment Parameters:"
-            - echo "  BITBUCKET_COMMIT: $BITBUCKET_COMMIT"
-            - echo "  SSH_USER: $SSH_USER"
-            - echo "  SSH_SERVER: $SSH_SERVER"
-            - echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-            - echo "  DOCKER_HUB_PASSWORD: $DOCKER_HUB_PASSWORD"
-            - echo "  CONTAINERS_TO_STOP_STAGING: $CONTAINERS_TO_STOP_STAGING"
-            - echo "  SERVER_PORT_STAGING: $SERVER_PORT_STAGING"
-            - echo "  NEXT_PUBLIC_API_URL: $NEXT_PUBLIC_API_URL"
-            - echo ""
-            - export IMAGE_NAME=majali1/bookagri-website:staging-$BITBUCKET_COMMIT
-            - echo "📦 Image Name: $IMAGE_NAME"
-            - echo ""
-            - pipe: atlassian/ssh-run:0.8.0
-              variables:
-                SSH_USER: $SSH_USER
-                SERVER: $SSH_SERVER
-                COMMAND: |
-                  set -e
-                  echo "🚀 Starting deployment to staging environment..."
-                  echo "📋 Staging Server Parameters:"
-                  echo "  SSH_USER: $SSH_USER"
-                  echo "  SSH_SERVER: $SSH_SERVER"
-                  echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-                  echo "  CONTAINERS_TO_STOP_STAGING: $CONTAINERS_TO_STOP_STAGING"
-                  echo "  SERVER_PORT_STAGING: $SERVER_PORT_STAGING"
-                  echo "  NEXT_PUBLIC_API_URL: $NEXT_PUBLIC_API_URL"
-                  echo "  IMAGE_NAME: $IMAGE_NAME"
-                  echo ""
-                  echo "🔐 Logging into Docker Hub..."
-                  docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
-                  echo "✅ Docker Hub login successful"
-                  echo ""
-                  echo "📥 Pulling latest image..."
-                  docker pull $IMAGE_NAME
-                  echo "✅ Image pulled successfully"
-                  echo ""
-                  echo "🛑 Stopping existing staging container..."
-                  docker stop $CONTAINERS_TO_STOP_STAGING || true
-                  echo "✅ Staging container stopped"
-                  echo ""
-                  echo "🗑️ Removing old staging container..."
-                  docker rm $CONTAINERS_TO_STOP_STAGING || true
-                  echo "✅ Staging container removed"
-                  echo ""
-                  echo "🚀 Starting new staging container..."
-                  docker run -d \
-                    --name $CONTAINERS_TO_STOP_STAGING \
-                    --restart unless-stopped \
-                    -p $SERVER_PORT_STAGING:3000 \
-                    -e NEXT_PUBLIC_NODE_ENV=staging \
-                    -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                    $IMAGE_NAME
-                  echo "✅ Staging container started successfully"
-                  echo ""
-                  echo "🧹 Cleaning up old images..."
-                  docker system prune -f
-                  echo "✅ Cleanup completed"
-                  echo ""
-                  echo "🏥 Checking staging container health..."
-                  sleep 10
-                  if curl -f http://localhost:$SERVER_PORT_STAGING/api/health; then
-                    echo "✅ Staging health check passed"
-                  else
-                    echo "⚠️ Staging health check failed, but continuing..."
-                  fi
-                  echo "🎉 Staging deployment completed successfully!"
+      - step: *build-and-push-staging
+      - step: *deploy-staging
+
+    production:
+      - step: *build-and-push-production
+      - step: *deploy-production
 
   pull-requests:
     '**':
       - step:
-          name: Test & Lint
-          caches:
-            - yarn
-            - node_modules
+          name: Lint and Test
           script:
-            - echo "🔍 Starting Test & Lint step (Pull Request)..."
-            - echo "📋 Environment Variables:"
-            - echo "  NODE_ENV: $NODE_ENV"
-            - echo "  BITBUCKET_COMMIT: $BITBUCKET_COMMIT"
-            - echo "  BITBUCKET_BRANCH: $BITBUCKET_BRANCH"
-            - echo "  PWD: $(pwd)"
-            - echo "  Node version: $(node --version)"
-            - echo "  Yarn version: $(yarn --version)"
-            - echo ""
-            - echo "📦 Installing dependencies..."
-            - yarn install --frozen-lockfile
-            - echo "✅ Dependencies installed successfully"
-            - echo ""
-            - echo "🔍 Running linting..."
-            - yarn lint
-            - echo "✅ Linting completed"
-            - echo ""
-            - echo "🔍 Running type checking..."
-            - yarn type-check
-            - echo "✅ Type checking completed"
-            - echo ""
-            - echo "🧪 Running tests..."
-            - yarn test:ci
-            - echo "✅ Tests completed"
-            - echo "🎉 Test & Lint step completed successfully!"
-          artifacts:
-            - node_modules/**
-            - .next/cache/**
+            - npm ci
+            - npm run lint
+            - npm run type-check
+            - echo "Code quality checks passed"
 
   custom:
-    manual-deploy:
-      - variables:
-          - name: ENVIRONMENT
-            default: staging
-            allowed-values:
-              - test
-              - staging
-              - production
-          - name: VERSION
-            default: latest
+    manual-deploy-staging:
       - step:
-          name: Manual Deploy
-          deployment: $ENVIRONMENT
-          services:
-            - docker
+          name: Manual Deploy to Staging
           script:
-            - echo "🚀 Starting Manual Deploy step..."
-            - echo "📋 Manual Deploy Parameters:"
-            - echo "  ENVIRONMENT: $ENVIRONMENT"
-            - echo "  VERSION: $VERSION"
-            - echo "  BITBUCKET_COMMIT: $BITBUCKET_COMMIT"
-            - echo "  SSH_USER: $SSH_USER"
-            - echo "  SSH_SERVER: $SSH_SERVER"
-            - echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-            - echo "  DOCKER_HUB_PASSWORD: $DOCKER_HUB_PASSWORD"
-            - echo "  PWD: $(pwd)"
-            - echo "  Docker version: $(docker --version)"
-            - echo ""
-            - export IMAGE_NAME=majali1/bookagri-website:$ENVIRONMENT-$VERSION
-            - echo "📦 Image Name: $IMAGE_NAME"
-            - echo ""
-            - pipe: atlassian/ssh-run:0.8.0
+            - echo "Manual staging deployment triggered"
+            - export IMAGE_NAME=majali1/bookagri-website:staging-$BITBUCKET_COMMIT
+            - export DOCKERFILE=Dockerfile.staging
+            - echo "Deploying to STAGING environment"
+            - docker build \
+                --build-arg NODE_ENV=staging \
+                --build-arg NEXT_PUBLIC_NODE_ENV=deployment \
+                --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+                -f $DOCKERFILE \
+                -t $IMAGE_NAME .
+            - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+            - docker push $IMAGE_NAME
+            - pipe: atlassian/ssh-run:0.6.1
               variables:
                 SSH_USER: $SSH_USER
                 SERVER: $SSH_SERVER
                 COMMAND: |
-                  set -e
-                  echo "🚀 Starting manual deployment to $ENVIRONMENT environment..."
-                  echo "📋 Manual Deploy Server Parameters:"
-                  echo "  ENVIRONMENT: $ENVIRONMENT"
-                  echo "  VERSION: $VERSION"
-                  echo "  SSH_USER: $SSH_USER"
-                  echo "  SSH_SERVER: $SSH_SERVER"
-                  echo "  DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"
-                  echo "  IMAGE_NAME: $IMAGE_NAME"
-                  echo ""
-                  echo "🔐 Logging into Docker Hub..."
-                  docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
-                  echo "✅ Docker Hub login successful"
-                  echo ""
-                  echo "📥 Pulling latest image..."
+                  docker stop $CONTAINERS_TO_STOP_STAGING || true
+                  docker rm $CONTAINERS_TO_STOP_STAGING || true
                   docker pull $IMAGE_NAME
-                  echo "✅ Image pulled successfully"
-                  echo ""
-                  if [ "$ENVIRONMENT" = "staging" ]; then
-                    CONTAINER_NAME=$CONTAINERS_TO_STOP_STAGING
-                    PORT=$SERVER_PORT_STAGING
-                    echo "🎯 Using staging configuration:"
-                    echo "  CONTAINER_NAME: $CONTAINER_NAME"
-                    echo "  PORT: $PORT"
-                  else
-                    CONTAINER_NAME=$CONTAINERS_TO_STOP
-                    PORT=$SERVER_PORT
-                    echo "🎯 Using production configuration:"
-                    echo "  CONTAINER_NAME: $CONTAINER_NAME"
-                    echo "  PORT: $PORT"
-                  fi
-                  echo ""
-                  echo "🛑 Stopping existing container..."
-                  docker stop $CONTAINER_NAME || true
-                  echo "✅ Container stopped"
-                  echo ""
-                  echo "🗑️ Removing old container..."
-                  docker rm $CONTAINER_NAME || true
-                  echo "✅ Container removed"
-                  echo ""
-                  echo "🚀 Starting new container..."
-                  docker run -d \
-                    --name $CONTAINER_NAME \
+                  docker run -p $SERVER_PORT_STAGING:3000 \
+                    --name $CONTAINERS_TO_STOP_STAGING \
                     --restart unless-stopped \
-                    -p $PORT:3000 \
-                    -e NEXT_PUBLIC_NODE_ENV=$ENVIRONMENT \
+                    -e NODE_ENV=staging \
+                    -e NEXT_PUBLIC_NODE_ENV=deployment \
                     -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-                    $IMAGE_NAME
-                  echo "✅ Container started successfully"
-                  echo ""
-                  echo "🧹 Cleaning up old images..."
-                  docker system prune -f
-                  echo "✅ Cleanup completed"
-                  echo ""
-                  echo "🏥 Checking container health..."
-                  sleep 10
-                  if curl -f http://localhost:$PORT/api/health; then
-                    echo "✅ Health check passed"
-                  else
-                    echo "⚠️ Health check failed, but continuing..."
-                  fi
-                  echo "🎉 Manual deployment to $ENVIRONMENT completed successfully!"
+                    -d $IMAGE_NAME
+          services:
+            - docker
+
+    manual-deploy-production:
+      - step:
+          name: Manual Deploy to Production
+          script:
+            - echo "Manual production deployment triggered"
+            - export IMAGE_NAME=majali1/bookagri-website:production-$BITBUCKET_COMMIT
+            - export DOCKERFILE=Dockerfile.production
+            - echo "Deploying to PRODUCTION environment"
+            - docker build \
+                --build-arg NODE_ENV=production \
+                --build-arg NEXT_PUBLIC_NODE_ENV=deployment \
+                --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+                -f $DOCKERFILE \
+                -t $IMAGE_NAME .
+            - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+            - docker push $IMAGE_NAME
+            - pipe: atlassian/ssh-run:0.6.1
+              variables:
+                SSH_USER: $SSH_USER
+                SERVER: $SSH_SERVER
+                COMMAND: |
+                  docker stop $CONTAINERS_TO_STOP || true
+                  docker rm $CONTAINERS_TO_STOP || true
+                  docker pull $IMAGE_NAME
+                  docker run -p $SERVER_PORT:3000 \
+                    --name $CONTAINERS_TO_STOP \
+                    --restart unless-stopped \
+                    -e NODE_ENV=production \
+                    -e NEXT_PUBLIC_NODE_ENV=deployment \
+                    -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+                    -d $IMAGE_NAME
+          services:
+            - docker
