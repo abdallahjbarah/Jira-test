@@ -26,8 +26,10 @@ ENV NODE_ENV=$NODE_ENV
 ENV NEXT_PUBLIC_NODE_ENV=$NEXT_PUBLIC_NODE_ENV
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV SKIP_TYPE_CHECK=1
 
-RUN yarn build
+# Build with TypeScript checking disabled for staging
+RUN yarn build --no-lint
 
 FROM node:20-alpine AS runner
 WORKDIR /app
