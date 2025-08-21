@@ -1,20 +1,20 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { toast } from 'react-toastify';
 import FormInput from '@/components/form/FormInput';
-import { useUserLogin } from '@/lib/apis/auth/useLogin';
-import { WretchError } from 'wretch';
-import { setCookie } from '@/utils/cookies';
-import { useQueryClient } from '@tanstack/react-query';
-import { TOKEN_NAME } from '@/utils';
 import PasswordInput from '@/components/form/PasswordInput';
-import { useTranslation } from '@/contexts/TranslationContext';
-import CustomLink from '@/components/ui/CustomLink';
 import SocialLoginButton from '@/components/shared/SocialLoginButton';
+import CustomLink from '@/components/ui/CustomLink';
+import { useTranslation } from '@/contexts/TranslationContext';
+import { useUserLogin } from '@/lib/apis/auth/useLogin';
+import { TOKEN_NAME } from '@/utils';
+import { setCookie } from '@/utils/cookies';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { WretchError } from 'wretch';
+import * as yup from 'yup';
 
 interface LoginFormValues {
   email: string;
@@ -33,11 +33,31 @@ export default function LoginPage() {
 
   const { mutate: login, isPending } = useUserLogin({
     onSuccess: data => {
-      queryClient.setQueryData(['user'], data);
-      setCookie(TOKEN_NAME, data.token);
-      setCookie('userStatus', data.user.status);
-      toast.success(t('auth.login.loggedInSuccess'));
-      router.push('/');
+      if (data.user.status === 3) {
+        // User needs verification - store data temporarily
+        sessionStorage.setItem(
+          'tempAuthData',
+          JSON.stringify({
+            token: data.token,
+            user: data.user,
+          })
+        );
+
+        toast.success(t('auth.login.verificationRequired'));
+        router.push(
+          `/auth/verify?email=${encodeURIComponent(data.user.email)}`
+        );
+      } else if (data.user.status === 1) {
+        // User is active - save data immediately and navigate to home
+        queryClient.setQueryData(['user'], data);
+        setCookie(TOKEN_NAME, data.token);
+        setCookie('userStatus', data.user.status);
+        toast.success(t('auth.login.loggedInSuccess'));
+        router.push('/');
+      } else {
+        // Handle other statuses
+        toast.error(t('auth.login.accountNotActive'));
+      }
     },
     onError: (error: WretchError) => {
       toast.error(error.json.message);

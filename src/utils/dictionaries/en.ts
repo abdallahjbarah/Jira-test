@@ -305,6 +305,8 @@ const en = {
       noAccount: "Don't have an account?",
       signUp: 'Sign Up',
       or: 'Or',
+      verificationRequired: 'Please verify your email to continue',
+      accountNotActive: 'Account is not active. Please contact support.',
     },
     signup: {
       title: 'Sign Up',
@@ -384,6 +386,7 @@ const en = {
       signInFailed: 'Failed to sign in with',
       unsupportedProvider: 'Unsupported provider',
     },
+    dataProcessingError: 'Data processing error. Please try again later.',
   },
   helpCenter: {
     title: 'Help Center',

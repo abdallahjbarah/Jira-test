@@ -1,15 +1,18 @@
 'use client';
 
-import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Formik, Form, FormikHelpers } from 'formik';
-import { toast } from 'react-toastify';
-import { useVerifyCode } from '@/lib/apis/users/useVerifyCode';
-import useUser from '@/utils/hooks/useUser';
-import { ApprovalStatus } from '@/lib/enums';
-import { setCookie } from '@/utils/cookies';
-import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { useVerifyCode } from '@/lib/apis/users/useVerifyCode';
+import { ApprovalStatus } from '@/lib/enums';
+import { TOKEN_NAME } from '@/utils';
+import { setCookie } from '@/utils/cookies';
+import useUser from '@/utils/hooks/useUser';
+import { useQueryClient } from '@tanstack/react-query';
+import { Form, Formik, FormikHelpers } from 'formik';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React from 'react';
+import { toast } from 'react-toastify';
+import { WretchError } from 'wretch';
+import { useReSendVerificationCode } from '../../../../lib/apis/auth/useReSendVerificationCode';
 
 interface VerificationFormValues {
   code0: string;
@@ -25,22 +28,103 @@ export default function VerifyPage(): React.ReactElement {
   const searchParams = useSearchParams();
   const type = searchParams.get('type');
   const { t } = useTranslation();
+  const {
+    mutate: reSendVerificationCode,
+    isPending: isReSendVerificationCodeLoading,
+  } = useReSendVerificationCode({
+    onSuccess: data => {
+      toast.success(data.message);
+      setTimeLeft(60);
+      setIsTimerActive(true);
+      setCanResend(false);
+    },
+    onError: (error: WretchError) => {
+      toast.error(error.json.message);
+    },
+  });
+
+  // Timer state
+  const [timeLeft, setTimeLeft] = React.useState(60); // 60 seconds = 1 minute
+  const [isTimerActive, setIsTimerActive] = React.useState(true);
+  const [canResend, setCanResend] = React.useState(false);
+
+  // Timer countdown effect
+  React.useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (isTimerActive && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(prevTime => {
+          if (prevTime <= 1) {
+            setIsTimerActive(false);
+            setCanResend(true);
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isTimerActive, timeLeft]);
+
+  // Format time as MM:SS
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Handle resend code
+  const handleResendCode = () => {
+    reSendVerificationCode({ email: userEmail });
+  };
 
   const { mutate: verifyCode, isPending: isVerifyCodeLoading } = useVerifyCode({
     onSuccess: () => {
       toast.success(t('auth.verify.verifySuccess'));
+
       if (type === 'forgot-password') {
         router.push(`/auth/reset-password?email=${userEmail}`);
       } else {
-        setCookie('userStatus', ApprovalStatus.ACTIVE.toString());
-        queryClient.setQueryData(['user'], (oldData: any) => {
-          return {
-            ...oldData,
-            user: { ...oldData.user, status: ApprovalStatus.ACTIVE },
-          };
-        });
+        // Retrieve temporary auth data and save it permanently
+        const tempAuthData = sessionStorage.getItem('tempAuthData');
+        if (tempAuthData) {
+          try {
+            const { token, user } = JSON.parse(tempAuthData);
 
-        router.push('/auth/welcome');
+            // Update user status to active
+            const updatedUser = { ...user, status: ApprovalStatus.ACTIVE };
+            const updatedData = { token, user: updatedUser };
+
+            // Save to persistent storage
+            setCookie(TOKEN_NAME, token);
+            setCookie('userStatus', ApprovalStatus.ACTIVE.toString());
+            queryClient.setQueryData(['user'], updatedData);
+
+            // Clear temporary data
+            sessionStorage.removeItem('tempAuthData');
+
+            router.push('/auth/welcome');
+          } catch (error) {
+            console.error('Error processing verification data:', error);
+            toast.error(t('auth.verify.dataProcessingError'));
+          }
+        } else {
+          // Fallback if no temp data found
+          setCookie('userStatus', ApprovalStatus.ACTIVE.toString());
+          queryClient.setQueryData(['user'], (oldData: any) => {
+            return {
+              ...oldData,
+              user: { ...oldData.user, status: ApprovalStatus.ACTIVE },
+            };
+          });
+          router.push('/auth/welcome');
+        }
       }
     },
     onError: () => {
@@ -210,13 +294,22 @@ export default function VerifyPage(): React.ReactElement {
             <p className='text-[12px] sm:text-[13px] font-normal leading-[15px] sm:leading-[16px] text-[#555555]'>
               {t('auth.verify.didntReceiveCode')}
             </p>
-            <button
-              type='button'
-              className='text-[12px] sm:text-[13px] font-bold leading-[15px] sm:leading-[16px] text-[#47C409] hover:text-[#3ba007] transition-colors'
-              onClick={() => {}}
-            >
-              {t('auth.verify.resendCode')}
-            </button>
+
+            {isTimerActive && timeLeft > 0 ? (
+              <div className='flex flex-col items-center space-y-2'>
+                <div className='text-[16px] sm:text-[18px] font-bold text-[#47C409]'>
+                  {formatTime(timeLeft)}
+                </div>
+              </div>
+            ) : (
+              <button
+                type='button'
+                className='text-[12px] sm:text-[13px] font-bold leading-[15px] sm:leading-[16px] text-[#47C409] hover:text-[#3ba007] transition-colors'
+                onClick={handleResendCode}
+              >
+                {t('auth.verify.resendCode')}
+              </button>
+            )}
           </div>
         </div>
       </div>

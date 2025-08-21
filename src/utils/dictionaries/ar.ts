@@ -321,6 +321,8 @@ const ar = {
       noAccount: 'ليس لديك حساب؟',
       signUp: 'إنشاء حساب',
       or: 'أو',
+      verificationRequired: 'يرجى التحقق من بريدك الإلكتروني للمتابعة',
+      accountNotActive: 'الحساب غير نشط. يرجى التواصل مع الدعم.',
     },
     signup: {
       title: 'إنشاء حساب',
@@ -371,6 +373,8 @@ const ar = {
       didntReceiveCode: 'لم تستلم الرمز؟',
       verifySuccess: 'تم التحقق من الحساب بنجاح!',
       verifyFailed: 'فشل التحقق من الحساب. يرجى المحاولة مرة أخرى.',
+      dataProcessingError:
+        'خطأ في معالجة البيانات. يرجى المحاولة مرة أخرى لاحقاً.',
     },
     welcome: {
       title: 'مرحباً بك في بوكاجري',

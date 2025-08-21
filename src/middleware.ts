@@ -57,6 +57,21 @@ export function middleware(request: NextRequest) {
       pathname.startsWith(`/${loc}/auth/signup`)
   );
 
+  const isVerifyPath = locales.some(loc =>
+    pathname.startsWith(`/${loc}/auth/verify`)
+  );
+
+  if (isVerifyPath) {
+    const email = request.nextUrl.searchParams.get('email');
+    const type = request.nextUrl.searchParams.get('type');
+
+    if (!email && type !== 'forgot-password') {
+      return NextResponse.redirect(
+        new URL(`/${locale}/auth/login`, request.url)
+      );
+    }
+  }
+
   if (
     userStatus === ApprovalStatus.PENDING.toString() &&
     (isProfilePath || isMyBookingsPath || isWishlistPath)

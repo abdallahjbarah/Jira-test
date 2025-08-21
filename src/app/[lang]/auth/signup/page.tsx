@@ -1,28 +1,26 @@
 'use client';
 
-import React from 'react';
+import FormInput from '@/components/form/FormInput';
+import PasswordInput from '@/components/form/PasswordInput';
+import PhoneNumberInput from '@/components/form/PhoneNumberInput';
+import SocialLoginButton from '@/components/shared/SocialLoginButton';
+import Checkbox from '@/components/ui/Checkbox';
+import CustomLink from '@/components/ui/CustomLink';
+import { useTranslation } from '@/contexts/TranslationContext';
+import { useSignup } from '@/lib/apis/auth/useSignup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useQueryClient } from '@tanstack/react-query';
+import { SignUpSchema } from '@utils/formsSchemas';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 import {
-  useForm,
-  SubmitHandler,
   Controller,
   FormProvider,
+  SubmitHandler,
+  useForm,
 } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { SignUpSchema } from '@utils/formsSchemas';
 import { toast } from 'react-toastify';
-import FormInput from '@/components/form/FormInput';
-import Checkbox from '@/components/ui/Checkbox';
-import PasswordInput from '@/components/form/PasswordInput';
-import { useSignup } from '@/lib/apis/auth/useSignup';
-import PhoneNumberInput from '@/components/form/PhoneNumberInput';
-import { setCookie } from '@/utils/cookies';
-import { TOKEN_NAME } from '@/utils';
-import { useQueryClient } from '@tanstack/react-query';
 import { WretchError } from 'wretch';
-import { useTranslation } from '@/contexts/TranslationContext';
-import CustomLink from '@/components/ui/CustomLink';
-import SocialLoginButton from '@/components/shared/SocialLoginButton';
 interface SignUpFormValues {
   firstName: string;
   lastName: string;
@@ -48,9 +46,15 @@ export default function SignUpPage(): React.ReactElement {
 
   const { mutate: signUpMutate, isPending: isSignUpLoading } = useSignup({
     onSuccess: data => {
-      setCookie(TOKEN_NAME, data.token);
-      setCookie('userStatus', data.user.status);
-      queryClient.setQueryData(['user'], data);
+      // Store data temporarily in sessionStorage for verification flow
+      // Don't save to cookies/queryClient until verification is complete
+      sessionStorage.setItem(
+        'tempAuthData',
+        JSON.stringify({
+          token: data.token,
+          user: data.user,
+        })
+      );
 
       toast.success(t('auth.signup.accountCreatedSuccess'));
       router.push(

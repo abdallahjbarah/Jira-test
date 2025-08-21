@@ -1,4 +1,4 @@
-import { NotificationPaths, Gender } from '../enums';
+import { Gender, NotificationPaths } from '../enums';
 
 export interface UserLoginResponse {
   user: User;
@@ -550,108 +550,112 @@ export interface SSOProvider {
   user: any;
 }
 
-
 export interface SimilarExperiencesResponse {
-  totalCount: number
-  similarSites: SimilarSite[]
+  totalCount: number;
+  similarSites: SimilarSite[];
 }
 
 export interface SimilarSite {
-  location: Location
-  _id?: string
-  status?: number
-  site_setup_status?: number
-  type?: string
-  name?: string
-  longDescription?: string
-  bookagriBadge?: boolean
-  cancellationPolicy?: string
-  cancellationTime?: number
-  specialInstructions?: string
-  host?: string
-  amenities?: string[]
-  bookOptions?: string[]
-  accessibilityFeatures?: string[]
-  googleLocationLink?: string
-  capacity?: number
-  whatToExpect?: WhatToExpect
-  ageSuitability?: number
-  levelOfDifficulty?: string
-  extras?: Extra[]
-  city?: string
-  country?: Country
-  images?: string[]
-  videos?: any[]
-  pricingInformation?: PricingInformation[]
-  guide?: Guide
-  guideIsMandatory?: boolean
-  transportation?: Transportation
-  transportationIsMandatory?: boolean
-  languages?: any[]
-  experienceTypes?: string[]
-  createdAt?: string
-  updatedAt?: string
-  __v?: number
-  coHost?: CoHost
-  mainImage?: string
-  schedule?: Schedule
-  guideIsIncluded?: boolean
-  transportationIsIncluded?: boolean
-  itineraryStops?: ItineraryStop[]
-  duration?: number
-  thingsToKnow?: string
-  airportIsIncluded?: boolean
-  wheelChair?: boolean
-  paymentMethod?: any[]
-  accessProvider?: boolean
+  location: Location;
+  _id?: string;
+  status?: number;
+  site_setup_status?: number;
+  type?: string;
+  name?: string;
+  longDescription?: string;
+  bookagriBadge?: boolean;
+  cancellationPolicy?: string;
+  cancellationTime?: number;
+  specialInstructions?: string;
+  host?: string;
+  amenities?: string[];
+  bookOptions?: string[];
+  accessibilityFeatures?: string[];
+  googleLocationLink?: string;
+  capacity?: number;
+  whatToExpect?: WhatToExpect;
+  ageSuitability?: number;
+  levelOfDifficulty?: string;
+  extras?: Extra[];
+  city?: string;
+  country?: Country;
+  images?: string[];
+  videos?: any[];
+  pricingInformation?: PricingInformation[];
+  guide?: Guide;
+  guideIsMandatory?: boolean;
+  transportation?: Transportation;
+  transportationIsMandatory?: boolean;
+  languages?: any[];
+  experienceTypes?: string[];
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+  coHost?: CoHost;
+  mainImage?: string;
+  schedule?: Schedule;
+  guideIsIncluded?: boolean;
+  transportationIsIncluded?: boolean;
+  itineraryStops?: ItineraryStop[];
+  duration?: number;
+  thingsToKnow?: string;
+  airportIsIncluded?: boolean;
+  wheelChair?: boolean;
+  paymentMethod?: any[];
+  accessProvider?: boolean;
 }
 
 export interface Location {
-  type: string
-  coordinates: number[]
+  type: string;
+  coordinates: number[];
 }
 
 export interface WhatToExpect {
-  images: any[]
-  description: string
+  images: any[];
+  description: string;
 }
 
 export interface Country {
-  _id: string
-  name: string
-  iso3: string
+  _id: string;
+  name: string;
+  iso3: string;
 }
 
 export interface Guide {
-  description: string
-  languages: string[]
-  price: number
-  learnMore: string
+  description: string;
+  languages: string[];
+  price: number;
+  learnMore: string;
 }
 
 export interface Transportation {
-  description: string
-  price: number
-  learnMore: string
+  description: string;
+  price: number;
+  learnMore: string;
 }
 
 export interface CoHost {
-  firstName: string
-  lastName: string
-  description: string
-  languages: string[]
-  image: string
+  firstName: string;
+  lastName: string;
+  description: string;
+  languages: string[];
+  image: string;
 }
 
 export interface Schedule {
-  startDateTime: number
-  endDateTime: number
-  days: any[]
+  startDateTime: number;
+  endDateTime: number;
+  days: any[];
 }
 
 export interface ItineraryStop {
-  title: string
-  locationURL: string
-  details: string
-  duration: number
+  title: string;
+  locationURL: string;
+  details: string;
+  duration: number;
+}
+
+export interface ReSendVerificationCodeResponse {
+  message: string;
+  email: string;
 }
