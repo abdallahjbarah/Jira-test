@@ -189,22 +189,27 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
   }, []);
 
   const handleDateChange = (dateString: string, dates: Date[]) => {
+    const toLocalMidnightTimestamp = (d: Date) =>
+      Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
     if (type != 'Stay') {
       setSelectedDates(dates);
       if (dates.length === 1) {
-        const startDateTime = dates[0].getTime();
-        const endDateTime = dates[0].getTime() + 24 * 60 * 60 * 1000;
+        const startDateTime = toLocalMidnightTimestamp(dates[0]);
+        const endDateTime =
+          toLocalMidnightTimestamp(dates[0]) + 2 * 24 * 60 * 60 * 1000;
         setSearchDates({ startDateTime, endDateTime });
       } else if (dates.length === 2) {
-        const startDateTime = dates[0].getTime();
-        const endDateTime = dates[1].getTime();
+        const startDateTime = toLocalMidnightTimestamp(dates[0]);
+        const endDateTime =
+          toLocalMidnightTimestamp(dates[1]) + 24 * 60 * 60 * 1000;
         setSearchDates({ startDateTime, endDateTime });
       }
     } else {
       setSelectedDates(dates);
       if (dates.length === 2) {
-        const startDateTime = dates[0].getTime();
-        const endDateTime = dates[1].getTime() + 24 * 60 * 60 * 1000;
+        const startDateTime = toLocalMidnightTimestamp(dates[0]);
+        const endDateTime =
+          toLocalMidnightTimestamp(dates[1]) + 24 * 60 * 60 * 1000;
         setSearchDates({ startDateTime, endDateTime });
       }
     }
@@ -234,6 +239,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
       hour: '2-digit',
       minute: '2-digit',
       hour12: true,
+      timeZone: 'GMT',
     });
   };
 
@@ -333,6 +339,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                   ).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
+                    timeZone: 'GMT',
                   })}{' '}
                   -{' '}
                   {new Date(
@@ -340,6 +347,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                   ).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
+                    timeZone: 'GMT',
                   })}
                 </p>
                 <TimeSlotCard
@@ -390,9 +398,21 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                   <TimeSlotCard
                     key={slot._id}
                     timeRange={`${formatTime(slot.startDateTime)} - ${formatTime(slot.endDateTime)}`}
-                    adultPrice={pricingInformation.find(info => info.personType === 'adults')?.price ?? null}
-                    childrenPrice={pricingInformation.find(info => info.personType === 'children')?.price ?? null}
-                    infantsPrice={pricingInformation.find(info => info.personType === 'infants')?.price ?? null}
+                    adultPrice={
+                      pricingInformation.find(
+                        info => info.personType === 'adults'
+                      )?.price ?? null
+                    }
+                    childrenPrice={
+                      pricingInformation.find(
+                        info => info.personType === 'children'
+                      )?.price ?? null
+                    }
+                    infantsPrice={
+                      pricingInformation.find(
+                        info => info.personType === 'infants'
+                      )?.price ?? null
+                    }
                     onChoose={() => {
                       if (
                         guests.adults + guests.children + guests.infants >

@@ -95,7 +95,9 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
 
   const startDate = useMemo(
     () =>
-      schedule?.startDateTime ? new Date(schedule.startDateTime) : undefined,
+      schedule?.startDateTime
+        ? new Date(schedule.startDateTime + 2 * 24 * 60 * 60 * 1000)
+        : undefined,
     [schedule]
   );
 
@@ -152,7 +154,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
 
   const handleDateChange = (dates: Date[]) => {
     if (disabled) return; // Prevent date changes when disabled
-    
+
     setSelectedDates(dates);
 
     if (onChange) {
