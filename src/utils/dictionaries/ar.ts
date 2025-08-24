@@ -332,6 +332,7 @@ const ar = {
       email: 'البريد الإلكتروني',
       phoneNumber: 'رقم الهاتف',
       password: 'كلمة المرور',
+      confirmPassword: 'تأكيد كلمة المرور',
       agreeToTerms: 'أوافق على',
       privacyPolicy: 'سياسة الخصوصية',
       and: 'و',

@@ -316,6 +316,7 @@ const en = {
       email: 'Email',
       phoneNumber: 'Phone Number',
       password: 'Password',
+      confirmPassword: 'Confirm Password',
       agreeToTerms: 'I agree to the',
       privacyPolicy: 'Privacy Policy',
       and: 'and',

@@ -28,6 +28,7 @@ interface SignUpFormValues {
   phoneNumber: string;
   countryCode: string;
   password: string;
+  confirmPassword: string;
   agreeToTerms: boolean;
 }
 
@@ -175,6 +176,25 @@ export default function SignUpPage(): React.ReactElement {
                         error={signUpForm.formState.errors.password?.message}
                         className='w-full h-[48px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]'
                         label={t('auth.signup.password')}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div className='flex flex-col items-center w-full'>
+                <div className='w-full relative'>
+                  <Controller
+                    control={signUpForm.control}
+                    name='confirmPassword'
+                    render={({ field }) => (
+                      <PasswordInput
+                        {...field}
+                        error={
+                          signUpForm.formState.errors.confirmPassword?.message
+                        }
+                        className='w-full h-[48px] bg-white px-4 py-3 text-gray-700 placeholder:h-[17px] placeholder:text-[14px] placeholder:font-normal placeholder:leading-[17px] placeholder:text-[#555555] focus:outline-none focus:ring-1 focus:ring-[#47C409] border-[1px] border-[#EEEEEE] hover:border-[#47C409]'
+                        label={t('auth.signup.confirmPassword')}
                       />
                     )}
                   />

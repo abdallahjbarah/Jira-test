@@ -1,10 +1,10 @@
 import * as Yup from 'yup';
 import {
   hasLowerCase,
-  hasUpperCase,
   hasNumbers,
-  hasSymbols,
   hasSpaces,
+  hasSymbols,
+  hasUpperCase,
 } from './regex';
 
 const passwordSchema = (requiredMessage: string): Yup.StringSchema => {
@@ -69,6 +69,9 @@ export const SignUpSchema = Yup.object().shape({
   lastName: Yup.string().required('Last Name is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
   password: passwordSchema('Password is required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Confirm Password is required'),
   phoneNumber: Yup.string().required('Phone Number is required'),
   countryCode: Yup.string(),
   agreeToTerms: Yup.boolean()
