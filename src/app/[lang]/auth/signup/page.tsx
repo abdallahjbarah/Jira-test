@@ -269,10 +269,10 @@ export default function SignUpPage(): React.ReactElement {
                 <div className='w-[123px] border-t-[1px] border-solid border-[#EEEEEE]'></div>
               </div>
 
-              <div className='space-y-3 flex flex-col items-center mb-8'>
+              <div className='space-y-3 flex flex-col items-center mb-8 w-full'>
                 <SocialLoginButton provider='apple' />
                 <SocialLoginButton provider='google' />
-                <SocialLoginButton provider='facebook' />
+                {/* <SocialLoginButton provider='facebook' /> */}
               </div>
 
               <div className='text-center transform transition-all hover:scale-105'>

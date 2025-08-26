@@ -202,7 +202,7 @@ export default function LoginPage() {
           <div className='space-y-3 flex flex-col items-center'>
             <SocialLoginButton provider='apple' />
             <SocialLoginButton provider='google' />
-            <SocialLoginButton provider='facebook' />
+            {/* <SocialLoginButton provider='facebook' /> */}
           </div>
         </div>
       </div>
