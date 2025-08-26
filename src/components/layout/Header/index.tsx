@@ -133,7 +133,7 @@ export default function Header(): React.ReactElement {
               >
                 {COLLECTION_STATUS_LIST[0].label[lang]}
               </CustomLink>
-              
+
               {/* Collection Items */}
               {COLLECTIONS_LINKS?.map((item, index) => (
                 <CustomLink
@@ -148,7 +148,7 @@ export default function Header(): React.ReactElement {
           </div>
         </div>
       )}
-          
+
       <nav className='z-50 absolute w-full'>
         <div className='laptopS:hidden flex items-end justify-end p-4'>
           <button
@@ -225,19 +225,19 @@ export default function Header(): React.ReactElement {
                   {/* Menu Items */}
                   <div className='flex-1 overflow-y-auto py-4'>
                     <ul className='space-y-2 px-4'>
-                    {LINKS_DATA?.map((item, index) => (
+                      {LINKS_DATA?.map((item, index) => (
                         <li key={item?.name[lang] + index + 'Nav'}>
-                      <HeaderLink
-                        path={item?.path}
-                        text={item?.name[lang]}
-                        isActive={
-                          item?.path === pathname.replace(`/${lang}`, '') ||
-                          (item.path === '/' && pathname === `/${lang}`)
-                        }
-                      />
+                          <HeaderLink
+                            path={item?.path}
+                            text={item?.name[lang]}
+                            isActive={
+                              item?.path === pathname.replace(`/${lang}`, '') ||
+                              (item.path === '/' && pathname === `/${lang}`)
+                            }
+                          />
                         </li>
                       ))}
-                      
+
                       {/* Collection Links */}
                       {COLLECTIONS_LINKS?.map((item, index) => (
                         <li key={item?.name[lang] + index + 'CollectionNav'}>
@@ -251,7 +251,7 @@ export default function Header(): React.ReactElement {
                           />
                         </li>
                       ))}
-                  </ul>
+                    </ul>
                   </div>
                 </div>
               </div>

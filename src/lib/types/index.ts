@@ -34,6 +34,7 @@ export interface User {
   city?: string | number;
   country?: Country;
   profileImageUrl?: string;
+  provider?: string;
 }
 
 export interface Role {

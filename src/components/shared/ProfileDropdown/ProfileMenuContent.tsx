@@ -1,14 +1,14 @@
-import React from 'react';
-import ProfileMenuItem from './ProfileMenuItem';
-import ProfileDivider from './ProfileDivider';
-import { useTranslation } from '@/contexts/TranslationContext';
-import FilledButton from '@/components/ui/buttons/FilledButton';
-import Divider from '@/components/ui/Divider';
 import FAQModal from '@/components/shared/FAQs';
 import HelpCenterModal from '@/components/shared/HelpCenter';
+import FilledButton from '@/components/ui/buttons/FilledButton';
+import Divider from '@/components/ui/Divider';
+import { useTranslation } from '@/contexts/TranslationContext';
 import useModal from '@/hooks/useModal';
 import useUser from '@/utils/hooks/useUser';
+import React from 'react';
+import ProfileDivider from './ProfileDivider';
 import ProfileDropDownHeader from './ProfileDropDownHeader';
+import ProfileMenuItem from './ProfileMenuItem';
 
 const ProfileMenuContent: React.FC = () => {
   const { t } = useTranslation();
@@ -45,13 +45,17 @@ const ProfileMenuContent: React.FC = () => {
             href='/profile/personal-info'
           />
           <Divider />
-          <ProfileMenuItem
-            label={t('profile.security')}
-            sublabel={t('profile.changePassword')}
-            icon='/SVGs/shared/lock.svg'
-            href='/profile/security'
-          />
-          <Divider />
+          {userData?.user?.provider === 'None' && (
+            <>
+              <ProfileMenuItem
+                label={t('profile.security')}
+                sublabel={t('profile.changePassword')}
+                icon='/SVGs/shared/lock.svg'
+                href='/profile/security'
+              />
+              <Divider />
+            </>
+          )}
 
           <ProfileMenuItem
             label={t('profile.myBookings')}

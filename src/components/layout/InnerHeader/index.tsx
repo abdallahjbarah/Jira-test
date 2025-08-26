@@ -1,13 +1,18 @@
 'use client';
 
-import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
-import { COLLECTION_STATUS_LIST, COLLECTIONS_LINKS, DEFAULT_LOCALE, Locale } from '@utils/constants';
-import Image from 'next/image';
-import React, { memo, useState } from 'react';
-import CollectionNavItem from '@components/ui/CollectionNavItem';
-import HeaderActions from './HeaderActions';
 import CustomLink from '@/components/ui/CustomLink';
+import CollectionNavItem from '@components/ui/CollectionNavItem';
+import BookagriLogoSvg from '@public/SVGs/shared/BookagriLogoSvg.svg';
+import {
+  COLLECTION_STATUS_LIST,
+  COLLECTIONS_LINKS,
+  DEFAULT_LOCALE,
+  Locale,
+} from '@utils/constants';
+import Image from 'next/image';
 import { useParams, usePathname } from 'next/navigation';
+import React, { memo, useState } from 'react';
+import HeaderActions from './HeaderActions';
 
 interface InnerHeaderProps {
   withNavItems?: boolean;
@@ -53,10 +58,10 @@ function InnerHeader({
           ))}
         </div>
       )}
-      
+
       <div className='flex items-center gap-2'>
         <HeaderActions />
-        
+
         {/* Collections Hamburger Menu for Tablet/Mobile */}
         {withNavItems && (
           <div className='flex laptopM:hidden items-center collections-dropdown'>
@@ -98,7 +103,7 @@ function InnerHeader({
               >
                 {COLLECTION_STATUS_LIST[0].label[lang]}
               </CustomLink>
-              
+
               {/* Collection Items */}
               {COLLECTIONS_LINKS?.map((item, index) => (
                 <CustomLink
