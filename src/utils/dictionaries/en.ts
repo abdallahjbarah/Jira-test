@@ -572,6 +572,11 @@ const en = {
   map: {
     showMapView: 'Map',
   },
+  cancellationPolicy: {
+    cancelUpTo: 'Cancel up to',
+    hoursBeforeTheStartTimeForAfullRefund:
+      'hours before the start time for a full refund',
+  },
 };
 
 export default en;

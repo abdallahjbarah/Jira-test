@@ -9,9 +9,9 @@ import {
   buildFiltersFromSearchParams,
   convertToBackendFilters,
 } from '@/utils/helpers/filterHelpers';
+import Image from 'next/image';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import Styled from 'styled-components';
 import CollectionCard from '../CollectionCard';
 import CollectionTypeLabel from '../CollectionTypeLabel';

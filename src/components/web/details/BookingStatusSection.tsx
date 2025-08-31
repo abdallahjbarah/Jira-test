@@ -7,13 +7,16 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import useModal from '@/hooks/useModal';
 import { BookingStatus } from '@/lib/enums';
 import { BookingDetails } from '@/lib/types';
-import React from 'react';
 
 interface BookingStatusSectionProps {
   detailsData: BookingDetails;
+  refetch: () => void;
 }
 
-const BookingStatusSection = ({ detailsData }: BookingStatusSectionProps) => {
+const BookingStatusSection = ({
+  detailsData,
+  refetch,
+}: BookingStatusSectionProps) => {
   const { t } = useTranslation();
   const { openModal, closeModal, isOpen } = useModal();
   const {
@@ -56,6 +59,11 @@ const BookingStatusSection = ({ detailsData }: BookingStatusSectionProps) => {
 
   const onCancelReasonModalClose = () => {
     closeCancelationReasonsModal();
+    // openCancellationSuccessModal();
+  };
+
+  const onCancel = () => {
+    closeCancelationReasonsModal();
     openCancellationSuccessModal();
   };
 
@@ -72,12 +80,16 @@ const BookingStatusSection = ({ detailsData }: BookingStatusSectionProps) => {
         {getStatusLabel(detailsData.booking.status)}
       </span>
 
-      <button
-        className='px-11 py-2.5 bg-[#47C40910] text-text_1 border border-green-200 rounded-full hover:bg-green-100 transition-colors duration-200 text-sm font-medium'
-        onClick={openModal}
-      >
-        {t('bookingStatus.cancel')}
-      </button>
+      {detailsData.canCancel &&
+        detailsData.booking.status! != BookingStatus.CANCELLED &&
+        detailsData.booking.status! != BookingStatus.COMPLETED && (
+          <button
+            className='px-11 py-2.5 bg-[#47C40910] text-text_1 border border-green-200 rounded-full hover:bg-green-100 transition-colors duration-200 text-sm font-medium'
+            onClick={openModal}
+          >
+            {t('bookingStatus.cancel')}
+          </button>
+        )}
 
       {isOpen && (
         <CancelationPolicyModal
@@ -92,7 +104,8 @@ const BookingStatusSection = ({ detailsData }: BookingStatusSectionProps) => {
           isOpen={isCancelationReasonsModalOpen}
           onClose={onCancelReasonModalClose}
           bookingId={detailsData.booking._id}
-          onCancel={closeCancelationReasonsModal}
+          onCancel={onCancel}
+          refetch={refetch}
         />
       )}
       {isCancellationSuccessModalOpen && (

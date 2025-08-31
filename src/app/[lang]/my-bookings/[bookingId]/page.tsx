@@ -1,35 +1,35 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Locale } from '@utils/constants';
-import InnerPagesLayout from '@/layouts/InnerPagesLayout';
-import { useFetchBookingDetails } from '@/lib/apis/bookings/useFetchBookingDetails';
+import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
 import CircularLoader from '@/components/ui/CircularLoader';
 import CustomSvg from '@/components/ui/CustomSvg';
 import Divider from '@/components/ui/Divider';
-import FeaturesSection from '@/components/web/details/FeaturesSection';
 import AmenitiesSection from '@/components/web/details/AmenitiesSection';
+import BookingStatusSection from '@/components/web/details/BookingStatusSection';
+import FeaturesSection from '@/components/web/details/FeaturesSection';
 import HostInfoSection from '@/components/web/details/HostInfoSection';
-import LocationSection from '@/components/web/details/LocationSection';
-import WhatToExpectSection from '@/components/web/details/WhatToExpectSection';
-import ItinerarySection from '@/components/web/details/ItinerarySection';
-import StaysFeature from '@/components/web/details/StaysFeature';
-import StayDetailsSection from '@/components/web/details/StayDetailsSection';
-import NearbySurroundingsSection from '@/components/web/details/NearbySurroundingsSection';
 import HouseRulesSection from '@/components/web/details/HouseRulesSection';
+import ItinerarySection from '@/components/web/details/ItinerarySection';
+import LocationSection from '@/components/web/details/LocationSection';
+import NearbySurroundingsSection from '@/components/web/details/NearbySurroundingsSection';
 import SpecialInstructionsAndCancellationSection from '@/components/web/details/SpecialInstructionsAndCancellationSection';
+import StayDetailsSection from '@/components/web/details/StayDetailsSection';
+import StaysFeature from '@/components/web/details/StaysFeature';
+import WhatToExpectSection from '@/components/web/details/WhatToExpectSection';
+import InnerPagesLayout from '@/layouts/InnerPagesLayout';
+import { useFetchBookingDetails } from '@/lib/apis/bookings/useFetchBookingDetails';
+import withFavourites from '@/lib/hocs/withFavourites';
+import { Site } from '@/lib/types';
+import useFavorite from '@/utils/hooks/useFavorite';
+import { Locale } from '@utils/constants';
 import Image from 'next/image';
+import React, { useState } from 'react';
 import Lightbox from 'yet-another-react-lightbox';
-import 'yet-another-react-lightbox/styles.css';
+import Counter from 'yet-another-react-lightbox/plugins/counter';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import Counter from 'yet-another-react-lightbox/plugins/counter';
-import withFavourites from '@/lib/hocs/withFavourites';
-import useFavorite from '@/utils/hooks/useFavorite';
-import { Site } from '@/lib/types';
-import BookingStatusSection from '@/components/web/details/BookingStatusSection';
-import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
+import 'yet-another-react-lightbox/styles.css';
 
 interface MyBookingsPageProps {
   params: { lang: Locale; bookingId: string };
@@ -93,6 +93,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
     isLoading,
     isError,
     error,
+    refetch,
   } = useFetchBookingDetails(params.bookingId);
 
   const { isFavorite, removeFavorite } = useFavorite();
@@ -294,7 +295,10 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                     )}
                   </div>
                 </div>
-                <BookingStatusSection detailsData={detailsData} />
+                <BookingStatusSection
+                  detailsData={detailsData}
+                  refetch={refetch}
+                />
               </div>
               <Divider className='w-full my-8' />
               <ExpandableTextSection

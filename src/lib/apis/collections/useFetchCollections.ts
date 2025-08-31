@@ -46,13 +46,13 @@ export const useFetchInfiniteCollections = (
 ) => {
   return useInfiniteQuery({
     queryKey: ['collections-infinite', filter],
-    queryFn: async ({ pageParam = 1 }) =>
+    queryFn: async ({ pageParam = 0 }) =>
       fetchCollections({
         ...filter,
         skip: Number(pageParam),
         limit: filter?.limit || 10,
       }),
-    initialPageParam: 1,
+    initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
       const limit = filter?.limit || 10;
       return lastPage.sites.data.length >= limit ? pages.length + 1 : undefined;

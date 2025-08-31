@@ -183,7 +183,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
 
   const minDate = useMemo(() => {
     const date = new Date();
-    date.setDate(date.getDate() + 2);
+    date.setDate(date.getDate() + 3);
     date.setHours(0, 0, 0, 0);
     return date;
   }, []);

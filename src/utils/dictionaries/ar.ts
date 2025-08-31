@@ -578,6 +578,11 @@ const ar = {
     searchAgainPlaceholder: 'ابحث عن مدينة أو دولة...',
     startTypingToSearch: 'ابدأ الكتابة للبحث...',
   },
+  cancellationPolicy: {
+    cancelUpTo: 'إلغاء حتى',
+    hoursBeforeTheStartTimeForAfullRefund:
+      'ساعات قبل بدء الوقت للاسترداد الكامل',
+  },
 };
 
 export default ar;

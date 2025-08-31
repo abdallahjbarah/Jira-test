@@ -1,21 +1,22 @@
-import React from 'react';
-import styled from 'styled-components';
+import CircularLoader from '@/components/ui/CircularLoader';
+import Divider from '@/components/ui/Divider';
 import Modal from '@/components/ui/Modal';
+import RadioButton from '@/components/ui/RadioButton';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { useCancelBooking } from '@/lib/apis/bookings/useCancelBooking';
 import { useFetchCancelReasons } from '@/lib/apis/cancel/useFetchCancelReasons';
 import { CancelReason } from '@/lib/types';
-import RadioButton from '@/components/ui/RadioButton';
+import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import Divider from '@/components/ui/Divider';
-import { useCancelBooking } from '@/lib/apis/bookings/useCancelBooking';
-import CircularLoader from '@/components/ui/CircularLoader';
 import { toast } from 'react-toastify';
+import styled from 'styled-components';
 import { WretchError } from 'wretch';
 interface CancelationReasonsModalProps {
   isOpen: boolean;
   onClose: () => void;
   bookingId: string;
   onCancel: () => void;
+  refetch: () => void;
 }
 
 const CancelButton = styled.button`
@@ -54,6 +55,7 @@ const CancelationReasonsModal: React.FC<CancelationReasonsModalProps> = ({
   onClose,
   onCancel,
   bookingId,
+  refetch,
 }) => {
   const { locale, t } = useTranslation();
 
@@ -71,6 +73,7 @@ const CancelationReasonsModal: React.FC<CancelationReasonsModalProps> = ({
   const { mutate: cancelBooking, isPending } = useCancelBooking({
     onSuccess: () => {
       onCancel();
+      refetch();
     },
     onError: (error: WretchError) => {
       toast.error(error.json.message);
@@ -88,7 +91,7 @@ const CancelationReasonsModal: React.FC<CancelationReasonsModalProps> = ({
       cancelBooking({
         bookingID: bookingId,
         cancelReasonID: data.cancelReasonID,
-        cancelReasonOther: "",
+        cancelReasonOther: '',
       });
     }
   };
