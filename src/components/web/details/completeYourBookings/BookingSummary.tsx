@@ -3,13 +3,13 @@ import CustomSvg from '@/components/ui/CustomSvg';
 import Divider from '@/components/ui/Divider';
 import withFavourites from '@/lib/hocs/withFavourites';
 import { Site } from '@/lib/types';
-import useCurrency from '@/utils/hooks/useCurrency';
-import useFavorite from '@/utils/hooks/useFavorite';
 import {
+  calculateGrandTotal,
   calculatePriceBreakdown,
   formatPriceBreakdownForDisplay,
-  calculateGrandTotal,
 } from '@/utils/helpers';
+import useCurrency from '@/utils/hooks/useCurrency';
+import useFavorite from '@/utils/hooks/useFavorite';
 import React from 'react';
 
 interface PriceBreakdown {
@@ -92,7 +92,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       siteInfo.transportation?.price,
       siteInfo.guide?.price,
       transportationChecked,
-      guideChecked,
+      guideChecked
     );
 
     return formatPriceBreakdownForDisplay(breakdown, currency, numberOfNights);
@@ -121,7 +121,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       siteInfo.transportation?.price,
       siteInfo.guide?.price,
       transportationChecked,
-      guideChecked,
+      guideChecked
     );
 
     const grandTotal = calculateGrandTotal(breakdown);
@@ -186,7 +186,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             <div className='flex flex-col gap-3'>
               {dynamicPriceBreakdown.map((item, index) => (
                 <div key={index} className='flex justify-between items-center'>
-                  <span className='text-gray-700'>{item.label}</span>
+                  <span
+                    className={`text-gray-700 ${item.discount ? 'line-through' : ''}`}
+                  >
+                    {item.label}
+                  </span>
                   <div className='flex flex-col items-end'>
                     <span className='font-custom-600'>{item.amount}</span>
                     {item.discount && (

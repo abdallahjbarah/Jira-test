@@ -73,6 +73,21 @@ function CollectionCard({
 
   const priceString = React.useMemo(() => {
     const price = collection.pricingInformation[0]?.price;
+    const discount = collection.pricingInformation[0]?.discount;
+
+    if (discount != null && price) {
+      return (
+        <span>
+          <span className='line-through text-gray-500'>
+            {price} {currency}
+          </span>
+          <span className='ml-2'>
+            {discount} {currency}
+          </span>
+        </span>
+      );
+    }
+
     return price ? `${price} ${currency}` : '';
   }, [collection.pricingInformation, currency]);
 

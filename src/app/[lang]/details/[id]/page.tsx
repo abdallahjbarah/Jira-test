@@ -1,32 +1,32 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Locale } from '@utils/constants';
-import InnerPagesLayout from '@/layouts/InnerPagesLayout';
-import { useFetchDetails } from '@/lib/apis/details/useFetchDetails';
+import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
 import CircularLoader from '@/components/ui/CircularLoader';
 import CustomSvg from '@/components/ui/CustomSvg';
 import Divider from '@/components/ui/Divider';
-import { useFetchCollections } from '@/lib/apis/collections/useFetchCollections';
+import AmenitiesSection from '@/components/web/details/AmenitiesSection';
 import BookingPanel from '@/components/web/details/BookingPanel';
 import FeaturesSection from '@/components/web/details/FeaturesSection';
-import AmenitiesSection from '@/components/web/details/AmenitiesSection';
 import HostInfoSection from '@/components/web/details/HostInfoSection';
-import LocationSection from '@/components/web/details/LocationSection';
-import WhatToExpectSection from '@/components/web/details/WhatToExpectSection';
-import ItinerarySection from '@/components/web/details/ItinerarySection';
-import StaysFeature from '@/components/web/details/StaysFeature';
-import StayDetailsSection from '@/components/web/details/StayDetailsSection';
-import NearbySurroundingsSection from '@/components/web/details/NearbySurroundingsSection';
 import HouseRulesSection from '@/components/web/details/HouseRulesSection';
-import SpecialInstructionsAndCancellationSection from '@/components/web/details/SpecialInstructionsAndCancellationSection';
-import withFavourites from '@/lib/hocs/withFavourites';
-import useFavorite from '@/utils/hooks/useFavorite';
-import { Site } from '@/lib/types';
-import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
-import ImagesGallery from './ImagesGallery';
-import { useFetchSimilar } from '@/lib/apis/details/useFetchSimillarExperiencde';
+import ItinerarySection from '@/components/web/details/ItinerarySection';
+import LocationSection from '@/components/web/details/LocationSection';
+import NearbySurroundingsSection from '@/components/web/details/NearbySurroundingsSection';
 import SimilarExperiencesSection from '@/components/web/details/SimilarExperiencesSection';
+import SpecialInstructionsAndCancellationSection from '@/components/web/details/SpecialInstructionsAndCancellationSection';
+import StayDetailsSection from '@/components/web/details/StayDetailsSection';
+import StaysFeature from '@/components/web/details/StaysFeature';
+import WhatToExpectSection from '@/components/web/details/WhatToExpectSection';
+import InnerPagesLayout from '@/layouts/InnerPagesLayout';
+import { useFetchCollections } from '@/lib/apis/collections/useFetchCollections';
+import { useFetchDetails } from '@/lib/apis/details/useFetchDetails';
+import { useFetchSimilar } from '@/lib/apis/details/useFetchSimillarExperiencde';
+import withFavourites from '@/lib/hocs/withFavourites';
+import { Site } from '@/lib/types';
+import useFavorite from '@/utils/hooks/useFavorite';
+import { Locale } from '@utils/constants';
+import React, { useState } from 'react';
+import ImagesGallery from './ImagesGallery';
 
 interface DetailsIdProps {
   params: { lang: Locale; id: string };
@@ -37,7 +37,6 @@ const DetailsId: React.FC<DetailsIdProps> = ({
   params,
   openFavouritesModal,
 }) => {
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -61,8 +60,10 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     error,
   } = useFetchDetails(params.id);
 
-  const { data: similarData, isLoading: isSimilarLoading } = useFetchSimilar(params.id);
-  console.log("similarData", similarData);
+  const { data: similarData, isLoading: isSimilarLoading } = useFetchSimilar(
+    params.id
+  );
+  console.log('similarData', similarData);
 
   const { isFavorite, removeFavorite } = useFavorite();
 
@@ -227,7 +228,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     transportationIsIncluded,
     transportationIsMandatory,
     guideIsIncluded,
-    guideIsMandatory
+    guideIsMandatory,
   } = detailsData.data;
 
   const galleryImages =
@@ -241,55 +242,78 @@ const DetailsId: React.FC<DetailsIdProps> = ({
       };
     }) || [];
 
-  console.log("guideIsIncluded", guideIsIncluded);
+  console.log('guideIsIncluded', guideIsIncluded);
 
   const features: {
     icon: string;
     title: string;
     description: string;
   }[] = [
-      {
-        icon: '/SVGs/shared/details-icons/timeCircle.svg',
-        title: 'Duration',
-        description: duration + ' hrs',
-      },
-      {
-        icon: '/SVGs/shared/details-icons/sun.svg',
-        title: 'Time of Day',
-        description: timeOfDay?.map((time: string) => time.charAt(0).toUpperCase() + time.slice(1)).join(', ') + "",
-      },
-      ...guideIsIncluded ? [{
-        icon: '/SVGs/shared/details-icons/guideIcon.svg',
-        title: guideIsMandatory ? 'Guide' : 'Guide (Upon Request)',
-        description: 'Extra fees applied',
-      }] : [],
-      {
-        icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
-        title: 'Level of Difficulty',
-        description: levelOfDifficulty + "",
-      },
-      {
-        icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
-        title: 'Age Suitability',
-        description: ageSuitability + '+',
-      },
-      ...transportationIsIncluded ? [{
-        icon: '/SVGs/shared/details-icons/transportationIcon.svg',
-        title: transportationIsMandatory ? 'Transportation' : 'Transportation (Upon Request)',
-        description: 'Extra fees applied',
-      }] : [],
-      {
-        icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
-        title: 'Spoken Language',
-        description:
-          languages?.map((language: { nameAr: string; nameEn: string; }) => language.nameEn.charAt(0).toUpperCase() + language.nameEn.slice(1)).join(', ') + ' (Download a language translator app to communicate with host!)',
-      },
-      ...(wheelChair ? [{
-        icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
-        title: 'Wheelchair Accessible',
-        description: '',
-      }] : []),
-    ];
+    {
+      icon: '/SVGs/shared/details-icons/timeCircle.svg',
+      title: 'Duration',
+      description: duration + ' hrs',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/sun.svg',
+      title: 'Time of Day',
+      description:
+        timeOfDay
+          ?.map((time: string) => time.charAt(0).toUpperCase() + time.slice(1))
+          .join(', ') + '',
+    },
+    ...(guideIsIncluded
+      ? [
+          {
+            icon: '/SVGs/shared/details-icons/guideIcon.svg',
+            title: guideIsMandatory ? 'Guide' : 'Guide (Upon Request)',
+            description: 'Extra fees applied',
+          },
+        ]
+      : []),
+    {
+      icon: '/SVGs/shared/details-icons/levelOfDiffIcon.svg',
+      title: 'Level of Difficulty',
+      description: levelOfDifficulty + '',
+    },
+    {
+      icon: '/SVGs/shared/details-icons/ageSuitabilityIcon.svg',
+      title: 'Age Suitability',
+      description: ageSuitability + '+',
+    },
+    ...(transportationIsIncluded
+      ? [
+          {
+            icon: '/SVGs/shared/details-icons/transportationIcon.svg',
+            title: transportationIsMandatory
+              ? 'Transportation'
+              : 'Transportation (Upon Request)',
+            description: 'Extra fees applied',
+          },
+        ]
+      : []),
+    {
+      icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
+      title: 'Spoken Language',
+      description:
+        languages
+          ?.map(
+            (language: { nameAr: string; nameEn: string }) =>
+              language.nameEn.charAt(0).toUpperCase() + language.nameEn.slice(1)
+          )
+          .join(', ') +
+        ' (Download a language translator app to communicate with host!)',
+    },
+    ...(wheelChair
+      ? [
+          {
+            icon: '/SVGs/shared/details-icons/wheelchairAccessibleIcon.svg',
+            title: 'Wheelchair Accessible',
+            description: '',
+          },
+        ]
+      : []),
+  ];
 
   return (
     <InnerPagesLayout headerProps={{ withNavItems: true }}>
@@ -386,13 +410,11 @@ const DetailsId: React.FC<DetailsIdProps> = ({
             </div>
             <BookingPanel
               pricingInformation={pricingInformation}
-              price={pricingInformation[0]?.price}
               schedule={schedule}
               params={params}
               type={type}
               name={name}
             />
-
           </div>
           {type != 'Stay' && (
             <>
@@ -429,7 +451,9 @@ const DetailsId: React.FC<DetailsIdProps> = ({
           {isSimilarLoading ? (
             <CircularLoader size={50} />
           ) : (
-            <SimilarExperiencesSection similarExperiences={similarData?.similarSites || []} />
+            <SimilarExperiencesSection
+              similarExperiences={similarData?.similarSites || []}
+            />
           )}
         </div>
       </main>

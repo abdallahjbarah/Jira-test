@@ -37,7 +37,7 @@ export const calculatePriceBreakdown = (
   transportationFee?: number,
   guideFee?: number,
   hasTransportation?: boolean,
-  hasGuide?: boolean,
+  hasGuide?: boolean
 ): PriceBreakdownItem[] => {
   const breakdown: PriceBreakdownItem[] = [];
 
@@ -62,7 +62,7 @@ export const calculatePriceBreakdown = (
 
     let finalPricePerPerson = originalPrice;
     if (discount && discount > 0) {
-      finalPricePerPerson = originalPrice - (originalPrice * discount) / 100;
+      finalPricePerPerson = discount; // discount is the final discounted price
     }
 
     const nights = numberOfNights || 1;
@@ -80,7 +80,7 @@ export const calculatePriceBreakdown = (
     });
   });
 
-  if (numberOfNights && numberOfNights > 1) {
+  if (numberOfNights && numberOfNights >= 1) {
     breakdown.push({
       label: `Number of nights`,
       amount: 0,
@@ -216,7 +216,9 @@ export const formatPriceBreakdownForDisplay = (
     };
 
     if (item.discount && item.discount > 0) {
-      result.discount = `${item.discount}% off`;
+      // Show original price in label and discount info
+      result.label = `${currency} ${item.originalPrice.toFixed(0)} x ${item.guestCount} ${guestTypeName}`;
+      result.discount = `Discounted to ${currency} ${item.pricePerPerson.toFixed(0)} each`;
     }
 
     return result;

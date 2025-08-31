@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import React, { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { WretchError } from 'wretch';
+import useCurrency from '../../../utils/hooks/useCurrency';
 import TimeSlotCard from './TimeSlotCard';
 
 interface BookingPanelProps {
@@ -21,7 +22,6 @@ interface BookingPanelProps {
     lang: Locale;
     id: string;
   };
-  price: number;
   bookabl?: boolean;
   type?: string;
   name?: string;
@@ -53,7 +53,6 @@ interface GroupedSlots {
 }
 
 const BookingPanel: React.FC<BookingPanelProps> = ({
-  price,
   schedule,
   params,
   type,
@@ -64,6 +63,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
   const queryClient = useQueryClient();
   const { setBookingData } = useBookingData();
   const { t } = useTranslation();
+  const { currency } = useCurrency();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [searchDates, setSearchDates] = useState<{
     startDateTime?: number;
@@ -111,7 +111,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
         infants: guests.infants,
         availabilityIds:
           type === 'Stay'
-            ? availabilityStaySlots?.data?.availabilitiesIds
+            ? availabilityStaySlots?.data?.availabilitiesIds?.slice(0, -1)
             : slotIds,
       });
 
@@ -124,11 +124,18 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
             infants: guests.infants,
           },
           dates: selectedDates,
-          price,
+          price: priceAdultString,
           allowedGuests: response.data,
           availability:
             type === 'Stay'
-              ? availabilityStaySlots?.data
+              ? {
+                  ...availabilityStaySlots?.data,
+                  availabilitiesIds:
+                    availabilityStaySlots?.data?.availabilitiesIds?.slice(
+                      0,
+                      -1
+                    ),
+                }
               : {
                   slotIds,
                   startDateTime:
@@ -266,10 +273,86 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
     return guestParts.join(', ');
   };
 
+  const priceAdultString = React.useMemo(() => {
+    const priceString =
+      pricingInformation.find(info => info.personType === 'adults')?.price ??
+      null;
+    const discountString =
+      pricingInformation.find(info => info.personType === 'adults')?.discount ??
+      null;
+
+    if (discountString != null && priceString) {
+      return (
+        <span>
+          <span className='line-through text-gray-500'>
+            {priceString} {currency}
+          </span>
+          <span className='ml-2'>
+            {discountString} {currency}
+          </span>
+        </span>
+      );
+    }
+
+    return priceString ? `${priceString} ${currency}` : null;
+  }, [pricingInformation, currency]);
+
+  const priceChildrenString = React.useMemo(() => {
+    const priceString =
+      pricingInformation.find(info => info.personType === 'children')?.price ??
+      null;
+    const discountString =
+      pricingInformation.find(info => info.personType === 'children')
+        ?.discount ?? null;
+
+    if (discountString != null && priceString) {
+      return (
+        <span>
+          <span className='line-through text-gray-500'>
+            {priceString} {currency}
+          </span>
+          <span className='ml-2'>
+            {discountString} {currency}
+          </span>
+        </span>
+      );
+    }
+
+    return priceString ? `${priceString} ${currency}` : null;
+  }, [pricingInformation, currency]);
+
+  const priceInfantsString = React.useMemo(() => {
+    const priceString =
+      pricingInformation.find(info => info.personType === 'infants')?.price ??
+      null;
+    const discountString =
+      pricingInformation.find(info => info.personType === 'infants')
+        ?.discount ?? null;
+
+    if (discountString != null && priceString) {
+      return (
+        <span>
+          <span className='line-through text-gray-500'>
+            {priceString} {currency}
+          </span>
+          <span className='ml-2'>
+            {discountString} {currency}
+          </span>
+        </span>
+      );
+    }
+
+    return priceString
+      ? priceString === 0
+        ? 'Free'
+        : `${priceString} ${currency}`
+      : null;
+  }, [pricingInformation, currency]);
+
   return (
     <div className='w-full max-w-[30.563rem] bg-white border border-[#F2F2F2] rounded-[1.5rem] drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] p-[1.5rem] flex flex-col space-y-[1.25rem] flex-[0.3]'>
       <h2 className='text-xl font-custom-700 text-text_1 pt-2 font-gellix-Bold'>
-        {t('booking.startFrom')} JOD {price}{' '}
+        {t('booking.startFrom')} {priceAdultString}{' '}
         <span className='font-custom-400 font-sans text-text_2'>
           {t('booking.perPerson')}
         </span>
@@ -362,8 +445,9 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                     month: 'short',
                     day: 'numeric',
                   })}`}
-                  adultPrice={price}
-                  childrenPrice={10}
+                  adultPrice={priceAdultString}
+                  childrenPrice={priceChildrenString}
+                  infantsPrice={priceInfantsString}
                   type={type}
                   title={name}
                   onChoose={() => {
@@ -398,21 +482,9 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                   <TimeSlotCard
                     key={slot._id}
                     timeRange={`${formatTime(slot.startDateTime)} - ${formatTime(slot.endDateTime)}`}
-                    adultPrice={
-                      pricingInformation.find(
-                        info => info.personType === 'adults'
-                      )?.price ?? null
-                    }
-                    childrenPrice={
-                      pricingInformation.find(
-                        info => info.personType === 'children'
-                      )?.price ?? null
-                    }
-                    infantsPrice={
-                      pricingInformation.find(
-                        info => info.personType === 'infants'
-                      )?.price ?? null
-                    }
+                    adultPrice={priceAdultString}
+                    childrenPrice={priceChildrenString}
+                    infantsPrice={priceInfantsString}
                     onChoose={() => {
                       if (
                         guests.adults + guests.children + guests.infants >

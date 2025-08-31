@@ -2,9 +2,9 @@ import React from 'react';
 
 interface TimeSlotCardProps {
   timeRange: string;
-  adultPrice: number | null;
-  childrenPrice: number | null;
-  infantsPrice: number | null;
+  adultPrice: string | null;
+  childrenPrice: string | null;
+  infantsPrice: string | null;
   onChoose: () => void;
   currency?: string;
   type?: 'Stay' | 'Regular';
@@ -21,7 +21,7 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
   type = 'Regular',
   title,
 }) => {
-  console.log("infantsPrice", infantsPrice);
+  console.log('infantsPrice', infantsPrice);
   if (type === 'Stay') {
     return (
       <div className='w-full bg-white border border-[#F3F1F1] rounded-[6px] shadow-[0px_4px_4px_rgba(184,184,184,0.25)] px-[21px] py-[15px] mb-[0.3rem]'>
@@ -29,7 +29,7 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
           <h3 className='font-custom-600 text-xl text-text_1'>{title}</h3>
           <div className='flex justify-between items-center'>
             <div className='font-custom-600 text-xl text-text_1'>
-              {currency} {adultPrice} <span className='font-sans'>/night</span>
+              {adultPrice} <span className='font-sans'>/night</span>
             </div>
             <button
               onClick={onChoose}
@@ -52,18 +52,17 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
           </div>
           {adultPrice != null && (
             <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
-              {currency} {adultPrice} /<span className='font-sans'>adult</span>
+              {adultPrice} /<span className='font-sans'>adult</span>
             </div>
           )}
           {childrenPrice != null && (
             <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
-              {currency} {childrenPrice} /
-              <span className='font-sans'>children</span>
+              {childrenPrice} /<span className='font-sans'>children</span>
             </div>
           )}
           {infantsPrice != null && (
             <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
-              {currency} {infantsPrice === 0 ? 'Free' : infantsPrice} /<span className='font-sans'>infant</span>
+              {infantsPrice} /<span className='font-sans'>infant</span>
             </div>
           )}
         </div>
