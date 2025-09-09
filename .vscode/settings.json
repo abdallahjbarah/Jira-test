@@ -142,7 +142,7 @@
   "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.fontSize": 13,
   "workbench.iconTheme": "vscode-icons",
-  "workbench.colorTheme": "Atom One Dark",
+  "workbench.colorTheme": "Default Dark Modern",
   "workbench.startupEditor": "welcomePageInEmptyWorkbench",
   "extensions.ignoreRecommendations": false,
   "security.workspace.trust.untrustedFiles": "open"

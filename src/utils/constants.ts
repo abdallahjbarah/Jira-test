@@ -97,9 +97,9 @@ export const CURRENCIES_LIST: CurrencyItem[] = [
 ];
 
 export const SOCIAL_LOGIN_TYPES = {
-  APPLE: 'apple',
-  GOOGLE: 'google',
-  FACEBOOK: 'facebook',
+  APPLE: 'Apple',
+  GOOGLE: 'Google',
+  FACEBOOK: 'Facebook',
 } as const;
 
 export type SocialLoginType =

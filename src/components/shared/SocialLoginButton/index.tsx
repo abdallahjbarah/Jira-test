@@ -1,17 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useTranslation } from '@/contexts/TranslationContext';
+import { useSocialLogin } from '@/lib/apis/auth/useSocialLogin';
+import { SSOProviderType } from '@/lib/enums';
+import { useFirebase } from '@/providers/FirebaseProvider';
+import { TOKEN_NAME } from '@/utils';
+import { setCookie } from '@/utils/cookies';
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useQueryClient } from '@tanstack/react-query';
 import { WretchError } from 'wretch';
-import { useFirebaseSSO } from '@/lib/apis/auth/useFirebaseSSO';
-import { setCookie } from '@/utils/cookies';
-import { TOKEN_NAME } from '@/utils';
-import { useTranslation } from '@/contexts/TranslationContext';
-import { useFirebase } from '@/providers/FirebaseProvider';
-import { SSOProviderType } from '@/lib/enums';
 
 interface SocialLoginButtonProps {
   provider: 'google' | 'facebook' | 'apple';
@@ -60,7 +60,7 @@ export default function SocialLoginButton({
   const { isInitialized: isFirebaseInitialized, error: firebaseError } =
     useFirebase();
 
-  const { mutate: firebaseSSO } = useFirebaseSSO(userType, {
+  const { mutate: socialLogin } = useSocialLogin(userType, {
     onSuccess: data => {
       try {
         queryClient.setQueryData(['user'], data);
@@ -128,7 +128,7 @@ export default function SocialLoginButton({
     setIsLoading(true);
 
     try {
-      await firebaseSSO({ provider, additionalData: additionalProfileData });
+      await socialLogin({ provider, additionalData: additionalProfileData });
     } catch (error) {
       setIsLoading(false);
     }
