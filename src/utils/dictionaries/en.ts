@@ -487,6 +487,7 @@ const en = {
     availableTimeSlots: 'Available Time Slots',
     startFrom: 'Start from',
     perPerson: '/person',
+    contactUsToRefund: 'Contact us to refund',
   },
   search: {
     'check-in': 'Check-in',
@@ -576,6 +577,29 @@ const en = {
     cancelUpTo: 'Cancel up to',
     hoursBeforeTheStartTimeForAfullRefund:
       'hours before the start time for a full refund',
+  },
+  payment: {
+    success: {
+      title: 'Booking Confirmed!',
+      subtitle: 'Payment Successful',
+      description:
+        "Your agritourism experience has been successfully booked. We've sent a confirmation email with all the details. Get ready for an amazing agricultural adventure!",
+    },
+    declined: {
+      title: 'Payment Declined',
+      subtitle: 'Transaction Failed',
+      description:
+        'Your payment could not be processed. Please check your payment details and try again. If the problem persists, contact your bank or try a different payment method.',
+      tryAgain: 'Try Again',
+    },
+    cancelled: {
+      title: 'Payment Cancelled',
+      subtitle: 'Transaction Cancelled',
+      description:
+        "You have cancelled the payment process. Your booking has not been confirmed. You can continue browsing experiences or retry the payment when you're ready.",
+      continueBooking: 'Continue Booking',
+    },
+    backToHome: 'Back to Home',
   },
 };
 

@@ -453,7 +453,7 @@ export interface Booking {
   availabilityId: string[];
   userId: any;
   totalPrice: number;
-  paymentMethod: string;
+  paymentMethod: BookingPaymentMethod;
   startDateTime: number;
   endDateTime: number;
   guests: Guests;
@@ -479,6 +479,13 @@ export interface Guests {
 export interface BookingDetails {
   canCancel: boolean;
   booking: Booking;
+}
+
+export interface BookingPaymentMethod {
+  _id: string;
+  isEnabled: boolean;
+  description: string;
+  name: string;
 }
 
 export interface CancelReason {

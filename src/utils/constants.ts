@@ -622,4 +622,11 @@ export const staticPaymentMethods: {
     icon: '/SVGs/shared/payment-icons/ExchangeIcon.svg',
     value: 'Exchange Offices',
   },
+  {
+    name: 'Credit/Debit Card (Visa/Mastercard)',
+    icon: '/SVGs/shared/payment-icons/paymentCreditCard.svg',
+    value: 'Credit/Debit Card (Visa/Mastercard)',
+  },
 ];
+
+export const whatsappLink = 'https://wa.me/962772236393';

@@ -7,4 +7,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000';
 export const api = wretch()
   .url(API_URL)
   .addon(QueryStringAddon)
-  .middlewares([authMiddleware]);
+  .middlewares([authMiddleware])
+  .headers({
+    'ngrok-skip-browser-warning': 'true',
+  });

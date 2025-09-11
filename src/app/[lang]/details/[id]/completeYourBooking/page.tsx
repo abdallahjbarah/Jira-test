@@ -280,7 +280,12 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     useMutateBooking({
       onSuccess: data => {
         toast.success(t('booking.financialReceipt.success'));
-        router.push(`/my-bookings/${data._id}`);
+        if (data.paymentUrl) {
+          window.open(data.paymentUrl, '_blank');
+        } else {
+          router.push(`/my-bookings/${data._id}`);
+        }
+        // router.push(`/my-bookings/${data._id}`);
         setTimeout(() => {
           clearBookingData(params.id);
         }, 200); // Delay to allow navigation to complete
@@ -400,7 +405,9 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   }
 
   const isPayOnSite = (name: string | undefined) =>
-    name === 'On-site Cash Payment' || name === 'On-site Card Payment';
+    name === 'On-site Cash Payment' ||
+    name === 'On-site Card Payment' ||
+    name === 'Credit/Debit Card (Visa/Mastercard)';
 
   // Find the selected payment method object
   const selectedPaymentMethodObj = (paymentMethods || []).find(

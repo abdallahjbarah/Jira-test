@@ -7,6 +7,7 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import useModal from '@/hooks/useModal';
 import { BookingStatus } from '@/lib/enums';
 import { BookingDetails } from '@/lib/types';
+import { whatsappLink } from '../../../utils';
 
 interface BookingStatusSectionProps {
   detailsData: BookingDetails;
@@ -17,6 +18,9 @@ const BookingStatusSection = ({
   detailsData,
   refetch,
 }: BookingStatusSectionProps) => {
+  const isShowWhatsApp =
+    detailsData.booking.paymentMethod.name ===
+    'Credit/Debit Card (Visa/Mastercard)';
   const { t } = useTranslation();
   const { openModal, closeModal, isOpen } = useModal();
   const {
@@ -72,6 +76,10 @@ const BookingStatusSection = ({
     openCancelationReasonsModal();
   };
 
+  const onWhatsapp = () => {
+    window.open(whatsappLink, '_blank');
+  };
+
   return (
     <div className='flex items-center gap-2.5 mt-[27px]'>
       <span
@@ -90,6 +98,20 @@ const BookingStatusSection = ({
             {t('bookingStatus.cancel')}
           </button>
         )}
+      {!isShowWhatsApp && (
+        <div
+          className='flex items-center gap-2 px-6 py-1 bg-white border border-solid border-gray-200 rounded-md shadow-sm hover:shadow-md hover:bg-gray-50 cursor-pointer transition-all duration-200'
+          onClick={onWhatsapp}
+        >
+          <span className='text-gray-700 text-sm font-medium'>
+            {t('booking.contactUsToRefund')}
+          </span>
+          <div className='flex items-center gap-2 px-4 py-0 bg-[#25D366] text-white rounded-full text-sm font-medium underline'>
+            <img src={'/SVGs/shared/whatsAppIcon.svg'} />
+            WhatsApp
+          </div>
+        </div>
+      )}
 
       {isOpen && (
         <CancelationPolicyModal
