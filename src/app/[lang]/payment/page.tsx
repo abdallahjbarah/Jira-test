@@ -1,11 +1,9 @@
 'use client';
 
-import CustomLink from '@/components/ui/CustomLink';
 import { useTranslation } from '@/contexts/TranslationContext';
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
-  HomeIcon,
   XCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -96,11 +94,11 @@ const PaymentStatusPage = () => {
           {paymentData?.subtitle || t(`payment.${status}.subtitle`)}
         </p>
 
-        <p className='text-gray-500 mb-8 leading-relaxed font-gellix-Regular'>
+        {/* <p className='text-gray-500 mb-8 leading-relaxed font-gellix-Regular'>
           {paymentData?.description || t(`payment.${status}.description`)}
-        </p>
+        </p> */}
 
-        <div className='space-y-4'>
+        {/* <div className='space-y-4'>
           {status !== 'success' && (
             <button
               onClick={handleAction}
@@ -121,7 +119,7 @@ const PaymentStatusPage = () => {
             <HomeIcon className='w-4 h-4' />
             {t('payment.backToHome')}
           </CustomLink>
-        </div>
+        </div> */}
       </div>
     </div>
   );

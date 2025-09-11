@@ -283,7 +283,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
         if (data.paymentUrl) {
           window.open(data.paymentUrl, '_blank');
         } else {
-          router.push(`/my-bookings/${data._id}`);
+          router.push(`/my-bookings/${data.booking._id}`);
         }
         // router.push(`/my-bookings/${data._id}`);
         setTimeout(() => {

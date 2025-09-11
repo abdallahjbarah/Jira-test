@@ -580,8 +580,8 @@ const en = {
   },
   payment: {
     success: {
-      title: 'Booking Confirmed!',
-      subtitle: 'Payment Successful',
+      title: 'Payment Successful!',
+      subtitle: 'Transaction Successful',
       description:
         "Your agritourism experience has been successfully booked. We've sent a confirmation email with all the details. Get ready for an amazing agricultural adventure!",
     },
