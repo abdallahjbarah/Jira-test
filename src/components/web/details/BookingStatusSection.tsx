@@ -39,6 +39,16 @@ const BookingStatusSection = ({
     switch (status) {
       case BookingStatus.PENDING:
         return t('bookingStatus.pending');
+      case BookingStatus.REFUND_REQUESTED:
+        return t('bookingStatus.refundRequested');
+      case BookingStatus.REFUNDED:
+        return t('bookingStatus.refunded');
+      case BookingStatus.APPROVED:
+        return t('bookingStatus.approved');
+      case BookingStatus.DECLINED:
+        return t('bookingStatus.declined');
+      case BookingStatus.REFUNDED:
+        return t('bookingStatus.refunded');
       case BookingStatus.CANCELLED:
         return t('bookingStatus.cancelled');
       case BookingStatus.COMPLETED:
@@ -52,6 +62,14 @@ const BookingStatusSection = ({
     switch (status) {
       case BookingStatus.PENDING:
         return 'bg-[#FFCC0110] text-[#FFCC01]';
+      case BookingStatus.REFUND_REQUESTED:
+        return 'bg-[#FFCC0110] text-[#FFCC01]';
+      case BookingStatus.REFUNDED:
+        return 'bg-white text-red-500 border border-red-500 border-solid';
+      case BookingStatus.APPROVED:
+        return 'bg-white text-green-500 border border-green-500 border-solid';
+      case BookingStatus.DECLINED:
+        return 'bg-white text-red-500 border border-red-500 border-solid';
       case BookingStatus.CANCELLED:
         return 'bg-gray-50 text-gray-700 ';
       case BookingStatus.COMPLETED:

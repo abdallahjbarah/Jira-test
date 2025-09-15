@@ -257,7 +257,7 @@ const en = {
     cancelled: 'Cancelled',
     refunded: 'Refunded',
     completed: 'Completed',
-    refundRequested: 'Refund Requested',
+    refundRequested: 'Requested',
 
     upcoming: 'Upcoming',
     cancel: 'Cancel',
