@@ -23,7 +23,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   step = 1,
   value,
   onChange,
-  currency = 'JOD',
+  currency = 'USD',
   className = '',
   activeColor = 'bg-primary_1',
 }) => {

@@ -17,7 +17,7 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
   childrenPrice,
   infantsPrice,
   onChoose,
-  currency = 'JOD',
+  currency = 'USD',
   type = 'Regular',
   title,
 }) => {

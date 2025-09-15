@@ -166,7 +166,7 @@ export const calculateTax = (
 
 export const formatPriceBreakdownForDisplay = (
   breakdown: PriceBreakdownItem[],
-  currency: string = 'JOD',
+  currency: string = 'USD',
   numberOfNights?: number
 ): Array<{ label: string; amount: string; discount?: string }> => {
   const formattedBreakdown = breakdown.map(item => {

@@ -3,7 +3,7 @@ import useUser from '../useUser';
 
 const useCurrency = () => {
   const { userData } = useUser();
-  const [currency, setCurrency] = useState(userData?.user?.currency || 'JOD');
+  const [currency, setCurrency] = useState(userData?.user?.currency || 'USD');
 
   useEffect(() => {
     if (userData?.user?.currency) {

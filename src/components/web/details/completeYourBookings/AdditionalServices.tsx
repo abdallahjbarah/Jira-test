@@ -55,7 +55,7 @@ const AdditionalServices: React.FC<AdditionalServicesProps> = ({
           </div>
           {siteInfo?.transportation?.price !== undefined && (
             <p className='font-custom-600 font-gellix-Bold text-base text-text_1'>
-              JOD {siteInfo.transportation.price}
+              USD {siteInfo.transportation.price}
             </p>
           )}
         </div>
@@ -91,7 +91,9 @@ const AdditionalServices: React.FC<AdditionalServicesProps> = ({
               </div>
             </div>
             <p className='font-custom-600 font-gellix-Bold text-base text-text_1'>
-              {siteInfo?.guide?.price !== undefined ? `JOD ${siteInfo.guide.price}` : guidePrice}
+              {siteInfo?.guide?.price !== undefined
+                ? `USD ${siteInfo.guide.price}`
+                : guidePrice}
             </p>
           </div>
         </div>
@@ -119,7 +121,7 @@ const AdditionalServices: React.FC<AdditionalServicesProps> = ({
           </div>
           {siteInfo?.airport?.price !== undefined && (
             <p className='font-custom-600 font-gellix-Bold text-base text-text_1'>
-              JOD {siteInfo.airport.price}
+              USD {siteInfo.airport.price}
             </p>
           )}
         </div>
