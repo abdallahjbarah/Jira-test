@@ -281,7 +281,7 @@ const en = {
       description:
         "You will receive a refund depending on the cancellation policy. We will send you an email confirming your cancellation. You don't need to do anything else!",
       action: 'Ok, got it',
-      yourRefund: 'Your refund Amount is',
+      yourRefund: 'Your refund amount is',
     },
   },
   metadata: {
