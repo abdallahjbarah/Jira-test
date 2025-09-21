@@ -1,12 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
+import CustomSvg from '@/components/ui/CustomSvg';
 import Modal from '@/components/ui/Modal';
 import { useTranslation } from '@/contexts/TranslationContext';
-import CustomSvg from '@/components/ui/CustomSvg';
+import React from 'react';
+import styled from 'styled-components';
+import useCurrency from '../../../utils/hooks/useCurrency';
 
 interface CancellationSuccessProps {
   isOpen: boolean;
   onClose: () => void;
+  cancelationSuccessData: any;
 }
 
 const NextButton = styled.button`
@@ -30,8 +32,10 @@ const NextButton = styled.button`
 const CancellationSuccess: React.FC<CancellationSuccessProps> = ({
   isOpen,
   onClose,
+  cancelationSuccessData,
 }) => {
   const { t } = useTranslation();
+  const { currency } = useCurrency();
 
   return (
     <Modal
@@ -53,6 +57,13 @@ const CancellationSuccess: React.FC<CancellationSuccessProps> = ({
         </h1>
         <p className='text-text_2 text-base mt-[37px] text-center'>
           {t('bookingStatus.cancellationSuccess.description')}
+        </p>
+        <p className='text-text_2 text-base mt-[37px] text-center'>
+          {t('bookingStatus.cancellationSuccess.yourRefund')}{' '}
+          <span className='text-text_1 font-black'>
+            {cancelationSuccessData.refundInfo.refundAmount.toFixed(2)}{' '}
+            {currency}
+          </span>
         </p>
         <NextButton onClick={onClose}>
           {t('bookingStatus.cancellationSuccess.action')}

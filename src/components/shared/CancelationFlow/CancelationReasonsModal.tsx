@@ -17,6 +17,7 @@ interface CancelationReasonsModalProps {
   bookingId: string;
   onCancel: () => void;
   refetch: () => void;
+  onSuccess: (data: any) => void;
 }
 
 const CancelButton = styled.button`
@@ -56,6 +57,7 @@ const CancelationReasonsModal: React.FC<CancelationReasonsModalProps> = ({
   onCancel,
   bookingId,
   refetch,
+  onSuccess,
 }) => {
   const { locale, t } = useTranslation();
 
@@ -71,7 +73,8 @@ const CancelationReasonsModal: React.FC<CancelationReasonsModalProps> = ({
   const { control, handleSubmit, watch } = useForm();
 
   const { mutate: cancelBooking, isPending } = useCancelBooking({
-    onSuccess: () => {
+    onSuccess: data => {
+      onSuccess(data);
       onCancel();
       refetch();
     },

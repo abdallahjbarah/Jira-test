@@ -1,3 +1,4 @@
+'use client';
 import {
   CancelationPolicyModal,
   CancelationReasonsModal,
@@ -7,6 +8,7 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import useModal from '@/hooks/useModal';
 import { BookingStatus } from '@/lib/enums';
 import { BookingDetails } from '@/lib/types';
+import { useState } from 'react';
 import { whatsappLink } from '../../../utils';
 
 interface BookingStatusSectionProps {
@@ -34,6 +36,9 @@ const BookingStatusSection = ({
     openModal: openCancellationSuccessModal,
     closeModal: closeCancellationSuccessModal,
   } = useModal();
+
+  const [cancelationSuccessData, setCancelationSuccessData] =
+    useState<any>(null);
 
   const getStatusLabel = (status: number) => {
     switch (status) {
@@ -146,12 +151,14 @@ const BookingStatusSection = ({
           bookingId={detailsData.booking._id}
           onCancel={onCancel}
           refetch={refetch}
+          onSuccess={setCancelationSuccessData}
         />
       )}
       {isCancellationSuccessModalOpen && (
         <CancellationSuccess
           isOpen={isCancellationSuccessModalOpen}
           onClose={closeCancellationSuccessModal}
+          cancelationSuccessData={cancelationSuccessData}
         />
       )}
     </div>
