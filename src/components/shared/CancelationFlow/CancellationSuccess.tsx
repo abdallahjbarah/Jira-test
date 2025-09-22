@@ -61,7 +61,7 @@ const CancellationSuccess: React.FC<CancellationSuccessProps> = ({
         <p className='text-text_2 text-base mt-[37px] text-center'>
           {t('bookingStatus.cancellationSuccess.yourRefund')}{' '}
           <span className='text-text_1 font-black'>
-            {cancelationSuccessData.refundInfo.refundAmount.toFixed(2)}{' '}
+            {cancelationSuccessData?.refundInfo?.refundAmount?.toFixed(2)}{' '}
             {currency}
           </span>
         </p>
