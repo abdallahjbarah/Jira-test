@@ -95,8 +95,8 @@ export const calculatePriceBreakdown = (
 
   if (extras && extras.length > 0) {
     extras.forEach(extra => {
-      const nights = numberOfNights || 1;
-      const totalAmount = extra.price * nights;
+      // const nights = numberOfNights || 1;
+      const totalAmount = extra.price;
       const isFree = extra.price === 0;
 
       breakdown.push({
@@ -114,8 +114,8 @@ export const calculatePriceBreakdown = (
 
   // Add transportation fee if selected
   if (hasTransportation && transportationFee !== undefined) {
-    const nights = numberOfNights || 1;
-    const totalTransportationAmount = transportationFee * nights;
+    // const nights = numberOfNights || 1;
+    const totalTransportationAmount = transportationFee;
     const isFree = transportationFee === 0;
 
     breakdown.push({
@@ -132,8 +132,8 @@ export const calculatePriceBreakdown = (
 
   // Add guide fee if selected
   if (hasGuide && guideFee !== undefined) {
-    const nights = numberOfNights || 1;
-    const totalGuideAmount = guideFee * nights;
+    // const nights = numberOfNights || 1;
+    const totalGuideAmount = guideFee;
     const isFree = guideFee === 0;
 
     breakdown.push({
@@ -180,7 +180,7 @@ export const formatPriceBreakdownForDisplay = (
     if (item.type === 'extra') {
       const result: { label: string; amount: string; discount?: string } = {
         label: item.label,
-        amount: item.isFree ? 'Free' : `${currency} ${item.amount.toFixed(0)}`,
+        amount: item.isFree ? 'Free' : `${currency} ${item.amount.toFixed(2)}`,
       };
       return result;
     }
@@ -188,7 +188,7 @@ export const formatPriceBreakdownForDisplay = (
     if (item.type === 'transportation') {
       const result: { label: string; amount: string; discount?: string } = {
         label: item.label,
-        amount: item.isFree ? 'Free' : `${currency} ${item.amount.toFixed(0)}`,
+        amount: item.isFree ? 'Free' : `${currency} ${item.amount.toFixed(2)}`,
       };
       return result;
     }
@@ -196,7 +196,7 @@ export const formatPriceBreakdownForDisplay = (
     if (item.type === 'guide') {
       const result: { label: string; amount: string; discount?: string } = {
         label: item.label,
-        amount: item.isFree ? 'Free' : `${currency} ${item.amount.toFixed(0)}`,
+        amount: item.isFree ? 'Free' : `${currency} ${item.amount.toFixed(2)}`,
       };
       return result;
     }
@@ -211,14 +211,14 @@ export const formatPriceBreakdownForDisplay = (
     }
 
     const result: { label: string; amount: string; discount?: string } = {
-      label: `${currency} ${item.pricePerPerson.toFixed(0)} x ${item.guestCount} ${guestTypeName}`,
-      amount: `${currency} ${item.amount.toFixed(0)}`,
+      label: `${currency} ${item.pricePerPerson.toFixed(2)} x ${item.guestCount} ${guestTypeName}`,
+      amount: `${currency} ${(item.pricePerPerson * item.guestCount).toFixed(2)}`,
     };
 
     if (item.discount && item.discount > 0) {
       // Show original price in label and discount info
-      result.label = `${currency} ${item.originalPrice.toFixed(0)} x ${item.guestCount} ${guestTypeName}`;
-      result.discount = `Discounted to ${currency} ${item.pricePerPerson.toFixed(0)} each`;
+      result.label = `${currency} ${item.originalPrice.toFixed(2)} x ${item.guestCount} ${guestTypeName}`;
+      result.discount = `Discounted to ${currency} ${item.pricePerPerson.toFixed(2)} each`;
     }
 
     return result;

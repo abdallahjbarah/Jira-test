@@ -76,7 +76,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     if (bookingData?.availability?.availabilitiesIds) {
       return bookingData.availability.availabilitiesIds.length;
     }
-    return 1;
+    return null;
   }, [bookingData?.availability?.availabilitiesIds]);
 
   const dynamicPriceBreakdown = React.useMemo(() => {
@@ -125,7 +125,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     );
 
     const grandTotal = calculateGrandTotal(breakdown);
-    return `${currency} ${grandTotal.toFixed(0)}`;
+    return `${currency} ${grandTotal.toFixed(2)}`;
   }, [
     bookingData?.guests,
     siteInfo?.pricingInformation,
