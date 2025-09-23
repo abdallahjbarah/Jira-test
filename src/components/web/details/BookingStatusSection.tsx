@@ -76,7 +76,7 @@ const BookingStatusSection = ({
       case BookingStatus.DECLINED:
         return 'bg-white text-red-500 border border-red-500 border-solid';
       case BookingStatus.CANCELLED:
-        return 'bg-gray-50 text-gray-700 ';
+        return 'bg-white text-red-500 border border-red-500 border-solid';
       case BookingStatus.COMPLETED:
         return 'bg-green-50 text-green-700 ';
       default:
