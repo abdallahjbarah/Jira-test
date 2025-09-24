@@ -733,7 +733,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
               </div>
               <BookingSummary
                 siteInfo={detailsData?.data?.site}
-                title={detailsData?.data?.name || ''}
+                title={detailsData?.data?.site.name || ''}
                 location={
                   `${detailsData?.data?.site.country?.name}, ${detailsData?.data?.site.city}` ||
                   ''
