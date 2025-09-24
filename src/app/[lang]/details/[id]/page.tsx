@@ -95,13 +95,16 @@ const DetailsId: React.FC<DetailsIdProps> = ({
 
   React.useEffect(() => {
     const loadAllDimensions = async () => {
-      if (!detailsData?.data?.images || detailsData.data.images.length === 0)
+      if (
+        !detailsData?.data?.site?.images ||
+        detailsData.data.site.images.length === 0
+      )
         return;
 
       const dimensions: { [key: string]: { width: number; height: number } } =
         {};
 
-      for (const imageUrl of detailsData.data.images) {
+      for (const imageUrl of detailsData.data.site.images) {
         const dims = await loadImageDimensions(imageUrl);
 
         const aspectRatio = dims.width / dims.height;
@@ -115,7 +118,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     };
 
     loadAllDimensions();
-  }, [detailsData?.data?.images, loadImageDimensions]);
+  }, [detailsData?.data?.site?.images, loadImageDimensions]);
 
   const handleFavoriteToggle = React.useCallback(
     (e: React.MouseEvent) => {
@@ -123,7 +126,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
       if (isCollectionFavorite) {
         removeFavorite(params.id);
       } else {
-        openFavouritesModal(detailsData?.data as Site);
+        openFavouritesModal(detailsData?.data?.site as Site);
       }
     },
     [
@@ -131,13 +134,13 @@ const DetailsId: React.FC<DetailsIdProps> = ({
       removeFavorite,
       params.id,
       openFavouritesModal,
-      detailsData?.data,
+      detailsData?.data?.site,
     ]
   );
 
   const handleImageClick = React.useCallback(
     (index: number) => {
-      const images = detailsData?.data?.images;
+      const images = detailsData?.data?.site?.images;
       if (!images || index < 0 || index >= images.length) {
         return;
       }
@@ -147,7 +150,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
         setIsLightboxOpen(true);
       }, 10);
     },
-    [detailsData?.data?.images]
+    [detailsData?.data?.site?.images]
   );
 
   const handleCloseLightbox = React.useCallback(() => {
@@ -155,18 +158,18 @@ const DetailsId: React.FC<DetailsIdProps> = ({
   }, []);
 
   const handleMovePrev = React.useCallback(() => {
-    const images = detailsData?.data?.images;
+    const images = detailsData?.data?.site?.images;
     if (!images) return;
     setCurrentImageIndex(
       current => (current + images.length - 1) % images.length
     );
-  }, [detailsData?.data?.images]);
+  }, [detailsData?.data?.site?.images]);
 
   const handleMoveNext = React.useCallback(() => {
-    const images = detailsData?.data?.images;
+    const images = detailsData?.data?.site?.images;
     if (!images) return;
     setCurrentImageIndex(current => (current + 1) % images.length);
-  }, [detailsData?.data?.images]);
+  }, [detailsData?.data?.site?.images]);
 
   if (isLoading) {
     return (
@@ -229,7 +232,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     transportationIsMandatory,
     guideIsIncluded,
     guideIsMandatory,
-  } = detailsData.data;
+  } = detailsData.data.site;
 
   const galleryImages =
     images?.map((image: string) => {
@@ -410,7 +413,10 @@ const DetailsId: React.FC<DetailsIdProps> = ({
             </div>
             <BookingPanel
               pricingInformation={pricingInformation}
-              schedule={schedule}
+              schedule={{
+                ...schedule,
+                unavailbleDates: detailsData?.data?.unavailbleDates,
+              }}
               params={params}
               type={type}
               name={name}

@@ -1,8 +1,8 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
-import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
-import { cn } from '@/utils/cn';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { cn } from '@/utils/cn';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import React, { useCallback, useEffect, useState } from 'react';
 
 type DateSelectionMode = 'single' | 'range' | 'both';
 
@@ -14,6 +14,7 @@ interface DateRangePickerProps {
   maxDate?: Date;
   className?: string;
   enabledDays?: number[];
+  enabledDates?: Date[];
   scheduleStartDate?: Date;
   scheduleEndDate?: Date;
   skipFutureDateValidation?: boolean;
@@ -27,6 +28,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   maxDate,
   className = '',
   enabledDays = [],
+  enabledDates = [],
   scheduleStartDate,
   scheduleEndDate,
   skipFutureDateValidation = false,
@@ -160,7 +162,14 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
       if (date.getTime() >= endDate.getTime()) return true;
     }
 
-    if (enabledDays.length > 0 && !enabledDays.includes(date.getDay())) {
+    // If enabledDates is provided, use it instead of enabledDays
+    if (enabledDates.length > 0) {
+      const dateString = date.toISOString().split('T')[0];
+      const isDateEnabled = enabledDates.some(
+        enabledDate => enabledDate.toISOString().split('T')[0] === dateString
+      );
+      if (!isDateEnabled) return true;
+    } else if (enabledDays.length > 0 && !enabledDays.includes(date.getDay())) {
       return true;
     }
 
@@ -278,12 +287,13 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             type='button'
             onClick={() => date && handleDateClick(date)}
             disabled={!date || isDateDisabled(date)}
-            className={`relative h-10 w-10 flex items-center justify-center ${!date
-              ? 'invisible'
-              : isDateDisabled(date)
-                ? 'text-gray-300 cursor-not-allowed'
-                : ''
-              }`}
+            className={`relative h-10 w-10 flex items-center justify-center ${
+              !date
+                ? 'invisible'
+                : isDateDisabled(date)
+                  ? 'text-gray-300 cursor-not-allowed'
+                  : ''
+            }`}
           >
             {date &&
               (mode === 'range' || mode === 'both') &&
@@ -305,15 +315,16 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
               )}
 
             <span
-              className={`relative z-10 flex items-center justify-center h-8 w-8 rounded-full ${date &&
+              className={`relative z-10 flex items-center justify-center h-8 w-8 rounded-full ${
+                date &&
                 (isStartDate(date) ||
                   isEndDate(date) ||
                   (mode === 'single' && isDateSelected(date)))
-                ? 'bg-black text-white'
-                : date && !isDateDisabled(date)
-                  ? 'hover:bg-gray-100 text-gray-800'
-                  : ''
-                }`}
+                  ? 'bg-black text-white'
+                  : date && !isDateDisabled(date)
+                    ? 'hover:bg-gray-100 text-gray-800'
+                    : ''
+              }`}
             >
               {date?.getDate()}
             </span>

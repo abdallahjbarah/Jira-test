@@ -125,6 +125,7 @@ export interface SitesResponse {
 export interface SiteByIdResponse {
   message: string;
   site: Site;
+  unavailbleDates?: number[];
 }
 
 export interface Site {

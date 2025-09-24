@@ -68,7 +68,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
   // Initialize form with default values based on mandatory status
   const getDefaultValues = () => {
-    const siteInfo = detailsData?.data;
+    const siteInfo = detailsData?.data?.site;
     return {
       transportationChecked: siteInfo?.transportationIsMandatory ?? false,
       guideChecked: siteInfo?.guideIsMandatory ?? false,
@@ -92,7 +92,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   // Update form values when site data is loaded
   React.useEffect(() => {
     if (detailsData?.data) {
-      const siteInfo = detailsData.data;
+      const siteInfo = detailsData.data.site;
       setValue(
         'transportationChecked',
         siteInfo.transportationIsMandatory ?? false
@@ -103,7 +103,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
   // Handlers that prevent unchecking mandatory items
   const handleTransportationChange = (checked: boolean) => {
-    const siteInfo = detailsData?.data;
+    const siteInfo = detailsData?.data?.site;
     // If mandatory, always keep it checked
     if (siteInfo?.transportationIsMandatory) {
       setValue('transportationChecked', true);
@@ -113,7 +113,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   };
 
   const handleGuideChange = (checked: boolean) => {
-    const siteInfo = detailsData?.data;
+    const siteInfo = detailsData?.data?.site;
     // If mandatory, always keep it checked
     if (siteInfo?.guideIsMandatory) {
       setValue('guideChecked', true);
@@ -131,7 +131,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   // Ensure mandatory items stay checked
   React.useEffect(() => {
     if (detailsData?.data) {
-      const siteInfo = detailsData.data;
+      const siteInfo = detailsData.data.site;
       if (siteInfo.transportationIsMandatory && !transportationChecked) {
         setValue('transportationChecked', true);
       }
@@ -168,43 +168,43 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
       bookingData,
       detailsData: detailsData?.data,
       availability: bookingData?.availability,
-      siteType: detailsData?.data?.type,
-      schedule: detailsData?.data?.schedule,
+      siteType: detailsData?.data?.site.type,
+      schedule: detailsData?.data?.site.schedule,
     });
 
     if (!bookingData?.availability) {
       console.log('⚠️ No booking availability data, using fallback');
       return {
-        startTime: detailsData?.data?.schedule?.startDateTime || '',
-        endTime: detailsData?.data?.schedule?.endDateTime || '',
-        startDate: detailsData?.data?.schedule?.startDateTime || '',
-        endDate: detailsData?.data?.schedule?.endDateTime || '',
+        startTime: detailsData?.data?.site.schedule?.startDateTime || '',
+        endTime: detailsData?.data?.site.schedule?.endDateTime || '',
+        startDate: detailsData?.data?.site.schedule?.startDateTime || '',
+        endDate: detailsData?.data?.site.schedule?.endDateTime || '',
       };
     }
 
     // For stays, the structure is different - availability contains startDate/endDate
-    if (detailsData?.data?.type === 'Stay') {
+    if (detailsData?.data?.site.type === 'Stay') {
       console.log('🏠 Stay type detected, using startDate/endDate');
       // For stays, the availability data structure is different
       const startTime =
         bookingData.availability.startDate ||
         bookingData.availability.startDateTime ||
-        detailsData?.data?.schedule?.startDateTime ||
+        detailsData?.data?.site.schedule?.startDateTime ||
         '';
       const endTime =
         bookingData.availability.endDate ||
         bookingData.availability.endDateTime ||
-        detailsData?.data?.schedule?.endDateTime ||
+        detailsData?.data?.site.schedule?.endDateTime ||
         '';
       const startDate =
         bookingData.availability.startDate ||
         bookingData.availability.startDateTime ||
-        detailsData?.data?.schedule?.startDateTime ||
+        detailsData?.data?.site.schedule?.startDateTime ||
         '';
       const endDate =
         bookingData.availability.endDate ||
         bookingData.availability.endDateTime ||
-        detailsData?.data?.schedule?.endDateTime ||
+        detailsData?.data?.site.schedule?.endDateTime ||
         '';
 
       console.log('🏠 Stay datetime values:', {
@@ -227,19 +227,19 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     // For experiences, the availability data contains startDateTime and endDateTime directly
     const startTime =
       bookingData.availability.startDateTime ||
-      detailsData?.data?.schedule?.startDateTime ||
+      detailsData?.data?.site.schedule?.startDateTime ||
       '';
     const endTime =
       bookingData.availability.endDateTime ||
-      detailsData?.data?.schedule?.endDateTime ||
+      detailsData?.data?.site.schedule?.endDateTime ||
       '';
     const startDate =
       bookingData.availability.startDateTime ||
-      detailsData?.data?.schedule?.startDateTime ||
+      detailsData?.data?.site.schedule?.startDateTime ||
       '';
     const endDate =
       bookingData.availability.endDateTime ||
-      detailsData?.data?.schedule?.endDateTime ||
+      detailsData?.data?.site.schedule?.endDateTime ||
       '';
 
     console.log('🎯 Experience datetime values:', {
@@ -298,9 +298,9 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   const { mutate: uploadFile, isPending: isUploadingFile } = useUploadFile({
     onSuccess: data => {
       bookCollection({
-        siteId: detailsData?.data?._id || '',
+        siteId: detailsData?.data?.site._id || '',
         availabilityId:
-          detailsData?.data?.type === 'Stay'
+          detailsData?.data?.site.type === 'Stay'
             ? bookingData?.availability?.availabilitiesIds
             : bookingData?.availability?.slotIds[0] || '',
         paymentMethod: selectedPaymentMethod || '',
@@ -346,9 +346,9 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     if (isOnSitePayment) {
       console.log('Proceeding with on-site payment without file attachment');
       bookCollection({
-        siteId: detailsData?.data?._id || '',
+        siteId: detailsData?.data?.site._id || '',
         availabilityId:
-          detailsData?.data?.type === 'Stay'
+          detailsData?.data?.site.type === 'Stay'
             ? bookingData?.availability?.availabilitiesIds
             : bookingData?.availability?.slotIds[0] || '',
         paymentMethod: data.selectedPaymentMethod || '',
@@ -429,7 +429,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
               <div className='flex flex-col gap-2 flex-1'>
                 <BookingDetails
                   time={
-                    detailsData?.data?.type !== 'Stay' &&
+                    detailsData?.data?.site.type !== 'Stay' &&
                     (() => {
                       try {
                         const startTime = new Date(bookingDateTime.startTime);
@@ -463,14 +463,14 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                           console.log('⚠️ Invalid time values, using fallback');
                           // Try to get time from site schedule as fallback
                           if (
-                            detailsData?.data?.schedule?.startDateTime &&
-                            detailsData?.data?.schedule?.endDateTime
+                            detailsData?.data?.site.schedule?.startDateTime &&
+                            detailsData?.data?.site.schedule?.endDateTime
                           ) {
                             const scheduleStart = new Date(
-                              detailsData.data.schedule.startDateTime
+                              detailsData.data.site.schedule.startDateTime
                             );
                             const scheduleEnd = new Date(
-                              detailsData.data.schedule.endDateTime
+                              detailsData.data.site.schedule.endDateTime
                             );
                             if (
                               !isNaN(scheduleStart.getTime()) &&
@@ -504,7 +504,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                     })()
                   }
                   date={(() => {
-                    if (detailsData?.data?.type === 'Stay') {
+                    if (detailsData?.data?.site.type === 'Stay') {
                       try {
                         const startDate = new Date(bookingDateTime.startDate);
                         const endDate = new Date(bookingDateTime.endDate);
@@ -581,14 +581,14 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                           console.log('⚠️ Invalid date values, using fallback');
                           // Try to get date from site schedule as fallback
                           if (
-                            detailsData?.data?.schedule?.startDateTime &&
-                            detailsData?.data?.schedule?.endDateTime
+                            detailsData?.data?.site.schedule?.startDateTime &&
+                            detailsData?.data?.site.schedule?.endDateTime
                           ) {
                             const scheduleStart = new Date(
-                              detailsData.data.schedule.startDateTime
+                              detailsData.data.site.schedule.startDateTime
                             );
                             const scheduleEnd = new Date(
-                              detailsData.data.schedule.endDateTime
+                              detailsData.data.site.schedule.endDateTime
                             );
                             if (
                               !isNaN(scheduleStart.getTime()) &&
@@ -645,49 +645,49 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                   guideChecked={guideChecked}
                   onTransportationChange={handleTransportationChange}
                   onGuideChange={handleGuideChange}
-                  siteInfo={detailsData?.data}
+                  siteInfo={detailsData?.data?.site}
                   airportChecked={airportChecked}
                   onAirportChange={checked =>
                     setValue('airportChecked', checked)
                   }
                 />
-                {detailsData?.data?.thingsToKnow && (
+                {detailsData?.data?.site.thingsToKnow && (
                   <>
                     <Divider className='w-full my-8' />
 
                     <ExpandableTextSection
                       title='Things to Know'
-                      content={detailsData?.data?.thingsToKnow || ''}
+                      content={detailsData?.data?.site.thingsToKnow || ''}
                     />
                   </>
                 )}
 
-                {detailsData?.data?.stayNearby && (
+                {detailsData?.data?.site.stayNearby && (
                   <>
                     <Divider className='w-full my-8' />
                     <ExpandableTextSection
                       title='Stay Nearby'
-                      content={detailsData?.data?.stayNearby || ''}
+                      content={detailsData?.data?.site.stayNearby || ''}
                     />
                   </>
                 )}
 
-                {detailsData?.data?.stayHouseRules && (
+                {detailsData?.data?.site.stayHouseRules && (
                   <>
                     <Divider className='w-full my-8' />
                     <ExpandableTextSection
                       title='Stay House Rules'
-                      content={detailsData?.data?.stayHouseRules || ''}
+                      content={detailsData?.data?.site.stayHouseRules || ''}
                     />
                   </>
                 )}
 
-                {detailsData?.data?.cancellationPolicy && (
+                {detailsData?.data?.site.cancellationPolicy && (
                   <>
                     <Divider className='w-full my-8' />
                     <ExpandableTextSection
                       title='Cancellation Policy'
-                      content={detailsData?.data?.cancellationPolicy}
+                      content={detailsData?.data?.site.cancellationPolicy}
                     />
                   </>
                 )}
@@ -732,10 +732,10 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                 )}
               </div>
               <BookingSummary
-                siteInfo={detailsData?.data}
+                siteInfo={detailsData?.data?.site}
                 title={detailsData?.data?.name || ''}
                 location={
-                  `${detailsData?.data?.country?.name}, ${detailsData?.data?.city}` ||
+                  `${detailsData?.data?.site.country?.name}, ${detailsData?.data?.site.city}` ||
                   ''
                 }
                 onSubmit={() => {

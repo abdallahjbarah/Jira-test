@@ -32,6 +32,7 @@ interface DatePickerDropdownProps {
         id: string;
       }[];
     }[];
+    unavailbleDates?: number[];
   };
 }
 
@@ -57,8 +58,8 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   );
   const [isOpen, setIsOpen] = useState(false);
 
-  const { enabledDays } = useMemo(() => {
-    if (!schedule?.days) return { enabledDays: [], daySlots: new Map() };
+  const { enabledDays, enabledDates } = useMemo(() => {
+    if (!schedule?.days) return { enabledDays: [], enabledDates: [] };
 
     const days = schedule.days
       .map(day => {
@@ -90,7 +91,37 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
       })
       .filter(day => day !== -1);
 
-    return { enabledDays: days };
+    // Generate enabled dates by combining day-of-week and unavailable dates filtering
+    let enabledDatesArray: Date[] = [];
+
+    if (schedule?.startDateTime && schedule?.endDateTime) {
+      const startDate = new Date(schedule.startDateTime);
+      const endDate = new Date(schedule.endDateTime);
+      const unavailableDates = schedule.unavailbleDates || [];
+
+      // Convert unavailable timestamps to date strings for comparison
+      const unavailableDateStrings = unavailableDates.map(
+        timestamp => new Date(timestamp).toISOString().split('T')[0]
+      );
+
+      const currentDate = new Date(startDate);
+      while (currentDate <= endDate) {
+        const dayOfWeek = currentDate.getDay();
+        const dateString = currentDate.toISOString().split('T')[0];
+
+        // Check if this day of week is enabled and this specific date is not unavailable
+        if (
+          days.includes(dayOfWeek) &&
+          !unavailableDateStrings.includes(dateString)
+        ) {
+          enabledDatesArray.push(new Date(currentDate));
+        }
+
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    }
+
+    return { enabledDays: days, enabledDates: enabledDatesArray };
   }, [schedule]);
 
   const startDate = useMemo(
@@ -186,6 +217,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
         minDate={effectiveMinDate}
         maxDate={maxDate}
         enabledDays={enabledDays}
+        enabledDates={enabledDates}
         scheduleStartDate={startDate}
         scheduleEndDate={endDate}
       />

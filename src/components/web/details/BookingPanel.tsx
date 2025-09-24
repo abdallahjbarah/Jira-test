@@ -35,6 +35,7 @@ interface BookingPanelProps {
         id: string;
       }[];
     }[];
+    unavailbleDates?: number[];
   };
   pricingInformation: PricingInformation[];
 }

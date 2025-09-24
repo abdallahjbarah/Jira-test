@@ -1,21 +1,21 @@
+import { SiteByIdResponse } from '@/lib/types';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '../index';
-import { Site, SiteByIdResponse } from '@/lib/types';
 
 const fetchDetails = async (
   id: string
-): Promise<{ data: Site | undefined }> => {
+): Promise<{ data: SiteByIdResponse | undefined }> => {
   const response = await api.url(`/sites/${id}`).get().json<SiteByIdResponse>();
-  return { data: response.site };
+  return { data: response };
 };
 
 export const useFetchDetails = (
   id: string,
   queryOptions?: Omit<
     UseQueryOptions<
-      { data: Site | undefined },
+      { data: SiteByIdResponse | undefined },
       Error,
-      { data: Site | undefined },
+      { data: SiteByIdResponse | undefined },
       readonly ['details', string]
     >,
     'queryKey' | 'queryFn' | 'enabled'
