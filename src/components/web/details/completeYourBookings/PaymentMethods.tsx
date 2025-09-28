@@ -27,7 +27,6 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
       const staticMethod = staticPaymentMethods.find(
         staticMethod => staticMethod.name === method.name
       );
-
       return {
         ...method,
         value: method._id,
