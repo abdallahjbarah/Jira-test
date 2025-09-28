@@ -374,6 +374,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
             schedule={schedule}
             onChange={handleDateChange}
             minDate={minDate}
+            type={type}
           />
         </div>
 

@@ -22,6 +22,7 @@ interface DatePickerDropdownProps {
   className?: string;
   onClick?: () => void;
   disabled?: boolean;
+  type?: string;
   schedule?: {
     startDateTime: number;
     endDateTime: number;
@@ -50,6 +51,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
   className,
   onClick,
   disabled,
+  type,
   schedule,
 }) => {
   const { t, locale } = useTranslation();
@@ -97,7 +99,10 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
     if (schedule?.startDateTime && schedule?.endDateTime) {
       const startDate = new Date(schedule.startDateTime);
       const endDate = new Date(schedule.endDateTime);
-      const unavailableDates = schedule.unavailbleDates || [];
+
+      // Only apply unavailable dates filtering for Stay type
+      const unavailableDates =
+        type === 'Stay' ? schedule.unavailbleDates || [] : [];
 
       // Convert unavailable timestamps to date strings for comparison
       const unavailableDateStrings = unavailableDates.map(
@@ -109,10 +114,10 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
         const dayOfWeek = currentDate.getDay();
         const dateString = currentDate.toISOString().split('T')[0];
 
-        // Check if this day of week is enabled and this specific date is not unavailable
+        // Check if this day of week is enabled and this specific date is not unavailable (only for Stay type)
         if (
           days.includes(dayOfWeek) &&
-          !unavailableDateStrings.includes(dateString)
+          (type !== 'Stay' || !unavailableDateStrings.includes(dateString))
         ) {
           enabledDatesArray.push(new Date(currentDate));
         }
@@ -122,7 +127,7 @@ const DatePickerDropdown: React.FC<DatePickerDropdownProps> = ({
     }
 
     return { enabledDays: days, enabledDates: enabledDatesArray };
-  }, [schedule]);
+  }, [schedule, type]);
 
   const startDate = useMemo(
     () =>
