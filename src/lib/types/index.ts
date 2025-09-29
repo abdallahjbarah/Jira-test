@@ -30,7 +30,7 @@ export interface User {
   status: number;
   gender?: Gender;
   nationality?: string;
-  birthdate?: string;
+  birthDate?: string;
   city?: string | number;
   country?: Country;
   profileImageUrl?: string;

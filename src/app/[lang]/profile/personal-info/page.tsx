@@ -1,34 +1,32 @@
 'use client';
 
-import React from 'react';
-import { useForm, Controller, useWatch, FormProvider } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { personalInfoSchema } from '@/utils/formsSchemas';
-import FormInput from '@/components/form/FormInput';
-import { useTranslation } from '@/contexts/TranslationContext';
-import FilledButton from '@/components/ui/buttons/FilledButton';
-import FloatingLabelSelect from '@/components/form/FloatingLabelSelect';
-import ImageUploader from '@/components/form/ImageUploader';
-import useUser from '@/utils/hooks/useUser';
-import { GENDER_OPTIONS } from '@/utils/constants';
-import { useFetchCountries } from '@/lib/apis/countries/useFetchCountries';
-import { Country, City } from '@/lib/types';
-import { useFetchCities } from '@/lib/apis/countries/useFetchCountriesCities';
 import DatePickerInput from '@/components/form/DatePickerInput';
-import { useEditUser } from '@/lib/apis/users/useEditUser';
-import { toast } from 'react-toastify';
+import FloatingLabelSelect from '@/components/form/FloatingLabelSelect';
+import FormInput from '@/components/form/FormInput';
+import ImageUploader from '@/components/form/ImageUploader';
 import PhoneNumberInput from '@/components/form/PhoneNumberInput';
-import { CountryCode } from 'libphonenumber-js';
-import { useQueryClient } from '@tanstack/react-query';
+import FilledButton from '@/components/ui/buttons/FilledButton';
+import { useTranslation } from '@/contexts/TranslationContext';
+import { useFetchCountries } from '@/lib/apis/countries/useFetchCountries';
+import { useFetchCities } from '@/lib/apis/countries/useFetchCountriesCities';
 import { useUploadFile } from '@/lib/apis/files/useUploadFile';
+import { useEditUser } from '@/lib/apis/users/useEditUser';
 import { FileFolder } from '@/lib/enums';
+import { City, Country } from '@/lib/types';
+import { GENDER_OPTIONS } from '@/utils/constants';
+import useUser from '@/utils/hooks/useUser';
+import { useQueryClient } from '@tanstack/react-query';
+import { CountryCode } from 'libphonenumber-js';
+import React from 'react';
+import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 type PersonalInfoFormData = {
   firstName: string;
   lastName: string;
   email: string;
   phoneNumber: string;
-  birthdate: string;
+  birthDate: string;
   gender: { value: string; label: string };
   country: { value: string; label: string };
   nationality: { value: string; label: string };
@@ -72,13 +70,13 @@ export default function PersonalInfoPage() {
   }, [cities, userData?.user.city]);
 
   const personalInfoForm = useForm<PersonalInfoFormData>({
-    resolver: yupResolver(personalInfoSchema) as any,
+    // resolver: yupResolver(personalInfoSchema) as any,
     defaultValues: {
       firstName: userData?.user.firstName,
       lastName: userData?.user.lastName,
       email: userData?.user.email,
       phoneNumber: userData?.user.phoneNumber,
-      birthdate: userData?.user.birthdate,
+      birthDate: userData?.user.birthDate,
       gender: {
         value: userData?.user.gender,
         label: userData?.user.gender,
@@ -130,8 +128,8 @@ export default function PersonalInfoPage() {
         gender: data.gender.value,
         nationality: data.nationality.value,
         country: data.country.value,
-        city: data.city.value,
-        birthdate: new Date(data.birthdate).toISOString(),
+        city: data.city.value.toString(),
+        birthDate: new Date(data.birthDate).toISOString(),
       });
     }
   };
@@ -146,7 +144,7 @@ export default function PersonalInfoPage() {
       nationality: rest.nationality.value,
       country: rest.country.value,
       city: rest.city.value.toString(),
-      birthdate: new Date(rest.birthdate).toISOString(),
+      birthDate: new Date(rest.birthDate).toISOString(),
     });
   };
 
@@ -230,13 +228,13 @@ export default function PersonalInfoPage() {
 
             <div>
               <Controller
-                name='birthdate'
+                name='birthDate'
                 control={personalInfoForm.control}
                 render={({ field }) => (
                   <DatePickerInput
-                    id='birthdate'
+                    id='birthDate'
                     label={t('profile.birthdate')}
-                    error={personalInfoForm.formState.errors.birthdate?.message}
+                    error={personalInfoForm.formState.errors.birthDate?.message}
                     value={field.value}
                     onChange={field.onChange}
                     isBirthdate={true}
