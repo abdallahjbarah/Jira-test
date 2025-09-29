@@ -411,16 +411,19 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               <Divider className='w-full my-8' />
               <AmenitiesSection amenities={amenities || []} />
             </div>
-            <BookingPanel
-              pricingInformation={pricingInformation}
-              schedule={{
-                ...schedule,
-                unavailbleDates: detailsData?.data?.unavailbleDates,
-              }}
-              params={params}
-              type={type}
-              name={name}
-            />
+            {/* BookingPanel for laptopM and larger screens */}
+            <div className='hidden laptopM:block max-w-[30.563rem] w-full flex-[0.3]'>
+              <BookingPanel
+                pricingInformation={pricingInformation}
+                schedule={{
+                  ...schedule,
+                  unavailbleDates: detailsData?.data?.unavailbleDates,
+                }}
+                params={params}
+                type={type}
+                name={name}
+              />
+            </div>
           </div>
           {type != 'Stay' && (
             <>
@@ -461,6 +464,20 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               similarExperiences={similarData?.similarSites || []}
             />
           )}
+
+          {/* BookingPanel for screens smaller than laptopM - positioned at bottom */}
+          <div className='block laptopM:hidden mt-8'>
+            <BookingPanel
+              pricingInformation={pricingInformation}
+              schedule={{
+                ...schedule,
+                unavailbleDates: detailsData?.data?.unavailbleDates,
+              }}
+              params={params}
+              type={type}
+              name={name}
+            />
+          </div>
         </div>
       </main>
     </InnerPagesLayout>

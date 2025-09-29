@@ -2,13 +2,13 @@
 import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
 import CircularLoader from '@/components/ui/CircularLoader';
 import Divider from '@/components/ui/Divider';
-import FinancialReceiptUpload from '@/components/web/bookings/FinancialReceiptUpload';
 import {
   AdditionalServices,
   BookingDetails,
   BookingSummary,
   PaymentMethods,
 } from '@/components/web/details/completeYourBookings';
+import SmartSubmitButton from '@/components/web/details/completeYourBookings/SmartSubmitButton';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { useBookingData } from '@/hooks/useBookingData';
 import InnerPagesLayout from '@/layouts/InnerPagesLayout';
@@ -426,82 +426,91 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
               Complete your booking and pay
             </h1>
             <div className='flex flex-col lg:flex-row justify-between w-full gap-20'>
-              <div className='flex flex-col gap-2 flex-1'>
+              <div className='flex flex-col gap-2 flex-1 order-2 lg:order-1'>
                 <BookingDetails
                   time={
-                    detailsData?.data?.site.type !== 'Stay' &&
-                    (() => {
-                      try {
-                        const startTime = new Date(bookingDateTime.startTime);
-                        const endTime = new Date(bookingDateTime.endTime);
-
-                        console.log('🕐 Experience time formatting:', {
-                          startTime: bookingDateTime.startTime,
-                          endTime: bookingDateTime.endTime,
-                          startTimeObj: startTime,
-                          endTimeObj: endTime,
-                          isValidStart: !isNaN(startTime.getTime()),
-                          isValidEnd: !isNaN(endTime.getTime()),
-                        });
-
-                        if (
-                          !isNaN(startTime.getTime()) &&
-                          !isNaN(endTime.getTime())
-                        ) {
-                          return `${startTime.toLocaleTimeString('en-US', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: true,
-                            timeZone: 'GMT',
-                          })} - ${endTime.toLocaleTimeString('en-US', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: true,
-                            timeZone: 'GMT',
-                          })}`;
-                        } else {
-                          console.log('⚠️ Invalid time values, using fallback');
-                          // Try to get time from site schedule as fallback
-                          if (
-                            detailsData?.data?.site.schedule?.startDateTime &&
-                            detailsData?.data?.site.schedule?.endDateTime
-                          ) {
-                            const scheduleStart = new Date(
-                              detailsData.data.site.schedule.startDateTime
+                    detailsData?.data?.site.type !== 'Stay'
+                      ? (() => {
+                          try {
+                            const startTime = new Date(
+                              bookingDateTime.startTime
                             );
-                            const scheduleEnd = new Date(
-                              detailsData.data.site.schedule.endDateTime
-                            );
+                            const endTime = new Date(bookingDateTime.endTime);
+
+                            console.log('🕐 Experience time formatting:', {
+                              startTime: bookingDateTime.startTime,
+                              endTime: bookingDateTime.endTime,
+                              startTimeObj: startTime,
+                              endTimeObj: endTime,
+                              isValidStart: !isNaN(startTime.getTime()),
+                              isValidEnd: !isNaN(endTime.getTime()),
+                            });
+
                             if (
-                              !isNaN(scheduleStart.getTime()) &&
-                              !isNaN(scheduleEnd.getTime())
+                              !isNaN(startTime.getTime()) &&
+                              !isNaN(endTime.getTime())
                             ) {
-                              return `${scheduleStart.toLocaleTimeString(
-                                'en-US',
-                                {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                  hour12: true,
-                                  timeZone: 'GMT',
-                                }
-                              )} - ${scheduleEnd.toLocaleTimeString('en-US', {
+                              return `${startTime.toLocaleTimeString('en-US', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true,
+                                timeZone: 'GMT',
+                              })} - ${endTime.toLocaleTimeString('en-US', {
                                 hour: '2-digit',
                                 minute: '2-digit',
                                 hour12: true,
                                 timeZone: 'GMT',
                               })}`;
+                            } else {
+                              console.log(
+                                '⚠️ Invalid time values, using fallback'
+                              );
+                              // Try to get time from site schedule as fallback
+                              if (
+                                detailsData?.data?.site.schedule
+                                  ?.startDateTime &&
+                                detailsData?.data?.site.schedule?.endDateTime
+                              ) {
+                                const scheduleStart = new Date(
+                                  detailsData.data.site.schedule.startDateTime
+                                );
+                                const scheduleEnd = new Date(
+                                  detailsData.data.site.schedule.endDateTime
+                                );
+                                if (
+                                  !isNaN(scheduleStart.getTime()) &&
+                                  !isNaN(scheduleEnd.getTime())
+                                ) {
+                                  return `${scheduleStart.toLocaleTimeString(
+                                    'en-US',
+                                    {
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                      hour12: true,
+                                      timeZone: 'GMT',
+                                    }
+                                  )} - ${scheduleEnd.toLocaleTimeString(
+                                    'en-US',
+                                    {
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                      hour12: true,
+                                      timeZone: 'GMT',
+                                    }
+                                  )}`;
+                                }
+                              }
+                              return '02:00 PM - 04:00 PM';
                             }
+                          } catch (error) {
+                            console.error(
+                              '❌ Error formatting experience time:',
+                              error
+                            );
+                            return '02:00 PM - 04:00 PM';
                           }
-                          return '02:00 PM - 04:00 PM';
-                        }
-                      } catch (error) {
-                        console.error(
-                          '❌ Error formatting experience time:',
-                          error
-                        );
-                        return '02:00 PM - 04:00 PM';
-                      }
-                    })()
+                        })()
+                      : ''
                   }
                   date={(() => {
                     if (detailsData?.data?.site.type === 'Stay') {
@@ -706,30 +715,14 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                   </>
                 )}
 
-                {!disableAttachment ? (
-                  <div className='mb-24'>
-                    {!financialReceipt && (
-                      <div className='mb-2'>
-                        <p className='text-sm text-red-600 font-medium'>
-                          * Financial receipt is required for this payment
-                          method
-                        </p>
-                      </div>
-                    )}
-                    <FinancialReceiptUpload
-                      control={control}
-                      name='financialReceipt'
-                      disabled={disableAttachment}
-                    />
-                  </div>
-                ) : (
-                  <div className='mb-24 p-4 bg-green-50 border border-green-200 rounded-lg'>
-                    <p className='text-green-800 text-sm'>
-                      No file attachment required for on-site payment methods.
-                      You can proceed with your booking.
-                    </p>
-                  </div>
-                )}
+                <SmartSubmitButton
+                  control={control}
+                  name='financialReceipt'
+                  disableAttachment={disableAttachment}
+                  onSubmit={handleSubmit(onSubmit)}
+                  isBookingCollectionPending={isBookingCollectionPending}
+                  isUploadingFile={isUploadingFile}
+                />
               </div>
               <BookingSummary
                 siteInfo={detailsData?.data?.site}
@@ -738,13 +731,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                   `${detailsData?.data?.site.country?.name}, ${detailsData?.data?.site.city}` ||
                   ''
                 }
-                onSubmit={() => {
-                  console.log('Submit button clicked');
-                  handleSubmit(onSubmit)();
-                }}
                 bookingData={bookingData}
-                isBookingCollectionPending={isBookingCollectionPending}
-                isUploadingFile={isUploadingFile}
                 transportationChecked={transportationChecked}
                 guideChecked={guideChecked}
                 airportChecked={airportChecked}

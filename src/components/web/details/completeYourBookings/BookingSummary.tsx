@@ -21,12 +21,9 @@ interface PriceBreakdown {
 interface BookingSummaryProps {
   title: string;
   location: string;
-  onSubmit: () => void;
   openFavouritesModal: (site: Site) => void;
   siteInfo: Site | undefined;
   bookingData: any | undefined;
-  isBookingCollectionPending: boolean;
-  isUploadingFile: boolean;
   transportationChecked?: boolean;
   guideChecked?: boolean;
   airportChecked?: boolean;
@@ -35,12 +32,9 @@ interface BookingSummaryProps {
 const BookingSummary: React.FC<BookingSummaryProps> = ({
   title,
   location,
-  onSubmit,
   openFavouritesModal,
   bookingData,
   siteInfo,
-  isBookingCollectionPending,
-  isUploadingFile,
   transportationChecked = false,
   guideChecked = false,
   airportChecked = false,
@@ -139,7 +133,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   ]);
 
   return (
-    <div className='flex flex-col gap-16 flex-1 items-end'>
+    <div className='flex flex-col gap-16 flex-1 items-end order-1 lg:order-2'>
       <div className='shadow-customShadow_1 rounded-2xl border border-gray-200 overflow-hidden w-full'>
         <div className='relative'>
           <img
@@ -214,14 +208,6 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
           </div>
         </div>
       </div>
-      <button
-        type='submit'
-        form='booking-form'
-        disabled={isBookingCollectionPending || isUploadingFile}
-        className='w-[186px] bg-primary_1 text-white px-6 py-3 rounded-lg font-custom-700 text-sm font-gellix-Bold max-w-[186px] min-w-[186px] mb-24 lg:mb-0 hover:bg-primary_2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
-      >
-        Submit
-      </button>
     </div>
   );
 };
