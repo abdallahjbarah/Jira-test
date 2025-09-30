@@ -8,21 +8,21 @@ jobs:
   delete-branch:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the repository
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0  # fetch all branches
 
-      # Step 2: Replace origin with PAT-authenticated remote
-      - name: Configure PAT remote
+      # Step 2: Configure Git to use PAT and remove GITHUB_TOKEN override
+      - name: Configure Git to use PAT
         env:
           PAT_GITHUB: ${{ secrets.PAT_GITHUB }}
         run: |
-          # Remove default origin (github-actions bot)
-          git remote remove origin
-          # Add PAT-authenticated origin
-          git remote add origin https://${PAT_GITHUB}@github.com/abdallahjbarah/Jira-test.git
+          # Remove the extraheader that forces GITHUB_TOKEN authentication
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          # Set origin to use PAT
+          git remote set-url origin https://${PAT_GITHUB}@github.com/abdallahjbarah/Jira-test.git
           git fetch origin --prune
 
       # Step 3: Delete Jira-created branch
