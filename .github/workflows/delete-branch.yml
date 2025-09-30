@@ -8,15 +8,14 @@ jobs:
   delete-branch:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the repository so git commands work
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Delete branch
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
           BRANCH_NAME: ${{ github.event.client_payload.branch }}
         run: |
           echo "Deleting branch: $BRANCH_NAME"
           git fetch origin
-          git push origin --delete $BRANCH_NAME || echo "Branch does not exist"
+          git push https://${GITHUB_TOKEN}@github.com/abdallahjbarah/Jira-test.git --delete $BRANCH_NAME || echo "Branch does not exist"
