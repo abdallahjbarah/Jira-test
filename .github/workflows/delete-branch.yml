@@ -8,13 +8,13 @@ jobs:
   delete-branch:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout repository
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0  # fetch all branches
 
-      # Step 2: Configure PAT as the origin remote
+      # Step 2: Replace origin with PAT-authenticated remote
       - name: Configure PAT remote
         env:
           PAT_GITHUB: ${{ secrets.PAT_GITHUB }}
