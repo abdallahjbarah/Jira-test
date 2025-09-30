@@ -8,18 +8,20 @@ jobs:
   delete-branch:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout repository so git commands work
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Delete the branch dynamically using PAT
+      # Step 2: Delete Jira-created branch using a PAT-authenticated remote
       - name: Delete Jira-created branch
         env:
           PAT_GITHUB: ${{ secrets.PAT_GITHUB }}        # Your GitHub PAT secret
           BRANCH_NAME: ${{ github.event.client_payload.branch }}
         run: |
           echo "Deleting branch: $BRANCH_NAME"
-          # Fetch all branches using PAT
-          git fetch https://${PAT_GITHUB}@github.com/abdallahjbarah/Jira-test.git
-          # Delete the branch using PAT
-          git push https://${PAT_GITHUB}@github.com/abdallahjbarah/Jira-test.git --delete $BRANCH_NAME || echo "Branch does not exist"
+          # Add a new remote that uses the PAT for authentication
+          git remote add pat-origin https://${PAT_GITHUB}@github.com/abdallahjbarah/Jira-test.git
+          # Fetch all branches using the PAT remote
+          git fetch pat-origin
+          # Delete the branch using the PAT remote
+          git push pat-origin --delete $BRANCH_NAME || echo "Branch does not exist"
