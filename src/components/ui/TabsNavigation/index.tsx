@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
 import clsx from 'clsx';
+import React, { useState } from 'react';
 
 export type TabItem = {
   id: number;
@@ -51,7 +51,7 @@ const TabsNavigation: React.FC<TabsNavigationProps> = ({
             key={tab.id}
             onClick={() => handleTabChange(tab.id)}
             className={clsx(
-              'flex-1 py-[11px] px-[30px] text-custom-18 font-custom-600 transition-all duration-200 rounded-[1.5rem] leading-full',
+              'flex-1 py-[8px] px-[15px] mobileM:py-[11px] mobileM:px-[30px] text-custom-14 mobileM:text-custom-18 font-custom-600 transition-all duration-200 rounded-[1.5rem] leading-full',
               tab.id === activeTab
                 ? 'bg-primary_4 text-primary_7 font-custom-800'
                 : ' text-primary_4 hover:bg-opacity-90 '

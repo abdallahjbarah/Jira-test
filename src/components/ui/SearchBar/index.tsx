@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
 import SearchInput from '@/components/ui/SearchInput';
+import React, { useState } from 'react';
 
 interface SearchBarProps {
   onSearch?: (query: string) => void;
@@ -33,7 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         placeholder={placeholder}
         value={searchQuery}
         onChange={handleChange}
-        className='w-full'
+        className='w-full h-[48px] mobileM:h-full'
       />
     </div>
   );

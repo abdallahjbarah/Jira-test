@@ -1,16 +1,16 @@
 'use client';
+import { IntersectionObserverTrigger } from '@/components/shared/IntersectionObserverTrigger';
+import CircularLoader from '@/components/ui/CircularLoader';
+import BookingsFilter from '@/components/web/bookings/BookingsFilter';
+import CollectionCard from '@/components/web/collections/CollectionCard';
 import { useTranslation } from '@/contexts/TranslationContext';
 import InnerPagesLayout from '@/layouts/InnerPagesLayout';
-import React from 'react';
-import BookingsFilter from '@/components/web/bookings/BookingsFilter';
-import Styled from 'styled-components';
-import CollectionCard from '@/components/web/collections/CollectionCard';
-import CircularLoader from '@/components/ui/CircularLoader';
 import { useFetchInfiniteBookings } from '@/lib/apis/bookings/useFetchBookings';
-import { IntersectionObserverTrigger } from '@/components/shared/IntersectionObserverTrigger';
 import { BookingStatus } from '@/lib/enums';
-import debounce from '@/utils/helpers/debounce';
 import { Booking } from '@/lib/types';
+import debounce from '@/utils/helpers/debounce';
+import React from 'react';
+import Styled from 'styled-components';
 
 const CollectionsListingContainer = Styled.div`
   display: grid;
@@ -102,7 +102,7 @@ const MyBookingsPage = () => {
   return (
     <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main className='container pt-[1rem] pb-[3rem] laptopM:pb-[5rem]'>
-        <h2 className='text-center text-custom-40 font-custom-700 font-gellix-Bold text-text_1 mb-[4rem]'>
+        <h2 className='text-center text-custom-25 mobileM:text-custom-35 laptopM:text-custom-40 font-custom-700 font-gellix-Bold text-text_1 mb-[2rem] mobileM:mb-[3rem] laptopM:mb-[4rem]'>
           {t('myBookings.my')}{' '}
           <span className='text-primary_1'>{t('myBookings.bookings')}</span>
         </h2>
@@ -118,7 +118,7 @@ const MyBookingsPage = () => {
         </div>
         {totalCount === 0 && !isLoading && (
           <div className=' mt-[2rem]'>
-            <span className='text-custom-24 text-text_1'>
+            <span className=' text-custom-15 mobileM:text-custom-20 laptopM:text-custom-24 text-text_1'>
               {t('myBookings.noBookings')}
             </span>
           </div>

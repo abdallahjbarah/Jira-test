@@ -1,8 +1,8 @@
-import React from 'react';
-import Image, { StaticImageData } from 'next/image';
-import CustomLink from '@components/ui/CustomLink';
 import ArrowRight from '@components/svg/shared/ArrowRight';
+import CustomLink from '@components/ui/CustomLink';
 import { useTranslation } from '@contexts/TranslationContext';
+import Image, { StaticImageData } from 'next/image';
+import React from 'react';
 
 interface ImageContainerProps {
   image: StaticImageData;
@@ -47,10 +47,10 @@ export default function ImageContainer({
         />
 
         <div className='absolute top-10 left-10 z-10'>
-          <h2 className='text-custom-32 font-bold text-primary_4 mb-2 select-none'>
+          <h2 className='text-custom-20 mobileM:text-custom-32 font-bold text-primary_4 mb-2 select-none'>
             {title}
           </h2>
-          <div className='flex gap-2 items-center text-custom-24 font-medium text-primary_4 group-hover:text-primary_2 transition-all duration-200'>
+          <div className='flex gap-2 items-center text-custom-14 mobileM:text-custom-24 font-medium text-primary_4 group-hover:text-primary_2 transition-all duration-200'>
             <span>{t('view-all') || 'View All'}</span>
             <ArrowRight className='transition-transform fill-primary_4 group-hover:fill-primary_2 group-hover:translate-x-2' />
           </div>

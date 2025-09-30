@@ -164,11 +164,10 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               </p>
               {siteInfo?.bookagriBadge && (
                 <div className='flex items-center gap-1'>
-                  <CustomSvg
+                  <img
                     src='/SVGs/shared/bookagri-gold.svg'
-                    className='text-gold_1'
-                    width={96}
-                    height={24}
+                    alt='Bookagri Badge'
+                    className='w-[60px] h-[16px] mobileM:w-[96px] mobileM:h-[24px] text-gold_1'
                   />
                 </div>
               )}
@@ -204,7 +203,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                 <span className='font-custom-700 text-text_1 text-custom-12 mobileM:text-custom-14 laptopM:text-custom-16'>
                   Total ({currency})
                 </span>
-                <span className='font-custom-700 text-text_1 text-custom-12 mobileM:text-custom-14 laptopM:text-custom-16'>
+                <span className='font-custom-700 text-text_1'>
                   {dynamicTotalAmount}
                 </span>
               </div>

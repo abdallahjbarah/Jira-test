@@ -378,11 +378,10 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                   </p>
                   <div className='text-custom-14 text-right'>
                     {bookagriBadge && (
-                      <CustomSvg
+                      <img
                         src='/SVGs/shared/bookagri-gold.svg'
-                        className='text-gold_1'
-                        width={96}
-                        height={24}
+                        alt='Bookagri Badge'
+                        className='w-[60px] h-[16px] mobileM:w-[96px] mobileM:h-[24px] text-gold_1'
                       />
                     )}
                   </div>

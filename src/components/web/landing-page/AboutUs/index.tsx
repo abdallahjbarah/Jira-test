@@ -1,11 +1,11 @@
 'use client';
-import React from 'react';
-import Image from 'next/image';
-import Vector from '@images/home/Vector.png';
-import VisionSVG from '@SVGs/home/VisionSVG.svg';
-import MissionSvg from '@SVGs/home/MissionSvg.svg';
 import FilledButton from '@components/ui/buttons/FilledButton';
 import { useTranslation } from '@contexts/TranslationContext';
+import Vector from '@images/home/Vector.png';
+import MissionSvg from '@SVGs/home/MissionSvg.svg';
+import VisionSVG from '@SVGs/home/VisionSVG.svg';
+import Image from 'next/image';
+import React from 'react';
 
 export default function AboutUs(): React.ReactElement {
   const { t } = useTranslation();
@@ -28,41 +28,41 @@ export default function AboutUs(): React.ReactElement {
 
         <div className='flex flex-col gap-12 max-w-[43.875rem] pb-[4rem] laptopS:pb-0'>
           <div>
-            <h1 className='text-custom-48 font-custom-800 text-primary_5 font-gellix-Bold'>
+            <h1 className=' text-custom-30 mobileM:text-custom-40 laptopM:text-custom-48 font-custom-800 text-primary_5 font-gellix-Bold'>
               {t('aboutUs.title')}
             </h1>
-            <p className='text-custom-24 font-custom-400 text-secondary_1 mt-6'>
+            <p className='text-custom-16 mobileM:text-custom-20 laptopM:text-custom-24 font-custom-400 text-secondary_1 mt-6'>
               {t('aboutUs.description')}
             </p>
           </div>
 
           <div className='flex gap-4'>
-            <div className='w-full bg-primary_4 max-w-[6.4375rem] max-h-[6.4375rem] rounded-custom-20 flex justify-center items-center'>
-              <div className='w-10 h-9'>
+            <div className='w-full bg-primary_4 max-w-[4.4375rem] max-h-[4.4375rem] mobileM:max-w-[6.4375rem] mobileM:max-h-[6.4375rem] rounded-custom-20 flex justify-center items-center'>
+              <div className='w-7 h-6 mobileM:w-10 mobileM:h-9'>
                 <Image src={VisionSVG} alt='Vision logo' />
               </div>
             </div>
             <div>
-              <h2 className='text-custom-24 font-custom-800 text-primary_5 font-gellix-Bold'>
+              <h2 className='text-custom-18 mobileM:text-custom-20 laptopM:text-custom-24 font-custom-800 text-primary_5 font-gellix-Bold'>
                 {t('aboutUs.vision.title')}
               </h2>
-              <p className='text-custom-18 font-custom-400 text-secondary_1 mt-2'>
+              <p className='text-custom-14 mobileM:text-custom-16 laptopM:text-custom-18 font-custom-400 text-secondary_1 mt-2'>
                 {t('aboutUs.vision.description')}
               </p>
             </div>
           </div>
 
           <div className='flex gap-4'>
-            <div className='w-full bg-primary_4 max-w-[6.4375rem] max-h-[6.4375rem] rounded-custom-20 flex justify-center items-center'>
-              <div className='w-10 h-9'>
+            <div className='w-full bg-primary_4 max-w-[4.4375rem] max-h-[4.4375rem] mobileM:max-w-[6.4375rem] mobileM:max-h-[6.4375rem]  rounded-custom-20 flex justify-center items-center'>
+              <div className='w-7 h-6 mobileM:w-10 mobileM:h-9'>
                 <Image src={MissionSvg} alt='Mission logo' />
               </div>
             </div>
             <div>
-              <h2 className='text-custom-24 font-custom-800 text-primary_5 font-gellix-Bold'>
+              <h2 className='text-custom-18 mobileM:text-custom-20 laptopM:text-custom-24 font-custom-800 text-primary_5 font-gellix-Bold'>
                 {t('aboutUs.mission.title')}
               </h2>
-              <p className='text-custom-18 font-custom-400 text-secondary_1 mt-2'>
+              <p className='text-custom-14 mobileM:text-custom-16 laptopM:text-custom-18 font-custom-400 text-secondary_1 mt-2'>
                 {t('aboutUs.mission.description')}
               </p>
             </div>
@@ -72,8 +72,8 @@ export default function AboutUs(): React.ReactElement {
             <FilledButton
               path='#'
               text={t('aboutUs.readMore')}
-              width='w-[11.3125rem]'
-              height='h-[4.8125rem]'
+              width='w-[8.3125rem] mobileM:w-[11.3125rem]'
+              height='h-[2.8125rem] mobileM:h-[4.8125rem]'
               className='mt-5 rounded-custom-16'
               icon={null}
               onClick={() => {}}

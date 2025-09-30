@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, ChangeEvent } from 'react';
 import clsx from 'clsx';
+import React, { ChangeEvent, useState } from 'react';
 import CustomSvg from '../CustomSvg';
 
 interface SearchInputProps {

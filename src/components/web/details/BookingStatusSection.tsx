@@ -104,33 +104,40 @@ const BookingStatusSection = ({
   };
 
   return (
-    <div className='flex items-center gap-2.5 mt-[27px]'>
-      <span
-        className={`rounded-full text-sm font-medium px-11 py-2.5 ${getStatusColor(detailsData.booking.status)}`}
-      >
-        {getStatusLabel(detailsData.booking.status)}
-      </span>
+    <div className='flex flex-col items-start gap-4 mobileM:gap-2.5 mt-[27px] mobileM:flex-row mobileM:items-center'>
+      <div className='flex items-center gap-2.5'>
+        <span
+          className={`rounded-full text-custom-12 mobileM:text-custom-12 laptopM:text-custom-14 font-medium px-11 py-2.5 ${getStatusColor(detailsData.booking.status)}`}
+        >
+          {getStatusLabel(detailsData.booking.status)}
+        </span>
 
-      {detailsData.canCancel &&
-        detailsData.booking.status! != BookingStatus.CANCELLED &&
-        detailsData.booking.status! != BookingStatus.COMPLETED && (
-          <button
-            className='px-11 py-2.5 bg-[#47C40910] text-text_1 border border-green-200 rounded-full hover:bg-green-100 transition-colors duration-200 text-sm font-medium'
-            onClick={openModal}
-          >
-            {t('bookingStatus.cancel')}
-          </button>
-        )}
+        {detailsData.canCancel &&
+          detailsData.booking.status! != BookingStatus.CANCELLED &&
+          detailsData.booking.status! != BookingStatus.COMPLETED && (
+            <button
+              className='px-11 py-2.5 bg-[#47C40910] text-text_1 border border-green-200 rounded-full hover:bg-green-100 transition-colors duration-200 text-custom-12 mobileM:text-custom-12 laptopM:text-custom-14 font-medium'
+              onClick={openModal}
+            >
+              {t('bookingStatus.cancel')}
+            </button>
+          )}
+      </div>
       {!isShowWhatsApp && (
         <div
           className='flex items-center gap-2 px-6 py-1 bg-white border border-solid border-gray-200 rounded-md shadow-sm hover:shadow-md hover:bg-gray-50 cursor-pointer transition-all duration-200'
           onClick={onWhatsapp}
         >
-          <span className='text-gray-700 text-sm font-medium'>
+          <span className='text-gray-700 text-custom-12 mobileM:text-custom-12 laptopM:text-custom-14 font-medium'>
             {t('booking.contactUsToRefund')}
           </span>
-          <div className='flex items-center gap-2 px-4 py-0 bg-[#25D366] text-white rounded-full text-sm font-medium underline'>
-            <img src={'/SVGs/shared/whatsAppIcon.svg'} />
+          <div className='flex items-center gap-2 px-4 py-0 bg-[#25D366] text-white rounded-full text-custom-12 mobileM:text-custom-12 laptopM:text-custom-14 font-medium underline'>
+            <img
+              src={'/SVGs/shared/whatsAppIcon.svg'}
+              alt='whatsAppIcon'
+              width={20}
+              height={20}
+            />
             WhatsApp
           </div>
         </div>

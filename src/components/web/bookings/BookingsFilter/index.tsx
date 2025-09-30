@@ -1,9 +1,8 @@
-import React from 'react';
-import { useTranslation } from '@/contexts/TranslationContext';
-import TabsNavigation, { TabItem } from '@/components/ui/TabsNavigation';
-import { FormProvider, useForm } from 'react-hook-form';
 import SearchBar from '@/components/ui/SearchBar';
+import TabsNavigation, { TabItem } from '@/components/ui/TabsNavigation';
+import { useTranslation } from '@/contexts/TranslationContext';
 import { BookingStatus } from '@/lib/enums';
+import { FormProvider, useForm } from 'react-hook-form';
 
 interface BookingsFilterProps {
   onFilterChange: (tabId: number) => void;
@@ -27,8 +26,8 @@ const BookingsFilter = ({
       id: BookingStatus.PENDING,
       label: t('bookingStatus.upcoming') || 'Upcoming',
       content: (
-        <div className='mt-8'>
-          <p className='text-custom-30 font-custom-500 text-[#000000]'>
+        <div className='mt-4 mobileM:mt-8'>
+          <p className=' text-custom-20 mobileM:text-custom-25 laptopM:text-custom-30 font-custom-500 text-[#000000]'>
             You have <span className='text-[#47C409]'>{upcomingCount}</span>{' '}
             upcoming {upcomingCount === 1 ? 'booking' : 'bookings'}
           </p>
@@ -40,7 +39,7 @@ const BookingsFilter = ({
       label: t('bookingStatus.completed') || 'Completed',
       content: (
         <div className='mt-8'>
-          <p className='text-custom-30 font-custom-500 text-[#000000]'>
+          <p className='text-custom-20 mobileM:text-custom-25 laptopM:text-custom-30 font-custom-500 text-[#000000]'>
             You have <span className='text-[#47C409]'>{completedCount}</span>{' '}
             completed {completedCount === 1 ? 'booking' : 'bookings'}
           </p>
@@ -52,7 +51,7 @@ const BookingsFilter = ({
       label: t('bookingStatus.cancelled') || 'Cancelled',
       content: (
         <div className='mt-8'>
-          <p className='text-custom-30 font-custom-500 text-[#000000]'>
+          <p className='text-custom-20 mobileM:text-custom-25 laptopM:text-custom-30 font-custom-500 text-[#000000]'>
             You have <span className='text-[#47C409]'>{cancelledCount}</span>{' '}
             cancelled {cancelledCount === 1 ? 'booking' : 'bookings'}
           </p>

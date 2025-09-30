@@ -277,11 +277,11 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
           <div className='flex  items-start mt-20'>
             <div className='flex flex-col gap-2 max-w-[60rem] w-full'>
               <div className='flex flex-col'>
-                <p className='text-text_1 text-custom-22 laptopM:text-custom-30 font-custom-500 font-sans text-ellipsis min-w-[12.5rem] break-words line-clamp-2'>
+                <p className='text-text_1 text-custom-20 mobileM:text-custom-25 laptopM:text-custom-30 font-custom-500 font-sans text-ellipsis min-w-[12.5rem] break-words line-clamp-2'>
                   {name}
                 </p>
                 <div className='flex justify-between items-center mt-2'>
-                  <p className='font-custom-400 font-sans text-custom-20 laptopM:text-custom-25 text-gray_3'>
+                  <p className='font-custom-400 font-sans  text-custom-15 mobileM:text-custom-20 laptopM:text-custom-25 text-gray_3'>
                     {`${country?.name}, ${city}`}
                   </p>
                   <div className='text-custom-14 text-right'>
