@@ -31,8 +31,8 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({
   coHosts,
 }) => (
   <div className='flex flex-col gap-10'>
-    <div className='flex gap-4 items-start'>
-      <div className='rounded-full w-20 h-20 flex-shrink-0'>
+    <div className='flex gap-3 items-start mobileM:gap-3 laptopM:gap-4'>
+      <div className='rounded-full w-[50px] h-[50px] mobileM:w-[60px] mobileM:h-[60px] laptopM:w-[80px] laptopM:h-[80px] flex-shrink-0'>
         <Image
           src={hosts?.profileImageUrl || ''}
           alt='host'
@@ -42,16 +42,16 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({
         />
       </div>
       <div className='flex flex-col gap-1 justify-start'>
-        <p className='font-custom-700 text-text_1 text-custom-22 laptopM:text-custom-30'>
+        <p className='font-custom-700 text-text_1 text-custom-16 mobileM:text-custom-22 laptopM:text-custom-30'>
           Host information
         </p>
-        <p className='font-custom-400 font-sems text-text_3 text-custom-16 laptopM:text-custom-20'>
+        <p className='font-custom-400 font-sems text-text_3 text-custom-14 mobileM:text-custom-18 laptopM:text-custom-20'>
           {hosts?.description}
         </p>
       </div>
     </div>
     <div className='flex gap-4 items-start'>
-      <div className='rounded-full w-20 h-20 flex-shrink-0'>
+      <div className='rounded-full w-[50px] h-[50px] mobileM:w-[60px] mobileM:h-[60px] laptopM:w-[80px] laptopM:h-[80px] flex-shrink-0'>
         <Image
           src={coHosts?.image || '/images/placeholder.jpg'}
           alt='co-host'
@@ -61,14 +61,14 @@ const HostInfoSection: React.FC<HostInfoSectionProps> = ({
         />
       </div>
       <div className='flex flex-col gap-1 justify-start'>
-        <p className='font-custom-700 text-text_1 text-custom-22 laptopM:text-custom-30'>
+        <p className='font-custom-700 text-text_1 text-custom-16 mobileM:text-custom-22 laptopM:text-custom-30'>
           Co-Host information
         </p>
-        <p className='font-custom-400 font-sems text-text_3 text-custom-16 laptopM:text-custom-20'>
+        <p className='font-custom-400 font-sems text-text_3 text-custom-14 mobileM:text-custom-18 laptopM:text-custom-20'>
           {coHosts?.firstName} {coHosts?.lastName} • Hosted in{' '}
           {coHosts?.languages.map(language => language.nameEn).join(', ')}
         </p>
-        <p className='font-custom-400 font-sems text-text_3 text-custom-16 laptopM:text-custom-20'>
+        <p className='font-custom-400 font-sems text-text_3 text-custom-14 mobileM:text-custom-18 laptopM:text-custom-20'>
           {coHosts?.description}
         </p>
       </div>

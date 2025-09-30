@@ -421,8 +421,12 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main className='container'>
         <form id='booking-form' onSubmit={handleSubmit(onSubmit)}>
-          <div className='flex flex-col gap-32'>
-            <h1 className='text-5xl font-custom-700 text-text_1 font-gellix-Bold'>
+          <div className='flex flex-col gap-8 mobileM:gap-24 laptopM:gap-32'>
+            <h1
+              className='
+            text-custom-20 mobileM:text-custom-35
+            laptopM:text-custom-48 font-custom-700 text-text_1 font-gellix-Bold'
+            >
               Complete your booking and pay
             </h1>
             <div className='flex flex-col lg:flex-row justify-between w-full gap-20'>

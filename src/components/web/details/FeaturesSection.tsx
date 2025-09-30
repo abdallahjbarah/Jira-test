@@ -1,5 +1,5 @@
-import React from 'react';
 import CustomSvg from '@/components/ui/CustomSvg';
+import React from 'react';
 
 interface Feature {
   icon: string;
@@ -20,10 +20,10 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ features }) => (
       >
         <CustomSvg src={feature.icon} width={24} height={24} color='red' />
         <div className='flex flex-col justify-start'>
-          <p className='font-custom-400 font-sans text-text_1 text-custom-20 '>
+          <p className='font-custom-400 font-sans text-text_1 text-custom-16 mobileM:text-custom-18 laptopM:text-custom-20'>
             {feature.title}
           </p>
-          <p className='font-custom-400 font-sans text-text_3 text-custom-14 '>
+          <p className='font-custom-400 font-sans text-text_3 text-custom-10 mobileM:text-custom-12 laptopM:text-custom-14'>
             {feature.description}
           </p>
         </div>

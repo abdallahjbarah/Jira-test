@@ -1,7 +1,7 @@
-import React from 'react';
-import Image from 'next/image';
 import CustomSvg from '@/components/ui/CustomSvg';
 import Divider from '@/components/ui/Divider';
+import Image from 'next/image';
+import React from 'react';
 
 interface Amenity {
   _id: string;
@@ -49,14 +49,14 @@ const AmenitiesPopup: React.FC<AmenitiesPopupProps> = ({
           <CustomSvg src='/SVGs/shared/close-icon.svg' width={24} height={24} />
         </button>
 
-        <h2 className='font-custom-700 text-custom-30 text-text_1 mb-8'>
+        <h2 className='font-custom-700 text-custom-20 mobileM:text-custom-22 laptopM:text-custom-30 text-text_1 mb-8'>
           All Amenities
         </h2>
 
         <div className='space-y-8'>
           {Object.values(groupedAmenities).map(category => (
             <div key={category.name} className='space-y-6'>
-              <h3 className='font-custom-700 text-custom-24 text-text_1 font-gellix-Bold'>
+              <h3 className='font-custom-700 text-custom-16 mobileM:text-custom-20 laptopM:text-custom-24 text-text_1 font-gellix-Bold'>
                 {category.name}
               </h3>
               <div className='flex flex-col gap-6'>
@@ -70,8 +70,9 @@ const AmenitiesPopup: React.FC<AmenitiesPopupProps> = ({
                       alt={amenity.nameEn}
                       width={50}
                       height={50}
+                      className='w-[30px] h-[30px] mobileM:w-[40px] mobileM:h-[40px] laptopM:w-[50px] laptopM:h-[50px]'
                     />
-                    <p className='font-custom-400 text-custom-20 text-text_1 text-center line-clamp-2'>
+                    <p className='font-custom-400 text-custom-14 mobileM:text-custom-18 laptopM:text-custom-20 text-text_1 text-center line-clamp-2'>
                       {amenity.nameEn}
                     </p>
                   </div>

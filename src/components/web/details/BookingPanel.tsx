@@ -352,7 +352,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
 
   return (
     <div className='w-full laptopM:max-w-[30.563rem] bg-white border border-[#F2F2F2] rounded-[1.5rem] drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] p-[1.5rem] flex flex-col space-y-[1.25rem] flex-[0.3]'>
-      <h2 className='text-xl font-custom-700 text-text_1 pt-2 font-gellix-Bold'>
+      <h2 className='text-custom-16 mobileM:text-custom-18 laptopM:text-custom-20 font-custom-700 text-text_1 pt-2 font-gellix-Bold'>
         {t('booking.startFrom')} {priceAdultString}{' '}
         <span className='font-custom-400 font-sans text-text_2'>
           {t('booking.perPerson')}
@@ -401,7 +401,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
         </div>
       </div>
       <div className='flex flex-col gap-2'>
-        <h1 className='text-xl font-custom-700 text-text_1 font-gellix-Bold'>
+        <h1 className='text-custom-16 mobileM:text-custom-18 laptopM:text-custom-20 font-custom-700 text-text_1 font-gellix-Bold'>
           {type === 'Stay'
             ? t('booking.availableStaySlots')
             : t('booking.availableTimeSlots')}

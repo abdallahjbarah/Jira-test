@@ -21,10 +21,10 @@ const ItinerarySection: React.FC<ItinerarySectionProps> = ({ stops }) => {
   };
   return (
     <div className='flex flex-col gap-4'>
-      <h1 className='font-custom-700 font-gellix-Bold text-text_1 text-custom-30'>
+      <h1 className='font-custom-700 font-gellix-Bold text-text_1  text-custom-20 mobileM:text-custom-22 laptopM:text-custom-30'>
         Itinerary
       </h1>
-      <p className='font-custom-400 font-sans text-text_2 text-custom-20'>
+      <p className='font-custom-400 font-sans text-text_2 text-custom-16 mobileM:text-custom-18 laptopM:text-custom-20'>
         This is a typical itinerary for this package
       </p>
       <div className='grid grid-cols-2 gap-8'>
@@ -43,10 +43,10 @@ const ItinerarySection: React.FC<ItinerarySectionProps> = ({ stops }) => {
               />
             </div>
             <div className='flex-1 flex flex-col'>
-              <h3 className='font-custom-600 text-custom-22 text-text_1 mb-2 '>
+              <h3 className='font-custom-600 text-custom-16 mobileM:text-custom-20 laptopM:text-custom-22 text-text_1 mb-2 '>
                 Stop At: {stop.title}
               </h3>
-              <p className='font-custom-400 text-custom-16 text-text_3 mb-4'>
+              <p className='font-custom-400 text-custom-14 mobileM:text-custom-14 laptopM:text-custom-16 text-text_3 mb-4'>
                 {stop.details}
               </p>
               <div className='flex items-center gap-2 mt-auto'>

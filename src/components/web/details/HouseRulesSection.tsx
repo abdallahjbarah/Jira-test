@@ -20,11 +20,11 @@ const HouseRulesSection: React.FC<HouseRulesSectionProps> = ({ rules }) => {
 
   return (
     <div className='flex flex-col gap-11'>
-      <p className='font-custom-700 text-text_1 text-custom-22 laptopM:text-custom-30'>
+      <p className='font-custom-700 text-text_1 text-custom-20 mobileM:text-custom-22 laptopM:text-custom-30'>
         House Rules
       </p>
       <div
-        className='font-custom-400 text-custom-16 laptopM:text-custom-20 text-text_2'
+        // className='font-custom-400 text-custom-16 laptopM:text-custom-20 text-text_2'
         dangerouslySetInnerHTML={{ __html: formatRules(rules || '') }}
       />
     </div>

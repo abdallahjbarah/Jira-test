@@ -273,6 +273,8 @@ export interface Site {
     price: number;
     learnMore: string;
   };
+  checkinTime?: string;
+  checkoutTime?: string;
 }
 
 export type Extra = {

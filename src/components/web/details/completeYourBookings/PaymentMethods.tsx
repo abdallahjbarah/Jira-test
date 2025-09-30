@@ -48,7 +48,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
 
   return (
     <div className='flex flex-col gap-14'>
-      <h2 className='text-3xl font-custom-700 text-text_1 font-gellix-Bold'>
+      <h2 className='text-custom-20 mobileM:text-custom-22 laptopM:text-custom-30 font-custom-700 text-text_1 font-gellix-Bold'>
         Choose Payment Methods
       </h2>
       <div className='flex flex-col gap-4'>
@@ -59,16 +59,16 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
             onClick={() => onMethodChange(method.value || '')}
           >
             <div className='flex justify-center gap-2 items-start'>
-              <div className='max-w-[56px] min-w-[56px] max-h-[56px] min-h-[56px] rounded-xl bg-secondary_2 flex items-center justify-center'>
+              <div className='max-w-[50px] min-w-[50px] max-h-[50px] min-h-[50px] mobileM:max-w-[56px] mobileM:min-w-[56px] mobileM:max-h-[56px] mobileM:min-h-[56px] rounded-xl bg-secondary_2 flex items-center justify-center'>
                 <img src={method.icon} alt={method.name} className='h-6 w-6' />
               </div>
               <div>
-                <h1 className='font-custom-600 text-text_1 font-gellix-Bold text-xl'>
+                <h1 className='font-custom-600 text-text_1 font-gellix-Bold text-custom-16 mobileM:text-custom-18 laptopM:text-custom-20'>
                   {method.name}
                 </h1>
                 {method.description && (
                   <p
-                    className='text-gray_3 text-sm'
+                    className='text-gray_3 text-custom-12 mobileM:text-custom-12 laptopM:text-custom-14'
                     dangerouslySetInnerHTML={{
                       __html: method.description,
                     }}

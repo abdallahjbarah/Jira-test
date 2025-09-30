@@ -258,7 +258,7 @@ const SmartSubmitButton = <T extends FieldValues = FieldValues>({
       {/* Show warning message for required attachment when no file selected */}
       {!disableAttachment && !value && (
         <div className='mb-2'>
-          <p className='text-sm text-red-600 font-medium'>
+          <p className=' text-red-600 font-medium text-custom-12 mobileM:text-custom-14'>
             * Financial receipt is required for this payment method
           </p>
         </div>
@@ -267,7 +267,7 @@ const SmartSubmitButton = <T extends FieldValues = FieldValues>({
       {/* Show info message for on-site payments */}
       {disableAttachment && (
         <div className='mb-4 p-4 bg-green-50 border border-green-200 rounded-lg'>
-          <p className='text-green-800 text-sm'>
+          <p className='text-green-800 text-custom-12 mobileM:text-custom-14'>
             No file attachment required for Credit/Debit Card (Visa/Mastercard).
             You can proceed with your booking.
           </p>
@@ -278,7 +278,7 @@ const SmartSubmitButton = <T extends FieldValues = FieldValues>({
       <FilledButton
         text={getButtonText()}
         width='w-full'
-        className='bg-primary_1 text-white px-6 py-3 rounded-lg font-custom-700 text-sm font-gellix-Bold max-w-[312px] min-w-[312px]'
+        className='bg-primary_1 text-white px-6 py-3 rounded-lg font-custom-700 font-gellix-Bold max-w-[312px] min-w-[312px] text-custom-12 mobileM:text-custom-14'
         icon={null}
         onClick={handleButtonClick}
         buttonType='button'

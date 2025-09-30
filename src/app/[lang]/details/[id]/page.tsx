@@ -232,6 +232,8 @@ const DetailsId: React.FC<DetailsIdProps> = ({
     transportationIsMandatory,
     guideIsIncluded,
     guideIsMandatory,
+    checkinTime,
+    checkoutTime,
   } = detailsData.data.site;
 
   const galleryImages =
@@ -318,6 +320,32 @@ const DetailsId: React.FC<DetailsIdProps> = ({
       : []),
   ];
 
+  const staysFeatures: {
+    icon: string;
+    title: string;
+    description: string;
+  }[] = [
+    {
+      icon: '/SVGs/shared/details-icons/timeCircle.svg',
+      title: 'Check-in',
+      description: `${checkinTime} PM`,
+    },
+    {
+      icon: '/SVGs/shared/details-icons/timeCircle.svg',
+      title: 'Check-out',
+      description: `${checkoutTime} PM`,
+    },
+    {
+      icon: '/SVGs/shared/details-icons/spokenLanguageIcon.svg',
+      title: 'Spoken Language',
+      description: `${languages
+        ?.map(language => language.nameEn)
+        .join(
+          ', '
+        )} (Download a language translator app to communicate with host!)`,
+    },
+  ];
+
   return (
     <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main className='container'>
@@ -398,6 +426,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                     startDateTime={startDateTime}
                     endDateTime={endDateTime}
                     languages={languages}
+                    staysFeatures={staysFeatures}
                   />
                 </>
               )}

@@ -42,7 +42,7 @@ function InnerHeader({
   }, [collectionsOpen]);
 
   return (
-    <header className='relative py-12  pr-10 pl-10 gap-3 container flex items-center justify-between '>
+    <header className='relative py-4 mobileM:py-12  pr-10 pl-10 gap-3 container flex items-center justify-between '>
       <CustomLink path={`/`}>
         <Image
           className='w-[20.6719rem] h-[5.25rem] laptopM:w-[14rem]'

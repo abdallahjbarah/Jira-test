@@ -155,11 +155,13 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         </div>
         <div className='p-6 flex flex-col gap-4'>
           <div className='flex flex-col gap-2'>
-            <h3 className='text-2xl font-custom-700 text-text_1 font-gellix-Bold'>
+            <h3 className='font-custom-700 text-text_1 font-gellix-Bold text-custom-16 mobileM:text-custom-20 laptopM:text-custom-24'>
               {title}
             </h3>
             <div className='flex justify-between items-center'>
-              <p className='text-gray-500'>{location}</p>
+              <p className='text-gray-500 text-custom-14 mobileM:text-custom-18 laptopM:text-custom-20'>
+                {location}
+              </p>
               {siteInfo?.bookagriBadge && (
                 <div className='flex items-center gap-1'>
                   <CustomSvg
@@ -174,19 +176,21 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
           </div>
 
           <div className='flex flex-col gap-4'>
-            <h4 className='text-xl font-custom-700 text-text_1 font-gellix-Bold'>
+            <h4 className='font-custom-700 text-text_1 font-gellix-Bold text-custom-16 mobileM:text-custom-20 laptopM:text-custom-24'>
               Price Breakdown
             </h4>
             <div className='flex flex-col gap-3'>
               {dynamicPriceBreakdown.map((item, index) => (
                 <div key={index} className='flex justify-between items-center'>
                   <span
-                    className={`text-gray-700 ${item.discount ? 'line-through' : ''}`}
+                    className={`text-gray-700 ${item.discount ? 'line-through' : ''} text-custom-14 mobileM:text-custom-18 laptopM:text-custom-20`}
                   >
                     {item.label}
                   </span>
                   <div className='flex flex-col items-end'>
-                    <span className='font-custom-600'>{item.amount}</span>
+                    <span className='font-custom-600 text-custom-12 mobileM:text-custom-14 laptopM:text-custom-16'>
+                      {item.amount}
+                    </span>
                     {item.discount && (
                       <span className='text-sm text-green-600'>
                         {item.discount}
@@ -197,10 +201,10 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               ))}
               <Divider className='w-full my-2' />
               <div className='flex justify-between items-center'>
-                <span className='font-custom-700 text-text_1'>
+                <span className='font-custom-700 text-text_1 text-custom-12 mobileM:text-custom-14 laptopM:text-custom-16'>
                   Total ({currency})
                 </span>
-                <span className='font-custom-700 text-text_1'>
+                <span className='font-custom-700 text-text_1 text-custom-12 mobileM:text-custom-14 laptopM:text-custom-16'>
                   {dynamicTotalAmount}
                 </span>
               </div>

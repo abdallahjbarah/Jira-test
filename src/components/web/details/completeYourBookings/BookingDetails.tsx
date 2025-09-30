@@ -57,7 +57,9 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({
             height={30}
             color='black'
           />
-          <p className='font-custom-400 text-text_1 font-sans text-3xl'>{time}</p>
+          <p className='font-custom-400 text-text_1 font-sans text-custom-19 mobileM:text-custom-26 laptopM:text-custom-30'>
+            {time}
+          </p>
         </div>
       )}
       {date && (
@@ -68,7 +70,9 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({
             height={30}
             color='black'
           />
-          <p className='font-custom-400 text-text_1 font-sans text-3xl'>{date}</p>
+          <p className='font-custom-400 text-text_1 font-sans text-custom-19 mobileM:text-custom-26 laptopM:text-custom-30'>
+            {date}
+          </p>
         </div>
       )}
       <div className='flex gap-1 items-center'>
@@ -78,7 +82,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({
           height={30}
           color='black'
         />
-        <p className='font-custom-400 text-text_1 font-sans text-3xl'>
+        <p className='font-custom-400 text-text_1 font-sans text-custom-19 mobileM:text-custom-26 laptopM:text-custom-30'>
           {people}
         </p>
       </div>
