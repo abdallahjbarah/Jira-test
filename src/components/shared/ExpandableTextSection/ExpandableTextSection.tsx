@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { useTranslation } from '@/contexts/TranslationContext';
+import React, { useState } from 'react';
 
 export interface ExpandableTextSectionProps {
   title: string;
@@ -35,11 +35,13 @@ const ExpandableTextSection: React.FC<ExpandableTextSectionProps> = ({
 
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
-      <h2 className={`text-3xl text-text_1 font-bold ${titleClassName}`}>
+      <h2
+        className={`text-custom-20 text-text_1 font-bold ${titleClassName} mobileM:text-custom-22 laptopM:text-custom-30`}
+      >
         {title}
       </h2>
       <div
-        className={`font-custom-400 text-text_1 font-sans text-xl ${contentClassName}`}
+        className={`font-custom-400 text-text_1 font-sans text-custom-15 ${contentClassName} mobileM:text-custom-18 laptopM:text-custom-20`}
       >
         <p>
           <span dangerouslySetInnerHTML={{ __html: displayContent }} />
@@ -47,7 +49,7 @@ const ExpandableTextSection: React.FC<ExpandableTextSectionProps> = ({
             <button
               onClick={toggleExpanded}
               type='button'
-              className={`ml-1 font-bold text-black font-sans text-2xl hover:opacity-80 transition-opacity ${buttonClassName}`}
+              className={`ml-1 font-bold text-black font-sans text-custom-14 hover:opacity-80 transition-opacity ${buttonClassName} mobileM:text-custom-18 laptopM:text-custom-20`}
             >
               {isExpanded ? t('common.readLess') : t('common.readMore')}
             </button>

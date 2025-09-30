@@ -1,17 +1,17 @@
 'use client';
 
-import React, { useEffect } from 'react';
 import ErrorFormik from '@components/ui/ErrorFormik';
 import FilledButton from '@components/ui/buttons/FilledButton';
 import CustomInput from '@components/ui/custom-inputs/CustomInput';
 import CustomTextarea from '@components/ui/custom-inputs/CustomTextarea';
+import { useTranslation } from '@contexts/TranslationContext';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { usePublicContext } from '@providers/ReactPublicContextProvider';
 import { usePostContactUs } from '@queries/mutations/postMutations';
 import { contactUsSchema } from '@utils/formsSchemas';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { toast } from 'react-toastify';
-import { useTranslation } from '@contexts/TranslationContext';
 
 interface ContactUsFormValues {
   firstName: string;
@@ -77,10 +77,10 @@ export default function ContactUsForm(): React.ReactElement {
     <div id='ContactUsForm' className='bg-secondary_2'>
       <div className='container mx-auto py-[15.125rem] flex flex-col laptopS:flex-row w-full justify-center items-center gap-[5rem] px-4 laptopS:px-[8.75rem]'>
         <div className='flex flex-col justify-center max-w-[35.875rem] mt-16 laptopS:mt-0'>
-          <h1 className='text-custom-70 font-custom-700 text-primary_5 font-gellix-Bold'>
+          <h1 className='text-custom-30 font-custom-700 text-primary_5 font-gellix-Bold mobileM:text-custom-70'>
             {t('contactUsForm.title')}
           </h1>
-          <p className='mt-6 text-custom-32 font-custom-400 text-primary_5'>
+          <p className='mt-6 text-custom-20 font-custom-400 text-primary_5 mobileM:text-custom-32'>
             {t('contactUsForm.subtitle')}
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function ContactUsForm(): React.ReactElement {
             <div className='w-full'>
               <CustomInput
                 shape={1}
-                className='h-[5rem] w-full px-6'
+                className='h-[3.5rem] w-full px-6 placeholder:text-custom-17 mobileM:h-[5rem] mobileM:placeholder:text-custom-24'
                 placeholder={t('contactUsForm.firstName')}
                 type='text'
                 id='firstName'
@@ -110,7 +110,7 @@ export default function ContactUsForm(): React.ReactElement {
             <div className='w-full'>
               <CustomInput
                 shape={1}
-                className='h-[5rem] w-full px-6'
+                className='h-[3.5rem] w-full px-6 placeholder:text-custom-17 mobileM:h-[5rem] mobileM:placeholder:text-custom-24'
                 placeholder={t('contactUsForm.lastName')}
                 type='text'
                 id='lastName'
@@ -129,7 +129,7 @@ export default function ContactUsForm(): React.ReactElement {
             <div className='w-full'>
               <CustomInput
                 shape={1}
-                className='h-[5rem] w-full px-6'
+                className='h-[3.5rem] w-full px-6 placeholder:text-custom-17 mobileM:h-[5rem] mobileM:placeholder:text-custom-24'
                 placeholder={t('contactUsForm.email')}
                 type='email'
                 id='email'
@@ -146,7 +146,7 @@ export default function ContactUsForm(): React.ReactElement {
             <div className='w-full'>
               <CustomInput
                 shape={1}
-                className='h-[5rem] w-full px-6'
+                className='h-[3.5rem] w-full px-6 placeholder:text-custom-17 mobileM:h-[5rem] mobileM:placeholder:text-custom-24'
                 placeholder={t('contactUsForm.phone')}
                 type='text'
                 id='phone'
@@ -165,7 +165,7 @@ export default function ContactUsForm(): React.ReactElement {
           <div className='w-full'>
             <CustomTextarea
               shape={1}
-              className='h-[15rem] w-full px-4 pt-5'
+              className='h-[11rem] w-full px-4 pt-5 placeholder:text-custom-17 mobileM:h-[15rem] mobileM:placeholder:text-custom-24'
               placeholder={t('contactUsForm.message')}
               id='message'
               value={values.message}
@@ -180,8 +180,8 @@ export default function ContactUsForm(): React.ReactElement {
           <div className='self-start mb-16 laptopS:mb-0'>
             <FilledButton
               path='#'
-              width='w-[14rem] mt-[2.5rem]'
-              height='h-[4.8125rem]'
+              width='w-[9rem] mt-[1.5rem] mobileM:w-[14rem] mobileM:mt-[2.5rem]'
+              height='h-[2.8125rem] mobileM:h-[4.8125rem]'
               text={t('contactUsForm.submit')}
               isButton
               buttonType='submit'

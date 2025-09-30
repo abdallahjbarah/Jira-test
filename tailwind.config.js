@@ -1,8 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 
-/* 
+/*
   All custom values write like this :
-  "custom-px": "value in rem" 
+  "custom-px": "value in rem"
 */
 
 module.exports = {
@@ -28,7 +28,7 @@ module.exports = {
       backgroundImage: {},
       screens: {
         mobileS: '375px', // Small mobile devices
-        mobileM: '420px', // Medium mobile devices, larger phones
+        mobileM: '430px', // Medium mobile devices, larger phones
         tabletS: '640px', // Small tablets
         tabletM: '768px', // Medium tablets
         laptopS: '1024px', // Small laptops

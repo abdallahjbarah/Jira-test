@@ -338,14 +338,14 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               />
             </button>
           </div>
-          <div className='flex justify-between laptopM:flex-row flex-col items-start gap-40 mt-20'>
+          <div className='flex justify-between laptopM:flex-row flex-col items-start gap-40 mt-8 mobileM:mt-10 laptopM:mt-20'>
             <div className='flex flex-col gap-2 flex-[0.7]'>
               <div className='flex flex-col laptopM:max-w-[37.5rem]'>
-                <p className='text-text_1 text-custom-30 font-custom-500 font-sans max-w-[37.5rem] text-ellipsis min-w-[12.5rem] break-words line-clamp-2'>
+                <p className='text-text_1 text-custom-20 font-custom-500 font-sans max-w-[37.5rem] text-ellipsis min-w-[12.5rem] break-words line-clamp-2 mobileM:text-custom-25 laptopM:text-custom-30'>
                   {name}
                 </p>
                 <div className='flex justify-between items-center mt-2'>
-                  <p className='font-custom-400 font-sans text-custom-25 text-gray_3'>
+                  <p className='font-custom-400 font-sans text-custom-15 text-gray_3 mobileM:text-custom-20 laptopM:text-custom-25'>
                     {`${country?.name}, ${city}`}
                   </p>
                   <div className='text-custom-14 text-right'>

@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import CustomLink from '../CustomLink';
 
 interface FilledButtonProps {
@@ -29,8 +29,8 @@ function FilledButton({
   className = 'rounded-custom-16',
 }: FilledButtonProps): ReactElement {
   const buttonStyles = {
-    normal: `text-custom-24 font-custom-700 bg-primary_1 justify-center items-center inline-flex text-primary_4 hover:bg-primary_2 transaction-colors duration-200 select-none ${className}`,
-    disabled: `text-custom-24 font-custom-700 bg-secondary_4 justify-center items-center inline-flex text-primary_2 transaction-colors duration-200 select-none ${className}`,
+    normal: `text-custom-16 font-custom-700 bg-primary_1 justify-center items-center inline-flex text-primary_4 hover:bg-primary_2 transaction-colors duration-200 select-none mobileMtext-custom-24 ${className}`,
+    disabled: `text-custom-16 font-custom-700 bg-secondary_4 justify-center items-center inline-flex text-primary_2 transaction-colors duration-200 select-none mobileM:text-custom-24 ${className}`,
   };
 
   const buttonClass = isDisable ? buttonStyles.disabled : buttonStyles.normal;

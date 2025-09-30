@@ -1,13 +1,11 @@
 'use client';
 
-import React from 'react';
-
 const LanguageIcon = () => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
-      width='38'
-      height='38'
+      width='30'
+      height='30'
       viewBox='0 0 38 38'
       fill='currentColor'
     >

@@ -1,13 +1,13 @@
 'use client';
-import React from 'react';
 import CustomSvg from '@/components/ui/CustomSvg';
 import useUser from '@/utils/hooks/useUser';
 import Image from 'next/image';
+import React from 'react';
 
 const ProfileTrigger: React.FC = () => {
   const { userData } = useUser();
   return (
-    <div className='w-[50px] h-[50px] laptopM:w-[70px] laptopM:h-[70px] bg-primary_2 rounded-full p-1 laptopM:p-[11px]'>
+    <div className='w-[40px] h-[40px] laptopM:w-[70px] laptopM:h-[70px] bg-primary_2 rounded-full p-1 laptopM:p-[11px]'>
       {userData?.user.profileImageUrl ? (
         <Image
           src={userData?.user.profileImageUrl}

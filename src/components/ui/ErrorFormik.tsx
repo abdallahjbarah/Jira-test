@@ -14,7 +14,7 @@ export default function ErrorFormik({
   return (
     <>
       {isError && isTouched ? (
-        <div className='text-red-500 text-custom-20 font-custom-500 mt-2'>
+        <div className='text-red-500 text-custom-14 font-custom-500 mt-2 mobileM:text-custom-20'>
           {error}
         </div>
       ) : null}
