@@ -8,20 +8,27 @@ jobs:
   delete-branch:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the repository
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # fetch all branches
 
-      # Step 2: Delete Jira-created branch using a PAT-authenticated remote
+      # Step 2: Configure PAT as the origin remote
+      - name: Configure PAT remote
+        env:
+          PAT_GITHUB: ${{ secrets.PAT_GITHUB }}
+        run: |
+          # Remove default origin (github-actions bot)
+          git remote remove origin
+          # Add PAT-authenticated origin
+          git remote add origin https://${PAT_GITHUB}@github.com/abdallahjbarah/Jira-test.git
+          git fetch origin --prune
+
+      # Step 3: Delete Jira-created branch
       - name: Delete Jira-created branch
         env:
-          PAT_GITHUB: ${{ secrets.PAT_GITHUB }}        # Your GitHub PAT secret
           BRANCH_NAME: ${{ github.event.client_payload.branch }}
         run: |
           echo "Deleting branch: $BRANCH_NAME"
-          # Add a new remote that uses the PAT for authentication
-          git remote add pat-origin https://${PAT_GITHUB}@github.com/abdallahjbarah/Jira-test.git
-          # Fetch all branches using the PAT remote
-          git fetch pat-origin
-          # Delete the branch using the PAT remote
-          git push pat-origin --delete $BRANCH_NAME || echo "Branch does not exist"
+          git push origin --delete $BRANCH_NAME || echo "Branch does not exist"
