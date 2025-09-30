@@ -8,7 +8,7 @@ jobs:
   delete-branch:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the repository
+      # Step 1: Checkout repository so git commands work
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -19,6 +19,7 @@ jobs:
           BRANCH_NAME: ${{ github.event.client_payload.branch }}
         run: |
           echo "Deleting branch: $BRANCH_NAME"
-          git fetch origin
-          # Use PAT in URL to authenticate and delete the branch
+          # Fetch all branches using PAT
+          git fetch https://${PAT_GITHUB}@github.com/abdallahjbarah/Jira-test.git
+          # Delete the branch using PAT
           git push https://${PAT_GITHUB}@github.com/abdallahjbarah/Jira-test.git --delete $BRANCH_NAME || echo "Branch does not exist"
