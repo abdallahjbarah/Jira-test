@@ -95,7 +95,7 @@ export default function LoginPage() {
 
       <div className='mt-32 sm:mt-52 w-full max-w-[296px] space-y-8 px-4 sm:px-0'>
         <div className='flex flex-row items-center justify-center gap-2 animate-fadeIn'>
-          <h1 className='w-[143px] h-[32px] text-[25px] font-bold leading-[100%] text-center'>
+          <h1 className='w-[143px] h-[32px] text-custom-22 tabletS:text-custom-25 font-bold leading-[100%] text-center'>
             <span className='text-[#222222]'>{t('auth.login.welcomeTo')} </span>
           </h1>
           <img

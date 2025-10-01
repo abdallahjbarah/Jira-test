@@ -1,6 +1,5 @@
 'use client';
 import CircularLoader from '@/components/ui/CircularLoader';
-import CustomSvg from '@/components/ui/CustomSvg';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { useFetchInfiniteCollections } from '@/lib/apis/collections/useFetchCollections';
 import { Site, SitesResponse } from '@/lib/types';
@@ -50,10 +49,12 @@ const MapToggleWidget = Styled.div`
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
-  align-items: center;
+  align-items: start;
   gap: 12px;
   min-width: 120px;
   max-width: 200px;
+  min-height: 60px;
+  max-height: 60px;
 
   &:hover {
     box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
@@ -66,6 +67,8 @@ const MapToggleWidget = Styled.div`
     gap: 10px;
     min-width: 100px;
     max-width: 160px;
+    min-height: 70px;
+    max-height: 70px;
   }
 
   @media (max-width: 768px) {
@@ -75,6 +78,8 @@ const MapToggleWidget = Styled.div`
     gap: 8px;
     min-width: 80px;
     max-width: 120px;
+    min-height: 80px;
+    max-height: 80px;
   }
 
   @media (max-width: 480px) {
@@ -84,6 +89,8 @@ const MapToggleWidget = Styled.div`
     gap: 6px;
     min-width: 70px;
     max-width: 100px;
+    min-height: 70px;
+    max-height: 70px;
   }
 
 `;
@@ -274,12 +281,10 @@ function CollectionsListing(): React.ReactElement {
     <div className='relative'>
       {!isMapView && (
         <MapToggleWidget onClick={handleMapToggle} title={t('map.showMapView')}>
-          <CustomSvg
+          <img
             src='/SVGs/shared/map-icon.svg'
-            className='text-white'
-            width={20}
-            height={20}
             alt='Map Icon'
+            className='w-[20px] h-[20px] text-white'
           />
           <span className='text-white font-medium text-sm'>
             {t('map.showMapView')}

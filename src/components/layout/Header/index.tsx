@@ -48,7 +48,7 @@ export default function Header(): React.ReactElement {
     <header className='relative'>
       <nav className='hidden laptopS:flex absolute left-1/2 top-[3rem] mx-auto w-full -translate-x-1/2 transform z-10 container bg-transparent'>
         <div className='flex justify-between items-center w-full'>
-          <ul className='flex justify-end items-center gap-2 laptopM:gap-4 xl:gap-6 flex-1'>
+          <ul className='flex items-center gap-2 laptopM:gap-4 laptopL:gap-6 '>
             {LINKS_DATA?.slice(0, 5)?.map((item: LinkData, index: number) => (
               <HeaderLink
                 key={index}
@@ -62,7 +62,7 @@ export default function Header(): React.ReactElement {
             ))}
           </ul>
 
-          <ul className='flex justify-center items-center flex-shrink-0 mx-8 pr-16 pl-32'>
+          <ul className='flex justify-center items-center flex-shrink-0 mx-8 '>
             <li>
               <CustomLink path={`/`}>
                 <Image
@@ -102,7 +102,7 @@ export default function Header(): React.ReactElement {
           </div>
 
           {/* Desktop Collections Links */}
-          <ul className='hidden laptopS:flex items-center gap-6 flex-shrink-0 pr-6'>
+          <ul className='hidden laptopS:flex items-center gap-2 laptopM:gap-4 laptopL:gap-6 flex-shrink-0 pr-6'>
             {COLLECTIONS_LINKS?.map(
               (item, index) =>
                 index != 5 && (
