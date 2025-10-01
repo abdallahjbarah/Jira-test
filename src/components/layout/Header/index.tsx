@@ -188,7 +188,7 @@ export default function Header(): React.ReactElement {
                   <div className=''>
                     <CustomLink path={`/`}>
                       <Image
-                        className='w-[20.6719rem] h-[5.25rem]'
+                        className='w-[10.6719rem] h-[5.25rem]'
                         quality={100}
                         src={BookagriLogoSvg}
                         alt='Bookagri Logo'
@@ -198,7 +198,7 @@ export default function Header(): React.ReactElement {
                   <div className='-mr-2'>
                     <button
                       type='button'
-                      className='bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-grayscale_3 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary_1'
+                      className='bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-grayscale_3 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary_1 w-[2rem] h-[2rem]'
                       onClick={() => setOpen(!open)}
                     >
                       <span className='sr-only'>Close menu</span>

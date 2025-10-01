@@ -29,7 +29,7 @@ function FilledButton({
   className = 'rounded-custom-16',
 }: FilledButtonProps): ReactElement {
   const buttonStyles = {
-    normal: `text-custom-16 font-custom-700 bg-primary_1 justify-center items-center inline-flex text-primary_4 hover:bg-primary_2 transaction-colors duration-200 select-none mobileMtext-custom-24 ${className}`,
+    normal: `text-custom-14 font-custom-700 bg-primary_1 justify-center items-center inline-flex text-primary_4 hover:bg-primary_2 transaction-colors duration-200 select-none mobileMtext-custom-24 ${className}`,
     disabled: `text-custom-16 font-custom-700 bg-secondary_4 justify-center items-center inline-flex text-primary_2 transaction-colors duration-200 select-none mobileM:text-custom-24 ${className}`,
   };
 

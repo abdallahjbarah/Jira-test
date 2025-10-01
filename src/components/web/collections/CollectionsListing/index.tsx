@@ -298,7 +298,9 @@ function CollectionsListing(): React.ReactElement {
         </div>
       ) : (
         <>
-          <CollectionTypeLabel />
+          <div className='px-[18px] tabletM:px-[32px]'>
+            <CollectionTypeLabel />
+          </div>
           {collectionsGrid}
           {hasNextPage && (
             <div className='flex justify-center mt-8'>

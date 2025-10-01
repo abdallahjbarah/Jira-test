@@ -66,6 +66,37 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     return null;
   };
 
+  // Helper function to extract time from string without timezone conversion
+  const extractTimeFromString = (
+    timeString: string | number | undefined
+  ): string => {
+    if (!timeString) return '';
+
+    if (typeof timeString === 'number') {
+      // If it's a timestamp, convert to date and format
+      const date = new Date(timeString);
+      return date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      });
+    }
+
+    if (typeof timeString === 'string') {
+      // Extract time portion from string like "2025-10-04 07:30 GMT+1"
+      const timeMatch = timeString.match(/(\d{1,2}):(\d{2})/);
+      if (timeMatch) {
+        const hours = parseInt(timeMatch[1]);
+        const minutes = timeMatch[2];
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+        return `${displayHours}:${minutes} ${period}`;
+      }
+    }
+
+    return '';
+  };
+
   // Helper function to format guest information
   const formatGuestInfo = (
     guests: { adults: number; children: number; infants: number } | undefined
@@ -467,32 +498,22 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                     detailsData?.data?.site.type !== 'Stay'
                       ? (() => {
                           try {
-                            const startTime = parseDateTime(
+                            const startTimeFormatted = extractTimeFromString(
                               bookingDateTime.startTime
                             );
-                            const endTime = parseDateTime(
+                            const endTimeFormatted = extractTimeFromString(
                               bookingDateTime.endTime
                             );
 
                             console.log('🕐 Experience time formatting:', {
                               startTime: bookingDateTime.startTime,
                               endTime: bookingDateTime.endTime,
-                              startTimeObj: startTime,
-                              endTimeObj: endTime,
-                              isValidStart: startTime !== null,
-                              isValidEnd: endTime !== null,
+                              startTimeFormatted,
+                              endTimeFormatted,
                             });
 
-                            if (startTime && endTime) {
-                              return `${startTime.toLocaleTimeString('en-US', {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: true,
-                              })} - ${endTime.toLocaleTimeString('en-US', {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: true,
-                              })}`;
+                            if (startTimeFormatted && endTimeFormatted) {
+                              return `${startTimeFormatted} - ${endTimeFormatted}`;
                             } else {
                               console.log(
                                 '⚠️ Invalid time values, using fallback'
@@ -503,28 +524,19 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                                   ?.startDateTime &&
                                 detailsData?.data?.site.schedule?.endDateTime
                               ) {
-                                const scheduleStart = parseDateTime(
-                                  detailsData.data.site.schedule.startDateTime
-                                );
-                                const scheduleEnd = parseDateTime(
-                                  detailsData.data.site.schedule.endDateTime
-                                );
-                                if (scheduleStart && scheduleEnd) {
-                                  return `${scheduleStart.toLocaleTimeString(
-                                    'en-US',
-                                    {
-                                      hour: '2-digit',
-                                      minute: '2-digit',
-                                      hour12: true,
-                                    }
-                                  )} - ${scheduleEnd.toLocaleTimeString(
-                                    'en-US',
-                                    {
-                                      hour: '2-digit',
-                                      minute: '2-digit',
-                                      hour12: true,
-                                    }
-                                  )}`;
+                                const scheduleStartFormatted =
+                                  extractTimeFromString(
+                                    detailsData.data.site.schedule.startDateTime
+                                  );
+                                const scheduleEndFormatted =
+                                  extractTimeFromString(
+                                    detailsData.data.site.schedule.endDateTime
+                                  );
+                                if (
+                                  scheduleStartFormatted &&
+                                  scheduleEndFormatted
+                                ) {
+                                  return `${scheduleStartFormatted} - ${scheduleEndFormatted}`;
                                 }
                               }
                               return '02:00 PM - 04:00 PM';

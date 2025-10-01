@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
-import Image from 'next/image';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { useTranslation } from '@/contexts/TranslationContext';
-import { useCreateTicket } from '@/lib/apis/helpCenter/useMutateTicket';
 import { useUploadFile } from '@/lib/apis/files/useUploadFile';
+import { useCreateTicket } from '@/lib/apis/helpCenter/useMutateTicket';
 import { FileFolder } from '@/lib/enums';
+import Image from 'next/image';
+import React, { useRef, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 interface FormData {
@@ -92,15 +92,15 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className='w-full'>
       <div className='absolute top-[120px] left-1/2 transform -translate-x-1/2 w-[296px] h-[54px] flex flex-col items-center'>
-        <div className='w-[121px] h-[29px] font-bold text-2xl leading-[29px] text-center text-[#222222] mx-auto mb-1 whitespace-nowrap'>
+        <div className='w-[121px] h-[29px] font-bold text-xl mobileM:text-2xl leading-[29px] text-center text-[#222222] mx-auto mb-1 whitespace-nowrap'>
           {t('helpCenter.needHelp')}
         </div>
-        <div className='w-[296px] h-[17px] font-normal text-sm leading-[17px] text-center text-[#222222]'>
+        <div className='w-[296px] h-[17px] font-normal text-xs mobileM:text-sm leading-[17px] text-center text-[#222222]'>
           {t('helpCenter.sendMessage')}
         </div>
       </div>
 
-      <div className='absolute top-[240px] left-1/2 transform -translate-x-1/2 w-[456px] h-[58.94px]'>
+      <div className='absolute top-[240px] left-1/2 transform -translate-x-1/2 w-[240px] mobileM:w-[356px] tabletS:w-[456px] tabletS:h-[58.94px]'>
         <input
           className='w-full h-[58.94px] bg-white border border-[#EEEEEE] rounded-lg font-normal text-sm leading-[17px] text-[#555555] p-[18px_24px] box-border focus:outline-none focus:border-[#47C409] placeholder:text-[#555555] truncate'
           placeholder={t('helpCenter.subject')}
@@ -108,7 +108,10 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
         />
       </div>
 
-      <div className='absolute top-[320px] left-1/2 transform -translate-x-1/2 w-[456px] h-[176.82px]'>
+      <div
+        className='absolute top-[320px] left-1/2 transform -translate-x-1/2
+      w-[240px] mobileM:w-[356px] tabletS:w-[456px] tabletS:h-[176.82px]'
+      >
         <textarea
           className='w-full h-[176.82px] bg-white border border-[#EEEEEE] rounded-lg font-normal text-sm leading-[17px] text-[#555555] p-[18px_24px] box-border resize-none focus:outline-none focus:border-[#47C409] placeholder:text-[#555555] break-words'
           placeholder={t('helpCenter.messagePlaceholder')}
@@ -116,7 +119,10 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
         />
       </div>
 
-      <div className='absolute top-[520px] left-1/2 transform -translate-x-1/2 w-[456px] h-[58.94px] flex items-center'>
+      <div
+        className='absolute top-[520px] left-1/2 transform -translate-x-1/2
+      w-[240px] mobileM:w-[356px] tabletS:w-[456px] tabletS:h-[58.94px] flex items-center'
+      >
         <input
           className='w-full h-[58.94px] bg-white border border-[#EEEEEE] rounded-lg font-normal text-sm leading-[17px] text-[#555555] p-[18px_24px] box-border cursor-pointer text-left focus:outline-none focus:border-[#47C409] placeholder:text-[#555555] truncate'
           placeholder={file?.[0]?.name || t('helpCenter.attachFile')}
@@ -147,13 +153,15 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
         />
       </div>
 
-      <button
-        type='submit'
-        className='absolute left-[194px] top-[644px] w-[179px] h-12 bg-[#47C409] shadow-[0px_10px_40px_rgba(71,196,9,0.25)] rounded-lg border-none text-white font-bold text-xl leading-6 text-center cursor-pointer'
-        disabled={isPending}
-      >
-        {isPending ? t('helpCenter.saving') : t('helpCenter.save')}
-      </button>
+      <div className='flex items-end justify-center h-[561px]'>
+        <button
+          type='submit'
+          className='w-[179px] h-12 bg-[#47C409] shadow-[0px_10px_40px_rgba(71,196,9,0.25)] rounded-lg border-none text-white font-bold text-base mobileM:text-xl leading-6 text-center cursor-pointer'
+          disabled={isPending}
+        >
+          {isPending ? t('helpCenter.saving') : t('helpCenter.save')}
+        </button>
+      </div>
 
       <div className='absolute left-[36.75%] right-[35.51%] top-[96.09%] bottom-[2.07%] font-normal text-xs leading-[14px] text-center text-[#222222]'>
         {t('helpCenter.checkFAQs')}{' '}

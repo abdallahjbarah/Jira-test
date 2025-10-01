@@ -1,15 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import FAQModal from '../FAQs';
+import Modal from '@/components/ui/Modal';
+import { useTranslation } from '@/contexts/TranslationContext';
+import { useFetchTickets } from '@/lib/apis/helpCenter/useFetchTickets';
 import { Ticket } from '@/lib/types';
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+import FAQModal from '../FAQs';
+import CreateTicket from './CreateTicket';
 import TicketDetail from './TicketDetail';
 import TicketList from './TicketList';
-import CreateTicket from './CreateTicket';
-import { useTranslation } from '@/contexts/TranslationContext';
-import Modal from '@/components/ui/Modal';
-import { useFetchTickets } from '@/lib/apis/helpCenter/useFetchTickets';
-import Image from 'next/image';
 
 type ViewState = 'list' | 'create' | 'faq';
 
@@ -104,7 +104,7 @@ const HelpCenterModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         onClose={onClose}
         title={getModalTitle()}
         width='566px'
-        containerClassName='laptopM:w-[566px] laptopM:h-[761px]'
+        containerClassName='w-[566px] h-[761px] laptopM:w-[566px] laptopM:h-[761px]'
         canClose={canCloseModal}
         headerPrefix={
           selectedTicket ? (

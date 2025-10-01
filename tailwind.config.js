@@ -28,7 +28,7 @@ module.exports = {
       backgroundImage: {},
       screens: {
         mobileS: '375px', // Small mobile devices
-        mobileM: '430px', // Medium mobile devices, larger phones
+        mobileM: '440px', // Medium mobile devices, larger phones
         tabletS: '640px', // Small tablets
         tabletM: '768px', // Medium tablets
         laptopS: '1024px', // Small laptops

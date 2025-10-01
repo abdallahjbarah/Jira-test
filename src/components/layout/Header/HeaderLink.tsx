@@ -16,7 +16,7 @@ export default function HeaderLink({
     <li
       className={`
         ${isActive ? 'text-primary_1 font-custom-800' : 'text-primary_4 font-custom-400'}
-        transition-all duration-200 text-custom-10 laptopS:text-custom-14 laptopM:text-custom-16 laptopL:text-custom-18 hover:font-custom-800 hover:text-primary_1`}
+        transition-all duration-200 text-custom-15 laptopS:text-custom-14 laptopM:text-custom-16 laptopL:text-custom-18 hover:font-custom-800 hover:text-primary_1`}
     >
       <CustomLink path={path}>{text}</CustomLink>
     </li>
