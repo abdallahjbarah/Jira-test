@@ -7,11 +7,10 @@ import debounce from '@/utils/helpers/debounce';
 import {
   buildFiltersFromSearchParams,
   buildSearchParamsFromFilters,
-  convertToBackendFilters,
-  FrontendFilter,
   FilterFormValues,
-  getFormDefaultsFromSearchParams,
+  FrontendFilter,
   getDefaultFilterValues,
+  getFormDefaultsFromSearchParams,
 } from '@/utils/helpers/filterHelpers';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
@@ -106,12 +105,8 @@ const FilterBar = () => {
     }
 
     methods.setValue('filters', updatedFilters, { shouldValidate: false });
-    // Only set active button to checkout if not in experiences section
-    if (collectionStatus !== 'experiences') {
-      setActiveButton('checkout');
-    } else {
-      setActiveButton(null);
-    }
+    // Clear active button after check-in selection
+    setActiveButton(null);
   };
 
   const handleCheckOutChange = (dateString: string, dates: Date[]) => {
@@ -145,7 +140,7 @@ const FilterBar = () => {
     }
 
     methods.setValue('filters', updatedFilters, { shouldValidate: true });
-    setActiveButton('date'); // Move to date selection
+    setActiveButton(null); // Clear active button after location selection
   };
 
   const handleMainSearch = () => {

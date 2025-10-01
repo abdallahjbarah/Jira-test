@@ -1,10 +1,10 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { useTranslation } from '@/contexts/TranslationContext';
-import GuestSelector from '../GuestSelector';
 import Dropdown from '@/components/ui/Dropdown';
+import { useTranslation } from '@/contexts/TranslationContext';
+import React, { useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import FilterBarItem from '../FilterBar/FilterBarItem';
+import GuestSelector from '../GuestSelector';
 
 interface GuestFilterItemProps {
   title?: {
@@ -123,7 +123,7 @@ const GuestFilterItem: React.FC<GuestFilterItemProps> = ({
             title={title || { en: '', ar: '' }}
             value={getGuestDisplayText()}
             onClick={() => {}}
-            className={`${isOpen || guests.adults > 0 || guests.children > 0 || guests.infants > 0 ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}`}
+            className={`${isOpen ? 'bg-white rounded-full [&_span]:!text-green-600' : ''}`}
           />
         )
       }

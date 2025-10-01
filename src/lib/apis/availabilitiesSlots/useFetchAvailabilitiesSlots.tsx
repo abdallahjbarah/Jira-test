@@ -1,6 +1,6 @@
+import { AvailabilitySlot } from '@/lib/types';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '../index';
-import { AvailabilitySlot } from '@/lib/types';
 
 interface AvailabilitiesSlotsResponse {
   data: AvailabilitySlot[];
@@ -10,6 +10,8 @@ interface FetchAvailabilitySlotsParams {
   siteId: string;
   startDateTime?: number;
   endDateTime?: number;
+  startDateTimeZoned?: string;
+  endDateTimeZoned?: string;
 }
 
 const fetchAvailabilitySlots = async ({

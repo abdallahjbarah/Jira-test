@@ -313,6 +313,8 @@ export interface PaymentMethod {
 export interface AvailabilitySlot {
   startDateTime: number;
   endDateTime: number;
+  startDateTimeZoned: string;
+  endDateTimeZoned: string;
   slotId: string;
   isFullyBooked: boolean;
   _id: string;

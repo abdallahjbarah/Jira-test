@@ -49,6 +49,8 @@ interface GroupedSlots {
       slotId: string;
       isFullyBooked: boolean;
       _id: string;
+      startDateTimeZoned?: string;
+      endDateTimeZoned?: string;
     }>;
   };
 }
@@ -140,9 +142,10 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
               : {
                   slotIds,
                   startDateTime:
-                    selectedSlot?.startDateTime || searchDates.startDateTime,
+                    selectedSlot?.startDateTimeZoned ||
+                    searchDates.startDateTime,
                   endDateTime:
-                    selectedSlot?.endDateTime || searchDates.endDateTime,
+                    selectedSlot?.endDateTimeZoned || searchDates.endDateTime,
                 },
           type,
           name,
@@ -174,7 +177,9 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
     if (!availabilitySlots?.data) return {};
 
     return availabilitySlots.data.reduce((acc: GroupedSlots, slot) => {
-      const date = new Date(slot.startDateTime);
+      // Extract date part from "2025-10-04 16:00 GMT+3"
+      const datePart = slot.startDateTimeZoned.split(' ')[0]; // "2025-10-04"
+      const date = new Date(datePart);
       const dateKey = date.toDateString();
 
       if (!acc[dateKey]) {
@@ -242,13 +247,16 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
     })}`;
   };
 
-  const formatTime = (timestamp: number) => {
-    return new Date(timestamp).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-      timeZone: 'GMT',
-    });
+  const formatTime = (zonedTimeString: string) => {
+    // Extract time part from "2025-10-04 16:00 GMT+3"
+    const timePart = zonedTimeString.split(' ')[1]; // "16:00"
+    const [hours, minutes] = timePart.split(':').map(Number);
+
+    // Convert to 12-hour format
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+
+    return `${displayHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
   };
 
   const allowedGuestsField = React.useMemo(() => {
@@ -483,7 +491,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                 {slots.map(slot => (
                   <TimeSlotCard
                     key={slot._id}
-                    timeRange={`${formatTime(slot.startDateTime)} - ${formatTime(slot.endDateTime)}`}
+                    timeRange={`${formatTime(slot.startDateTimeZoned!)} - ${formatTime(slot.endDateTimeZoned!)}`}
                     adultPrice={priceAdultString}
                     childrenPrice={priceChildrenString}
                     infantsPrice={priceInfantsString}

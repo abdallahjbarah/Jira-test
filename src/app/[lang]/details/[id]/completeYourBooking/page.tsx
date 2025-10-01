@@ -38,6 +38,34 @@ interface BookingFormData {
 const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   params,
 }) => {
+  // Helper function to parse datetime values for experiences (supports both timestamps and zoned strings)
+  const parseDateTime = (value: string | number | undefined): Date | null => {
+    if (!value) return null;
+
+    // If it's a number (timestamp), use it directly
+    if (typeof value === 'number') {
+      return new Date(value);
+    }
+
+    // If it's a zoned string like "2025-10-04 16:00 GMT+3", parse it
+    if (typeof value === 'string') {
+      // Try parsing as-is first
+      const directParse = new Date(value);
+      if (!isNaN(directParse.getTime())) {
+        return directParse;
+      }
+
+      // If direct parsing fails, try normalizing GMT to UTC
+      const normalizedString = value.replace('GMT', 'UTC');
+      const normalizedParse = new Date(normalizedString);
+      if (!isNaN(normalizedParse.getTime())) {
+        return normalizedParse;
+      }
+    }
+
+    return null;
+  };
+
   // Helper function to format guest information
   const formatGuestInfo = (
     guests: { adults: number; children: number; infants: number } | undefined
@@ -225,6 +253,7 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     // For experiences, use startDateTime/endDateTime from the selected slot
     console.log('🎯 Experience type detected, using startDateTime/endDateTime');
     // For experiences, the availability data contains startDateTime and endDateTime directly
+    // These can now be either timestamps (numbers) or zoned strings
     const startTime =
       bookingData.availability.startDateTime ||
       detailsData?.data?.site.schedule?.startDateTime ||
@@ -247,6 +276,8 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
       endTime,
       startDate,
       endDate,
+      startTimeType: typeof startTime,
+      endTimeType: typeof endTime,
     });
 
     return {
@@ -436,34 +467,31 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                     detailsData?.data?.site.type !== 'Stay'
                       ? (() => {
                           try {
-                            const startTime = new Date(
+                            const startTime = parseDateTime(
                               bookingDateTime.startTime
                             );
-                            const endTime = new Date(bookingDateTime.endTime);
+                            const endTime = parseDateTime(
+                              bookingDateTime.endTime
+                            );
 
                             console.log('🕐 Experience time formatting:', {
                               startTime: bookingDateTime.startTime,
                               endTime: bookingDateTime.endTime,
                               startTimeObj: startTime,
                               endTimeObj: endTime,
-                              isValidStart: !isNaN(startTime.getTime()),
-                              isValidEnd: !isNaN(endTime.getTime()),
+                              isValidStart: startTime !== null,
+                              isValidEnd: endTime !== null,
                             });
 
-                            if (
-                              !isNaN(startTime.getTime()) &&
-                              !isNaN(endTime.getTime())
-                            ) {
+                            if (startTime && endTime) {
                               return `${startTime.toLocaleTimeString('en-US', {
                                 hour: '2-digit',
                                 minute: '2-digit',
                                 hour12: true,
-                                timeZone: 'GMT',
                               })} - ${endTime.toLocaleTimeString('en-US', {
                                 hour: '2-digit',
                                 minute: '2-digit',
                                 hour12: true,
-                                timeZone: 'GMT',
                               })}`;
                             } else {
                               console.log(
@@ -475,23 +503,19 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                                   ?.startDateTime &&
                                 detailsData?.data?.site.schedule?.endDateTime
                               ) {
-                                const scheduleStart = new Date(
+                                const scheduleStart = parseDateTime(
                                   detailsData.data.site.schedule.startDateTime
                                 );
-                                const scheduleEnd = new Date(
+                                const scheduleEnd = parseDateTime(
                                   detailsData.data.site.schedule.endDateTime
                                 );
-                                if (
-                                  !isNaN(scheduleStart.getTime()) &&
-                                  !isNaN(scheduleEnd.getTime())
-                                ) {
+                                if (scheduleStart && scheduleEnd) {
                                   return `${scheduleStart.toLocaleTimeString(
                                     'en-US',
                                     {
                                       hour: '2-digit',
                                       minute: '2-digit',
                                       hour12: true,
-                                      timeZone: 'GMT',
                                     }
                                   )} - ${scheduleEnd.toLocaleTimeString(
                                     'en-US',
@@ -499,7 +523,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                                       hour: '2-digit',
                                       minute: '2-digit',
                                       hour12: true,
-                                      timeZone: 'GMT',
                                     }
                                   )}`;
                                 }
@@ -556,19 +579,19 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                       }
                     } else {
                       try {
-                        const start = new Date(bookingDateTime.startDate);
-                        const end = new Date(bookingDateTime.endDate);
+                        const start = parseDateTime(bookingDateTime.startDate);
+                        const end = parseDateTime(bookingDateTime.endDate);
 
                         console.log('📅 Experience date formatting:', {
                           startDate: bookingDateTime.startDate,
                           endDate: bookingDateTime.endDate,
                           startDateObj: start,
                           endDateObj: end,
-                          isValidStart: !isNaN(start.getTime()),
-                          isValidEnd: !isNaN(end.getTime()),
+                          isValidStart: start !== null,
+                          isValidEnd: end !== null,
                         });
 
-                        if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+                        if (start && end) {
                           if (
                             start.getFullYear() === end.getFullYear() &&
                             start.getMonth() === end.getMonth() &&
@@ -597,16 +620,13 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                             detailsData?.data?.site.schedule?.startDateTime &&
                             detailsData?.data?.site.schedule?.endDateTime
                           ) {
-                            const scheduleStart = new Date(
+                            const scheduleStart = parseDateTime(
                               detailsData.data.site.schedule.startDateTime
                             );
-                            const scheduleEnd = new Date(
+                            const scheduleEnd = parseDateTime(
                               detailsData.data.site.schedule.endDateTime
                             );
-                            if (
-                              !isNaN(scheduleStart.getTime()) &&
-                              !isNaN(scheduleEnd.getTime())
-                            ) {
+                            if (scheduleStart && scheduleEnd) {
                               return `(${scheduleStart.toLocaleDateString(
                                 'en-US',
                                 {

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface TimeSlotCardProps {
   timeRange: string;
-  adultPrice: string | null;
-  childrenPrice: string | null;
-  infantsPrice: string | null;
+  adultPrice: string | ReactNode | null;
+  childrenPrice: string | ReactNode | null;
+  infantsPrice: string | ReactNode | null;
   onChoose: () => void;
   currency?: string;
   type?: 'Stay' | 'Regular';
