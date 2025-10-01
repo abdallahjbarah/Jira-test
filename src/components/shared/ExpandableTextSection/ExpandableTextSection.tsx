@@ -49,7 +49,7 @@ const ExpandableTextSection: React.FC<ExpandableTextSectionProps> = ({
             <button
               onClick={toggleExpanded}
               type='button'
-              className={`ml-1 font-bold text-black font-sans text-custom-14 hover:opacity-80 transition-opacity ${buttonClassName} mobileM:text-custom-18 laptopM:text-custom-20`}
+              className={`ml-1 font-bold text-black font-sans text-custom-14 hover:opacity-80 transition-opacity ${buttonClassName} mobileM:text-custom-18 laptopM:text-custom-20 underline hover:text-primary_2 transition-colors`}
             >
               {isExpanded ? t('common.readLess') : t('common.readMore')}
             </button>

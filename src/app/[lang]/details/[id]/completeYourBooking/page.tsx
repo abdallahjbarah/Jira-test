@@ -684,7 +684,11 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
                     });
                   }}
                 />
-                <Divider className='w-full my-8' />
+                {detailsData?.data?.site.airportIsIncluded ||
+                  detailsData?.data?.site.guideIsIncluded ||
+                  (detailsData?.data?.site.transportationIsIncluded && (
+                    <Divider className='w-full my-8' />
+                  ))}
                 <AdditionalServices
                   transportationChecked={transportationChecked}
                   guideChecked={guideChecked}

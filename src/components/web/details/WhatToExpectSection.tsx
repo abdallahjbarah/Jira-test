@@ -28,7 +28,7 @@ const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({
           {shouldTruncate && (
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className='font-custom-500 underline text-black ml-1 hover:text-gray-700 transition-colors'
+              className='font-custom-500 underline text-black ml-1 hover:text-primary_2 transition-colors'
             >
               {isExpanded ? 'Read less' : 'Read more'}
             </button>
