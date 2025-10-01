@@ -1,6 +1,5 @@
 'use client';
 
-import CustomSvg from '@/components/ui/CustomSvg';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { useFetchSearchDestination } from '@/lib/apis/shared/useFetchSearchDestination';
 import debounce from '@/utils/helpers/debounce';
@@ -15,6 +14,7 @@ import {
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import CustomSvg from '../../ui/CustomSvg';
 import DatePickerDropdown from '../DatePickerDropdown';
 import GuestFilterItem from '../GuestFilterItem';
 import AdvancedFilterDropDown from './AdvancedFilterDropDown';
@@ -460,10 +460,10 @@ const FilterBar = () => {
                   >
                     <CustomSvg
                       src='/SVGs/home/search-bar-logo.svg'
-                      width={33}
-                      height={33}
-                      className='opacity-100 group-hover:text-black'
+                      className='opacity-100 group-hover:text-black w-[24px] h-[24px] laptopS:w-[33px] laptopS:h-[33px]'
                       color='white'
+                      width='100%'
+                      height='100%'
                     />
                   </button>
                   {!showSearchPopup && (
@@ -474,7 +474,7 @@ const FilterBar = () => {
                       aria-label='Clear filters'
                     >
                       <svg
-                        className='w-[35px] h-[35px] text-white'
+                        className='w-[26px] h-[26px] laptopS:w-[35px] laptopS:h-[35px] text-white'
                         stroke='currentColor'
                         fill='currentColor'
                         strokeWidth='0'

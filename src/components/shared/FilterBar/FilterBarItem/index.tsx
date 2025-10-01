@@ -47,10 +47,10 @@ const FilterBarItem = ({
       className={className}
       $isOpen={isOpen}
     >
-      <span className='text-[22px] font-custom-500 text-[#ffffff] text-center'>
+      <span className=' text-custom-14 tabletS:text-custom-18 laptopS:text-custom-22 font-custom-500 text-[#ffffff] text-center'>
         {title[locale]}
       </span>
-      <span className='text-[12px] font-custom-500 text-[#ffffff] text-center'>
+      <span className='text-custom-10 tabletS:text-custom-11 laptopS:text-custom-12 font-custom-500 text-[#ffffff] text-center'>
         {value}
       </span>
     </FilterBarItemContainer>

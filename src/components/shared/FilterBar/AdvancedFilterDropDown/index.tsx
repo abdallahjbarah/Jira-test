@@ -77,7 +77,13 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
           }
           // For other arrays, count only if not empty and different from default
           const defaultArray = defaultValue || [];
-          return count + (value.length > 0 && JSON.stringify(value.sort()) !== JSON.stringify(defaultArray.sort()) ? value.length : 0);
+          return (
+            count +
+            (value.length > 0 &&
+            JSON.stringify(value.sort()) !== JSON.stringify(defaultArray.sort())
+              ? value.length
+              : 0)
+          );
         }
 
         // Handle boolean values (like radio buttons and checkboxes)
@@ -161,7 +167,7 @@ const AdvancedFilterDropDown: React.FC<AdvancedFilterDropDownProps> = ({
     <div className='relative'>
       <CustomSvg
         src='/SVGs/shared/filter-icon.svg'
-        className='!w-[57px] !h-[57px] text-text_2 block'
+        className='!w-[37px] !h-[37px] laptopS:!w-[57px] laptopS:!h-[57px] text-text_2 block'
         width='100%'
         height='100%'
       />

@@ -153,7 +153,7 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
         />
       </div>
 
-      <div className='flex items-end justify-center h-[561px]'>
+      <div className='flex flex-col items-center justify-end h-[561px] gap-4'>
         <button
           type='submit'
           className='w-[179px] h-12 bg-[#47C409] shadow-[0px_10px_40px_rgba(71,196,9,0.25)] rounded-lg border-none text-white font-bold text-base mobileM:text-xl leading-6 text-center cursor-pointer'
@@ -161,16 +161,15 @@ const CreateTicket: React.FC<CreateTicketProps> = ({
         >
           {isPending ? t('helpCenter.saving') : t('helpCenter.save')}
         </button>
-      </div>
-
-      <div className='absolute left-[36.75%] right-[35.51%] top-[96.09%] bottom-[2.07%] font-normal text-xs leading-[14px] text-center text-[#222222]'>
-        {t('helpCenter.checkFAQs')}{' '}
-        <a
-          className='text-[#47C409] no-underline cursor-pointer hover:underline'
-          onClick={onFAQClick}
-        >
-          {t('helpCenter.faqs')}
-        </a>
+        <div className='font-normal text-xs leading-[14px] text-center text-[#222222]'>
+          {t('helpCenter.checkFAQs')}{' '}
+          <a
+            className='text-[#47C409] no-underline cursor-pointer hover:underline'
+            onClick={onFAQClick}
+          >
+            {t('helpCenter.faqs')}
+          </a>
+        </div>
       </div>
     </form>
   );

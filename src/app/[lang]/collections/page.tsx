@@ -56,7 +56,7 @@ export default function CollectionsPage({
   return (
     <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main>
-        <div className='container mb-[30px] laptopM:mb-[68px] flex items-center justify-center'>
+        <div className='container laptopS:mb-[30px] laptopM:mb-[68px] flex items-center justify-center'>
           <Suspense
             fallback={
               <div className='h-[60px] flex items-center justify-center'>
