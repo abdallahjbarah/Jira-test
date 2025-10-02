@@ -14,7 +14,6 @@ import {
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import CustomSvg from '../../ui/CustomSvg';
 import DatePickerDropdown from '../DatePickerDropdown';
 import GuestFilterItem from '../GuestFilterItem';
 import AdvancedFilterDropDown from './AdvancedFilterDropDown';
@@ -458,12 +457,10 @@ const FilterBar = () => {
                     onClick={handleMainSearch}
                     className='flex items-center justify-center p-3 bg-transparent rounded-full border-transparent transition-colors group'
                   >
-                    <CustomSvg
+                    <img
                       src='/SVGs/home/search-bar-logo.svg'
                       className='opacity-100 group-hover:text-black w-[24px] h-[24px] laptopS:w-[33px] laptopS:h-[33px]'
                       color='white'
-                      width='100%'
-                      height='100%'
                     />
                   </button>
                   {!showSearchPopup && (
