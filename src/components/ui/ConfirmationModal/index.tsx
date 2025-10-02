@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
 import Modal from '@/components/ui/Modal';
 import FilledButton from '@/components/ui/buttons/FilledButton';
+import React from 'react';
+import styled from 'styled-components';
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -40,12 +40,9 @@ const CancelButton = styled.button`
   border: 2px solid #e5e5e5;
   border-radius: 16px;
   padding: 0.9375rem 2.125rem;
-  font-size: 1.125rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
-  min-width: 10.67rem;
-  height: 3.8125rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,7 +86,12 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         </MessageContainer>
 
         <ButtonContainer>
-          <CancelButton onClick={onClose} disabled={isLoading} type='button'>
+          <CancelButton
+            onClick={onClose}
+            disabled={isLoading}
+            type='button'
+            className='!w-[8.67rem] !h-[3.8125rem] tabletS:!w-[10.67rem] tabletS:!h-[3.8125rem] !text-custom-16 tabletS:!text-custom-18'
+          >
             {cancelText}
           </CancelButton>
 
@@ -98,9 +100,9 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             isButton
             onClick={handleConfirm}
             buttonType='button'
-            width='w-[10.67rem]'
-            height='h-[3.8125rem]'
-            className={`rounded-custom-16 !text-custom-18 ${confirmButtonClass}`}
+            width='!w-[8.67rem] tabletS:!w-[10.67rem]'
+            height='!h-[3.8125rem] tabletS:!h-[3.8125rem]'
+            className={`rounded-custom-16 !text-custom-16 tabletS:text-custom-18 ${confirmButtonClass}`}
             isDisable={isLoading}
           />
         </ButtonContainer>
