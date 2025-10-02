@@ -10,7 +10,7 @@ import { TOKEN_NAME } from '@/utils';
 import { setCookie } from '@/utils/cookies';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { WretchError } from 'wretch';
@@ -28,6 +28,7 @@ const loginSchema = yup.object().shape({
 
 export default function LoginPage() {
   const router = useRouter();
+  const params = useParams<{ lang: string }>();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
@@ -48,12 +49,20 @@ export default function LoginPage() {
           `/auth/verify?email=${encodeURIComponent(data.user.email)}`
         );
       } else if (data.user.status === 1) {
-        // User is active - save data immediately and navigate to home
+        // User is active - save data immediately and navigate to return URL or home
         queryClient.setQueryData(['user'], data);
         setCookie(TOKEN_NAME, data.token);
         setCookie('userStatus', data.user.status);
         toast.success(t('auth.login.loggedInSuccess'));
-        router.push('/');
+
+        // Check for return URL
+        const returnUrl = sessionStorage.getItem('returnUrl');
+        if (returnUrl) {
+          sessionStorage.removeItem('returnUrl');
+          router.push(returnUrl);
+        } else {
+          router.push('/');
+        }
       } else {
         // Handle other statuses
         toast.error(t('auth.login.accountNotActive'));
@@ -98,11 +107,13 @@ export default function LoginPage() {
           <h1 className='w-[143px] h-[32px] text-custom-22 tabletS:text-custom-25 font-bold leading-[100%] text-center'>
             <span className='text-[#222222]'>{t('auth.login.welcomeTo')} </span>
           </h1>
-          <img
-            src='/images/shared/bookagriCOM.png'
-            alt='BookAgri'
-            className='w-[128px] h-[32.19px] object-contain'
-          />
+          <CustomLink path='/' className='cursor-pointer'>
+            <img
+              src='/images/shared/bookagriCOM.png'
+              alt='BookAgri'
+              className='w-[128px] h-[32.19px] object-contain hover:opacity-80 transition-opacity'
+            />
+          </CustomLink>
         </div>
 
         <div className='w-full space-y-5 pb-16'>

@@ -97,7 +97,14 @@ export default function SocialLoginButton({
               `/auth/verify?email=${encodeURIComponent(data.user.email)}`
             );
           } else {
-            router.push('/');
+            // Check for return URL
+            const returnUrl = sessionStorage.getItem('returnUrl');
+            if (returnUrl) {
+              sessionStorage.removeItem('returnUrl');
+              router.push(returnUrl);
+            } else {
+              router.push('/');
+            }
           }
         }
       } catch (processingError) {

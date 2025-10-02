@@ -308,6 +308,9 @@ const en = {
       or: 'Or',
       verificationRequired: 'Please verify your email to continue',
       accountNotActive: 'Account is not active. Please contact support.',
+      loginRequired: 'Login Required',
+      loginRequiredMessage: 'Please log in to continue with your booking.',
+      cancel: 'Cancel',
     },
     signup: {
       title: 'Sign Up',

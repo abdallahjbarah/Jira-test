@@ -2,19 +2,22 @@ import { Input } from '@/components/form/Input';
 import DatePickerDropdown from '@/components/shared/DatePickerDropdown';
 import GuestFilterItem from '@/components/shared/GuestFilterItem';
 import CircularLoader from '@/components/ui/CircularLoader';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { useBookingData } from '@/hooks/useBookingData';
+import useConfirmationModal from '@/hooks/useConfirmationModal';
 import { useFetchAvailabilitySlots } from '@/lib/apis/availabilitiesSlots/useFetchAvailabilitiesSlots';
 import { useFetchAvailabilityStaySlots } from '@/lib/apis/availabilitiesSlots/useFetchAvailabilitiesStay';
 import { fetchAllowedGuests } from '@/lib/apis/details/useFetchAllowedGuests';
 import { PricingInformation } from '@/lib/types';
 import { useQueryClient } from '@tanstack/react-query';
 import { Locale } from '@utils/constants';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { WretchError } from 'wretch';
 import useCurrency from '../../../utils/hooks/useCurrency';
+import useUser from '../../../utils/hooks/useUser';
 import TimeSlotCard from './TimeSlotCard';
 
 interface BookingPanelProps {
@@ -63,10 +66,20 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
   pricingInformation,
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const queryClient = useQueryClient();
   const { setBookingData } = useBookingData();
   const { t } = useTranslation();
   const { currency } = useCurrency();
+  const { isLoggedIn } = useUser();
+  const {
+    isOpen: isLoginModalOpen,
+    config: loginModalConfig,
+    isLoading: isLoginModalLoading,
+    openConfirmation: openLoginModal,
+    closeConfirmation: closeLoginModal,
+    handleConfirm: handleLoginConfirm,
+  } = useConfirmationModal();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [searchDates, setSearchDates] = useState<{
     startDateTime?: number;
@@ -104,6 +117,29 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
     type === 'Stay'
       ? availabilityStaySlotsQuery
       : { data: undefined, isLoading: false };
+
+  const handleAuthenticationCheck = async (callback: () => void) => {
+    if (!isLoggedIn) {
+      const confirmed = await openLoginModal({
+        title: t('auth.login.loginRequired'),
+        message: t('auth.login.loginRequiredMessage'),
+        confirmText: t('auth.login.loginButton'),
+        cancelText: t('auth.login.cancel'),
+        confirmButtonVariant: 'primary',
+      });
+
+      if (confirmed) {
+        // Store current page URL for return after login
+        const returnUrl = pathname;
+        sessionStorage.setItem('returnUrl', returnUrl);
+
+        // Navigate to login page
+        router.push(`/${params.lang}/auth/login`);
+      }
+    } else {
+      callback();
+    }
+  };
 
   const getAllowedGuests = async (slotIds?: string[], selectedSlot?: any) => {
     try {
@@ -359,148 +395,114 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
   }, [pricingInformation, currency]);
 
   return (
-    <div className='w-full laptopM:max-w-[30.563rem] bg-white border border-[#F2F2F2] rounded-[1.5rem] drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] p-[1.5rem] flex flex-col space-y-[1.25rem] flex-[0.3]'>
-      <h2 className='text-custom-16 mobileM:text-custom-18 laptopM:text-custom-20 font-custom-700 text-text_1 pt-2 font-gellix-Bold'>
-        {t('booking.startFrom')} {priceAdultString}{' '}
-        <span className='font-custom-400 font-sans text-text_2'>
-          {t('booking.perPerson')}
-        </span>
-      </h2>
-      <div className='flex flex-col gap-4'>
-        <div className='flex flex-col gap-2'>
-          <DatePickerDropdown
-            triggerComponent={
-              <Input
-                type='text'
-                className='border border-secondary_3 rounded-custom-10 p-3 w-full'
-                label={t('form.date')}
-                value={getDateDisplay()}
-                readOnly
-              />
-            }
-            mode={type === 'stay' ? 'range' : 'both'}
-            schedule={schedule}
-            onChange={handleDateChange}
-            minDate={minDate}
-            type={type}
-          />
-        </div>
-
-        <div className='flex flex-col gap-2'>
-          <GuestFilterItem
-            triggerComponent={
-              <Input
-                type='text'
-                className='border border-secondary_3 rounded-custom-10 p-3'
-                label={t('form.guests')}
-                value={getGuestDisplay()}
-                readOnly
-              />
-            }
-            onChange={guests => {
-              setGuests({
-                adults: guests.adults,
-                children: guests.children,
-                infants: guests.infants,
-              });
-            }}
-            allowedGuestsField={allowedGuestsField}
-          />
-        </div>
-      </div>
-      <div className='flex flex-col gap-2'>
-        <h1 className='text-custom-16 mobileM:text-custom-18 laptopM:text-custom-20 font-custom-700 text-text_1 font-gellix-Bold'>
-          {type === 'Stay'
-            ? t('booking.availableStaySlots')
-            : t('booking.availableTimeSlots')}
-        </h1>
-        {(
-          type === 'Stay'
-            ? isLoadingAvailabilityStaySlots
-            : isLoadingAvailabilitySlots
-        ) ? (
-          <div className='flex justify-center items-center h-[550px]'>
-            <CircularLoader size={50} />
-          </div>
-        ) : type === 'Stay' ? (
-          <div className='flex flex-col max-h-[400px] overflow-y-auto gap-5'>
-            {selectedDates.length === 2 && availabilityStaySlots?.data && (
-              <>
-                <p className='text-sm font-custom-400 text-text_1 font-sans'>
-                  {new Date(
-                    availabilityStaySlots.data.startDate
-                  ).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    timeZone: 'GMT',
-                  })}{' '}
-                  -{' '}
-                  {new Date(
-                    availabilityStaySlots.data.endDate
-                  ).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    timeZone: 'GMT',
-                  })}
-                </p>
-                <TimeSlotCard
-                  timeRange={`${new Date(
-                    availabilityStaySlots.data.startDate
-                  ).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                  })} - ${new Date(
-                    availabilityStaySlots.data.endDate
-                  ).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                  })}`}
-                  adultPrice={priceAdultString}
-                  childrenPrice={priceChildrenString}
-                  infantsPrice={priceInfantsString}
-                  type={type}
-                  title={name}
-                  onChoose={() => {
-                    if (guests.adults + guests.children + guests.infants > 0) {
-                      getAllowedGuests();
-                    } else {
-                      toast.error(t('booking.guests.selectGuests'), {
-                        position: 'top-right',
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                      });
-                    }
-                  }}
+    <>
+      <div className='w-full laptopM:max-w-[30.563rem] bg-white border border-[#F2F2F2] rounded-[1.5rem] drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] p-[1.5rem] flex flex-col space-y-[1.25rem] flex-[0.3]'>
+        <h2 className='text-custom-16 mobileM:text-custom-18 laptopM:text-custom-20 font-custom-700 text-text_1 pt-2 font-gellix-Bold'>
+          {t('booking.startFrom')} {priceAdultString}{' '}
+          <span className='font-custom-400 font-sans text-text_2'>
+            {t('booking.perPerson')}
+          </span>
+        </h2>
+        <div className='flex flex-col gap-4'>
+          <div className='flex flex-col gap-2'>
+            <DatePickerDropdown
+              triggerComponent={
+                <Input
+                  type='text'
+                  className='border border-secondary_3 rounded-custom-10 p-3 w-full'
+                  label={t('form.date')}
+                  value={getDateDisplay()}
+                  readOnly
                 />
-              </>
-            )}
+              }
+              mode={type === 'stay' ? 'range' : 'both'}
+              schedule={schedule}
+              onChange={handleDateChange}
+              minDate={minDate}
+              type={type}
+            />
           </div>
-        ) : (
-          <div className='flex flex-col max-h-[400px] overflow-y-auto gap-5'>
-            {Object.entries(groupedSlots).map(([dateKey, { date, slots }]) => (
-              <div key={dateKey} className='flex flex-col gap-2'>
-                <p className='text-sm font-custom-400 text-text_1 font-sans'>
-                  {date.toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'short',
-                  })}
-                </p>
-                {slots.map(slot => (
+
+          <div className='flex flex-col gap-2'>
+            <GuestFilterItem
+              triggerComponent={
+                <Input
+                  type='text'
+                  className='border border-secondary_3 rounded-custom-10 p-3'
+                  label={t('form.guests')}
+                  value={getGuestDisplay()}
+                  readOnly
+                />
+              }
+              onChange={guests => {
+                setGuests({
+                  adults: guests.adults,
+                  children: guests.children,
+                  infants: guests.infants,
+                });
+              }}
+              allowedGuestsField={allowedGuestsField}
+            />
+          </div>
+        </div>
+        <div className='flex flex-col gap-2'>
+          <h1 className='text-custom-16 mobileM:text-custom-18 laptopM:text-custom-20 font-custom-700 text-text_1 font-gellix-Bold'>
+            {type === 'Stay'
+              ? t('booking.availableStaySlots')
+              : t('booking.availableTimeSlots')}
+          </h1>
+          {(
+            type === 'Stay'
+              ? isLoadingAvailabilityStaySlots
+              : isLoadingAvailabilitySlots
+          ) ? (
+            <div className='flex justify-center items-center h-[550px]'>
+              <CircularLoader size={50} />
+            </div>
+          ) : type === 'Stay' ? (
+            <div className='flex flex-col max-h-[400px] overflow-y-auto gap-5'>
+              {selectedDates.length === 2 && availabilityStaySlots?.data && (
+                <>
+                  <p className='text-sm font-custom-400 text-text_1 font-sans'>
+                    {new Date(
+                      availabilityStaySlots.data.startDate
+                    ).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      timeZone: 'GMT',
+                    })}{' '}
+                    -{' '}
+                    {new Date(
+                      availabilityStaySlots.data.endDate
+                    ).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      timeZone: 'GMT',
+                    })}
+                  </p>
                   <TimeSlotCard
-                    key={slot._id}
-                    timeRange={`${formatTime(slot.startDateTimeZoned!)} - ${formatTime(slot.endDateTimeZoned!)}`}
+                    timeRange={`${new Date(
+                      availabilityStaySlots.data.startDate
+                    ).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })} - ${new Date(
+                      availabilityStaySlots.data.endDate
+                    ).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })}`}
                     adultPrice={priceAdultString}
                     childrenPrice={priceChildrenString}
                     infantsPrice={priceInfantsString}
+                    type={type}
+                    title={name}
                     onChoose={() => {
                       if (
                         guests.adults + guests.children + guests.infants >
                         0
                       ) {
-                        getAllowedGuests([slot._id], slot);
+                        handleAuthenticationCheck(() => getAllowedGuests());
                       } else {
                         toast.error(t('booking.guests.selectGuests'), {
                           position: 'top-right',
@@ -512,13 +514,74 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                       }
                     }}
                   />
-                ))}
-              </div>
-            ))}
-          </div>
-        )}
+                </>
+              )}
+            </div>
+          ) : (
+            <div className='flex flex-col max-h-[400px] overflow-y-auto gap-5'>
+              {Object.entries(groupedSlots).map(
+                ([dateKey, { date, slots }]) => (
+                  <div key={dateKey} className='flex flex-col gap-2'>
+                    <p className='text-sm font-custom-400 text-text_1 font-sans'>
+                      {date.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        day: 'numeric',
+                        month: 'short',
+                      })}
+                    </p>
+                    {slots.map(slot => (
+                      <TimeSlotCard
+                        key={slot._id}
+                        timeRange={`${formatTime(slot.startDateTimeZoned!)} - ${formatTime(slot.endDateTimeZoned!)}`}
+                        adultPrice={priceAdultString}
+                        childrenPrice={priceChildrenString}
+                        infantsPrice={priceInfantsString}
+                        onChoose={() => {
+                          if (
+                            guests.adults + guests.children + guests.infants >
+                            0
+                          ) {
+                            handleAuthenticationCheck(() =>
+                              getAllowedGuests([slot._id], slot)
+                            );
+                          } else {
+                            toast.error(t('booking.guests.selectGuests'), {
+                              position: 'top-right',
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                            });
+                          }
+                        }}
+                      />
+                    ))}
+                  </div>
+                )
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+
+      {/* Login Required Modal */}
+      <ConfirmationModal
+        isOpen={isLoginModalOpen}
+        onClose={closeLoginModal}
+        onConfirm={handleLoginConfirm}
+        title={loginModalConfig?.title || 'Login Required'}
+        message={
+          loginModalConfig?.message ||
+          'Please log in to continue with your booking.'
+        }
+        confirmText={loginModalConfig?.confirmText || 'Login'}
+        cancelText={loginModalConfig?.cancelText || 'Cancel'}
+        confirmButtonVariant={
+          loginModalConfig?.confirmButtonVariant || 'primary'
+        }
+        isLoading={isLoginModalLoading}
+      />
+    </>
   );
 };
 

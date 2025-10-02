@@ -324,6 +324,9 @@ const ar = {
       or: 'أو',
       verificationRequired: 'يرجى التحقق من بريدك الإلكتروني للمتابعة',
       accountNotActive: 'الحساب غير نشط. يرجى التواصل مع الدعم.',
+      loginRequired: 'تسجيل الدخول مطلوب',
+      loginRequiredMessage: 'يرجى تسجيل الدخول للمتابعة مع حجزك.',
+      cancel: 'إلغاء',
     },
     signup: {
       title: 'إنشاء حساب',

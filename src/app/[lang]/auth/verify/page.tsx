@@ -109,7 +109,14 @@ export default function VerifyPage(): React.ReactElement {
             // Clear temporary data
             sessionStorage.removeItem('tempAuthData');
 
-            router.push('/auth/welcome');
+            // Check for return URL
+            const returnUrl = sessionStorage.getItem('returnUrl');
+            if (returnUrl) {
+              sessionStorage.removeItem('returnUrl');
+              router.push(returnUrl);
+            } else {
+              router.push('/auth/welcome');
+            }
           } catch (error) {
             console.error('Error processing verification data:', error);
             toast.error(t('auth.verify.dataProcessingError'));
@@ -123,7 +130,15 @@ export default function VerifyPage(): React.ReactElement {
               user: { ...oldData.user, status: ApprovalStatus.ACTIVE },
             };
           });
-          router.push('/auth/welcome');
+
+          // Check for return URL
+          const returnUrl = sessionStorage.getItem('returnUrl');
+          if (returnUrl) {
+            sessionStorage.removeItem('returnUrl');
+            router.push(returnUrl);
+          } else {
+            router.push('/auth/welcome');
+          }
         }
       }
     },
