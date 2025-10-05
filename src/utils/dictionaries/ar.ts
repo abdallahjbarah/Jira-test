@@ -326,6 +326,7 @@ const ar = {
       accountNotActive: 'الحساب غير نشط. يرجى التواصل مع الدعم.',
       loginRequired: 'تسجيل الدخول مطلوب',
       loginRequiredMessage: 'يرجى تسجيل الدخول للمتابعة مع حجزك.',
+      loginToAddFavorites: 'يرجى تسجيل الدخول لإضافة العناصر إلى مفضلاتك.',
       cancel: 'إلغاء',
     },
     signup: {

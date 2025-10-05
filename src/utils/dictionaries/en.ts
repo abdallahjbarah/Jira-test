@@ -310,6 +310,7 @@ const en = {
       accountNotActive: 'Account is not active. Please contact support.',
       loginRequired: 'Login Required',
       loginRequiredMessage: 'Please log in to continue with your booking.',
+      loginToAddFavorites: 'Please log in to add items to your favorites.',
       cancel: 'Cancel',
     },
     signup: {

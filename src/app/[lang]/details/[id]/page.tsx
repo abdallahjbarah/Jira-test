@@ -2,6 +2,7 @@
 
 import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
 import CircularLoader from '@/components/ui/CircularLoader';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import CustomSvg from '@/components/ui/CustomSvg';
 import Divider from '@/components/ui/Divider';
 import AmenitiesSection from '@/components/web/details/AmenitiesSection';
@@ -17,6 +18,8 @@ import SpecialInstructionsAndCancellationSection from '@/components/web/details/
 import StayDetailsSection from '@/components/web/details/StayDetailsSection';
 import StaysFeature from '@/components/web/details/StaysFeature';
 import WhatToExpectSection from '@/components/web/details/WhatToExpectSection';
+import { useTranslation } from '@/contexts/TranslationContext';
+import useConfirmationModal from '@/hooks/useConfirmationModal';
 import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import { useFetchCollections } from '@/lib/apis/collections/useFetchCollections';
 import { useFetchDetails } from '@/lib/apis/details/useFetchDetails';
@@ -24,7 +27,9 @@ import { useFetchSimilar } from '@/lib/apis/details/useFetchSimillarExperiencde'
 import withFavourites from '@/lib/hocs/withFavourites';
 import { Site } from '@/lib/types';
 import useFavorite from '@/utils/hooks/useFavorite';
+import useUser from '@/utils/hooks/useUser';
 import { Locale } from '@utils/constants';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import ImagesGallery from './ImagesGallery';
 
@@ -37,6 +42,19 @@ const DetailsId: React.FC<DetailsIdProps> = ({
   params,
   openFavouritesModal,
 }) => {
+  const { t } = useTranslation();
+  const { isLoggedIn } = useUser();
+  const {
+    isOpen,
+    config,
+    isLoading: isConfirmationLoading,
+    openConfirmation,
+    closeConfirmation,
+    handleConfirm,
+  } = useConfirmationModal();
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -121,8 +139,28 @@ const DetailsId: React.FC<DetailsIdProps> = ({
   }, [detailsData?.data?.site?.images, loadImageDimensions]);
 
   const handleFavoriteToggle = React.useCallback(
-    (e: React.MouseEvent) => {
+    async (e: React.MouseEvent) => {
       e.preventDefault();
+
+      // Check if user is logged in first
+      if (!isLoggedIn) {
+        const confirmed = await openConfirmation({
+          title: t('auth.login.loginRequired'),
+          message: t('auth.login.loginToAddFavorites'),
+          confirmText: t('auth.login.loginButton'),
+          cancelText: t('common.cancel'),
+          confirmButtonVariant: 'primary',
+        });
+
+        if (confirmed) {
+          // Save current URL to return after login
+          sessionStorage.setItem('returnUrl', pathname);
+          router.push('/auth/login');
+        }
+        return;
+      }
+
+      // Proceed with favorite toggle if logged in
       if (isCollectionFavorite) {
         removeFavorite(params.id);
       } else {
@@ -130,11 +168,16 @@ const DetailsId: React.FC<DetailsIdProps> = ({
       }
     },
     [
+      isLoggedIn,
       isCollectionFavorite,
       removeFavorite,
       params.id,
       openFavouritesModal,
       detailsData?.data?.site,
+      openConfirmation,
+      t,
+      pathname,
+      router,
     ]
   );
 
@@ -508,6 +551,20 @@ const DetailsId: React.FC<DetailsIdProps> = ({
           </div>
         </div>
       </main>
+
+      {config && (
+        <ConfirmationModal
+          isOpen={isOpen}
+          onClose={closeConfirmation}
+          onConfirm={handleConfirm}
+          title={config.title}
+          message={config.message}
+          confirmText={config.confirmText}
+          cancelText={config.cancelText}
+          confirmButtonVariant={config.confirmButtonVariant}
+          isLoading={isConfirmationLoading}
+        />
+      )}
     </InnerPagesLayout>
   );
 };
