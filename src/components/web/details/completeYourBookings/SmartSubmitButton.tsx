@@ -265,14 +265,14 @@ const SmartSubmitButton = <T extends FieldValues = FieldValues>({
       )}
 
       {/* Show info message for on-site payments */}
-      {disableAttachment && (
+      {/* {disableAttachment && (
         <div className='mb-4 p-4 bg-green-50 border border-green-200 rounded-lg'>
           <p className='text-green-800 text-custom-12 mobileM:text-custom-14'>
             No file attachment required for Credit/Debit Card (Visa/Mastercard).
             You can proceed with your booking.
           </p>
         </div>
-      )}
+      )} */}
 
       {/* Smart button that handles both attach and submit */}
       <FilledButton
