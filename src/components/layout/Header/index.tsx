@@ -48,32 +48,37 @@ export default function Header(): React.ReactElement {
     <header className='relative'>
       <nav className='hidden laptopS:flex absolute left-1/2 top-[3rem] mx-auto w-full -translate-x-1/2 transform z-10 container bg-transparent'>
         <div className='flex justify-between items-center w-full'>
-          <ul className='flex items-center gap-2 laptopM:gap-4 laptopL:gap-6 '>
-            {LINKS_DATA?.slice(0, 5)?.map((item: LinkData, index: number) => (
-              <HeaderLink
-                key={index}
-                path={item?.path}
-                text={item?.name[lang]}
-                isActive={
-                  item?.path === pathname.replace(`/${lang}`, '') ||
-                  (item.path === '/' && pathname === `/${lang}`)
-                }
-              />
-            ))}
-          </ul>
-
-          <ul className='flex justify-center items-center flex-shrink-0 mx-8 '>
-            <li>
-              <CustomLink path={`/`}>
-                <Image
-                  className='w-[11.8125rem] h-[3rem]'
-                  quality={100}
-                  src={BookagriLogoSvg}
-                  alt='Bookagri Logo'
-                />
-              </CustomLink>
-            </li>
-          </ul>
+          {/* Desktop Collections Links */}
+          <div className='flex items-center'>
+            <ul className='flex justify-center items-center flex-shrink-0 mx-8 '>
+              <li>
+                <CustomLink path={`/`}>
+                  <Image
+                    className='w-[11.8125rem] h-[3rem]'
+                    quality={100}
+                    src={BookagriLogoSvg}
+                    alt='Bookagri Logo'
+                  />
+                </CustomLink>
+              </li>
+            </ul>
+            <ul className='hidden laptopS:flex items-center gap-2 laptopM:gap-4 laptopL:gap-6 flex-shrink-0 pr-6'>
+              {COLLECTIONS_LINKS?.map(
+                (item, index) =>
+                  index != 5 && (
+                    <HeaderLink
+                      key={index}
+                      path={item?.path}
+                      text={item?.name[lang]}
+                      isActive={
+                        item?.path === pathname.replace(`/${lang}`, '') ||
+                        (item.path === '/' && pathname === `/${lang}`)
+                      }
+                    />
+                  )
+              )}
+            </ul>
+          </div>
 
           {/* Collections Hamburger Menu */}
           <div className='flex laptopS:hidden items-center gap-6 flex-shrink-0 pr-6 collections-dropdown'>
@@ -101,22 +106,18 @@ export default function Header(): React.ReactElement {
             </button>
           </div>
 
-          {/* Desktop Collections Links */}
-          <ul className='hidden laptopS:flex items-center gap-2 laptopM:gap-4 laptopL:gap-6 flex-shrink-0 pr-6'>
-            {COLLECTIONS_LINKS?.map(
-              (item, index) =>
-                index != 5 && (
-                  <HeaderLink
-                    key={index}
-                    path={item?.path}
-                    text={item?.name[lang]}
-                    isActive={
-                      item?.path === pathname.replace(`/${lang}`, '') ||
-                      (item.path === '/' && pathname === `/${lang}`)
-                    }
-                  />
-                )
-            )}
+          <ul className='flex items-center gap-2 laptopM:gap-4 laptopL:gap-6 '>
+            {LINKS_DATA?.slice(0, 5)?.map((item: LinkData, index: number) => (
+              <HeaderLink
+                key={index}
+                path={item?.path}
+                text={item?.name[lang]}
+                isActive={
+                  item?.path === pathname.replace(`/${lang}`, '') ||
+                  (item.path === '/' && pathname === `/${lang}`)
+                }
+              />
+            ))}
           </ul>
         </div>
       </nav>

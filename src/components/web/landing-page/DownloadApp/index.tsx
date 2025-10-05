@@ -27,7 +27,11 @@ export default function DownloadApp(): React.ReactElement {
           </div>
           <div className='flex flex-wrap gap-6 justify-center laptopS:justify-start'>
             <MovingColorfulBorder className='rounded-[12px]'>
-              <a className='element' href='#' target='_blank'>
+              <a
+                className='element'
+                href='https://play.google.com/store/apps/details?id=com.cryptonic_art.bookagri'
+                target='_blank'
+              >
                 <Image
                   quality={100}
                   src={GooglePlaySvg}
@@ -37,7 +41,10 @@ export default function DownloadApp(): React.ReactElement {
             </MovingColorfulBorder>
 
             <MovingColorfulBorder className='rounded-[12px]'>
-              <a href='#' target='_blank'>
+              <a
+                href='https://apps.apple.com/us/app/bookagri/id6478115547'
+                target='_blank'
+              >
                 <Image
                   quality={100}
                   src={AppStoreSvg}
