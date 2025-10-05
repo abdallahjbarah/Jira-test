@@ -55,7 +55,9 @@ export const useFetchInfiniteCollections = (
     initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
       const limit = filter?.limit || 10;
-      return lastPage.sites.data.length >= limit ? pages.length + 1 : undefined;
+      return lastPage.sites.data.length >= limit
+        ? pages.length * limit
+        : undefined;
     },
     ...queryOptions,
   });

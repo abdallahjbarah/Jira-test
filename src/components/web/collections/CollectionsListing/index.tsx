@@ -103,6 +103,7 @@ function CollectionsListing(): React.ReactElement {
   const [isMapView, setIsMapView] = useState(false);
   const { t } = useTranslation();
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<HTMLDivElement>(null);
 
   const currentCollectionStatus = collectionStatus || COLLECTION_STATUS.ALL;
 
@@ -184,17 +185,6 @@ function CollectionsListing(): React.ReactElement {
     setIsMapView(!isMapView);
   }, [isMapView]);
 
-  useEffect(() => {
-    if (isMapView && mapContainerRef.current) {
-      setTimeout(() => {
-        mapContainerRef.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      }, 100);
-    }
-  }, [isMapView]);
-
   const handleBackToList = useCallback(() => {
     setIsMapView(false);
   }, []);
@@ -214,6 +204,41 @@ function CollectionsListing(): React.ReactElement {
   const handleIntersect = React.useCallback(() => {
     debouncedFetchNextPage();
   }, [debouncedFetchNextPage]);
+
+  useEffect(() => {
+    if (isMapView && mapContainerRef.current) {
+      setTimeout(() => {
+        mapContainerRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 100);
+    }
+  }, [isMapView]);
+
+  // Infinite scroll observer
+  useEffect(() => {
+    if (isMapView) return; // Don't observe when in map view
+
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          handleIntersect();
+        }
+      },
+      { threshold: 0.1, rootMargin: '100px' }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [hasNextPage, isFetchingNextPage, handleIntersect, isMapView]);
 
   const collectionsGrid = React.useMemo(() => {
     if (!collections?.length) return null;
@@ -302,16 +327,12 @@ function CollectionsListing(): React.ReactElement {
             <CollectionTypeLabel />
           </div>
           {collectionsGrid}
-          {hasNextPage && (
-            <div className='flex justify-center mt-8'>
-              <button
-                onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
-                className='px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50'
-              >
-                {isFetchingNextPage ? 'Loading...' : 'Load More'}
-              </button>
-            </div>
+          {/* Infinite scroll sentinel */}
+          <div ref={observerRef} className='h-10 w-full' />
+          {isFetchingNextPage && (
+            <LoaderContainer>
+              <CircularLoader size={40} />
+            </LoaderContainer>
           )}
         </>
       )}
