@@ -480,7 +480,10 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                 </>
               )}
               <Divider className='w-full my-8' />
-              <AmenitiesSection amenities={amenities || []} params={params} />
+              <AmenitiesSection
+                amenities={amenities || []}
+                paramsLang={params.lang}
+              />
             </div>
             {/* BookingPanel for laptopM and larger screens */}
             <div className='hidden laptopM:block max-w-[30.563rem] w-full flex-[0.3]'>

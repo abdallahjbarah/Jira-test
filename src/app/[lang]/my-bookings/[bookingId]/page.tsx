@@ -338,7 +338,10 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                 endDateTimeZoned={endDateTimeZoned}
               />
               <Divider className='w-full my-8' />
-              <AmenitiesSection amenities={amenities || []} />
+              <AmenitiesSection
+                amenities={amenities || []}
+                paramsLang={params.lang}
+              />
               <Divider className='w-full my-8' />
               <ShowExperience
                 type={type}

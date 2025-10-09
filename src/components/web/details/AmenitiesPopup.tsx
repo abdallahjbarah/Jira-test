@@ -20,15 +20,15 @@ interface Amenity {
 interface AmenitiesPopupProps {
   amenities: Amenity[];
   onClose: () => void;
-  params: { lang: Locale; id: string };
+  paramsLang: Locale;
 }
 
 const AmenitiesPopup: React.FC<AmenitiesPopupProps> = ({
   amenities,
   onClose,
-  params,
+  paramsLang,
 }) => {
-  const isArabic = params.lang === 'ar';
+  const isArabic = paramsLang === 'ar';
   const groupedAmenities = amenities.reduce(
     (acc, amenity) => {
       const categoryId = amenity.category[0]._id;

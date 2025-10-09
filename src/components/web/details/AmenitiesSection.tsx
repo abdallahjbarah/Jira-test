@@ -18,16 +18,16 @@ interface Amenity {
 
 interface AmenitiesSectionProps {
   amenities: Amenity[];
-  params: { lang: Locale; id: string };
+  paramsLang: Locale;
 }
 
 const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({
   amenities,
-  params,
+  paramsLang,
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const { t } = useTranslation();
-  const isArabic = params.lang === 'ar';
+  const isArabic = paramsLang === 'ar';
   return (
     <div className='flex flex-col gap-11'>
       <div className='flex justify-between items-center w-full'>
@@ -62,7 +62,7 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({
         <AmenitiesPopup
           amenities={amenities}
           onClose={() => setIsPopupOpen(false)}
-          params={params}
+          paramsLang={paramsLang}
         />
       )}
     </div>
