@@ -1,6 +1,7 @@
 import CustomSvg from '@/components/ui/CustomSvg';
 import Image from 'next/image';
 import React from 'react';
+import { useTranslation } from '../../../contexts/TranslationContext';
 
 export interface ItineraryStop {
   title: string;
@@ -19,13 +20,14 @@ const ItinerarySection: React.FC<ItinerarySectionProps> = ({ stops }) => {
     const googleMapsUrl = locationUrl;
     window.open(googleMapsUrl, '_blank');
   };
+  const { t } = useTranslation();
   return (
     <div className='flex flex-col gap-4'>
       <h1 className='font-custom-700 font-gellix-Bold text-text_1  text-custom-20 mobileM:text-custom-22 laptopM:text-custom-30'>
-        Itinerary
+        {t('location.itinerary')}
       </h1>
       <p className='font-custom-400 font-sans text-text_2 text-custom-16 mobileM:text-custom-18 laptopM:text-custom-20'>
-        This is a typical itinerary for this package
+        {t('location.typicalItinerary')}
       </p>
       <div className='grid grid-cols-2 gap-8'>
         {stops.map((stop, index) => (
@@ -44,7 +46,7 @@ const ItinerarySection: React.FC<ItinerarySectionProps> = ({ stops }) => {
             </div>
             <div className='flex-1 flex flex-col'>
               <h3 className='font-custom-600 text-custom-16 mobileM:text-custom-20 laptopM:text-custom-22 text-text_1 mb-2 '>
-                Stop At: {stop.title}
+                {t('location.stopAt')}: {stop.title}
               </h3>
               <p className='font-custom-400 text-custom-14 mobileM:text-custom-14 laptopM:text-custom-16 text-text_3 mb-4'>
                 {stop.details}
@@ -56,7 +58,10 @@ const ItinerarySection: React.FC<ItinerarySectionProps> = ({ stops }) => {
                   height={20}
                 />
                 <span className='text-custom-16 text-text_3'>
-                  {stop.duration} {stop.duration === 1 ? 'hour' : 'hours'}
+                  {stop.duration}{' '}
+                  {stop.duration === 1
+                    ? t('location.hour')
+                    : t('location.hours')}
                 </span>
               </div>
             </div>

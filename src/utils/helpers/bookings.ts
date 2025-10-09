@@ -232,3 +232,15 @@ export const calculateGrandTotal = (
 ): number => {
   return calculateTotalAmount(breakdown);
 };
+
+export const formatTime = (zonedTimeString: string) => {
+  // Extract time part from "2025-10-04 16:00 GMT+3"
+  const timePart = zonedTimeString.split(' ')[1]; // "16:00"
+  const [hours, minutes] = timePart.split(':').map(Number);
+
+  // Convert to 12-hour format
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+
+  return `${displayHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
+};

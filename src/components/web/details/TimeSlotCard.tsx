@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { useTranslation } from '../../../contexts/TranslationContext';
 
 interface TimeSlotCardProps {
   timeRange: string;
@@ -21,7 +22,7 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
   type = 'Regular',
   title,
 }) => {
-  console.log('infantsPrice', infantsPrice);
+  const { t } = useTranslation();
   if (type === 'Stay') {
     return (
       <div className='w-full bg-white border border-[#F3F1F1] rounded-[6px] shadow-[0px_4px_4px_rgba(184,184,184,0.25)] px-[21px] py-[15px] mb-[0.3rem]'>
@@ -35,7 +36,7 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
               onClick={onChoose}
               className='bg-[#47C409] text-white px-6 py-3 rounded-lg font-custom-700 text-sm font-gellix-Bold'
             >
-              Choose
+              {t('booking.choose')}
             </button>
           </div>
         </div>
@@ -52,17 +53,20 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
           </div>
           {adultPrice != null && (
             <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
-              {adultPrice} /<span className='font-sans'>adult</span>
+              {adultPrice} /
+              <span className='font-sans'>{t('booking.adult')}</span>
             </div>
           )}
           {childrenPrice != null && (
             <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
-              {childrenPrice} /<span className='font-sans'>children</span>
+              {childrenPrice} /
+              <span className='font-sans'>{t('booking.children')}</span>
             </div>
           )}
           {infantsPrice != null && (
             <div className='font-custom-600 text-sm font-gellix-Bold text-text_1'>
-              {infantsPrice} /<span className='font-sans'>infant</span>
+              {infantsPrice} /
+              <span className='font-sans'>{t('booking.infant')}</span>
             </div>
           )}
         </div>
@@ -70,7 +74,7 @@ const TimeSlotCard: React.FC<TimeSlotCardProps> = ({
           onClick={onChoose}
           className='bg-[#47C409] text-white px-6 py-3 rounded-lg font-custom-700 text-sm font-gellix-Bold'
         >
-          Choose
+          {t('booking.choose')}
         </button>
       </div>
     </div>

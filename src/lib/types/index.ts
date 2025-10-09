@@ -461,6 +461,8 @@ export interface Booking {
   paymentMethod: BookingPaymentMethod;
   startDateTime: number;
   endDateTime: number;
+  startDateTimeZoned: string;
+  endDateTimeZoned: string;
   guests: Guests;
   hasGuide: boolean;
   hasTransportation: boolean;

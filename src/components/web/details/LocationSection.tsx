@@ -1,5 +1,6 @@
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import React from 'react';
+import { useTranslation } from '../../../contexts/TranslationContext';
 
 interface LocationSectionProps {
   location: string;
@@ -28,17 +29,18 @@ const LocationSection: React.FC<LocationSectionProps> = ({
     const googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
     window.open(googleMapsUrl, '_blank');
   };
+  const { t } = useTranslation();
 
   return (
     <div className='flex flex-col gap-4'>
       <h1 className='font-custom-700 text-text_1 text-custom-20 mobileM:text-custom-22 laptopM:text-custom-30'>
-        Location
+        {t('location.location')}
       </h1>
       <p className='font-custom-400 font-sans text-text_1 text-custom-15 mobileM:text-custom-20 laptopM:text-custom-24'>
         {location}
       </p>
       <p className='font-custom-400 font-sans text-text_3 text-custom-13 mobileM:text-custom-16 laptopM:text-custom-20'>
-        Exact location will be available prior to one day
+        {t('location.exactLocation')}
       </p>
       <div onDoubleClick={handleMapDoubleClick} style={{ cursor: 'pointer' }}>
         <LoadScript

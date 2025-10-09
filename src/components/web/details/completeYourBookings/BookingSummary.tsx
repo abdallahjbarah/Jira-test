@@ -11,6 +11,7 @@ import {
 import useCurrency from '@/utils/hooks/useCurrency';
 import useFavorite from '@/utils/hooks/useFavorite';
 import React from 'react';
+import { useTranslation } from '../../../../contexts/TranslationContext';
 
 interface PriceBreakdown {
   label: string;
@@ -132,6 +133,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     guideChecked,
   ]);
 
+  const { t } = useTranslation();
+
   return (
     <div className='flex flex-col gap-16 flex-1 items-end order-1 lg:order-2'>
       <div className='shadow-customShadow_1 rounded-2xl border border-gray-200 overflow-hidden w-full'>
@@ -176,7 +179,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 
           <div className='flex flex-col gap-4'>
             <h4 className='font-custom-700 text-text_1 font-gellix-Bold text-custom-16 mobileM:text-custom-20 laptopM:text-custom-24'>
-              Price Breakdown
+              {t('completeYourBooking.priceBreakdown')}
             </h4>
             <div className='flex flex-col gap-3'>
               {dynamicPriceBreakdown.map((item, index) => (
@@ -201,7 +204,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               <Divider className='w-full my-2' />
               <div className='flex justify-between items-center'>
                 <span className='font-custom-700 text-text_1 text-custom-12 mobileM:text-custom-14 laptopM:text-custom-16'>
-                  Total ({currency})
+                  {t('completeYourBooking.total')} ({currency})
                 </span>
                 <span className='font-custom-700 text-text_1'>
                   {dynamicTotalAmount}

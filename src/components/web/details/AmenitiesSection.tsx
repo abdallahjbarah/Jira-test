@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
+import { useTranslation } from '../../../contexts/TranslationContext';
+import { Locale } from '../../../utils';
 import AmenitiesPopup from './AmenitiesPopup';
 
 interface Amenity {
@@ -16,22 +18,27 @@ interface Amenity {
 
 interface AmenitiesSectionProps {
   amenities: Amenity[];
+  params: { lang: Locale; id: string };
 }
 
-const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({ amenities }) => {
+const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({
+  amenities,
+  params,
+}) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
+  const { t } = useTranslation();
+  const isArabic = params.lang === 'ar';
   return (
     <div className='flex flex-col gap-11'>
       <div className='flex justify-between items-center w-full'>
         <p className='font-custom-700 text-text_1 text-custom-20 mobileM:text-custom-22 laptopM:text-custom-30'>
-          Available Amenities
+          {t('amenities.availableAmenities')}
         </p>
         <button
           className='font-custom-400 font-sans text-text_1 text-custom-14 mobileM:text-custom-18 laptopM:text-custom-20'
           onClick={() => setIsPopupOpen(true)}
         >
-          See All
+          {t('amenities.seeAll')}
         </button>
       </div>
       <div className='flex laptopM:flex-row flex-col gap-20'>
@@ -39,13 +46,13 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({ amenities }) => {
           <div className='flex flex-col gap-3 items-center' key={index}>
             <Image
               src={amenity?.iconPath}
-              alt={amenity?.nameEn}
+              alt={isArabic ? amenity?.nameAr : amenity?.nameEn}
               width={87}
               height={87}
               className='w-[57px] h-[57px] mobileM:w-[77px] mobileM:h-[77px] laptopM:w-[87px] laptopM:h-[87px]'
             />
             <p className='font-custom-400 font-sans text-text_1 text-custom-14 mobileM:text-custom-18 laptopM:text-custom-20 line-clamp-1'>
-              {amenity?.nameEn}
+              {isArabic ? amenity?.nameAr : amenity?.nameEn}
             </p>
           </div>
         ))}
@@ -55,6 +62,7 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({ amenities }) => {
         <AmenitiesPopup
           amenities={amenities}
           onClose={() => setIsPopupOpen(false)}
+          params={params}
         />
       )}
     </div>

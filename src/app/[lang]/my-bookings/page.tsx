@@ -135,6 +135,8 @@ const MyBookingsPage = () => {
                   path={`/my-bookings/${booking?._id}`}
                   key={booking._id}
                   collection={booking?.siteId}
+                  booking={booking}
+                  isBooking={true}
                 />
               ))}
             </CollectionsListingContainer>

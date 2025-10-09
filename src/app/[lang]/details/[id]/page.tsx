@@ -433,7 +433,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
               <Divider className='w-full my-8' />
 
               <ExpandableTextSection
-                title='Overview'
+                title={t('overview.overview')}
                 content={longDescription}
               />
               {type != 'Offers & Packages' && (
@@ -480,7 +480,7 @@ const DetailsId: React.FC<DetailsIdProps> = ({
                 </>
               )}
               <Divider className='w-full my-8' />
-              <AmenitiesSection amenities={amenities || []} />
+              <AmenitiesSection amenities={amenities || []} params={params} />
             </div>
             {/* BookingPanel for laptopM and larger screens */}
             <div className='hidden laptopM:block max-w-[30.563rem] w-full flex-[0.3]'>

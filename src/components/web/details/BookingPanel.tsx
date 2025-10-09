@@ -301,7 +301,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
 
   const getGuestDisplay = () => {
     const totalGuests = guests.adults + guests.children + guests.infants;
-    if (totalGuests === 0) return 'Select guests';
+    if (totalGuests === 0) return t('booking.selectGuests');
 
     const guestParts = [];
     if (guests.adults > 0)

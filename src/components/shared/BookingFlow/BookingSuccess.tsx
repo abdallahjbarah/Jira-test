@@ -1,14 +1,15 @@
 import CustomSvg from '@/components/ui/CustomSvg';
 import Modal from '@/components/ui/Modal';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import styled from 'styled-components';
-import useCurrency from '../../../utils/hooks/useCurrency';
 
-interface CancellationSuccessProps {
+interface BookingSuccessProps {
   isOpen: boolean;
   onClose: () => void;
-  cancelationSuccessData: any;
+  bookingId: string;
+  lang: string;
 }
 
 const NextButton = styled.button`
@@ -29,51 +30,49 @@ const NextButton = styled.button`
   }
 `;
 
-const CancellationSuccess: React.FC<CancellationSuccessProps> = ({
+const BookingSuccess: React.FC<BookingSuccessProps> = ({
   isOpen,
   onClose,
-  cancelationSuccessData,
+  bookingId,
+  lang,
 }) => {
   const { t } = useTranslation();
-  const { currency } = useCurrency();
+  const router = useRouter();
+
+  const handleViewBooking = () => {
+    router.push(`/${lang}/my-bookings/${bookingId}`);
+  };
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={t('bookingStatus.cancellationPolicyModal.title')}
+      title={t('booking.success.title')}
       width='540px'
     >
       <div className='flex flex-col items-center justify-center'>
         <CustomSvg
-          src='/SVGs/shared/check-icon.svg'
+          src='/SVGs/shared/pendingIcon.svg'
           width={81}
           height={81}
           className='text-green-500'
           color='currentColor'
         />
         <h1 className='text-text_1 text-3xl font-black mt-[45px]'>
-          {t('bookingStatus.cancellationSuccess.title')}
+          {t('booking.success.message')}
         </h1>
-        <p className='text-text_2 text-base mt-[37px] text-center'>
-          {t('bookingStatus.cancellationSuccess.description')}
-        </p>
-        <p className='text-text_2 text-base mt-[37px] text-center'>
-          {t('bookingStatus.cancellationSuccess.yourRefund')}{' '}
-          <span className='text-text_1 font-black'>
-            {cancelationSuccessData?.refundInfo?.refundAmount?.toFixed(2)}{' '}
-            {currency}
-          </span>
+        <p className='text-text_2 text-base mt-[27px] text-center'>
+          {t('booking.success.description')}
         </p>
         <p className='text-text_2 text-sm mt-[20px] text-center italic'>
-          {t('bookingStatus.cancellationSuccess.emailNote')}
+          {t('booking.success.emailNote')}
         </p>
-        <NextButton onClick={onClose}>
-          {t('bookingStatus.cancellationSuccess.action')}
+        <NextButton onClick={handleViewBooking}>
+          {t('booking.success.viewBooking')}
         </NextButton>
       </div>
     </Modal>
   );
 };
 
-export default CancellationSuccess;
+export default BookingSuccess;

@@ -6,21 +6,26 @@ import CustomSvg from '@/components/ui/CustomSvg';
 import { useTranslation } from '@/contexts/TranslationContext';
 import useConfirmationModal from '@/hooks/useConfirmationModal';
 import withFavourites from '@/lib/hocs/withFavourites';
-import { Site } from '@/lib/types';
+import { Booking, Site } from '@/lib/types';
 import useCurrency from '@/utils/hooks/useCurrency';
 import useFavorite from '@/utils/hooks/useFavorite';
 import useUser from '@/utils/hooks/useUser';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
+import { formatTime } from '../../../../utils';
 
 function CollectionCard({
   collection,
   openFavouritesModal,
   path,
+  booking,
+  isBooking = false,
 }: {
   collection: Site;
   openFavouritesModal: (site: Site) => void;
   path?: string;
+  booking?: Booking;
+  isBooking?: boolean;
 }): React.ReactElement {
   const { t } = useTranslation();
   const { currency } = useCurrency();
@@ -183,22 +188,40 @@ function CollectionCard({
 
             <p className='text-custom-10 text-gray_3 mt-1'>{locationString}</p>
 
-            <div className='flex justify-between items-center mt-2'>
-              <p className='text-custom-12 font-bold text-text_1'>
-                {t('from')} {priceString}
-                <span className='text-custom-10 font-custom-400 '>
-                  {' '}
-                  /{t('person')}
-                </span>
-              </p>
-              <div className='text-custom-14 text-right'>
-                <CustomSvg
-                  src='/SVGs/shared/bookagri-gold.svg'
-                  className='text-gold_1'
-                  width={60}
-                />
+            {!isBooking && (
+              <div className='flex justify-between items-center mt-2'>
+                <p className='text-custom-12 font-bold text-text_1'>
+                  {t('from')} {priceString}
+                  <span className='text-custom-10 font-custom-400 '>
+                    {' '}
+                    /{t('person')}
+                  </span>
+                </p>
+                <div className='text-custom-14 text-right'>
+                  <CustomSvg
+                    src='/SVGs/shared/bookagri-gold.svg'
+                    className='text-gold_1'
+                    width={60}
+                  />
+                </div>
               </div>
-            </div>
+            )}
+            {isBooking && (
+              <p className='text-custom-12 font-custom-400 text-gray_3 mt-1'>
+                {new Date(booking?.startDateTimeZoned || '').toLocaleDateString(
+                  'en-US',
+                  {
+                    weekday: 'long',
+                    month: 'short',
+                    day: 'numeric',
+                  }
+                )}
+                {' - '}
+                {formatTime(booking?.startDateTimeZoned || '')}
+                {' - '}
+                {formatTime(booking?.endDateTimeZoned || '')}
+              </p>
+            )}
           </div>
         </div>
       </CustomLink>

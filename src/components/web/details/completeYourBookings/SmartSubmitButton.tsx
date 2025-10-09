@@ -6,6 +6,7 @@ import {
   useController,
   UseControllerProps,
 } from 'react-hook-form';
+import { useTranslation } from '../../../../contexts/TranslationContext';
 
 interface SmartSubmitButtonProps<T extends FieldValues = FieldValues>
   extends UseControllerProps<T> {
@@ -230,17 +231,18 @@ const SmartSubmitButton = <T extends FieldValues = FieldValues>({
   // Determine button text based on current state
   const getButtonText = () => {
     if (disableAttachment) {
-      return 'Submit';
+      return t('booking.Submit');
     }
     if (!value) {
-      return 'Attach the financial receipt';
+      return t('booking.AttachTheFinancialReceipt');
     }
-    return 'Submit';
+    return t('booking.Submit');
   };
 
   const isButtonDisabled =
     disabled || isBookingCollectionPending || isUploadingFile;
 
+  const { t } = useTranslation();
   return (
     <div className={`flex flex-col gap-4 mb-24 ${className}`}>
       <input
@@ -259,7 +261,7 @@ const SmartSubmitButton = <T extends FieldValues = FieldValues>({
       {!disableAttachment && !value && (
         <div className='mb-2'>
           <p className=' text-red-600 font-medium text-custom-12 mobileM:text-custom-14'>
-            * Financial receipt is required for this payment method
+            * {t('completeYourBooking.financialReceiptRequired')}
           </p>
         </div>
       )}

@@ -2,6 +2,7 @@ import RadioButton from '@/components/ui/RadioButton';
 import { PaymentMethod } from '@/lib/types';
 import { staticPaymentMethods } from '@/utils/constants';
 import React from 'react';
+import { useTranslation } from '../../../../contexts/TranslationContext';
 
 interface PaymentMethodWithIcon extends PaymentMethod {
   icon?: string;
@@ -46,10 +47,11 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
   const disableAttachment =
     selectedMethodObj && isPayOnSite(selectedMethodObj.name);
 
+  const { t } = useTranslation();
   return (
     <div className='flex flex-col gap-14'>
       <h2 className='text-custom-20 mobileM:text-custom-22 laptopM:text-custom-30 font-custom-700 text-text_1 font-gellix-Bold'>
-        Choose Payment Methods
+        {t('completeYourBooking.choosePaymentMethods')}
       </h2>
       <div className='flex flex-col gap-4'>
         {allMethods.map((method: PaymentMethodWithIcon, index: number) => (

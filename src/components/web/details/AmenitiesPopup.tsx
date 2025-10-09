@@ -2,6 +2,8 @@ import CustomSvg from '@/components/ui/CustomSvg';
 import Divider from '@/components/ui/Divider';
 import Image from 'next/image';
 import React from 'react';
+import { useTranslation } from '../../../contexts/TranslationContext';
+import { Locale } from '../../../utils';
 
 interface Amenity {
   _id: string;
@@ -18,16 +20,21 @@ interface Amenity {
 interface AmenitiesPopupProps {
   amenities: Amenity[];
   onClose: () => void;
+  params: { lang: Locale; id: string };
 }
 
 const AmenitiesPopup: React.FC<AmenitiesPopupProps> = ({
   amenities,
   onClose,
+  params,
 }) => {
+  const isArabic = params.lang === 'ar';
   const groupedAmenities = amenities.reduce(
     (acc, amenity) => {
       const categoryId = amenity.category[0]._id;
-      const categoryName = amenity.category[0].nameEn;
+      const categoryName = isArabic
+        ? amenity.category[0].nameAr
+        : amenity.category[0].nameEn;
 
       if (!acc[categoryId]) {
         acc[categoryId] = {
@@ -41,17 +48,22 @@ const AmenitiesPopup: React.FC<AmenitiesPopupProps> = ({
     },
     {} as Record<string, { name: string; items: Amenity[] }>
   );
-
+  const { t } = useTranslation();
   return (
     <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-      <div className='bg-white rounded-2xl p-8 max-w-4xl w-full max-h-[80vh] overflow-y-auto relative'>
-        <button onClick={onClose} className='absolute top-6 right-6 p-2'>
-          <CustomSvg src='/SVGs/shared/close-icon.svg' width={24} height={24} />
-        </button>
-
-        <h2 className='font-custom-700 text-custom-20 mobileM:text-custom-22 laptopM:text-custom-30 text-text_1 mb-8'>
-          All Amenities
-        </h2>
+      <div className='bg-white rounded-2xl p-8 max-w-4xl w-full max-h-[80vh] overflow-y-auto'>
+        <div className='flex justify-between items-center mb-8'>
+          <h2 className='font-custom-700 text-custom-20 mobileM:text-custom-22 laptopM:text-custom-30 text-text_1'>
+            {t('amenities.allAmenities')}
+          </h2>
+          <button onClick={onClose} className='p-2'>
+            <CustomSvg
+              src='/SVGs/shared/close-icon.svg'
+              width={24}
+              height={24}
+            />
+          </button>
+        </div>
 
         <div className='space-y-8'>
           {Object.values(groupedAmenities).map(category => (
@@ -67,13 +79,13 @@ const AmenitiesPopup: React.FC<AmenitiesPopupProps> = ({
                   >
                     <Image
                       src={amenity.iconPath}
-                      alt={amenity.nameEn}
+                      alt={isArabic ? amenity.nameAr : amenity.nameEn}
                       width={50}
                       height={50}
                       className='w-[30px] h-[30px] mobileM:w-[40px] mobileM:h-[40px] laptopM:w-[50px] laptopM:h-[50px]'
                     />
                     <p className='font-custom-400 text-custom-14 mobileM:text-custom-18 laptopM:text-custom-20 text-text_1 text-center line-clamp-2'>
-                      {amenity.nameEn}
+                      {isArabic ? amenity.nameAr : amenity.nameEn}
                     </p>
                   </div>
                 ))}

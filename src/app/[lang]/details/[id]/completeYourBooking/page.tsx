@@ -1,4 +1,5 @@
 'use client';
+import BookingSuccess from '@/components/shared/BookingFlow/BookingSuccess';
 import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
 import CircularLoader from '@/components/ui/CircularLoader';
 import Divider from '@/components/ui/Divider';
@@ -11,6 +12,7 @@ import {
 import SmartSubmitButton from '@/components/web/details/completeYourBookings/SmartSubmitButton';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { useBookingData } from '@/hooks/useBookingData';
+import useModal from '@/hooks/useModal';
 import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import useMutateBooking from '@/lib/apis/bookings/useMutateBooking';
 import { useFetchDetails } from '@/lib/apis/details/useFetchDetails';
@@ -206,6 +208,14 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     useBookingData();
   const bookingData = getBookingData(params.id);
 
+  // Booking success modal state
+  const {
+    isOpen: isSuccessModalOpen,
+    openModal: openSuccessModal,
+    closeModal: closeSuccessModal,
+  } = useModal();
+  const [successBookingId, setSuccessBookingId] = React.useState<string>('');
+
   // Redirect to details page if bookingData is missing
   React.useEffect(() => {
     if (!bookingData) {
@@ -213,26 +223,9 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     }
   }, [bookingData, params.lang, params.id, router]);
 
-  // Debug log to help troubleshoot data issues
-  console.log('📊 Booking Data Retrieved:', {
-    bookingData,
-    availability: bookingData?.availability,
-    guests: bookingData?.guests,
-    type: bookingData?.type,
-  });
-
   // Helper function to get the correct date/time based on site type
   const getBookingDateTime = () => {
-    console.log('🔍 Debug - getBookingDateTime called with:', {
-      bookingData,
-      detailsData: detailsData?.data,
-      availability: bookingData?.availability,
-      siteType: detailsData?.data?.site.type,
-      schedule: detailsData?.data?.site.schedule,
-    });
-
     if (!bookingData?.availability) {
-      console.log('⚠️ No booking availability data, using fallback');
       return {
         startTime: detailsData?.data?.site.schedule?.startDateTime || '',
         endTime: detailsData?.data?.site.schedule?.endDateTime || '',
@@ -243,7 +236,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
     // For stays, the structure is different - availability contains startDate/endDate
     if (detailsData?.data?.site.type === 'Stay') {
-      console.log('🏠 Stay type detected, using startDate/endDate');
       // For stays, the availability data structure is different
       const startTime =
         bookingData.availability.startDate ||
@@ -266,13 +258,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
         detailsData?.data?.site.schedule?.endDateTime ||
         '';
 
-      console.log('🏠 Stay datetime values:', {
-        startTime,
-        endTime,
-        startDate,
-        endDate,
-      });
-
       return {
         startTime,
         endTime,
@@ -282,7 +267,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     }
 
     // For experiences, use startDateTime/endDateTime from the selected slot
-    console.log('🎯 Experience type detected, using startDateTime/endDateTime');
     // For experiences, the availability data contains startDateTime and endDateTime directly
     // These can now be either timestamps (numbers) or zoned strings
     const startTime =
@@ -302,15 +286,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
       detailsData?.data?.site.schedule?.endDateTime ||
       '';
 
-    console.log('🎯 Experience datetime values:', {
-      startTime,
-      endTime,
-      startDate,
-      endDate,
-      startTimeType: typeof startTime,
-      endTimeType: typeof endTime,
-    });
-
     return {
       startTime,
       endTime,
@@ -321,36 +296,19 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
   const bookingDateTime = getBookingDateTime();
 
-  // Debug the final bookingDateTime object
-  console.log('📅 Final bookingDateTime object:', bookingDateTime);
-  console.log('📅 bookingDateTime validation:', {
-    startTimeValid:
-      bookingDateTime.startTime &&
-      !isNaN(new Date(bookingDateTime.startTime).getTime()),
-    endTimeValid:
-      bookingDateTime.endTime &&
-      !isNaN(new Date(bookingDateTime.endTime).getTime()),
-    startDateValid:
-      bookingDateTime.startDate &&
-      !isNaN(new Date(bookingDateTime.startDate).getTime()),
-    endDateValid:
-      bookingDateTime.endDate &&
-      !isNaN(new Date(bookingDateTime.endDate).getTime()),
-  });
-
   const { mutate: bookCollection, isPending: isBookingCollectionPending } =
     useMutateBooking({
       onSuccess: data => {
-        toast.success(t('booking.financialReceipt.success'));
+        setSuccessBookingId(data.booking._id);
+        openSuccessModal();
+
         if (data.paymentUrl) {
           window.open(data.paymentUrl, '_blank');
-        } else {
-          router.push(`/my-bookings/${data.booking._id}`);
         }
-        // router.push(`/my-bookings/${data._id}`);
+
         setTimeout(() => {
           clearBookingData(params.id);
-        }, 200); // Delay to allow navigation to complete
+        }, 200);
       },
       onError: error => {
         toast.error(error.json.message);
@@ -379,10 +337,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   });
 
   const onSubmit: SubmitHandler<BookingFormData> = data => {
-    console.log('Form submitted with data:', data);
-    console.log('Financial receipt from data:', data.financialReceipt);
-    console.log('Financial receipt from watch:', financialReceipt);
-
     // Check if payment method is selected
     if (!data.selectedPaymentMethod) {
       toast.error('Please select a payment method to proceed.');
@@ -395,18 +349,11 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     );
     const isOnSitePayment = isPayOnSite(selectedPaymentMethodObj?.name);
 
-    console.log('Selected payment method:', selectedPaymentMethodObj?.name);
-    console.log('Is on-site payment:', isOnSitePayment);
-    console.log('File attached from data:', !!data.financialReceipt);
-    console.log('File attached from watch:', !!financialReceipt);
-
     // Use either the data parameter or the watched value
     const hasFile = data.financialReceipt || financialReceipt;
-    console.log('Has file (combined check):', !!hasFile);
 
     // If it's an on-site payment, proceed without file attachment
     if (isOnSitePayment) {
-      console.log('Proceeding with on-site payment without file attachment');
       bookCollection({
         siteId: detailsData?.data?.site._id || '',
         availabilityId:
@@ -425,7 +372,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
 
     // For non-on-site payments, check if file is attached
     if (!hasFile) {
-      console.log('File attachment required but not provided');
       toast.error(
         'Please attach a financial receipt to proceed with your booking.'
       );
@@ -433,7 +379,6 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     }
 
     // Proceed with file attachment for non-on-site payment
-    console.log('Proceeding with file attachment for non-on-site payment');
     const fileToUpload = data.financialReceipt || financialReceipt;
     uploadFile({
       file: fileToUpload!,
@@ -480,307 +425,279 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
   const enabledPaymentMethods = (paymentMethods || []).filter(m => m.isEnabled);
 
   return (
-    <InnerPagesLayout headerProps={{ withNavItems: true }}>
-      <main className='container'>
-        <form id='booking-form' onSubmit={handleSubmit(onSubmit)}>
-          <div className='flex flex-col gap-8 mobileM:gap-24 laptopM:gap-32'>
-            <h1
-              className='
+    <>
+      <BookingSuccess
+        isOpen={isSuccessModalOpen}
+        onClose={closeSuccessModal}
+        bookingId={successBookingId}
+        lang={params.lang}
+      />
+      <InnerPagesLayout headerProps={{ withNavItems: true }}>
+        <main className='container'>
+          <form id='booking-form' onSubmit={handleSubmit(onSubmit)}>
+            <div className='flex flex-col gap-8 mobileM:gap-24 laptopM:gap-32'>
+              <h1
+                className='
             text-custom-20 mobileM:text-custom-35
             laptopM:text-custom-48 font-custom-700 text-text_1 font-gellix-Bold'
-            >
-              Complete your booking and pay
-            </h1>
-            <div className='flex flex-col lg:flex-row justify-between w-full gap-20'>
-              <div className='flex flex-col gap-2 flex-1 order-2 lg:order-1'>
-                <BookingDetails
-                  time={
-                    detailsData?.data?.site.type !== 'Stay'
-                      ? (() => {
-                          try {
-                            const startTimeFormatted = extractTimeFromString(
-                              bookingDateTime.startTime
-                            );
-                            const endTimeFormatted = extractTimeFromString(
-                              bookingDateTime.endTime
-                            );
-
-                            console.log('🕐 Experience time formatting:', {
-                              startTime: bookingDateTime.startTime,
-                              endTime: bookingDateTime.endTime,
-                              startTimeFormatted,
-                              endTimeFormatted,
-                            });
-
-                            if (startTimeFormatted && endTimeFormatted) {
-                              return `${startTimeFormatted} - ${endTimeFormatted}`;
-                            } else {
-                              console.log(
-                                '⚠️ Invalid time values, using fallback'
+              >
+                {t('completeYourBooking.completeYourBookingAndPay')}
+              </h1>
+              <div className='flex flex-col lg:flex-row justify-between w-full gap-20'>
+                <div className='flex flex-col gap-2 flex-1 order-2 lg:order-1'>
+                  <BookingDetails
+                    time={
+                      detailsData?.data?.site.type !== 'Stay'
+                        ? (() => {
+                            try {
+                              const startTimeFormatted = extractTimeFromString(
+                                bookingDateTime.startTime
                               );
-                              // Try to get time from site schedule as fallback
-                              if (
-                                detailsData?.data?.site.schedule
-                                  ?.startDateTime &&
-                                detailsData?.data?.site.schedule?.endDateTime
-                              ) {
-                                const scheduleStartFormatted =
-                                  extractTimeFromString(
-                                    detailsData.data.site.schedule.startDateTime
-                                  );
-                                const scheduleEndFormatted =
-                                  extractTimeFromString(
-                                    detailsData.data.site.schedule.endDateTime
-                                  );
+                              const endTimeFormatted = extractTimeFromString(
+                                bookingDateTime.endTime
+                              );
+
+                              if (startTimeFormatted && endTimeFormatted) {
+                                return `${startTimeFormatted} - ${endTimeFormatted}`;
+                              } else {
+                                // Try to get time from site schedule as fallback
                                 if (
-                                  scheduleStartFormatted &&
-                                  scheduleEndFormatted
+                                  detailsData?.data?.site.schedule
+                                    ?.startDateTime &&
+                                  detailsData?.data?.site.schedule?.endDateTime
                                 ) {
-                                  return `${scheduleStartFormatted} - ${scheduleEndFormatted}`;
+                                  const scheduleStartFormatted =
+                                    extractTimeFromString(
+                                      detailsData.data.site.schedule
+                                        .startDateTime
+                                    );
+                                  const scheduleEndFormatted =
+                                    extractTimeFromString(
+                                      detailsData.data.site.schedule.endDateTime
+                                    );
+                                  if (
+                                    scheduleStartFormatted &&
+                                    scheduleEndFormatted
+                                  ) {
+                                    return `${scheduleStartFormatted} - ${scheduleEndFormatted}`;
+                                  }
                                 }
+                                return '02:00 PM - 04:00 PM';
                               }
+                            } catch (error) {
                               return '02:00 PM - 04:00 PM';
                             }
-                          } catch (error) {
-                            console.error(
-                              '❌ Error formatting experience time:',
-                              error
-                            );
-                            return '02:00 PM - 04:00 PM';
+                          })()
+                        : ''
+                    }
+                    date={(() => {
+                      if (detailsData?.data?.site.type === 'Stay') {
+                        try {
+                          const startDate = new Date(bookingDateTime.startDate);
+                          const endDate = new Date(bookingDateTime.endDate);
+
+                          if (
+                            !isNaN(startDate.getTime()) &&
+                            !isNaN(endDate.getTime())
+                          ) {
+                            return `${startDate.toLocaleDateString('en-US', {
+                              // weekday: 'long',
+                              month: 'long',
+                              day: 'numeric',
+                              timeZone: 'GMT',
+                            })} - ${endDate.toLocaleDateString('en-US', {
+                              // weekday: 'long',
+                              month: 'long',
+                              day: 'numeric',
+                              timeZone: 'GMT',
+                            })}`;
+                          } else {
+                            return 'Check-in - Check-out';
                           }
-                        })()
-                      : ''
-                  }
-                  date={(() => {
-                    if (detailsData?.data?.site.type === 'Stay') {
-                      try {
-                        const startDate = new Date(bookingDateTime.startDate);
-                        const endDate = new Date(bookingDateTime.endDate);
-
-                        console.log('📅 Stay date formatting:', {
-                          startDate: bookingDateTime.startDate,
-                          endDate: bookingDateTime.endDate,
-                          startDateObj: startDate,
-                          endDateObj: endDate,
-                          isValidStart: !isNaN(startDate.getTime()),
-                          isValidEnd: !isNaN(endDate.getTime()),
-                        });
-
-                        if (
-                          !isNaN(startDate.getTime()) &&
-                          !isNaN(endDate.getTime())
-                        ) {
-                          return `${startDate.toLocaleDateString('en-US', {
-                            // weekday: 'long',
-                            month: 'long',
-                            day: 'numeric',
-                            timeZone: 'GMT',
-                          })} - ${endDate.toLocaleDateString('en-US', {
-                            // weekday: 'long',
-                            month: 'long',
-                            day: 'numeric',
-                            timeZone: 'GMT',
-                          })}`;
-                        } else {
-                          console.log('⚠️ Invalid date values, using fallback');
+                        } catch (error) {
                           return 'Check-in - Check-out';
                         }
-                      } catch (error) {
-                        console.error('❌ Error formatting stay date:', error);
-                        return 'Check-in - Check-out';
-                      }
-                    } else {
-                      try {
-                        const start = parseDateTime(bookingDateTime.startDate);
-                        const end = parseDateTime(bookingDateTime.endDate);
+                      } else {
+                        try {
+                          const start = parseDateTime(
+                            bookingDateTime.startDate
+                          );
+                          const end = parseDateTime(bookingDateTime.endDate);
 
-                        console.log('📅 Experience date formatting:', {
-                          startDate: bookingDateTime.startDate,
-                          endDate: bookingDateTime.endDate,
-                          startDateObj: start,
-                          endDateObj: end,
-                          isValidStart: start !== null,
-                          isValidEnd: end !== null,
-                        });
-
-                        if (start && end) {
-                          if (
-                            start.getFullYear() === end.getFullYear() &&
-                            start.getMonth() === end.getMonth() &&
-                            start.getDate() === end.getDate()
-                          ) {
-                            return `(${start.toLocaleDateString('en-US', {
-                              weekday: 'long',
-                              month: 'short',
-                              day: 'numeric',
-                            })})`;
-                          } else {
-                            return `(${start.toLocaleDateString('en-US', {
-                              weekday: 'long',
-                              month: 'short',
-                              day: 'numeric',
-                            })} - ${end.toLocaleDateString('en-US', {
-                              weekday: 'long',
-                              month: 'short',
-                              day: 'numeric',
-                            })})`;
-                          }
-                        } else {
-                          console.log('⚠️ Invalid date values, using fallback');
-                          // Try to get date from site schedule as fallback
-                          if (
-                            detailsData?.data?.site.schedule?.startDateTime &&
-                            detailsData?.data?.site.schedule?.endDateTime
-                          ) {
-                            const scheduleStart = parseDateTime(
-                              detailsData.data.site.schedule.startDateTime
-                            );
-                            const scheduleEnd = parseDateTime(
-                              detailsData.data.site.schedule.endDateTime
-                            );
-                            if (scheduleStart && scheduleEnd) {
-                              return `(${scheduleStart.toLocaleDateString(
-                                'en-US',
-                                {
-                                  weekday: 'long',
-                                  month: 'short',
-                                  day: 'numeric',
-                                }
-                              )})`;
+                          if (start && end) {
+                            if (
+                              start.getFullYear() === end.getFullYear() &&
+                              start.getMonth() === end.getMonth() &&
+                              start.getDate() === end.getDate()
+                            ) {
+                              return `(${start.toLocaleDateString('en-US', {
+                                weekday: 'long',
+                                month: 'short',
+                                day: 'numeric',
+                              })})`;
+                            } else {
+                              return `(${start.toLocaleDateString('en-US', {
+                                weekday: 'long',
+                                month: 'short',
+                                day: 'numeric',
+                              })} - ${end.toLocaleDateString('en-US', {
+                                weekday: 'long',
+                                month: 'short',
+                                day: 'numeric',
+                              })})`;
                             }
+                          } else {
+                            // Try to get date from site schedule as fallback
+                            if (
+                              detailsData?.data?.site.schedule?.startDateTime &&
+                              detailsData?.data?.site.schedule?.endDateTime
+                            ) {
+                              const scheduleStart = parseDateTime(
+                                detailsData.data.site.schedule.startDateTime
+                              );
+                              const scheduleEnd = parseDateTime(
+                                detailsData.data.site.schedule.endDateTime
+                              );
+                              if (scheduleStart && scheduleEnd) {
+                                return `(${scheduleStart.toLocaleDateString(
+                                  'en-US',
+                                  {
+                                    weekday: 'long',
+                                    month: 'short',
+                                    day: 'numeric',
+                                  }
+                                )})`;
+                              }
+                            }
+                            return '(Selected Date)';
                           }
+                        } catch (error) {
                           return '(Selected Date)';
                         }
-                      } catch (error) {
-                        console.error(
-                          '❌ Error formatting experience date:',
-                          error
-                        );
-                        return '(Selected Date)';
                       }
+                    })()}
+                    people={(() => {
+                      const guests = bookingData?.guests;
+                      if (!guests) return '';
+                      const parts = [];
+                      if (guests.adults > 0)
+                        parts.push(
+                          `${guests.adults} Adult${guests.adults > 1 ? 's' : ''}`
+                        );
+                      if (guests.children > 0)
+                        parts.push(
+                          `${guests.children} Child${guests.children > 1 ? 'ren' : ''}`
+                        );
+                      if (guests.infants > 0)
+                        parts.push(
+                          `${guests.infants} Infant${guests.infants > 1 ? 's' : ''}`
+                        );
+                      return parts.join(', ');
+                    })()}
+                    onGuestUpdate={guests => {
+                      updateBookingData(params.id, {
+                        guests,
+                      });
+                    }}
+                  />
+                  {detailsData?.data?.site.airportIsIncluded ||
+                    detailsData?.data?.site.guideIsIncluded ||
+                    (detailsData?.data?.site.transportationIsIncluded && (
+                      <Divider className='w-full my-8' />
+                    ))}
+                  <AdditionalServices
+                    transportationChecked={transportationChecked}
+                    guideChecked={guideChecked}
+                    onTransportationChange={handleTransportationChange}
+                    onGuideChange={handleGuideChange}
+                    siteInfo={detailsData?.data?.site}
+                    airportChecked={airportChecked}
+                    onAirportChange={checked =>
+                      setValue('airportChecked', checked)
                     }
-                  })()}
-                  people={(() => {
-                    const guests = bookingData?.guests;
-                    if (!guests) return '';
-                    const parts = [];
-                    if (guests.adults > 0)
-                      parts.push(
-                        `${guests.adults} Adult${guests.adults > 1 ? 's' : ''}`
-                      );
-                    if (guests.children > 0)
-                      parts.push(
-                        `${guests.children} Child${guests.children > 1 ? 'ren' : ''}`
-                      );
-                    if (guests.infants > 0)
-                      parts.push(
-                        `${guests.infants} Infant${guests.infants > 1 ? 's' : ''}`
-                      );
-                    return parts.join(', ');
-                  })()}
-                  onGuestUpdate={guests => {
-                    updateBookingData(params.id, {
-                      guests,
-                    });
-                  }}
-                />
-                {detailsData?.data?.site.airportIsIncluded ||
-                  detailsData?.data?.site.guideIsIncluded ||
-                  (detailsData?.data?.site.transportationIsIncluded && (
-                    <Divider className='w-full my-8' />
-                  ))}
-                <AdditionalServices
+                  />
+                  {detailsData?.data?.site.thingsToKnow && (
+                    <>
+                      <Divider className='w-full my-8' />
+
+                      <ExpandableTextSection
+                        title={t('completeYourBooking.thingsToKnow')}
+                        content={detailsData?.data?.site.thingsToKnow || ''}
+                      />
+                    </>
+                  )}
+
+                  {detailsData?.data?.site.stayNearby && (
+                    <>
+                      <Divider className='w-full my-8' />
+                      <ExpandableTextSection
+                        title={t('completeYourBooking.stayNearby')}
+                        content={detailsData?.data?.site.stayNearby || ''}
+                      />
+                    </>
+                  )}
+
+                  {detailsData?.data?.site.stayHouseRules && (
+                    <>
+                      <Divider className='w-full my-8' />
+                      <ExpandableTextSection
+                        title={t('completeYourBooking.stayHouseRules')}
+                        content={detailsData?.data?.site.stayHouseRules || ''}
+                      />
+                    </>
+                  )}
+
+                  {detailsData?.data?.site.cancellationPolicy && (
+                    <>
+                      <Divider className='w-full my-8' />
+                      <ExpandableTextSection
+                        title={t('completeYourBooking.cancellationPolicy')}
+                        content={detailsData?.data?.site.cancellationPolicy}
+                      />
+                    </>
+                  )}
+                  <Divider className='w-full my-8' />
+
+                  {enabledPaymentMethods.length > 0 && (
+                    <>
+                      <PaymentMethods
+                        methods={enabledPaymentMethods}
+                        selectedMethod={selectedPaymentMethod || ''}
+                        onMethodChange={method =>
+                          setValue('selectedPaymentMethod', method)
+                        }
+                      />
+                      <Divider className='w-full my-8' />
+                    </>
+                  )}
+
+                  <SmartSubmitButton
+                    control={control}
+                    name='financialReceipt'
+                    disableAttachment={disableAttachment}
+                    onSubmit={handleSubmit(onSubmit)}
+                    isBookingCollectionPending={isBookingCollectionPending}
+                    isUploadingFile={isUploadingFile}
+                  />
+                </div>
+                <BookingSummary
+                  siteInfo={detailsData?.data?.site}
+                  title={detailsData?.data?.site.name || ''}
+                  location={
+                    `${detailsData?.data?.site.country?.name}, ${detailsData?.data?.site.city}` ||
+                    ''
+                  }
+                  bookingData={bookingData}
                   transportationChecked={transportationChecked}
                   guideChecked={guideChecked}
-                  onTransportationChange={handleTransportationChange}
-                  onGuideChange={handleGuideChange}
-                  siteInfo={detailsData?.data?.site}
                   airportChecked={airportChecked}
-                  onAirportChange={checked =>
-                    setValue('airportChecked', checked)
-                  }
-                />
-                {detailsData?.data?.site.thingsToKnow && (
-                  <>
-                    <Divider className='w-full my-8' />
-
-                    <ExpandableTextSection
-                      title='Things to Know'
-                      content={detailsData?.data?.site.thingsToKnow || ''}
-                    />
-                  </>
-                )}
-
-                {detailsData?.data?.site.stayNearby && (
-                  <>
-                    <Divider className='w-full my-8' />
-                    <ExpandableTextSection
-                      title='Stay Nearby'
-                      content={detailsData?.data?.site.stayNearby || ''}
-                    />
-                  </>
-                )}
-
-                {detailsData?.data?.site.stayHouseRules && (
-                  <>
-                    <Divider className='w-full my-8' />
-                    <ExpandableTextSection
-                      title='Stay House Rules'
-                      content={detailsData?.data?.site.stayHouseRules || ''}
-                    />
-                  </>
-                )}
-
-                {detailsData?.data?.site.cancellationPolicy && (
-                  <>
-                    <Divider className='w-full my-8' />
-                    <ExpandableTextSection
-                      title='Cancellation Policy'
-                      content={detailsData?.data?.site.cancellationPolicy}
-                    />
-                  </>
-                )}
-                <Divider className='w-full my-8' />
-
-                {enabledPaymentMethods.length > 0 && (
-                  <>
-                    <PaymentMethods
-                      methods={enabledPaymentMethods}
-                      selectedMethod={selectedPaymentMethod || ''}
-                      onMethodChange={method =>
-                        setValue('selectedPaymentMethod', method)
-                      }
-                    />
-                    <Divider className='w-full my-8' />
-                  </>
-                )}
-
-                <SmartSubmitButton
-                  control={control}
-                  name='financialReceipt'
-                  disableAttachment={disableAttachment}
-                  onSubmit={handleSubmit(onSubmit)}
-                  isBookingCollectionPending={isBookingCollectionPending}
-                  isUploadingFile={isUploadingFile}
                 />
               </div>
-              <BookingSummary
-                siteInfo={detailsData?.data?.site}
-                title={detailsData?.data?.site.name || ''}
-                location={
-                  `${detailsData?.data?.site.country?.name}, ${detailsData?.data?.site.city}` ||
-                  ''
-                }
-                bookingData={bookingData}
-                transportationChecked={transportationChecked}
-                guideChecked={guideChecked}
-                airportChecked={airportChecked}
-              />
             </div>
-          </div>
-        </form>
-      </main>
-    </InnerPagesLayout>
+          </form>
+        </main>
+      </InnerPagesLayout>
+    </>
   );
 };
 

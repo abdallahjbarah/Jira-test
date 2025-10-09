@@ -1,21 +1,14 @@
 'use client';
 
-import ExpandableTextSection from '@/components/shared/ExpandableTextSection';
 import CircularLoader from '@/components/ui/CircularLoader';
 import CustomSvg from '@/components/ui/CustomSvg';
 import Divider from '@/components/ui/Divider';
 import AmenitiesSection from '@/components/web/details/AmenitiesSection';
 import BookingStatusSection from '@/components/web/details/BookingStatusSection';
-import FeaturesSection from '@/components/web/details/FeaturesSection';
 import HostInfoSection from '@/components/web/details/HostInfoSection';
-import HouseRulesSection from '@/components/web/details/HouseRulesSection';
 import ItinerarySection from '@/components/web/details/ItinerarySection';
 import LocationSection from '@/components/web/details/LocationSection';
-import NearbySurroundingsSection from '@/components/web/details/NearbySurroundingsSection';
 import SpecialInstructionsAndCancellationSection from '@/components/web/details/SpecialInstructionsAndCancellationSection';
-import StayDetailsSection from '@/components/web/details/StayDetailsSection';
-import StaysFeature from '@/components/web/details/StaysFeature';
-import WhatToExpectSection from '@/components/web/details/WhatToExpectSection';
 import InnerPagesLayout from '@/layouts/InnerPagesLayout';
 import { useFetchBookingDetails } from '@/lib/apis/bookings/useFetchBookingDetails';
 import withFavourites from '@/lib/hocs/withFavourites';
@@ -23,6 +16,7 @@ import { Site } from '@/lib/types';
 import useFavorite from '@/utils/hooks/useFavorite';
 import { Locale } from '@utils/constants';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import Lightbox from 'yet-another-react-lightbox';
 import Counter from 'yet-another-react-lightbox/plugins/counter';
@@ -30,6 +24,11 @@ import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
+import DatesAndTime from '../../../../components/web/my-bookings/bookingId/DatesAndTime';
+import PaymentInformation from '../../../../components/web/my-bookings/bookingId/PaymentInformation';
+import ReservationDetails from '../../../../components/web/my-bookings/bookingId/ReservationDetails';
+import ShowExperience from '../../../../components/web/my-bookings/bookingId/ShowExperience';
+import useCurrency from '../../../../utils/hooks/useCurrency';
 
 interface MyBookingsPageProps {
   params: { lang: Locale; bookingId: string };
@@ -97,6 +96,8 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
   } = useFetchBookingDetails(params.bookingId);
 
   const { isFavorite, removeFavorite } = useFavorite();
+  const router = useRouter();
+  const { currency } = useCurrency();
 
   const isCollectionFavorite = React.useMemo(() => {
     return isFavorite(params.bookingId);
@@ -203,6 +204,14 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
     stayHouseRules,
   } = detailsData.booking.siteId;
 
+  const { startDateTimeZoned, endDateTimeZoned } = detailsData.booking;
+
+  const guests = detailsData.booking.guests;
+  const displayGuests = Object.entries(guests)
+    .filter(([_, value]) => value > 0)
+    .map(([key, value]) => `${value} ${key}`)
+    .join(', ');
+
   return (
     <InnerPagesLayout headerProps={{ withNavItems: true }}>
       <main className='container'>
@@ -301,9 +310,9 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                 />
               </div>
               <Divider className='w-full my-8' />
-              <ExpandableTextSection
-                title='Overview'
-                content={longDescription}
+              <DatesAndTime
+                startDateTimeZoned={startDateTimeZoned}
+                endDateTimeZoned={endDateTimeZoned}
               />
               {type != 'Offers & Packages' && (
                 <>
@@ -322,58 +331,36 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
                   <ItinerarySection stops={itineraryStops || []} />
                 </>
               )}
-              {type != 'Stay' && (
-                <>
-                  <Divider className='w-full my-8' />
-
-                  <FeaturesSection features={features} />
-                </>
-              )}
-              {type === 'Stay' && (
-                <>
-                  <Divider className='w-full my-8' />
-                  <StaysFeature
-                    startDateTime={startDateTime}
-                    endDateTime={endDateTime}
-                    languages={languages}
-                  />
-                </>
-              )}
               <Divider className='w-full my-8' />
-
+              <ReservationDetails
+                displayGuests={displayGuests}
+                startDateTimeZoned={startDateTimeZoned}
+                endDateTimeZoned={endDateTimeZoned}
+              />
+              <Divider className='w-full my-8' />
+              <AmenitiesSection amenities={amenities || []} />
+              <Divider className='w-full my-8' />
+              <ShowExperience
+                type={type}
+                onClick={() => {
+                  router.push(
+                    `/${params.lang}/details/${detailsData.booking.siteId._id}`
+                  );
+                }}
+              />
+              <Divider className='w-full my-8' />
               {host && coHost && (
                 <HostInfoSection hosts={host} coHosts={coHost} />
-              )}
-              <Divider className='w-full my-8' />
-
-              <AmenitiesSection amenities={amenities || []} />
+              )}{' '}
             </div>
           </div>
-          {type != 'Stay' && (
-            <>
-              <Divider className='w-full my-8' />
-
-              <WhatToExpectSection
-                description={whatToExpect?.description}
-                images={whatToExpect?.images}
-              />
-              <Divider className='w-full my-8' />
-              <SpecialInstructionsAndCancellationSection
-                specialInstructions={specialInstructions}
-                cancellationPolicy={cancellationPolicy}
-              />
-            </>
-          )}
-          {type === 'Stay' && (
-            <>
-              <Divider className='w-full my-8' />
-              <StayDetailsSection details={stayDetails?.description} />
-              <Divider className='w-full my-8' />
-              <NearbySurroundingsSection details={stayNearby} />
-              <Divider className='w-full my-8' />
-              <HouseRulesSection rules={stayHouseRules} />
-            </>
-          )}
+          <Divider className='w-full my-8' />
+          <PaymentInformation currency={currency} detailsData={detailsData} />
+          <Divider className='w-full my-8' />
+          <SpecialInstructionsAndCancellationSection
+            cancellationPolicy={cancellationPolicy}
+            isBooking={true}
+          />
         </div>
       </main>
 
