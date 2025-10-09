@@ -112,16 +112,14 @@ const BookingStatusSection = ({
           {getStatusLabel(detailsData.booking.status)}
         </span>
 
-        {detailsData.canCancel &&
-          detailsData.booking.status! != BookingStatus.CANCELLED &&
-          detailsData.booking.status! != BookingStatus.COMPLETED && (
-            <button
-              className='px-11 py-2.5 bg-[#47C40910] text-text_1 border border-green-200 rounded-full hover:bg-green-100 transition-colors duration-200 text-custom-12 mobileM:text-custom-12 laptopM:text-custom-14 font-medium'
-              onClick={openModal}
-            >
-              {t('bookingStatus.cancel')}
-            </button>
-          )}
+        {detailsData.canCancel && (
+          <button
+            className='px-11 py-2.5 bg-[#47C40910] text-text_1 border border-green-200 rounded-full hover:bg-green-100 transition-colors duration-200 text-custom-12 mobileM:text-custom-12 laptopM:text-custom-14 font-medium'
+            onClick={openModal}
+          >
+            {t('bookingStatus.cancel')}
+          </button>
+        )}
       </div>
       {!isShowWhatsApp && (
         <div
