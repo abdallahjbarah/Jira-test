@@ -18,7 +18,7 @@ import useMutateBooking from '@/lib/apis/bookings/useMutateBooking';
 import { useFetchDetails } from '@/lib/apis/details/useFetchDetails';
 import { useUploadFile } from '@/lib/apis/files/useUploadFile';
 import { useFetchPaymentMethods } from '@/lib/apis/paymentMethod/useFetchPaymentMethod';
-import { FileFolder } from '@/lib/enums';
+import { BookingStatus, FileFolder } from '@/lib/enums';
 import { Locale } from '@utils/constants';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -300,7 +300,9 @@ const CompleteYourBooking: React.FC<CompleteYourBookingProps> = ({
     useMutateBooking({
       onSuccess: data => {
         setSuccessBookingId(data.booking._id);
-        openSuccessModal();
+        if (data.booking.status != BookingStatus.DRAFT) {
+          openSuccessModal();
+        }
 
         if (data.paymentUrl) {
           window.open(data.paymentUrl, '_blank');

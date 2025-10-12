@@ -43,6 +43,7 @@ export enum BookingStatus {
   REFUNDED = 5,
   COMPLETED = 6,
   REFUND_REQUESTED = 7,
+  DRAFT = 0,
 }
 
 export enum SSOProviderType {
