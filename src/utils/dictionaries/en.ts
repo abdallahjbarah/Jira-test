@@ -638,7 +638,8 @@ const en = {
   },
   location: {
     location: 'Location',
-    exactLocation: 'Exact location will be available prior to one day',
+    exactLocation:
+      'Exact location will be available once the experience is Approved.',
     itinerary: 'Itinerary',
     typicalItinerary: 'TThis is a typical itinerary for this package',
     stopAt: 'Stop At',
