@@ -1,18 +1,17 @@
 'use client';
 
-import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { currencySchema } from '@/utils/formsSchemas';
-import { useTranslation } from '@/contexts/TranslationContext';
 import FilledButton from '@/components/ui/buttons/FilledButton';
-import RadioButton from '@/components/ui/RadioButton';
-import { CurrencyOption } from '@/types';
-import useUser from '@/utils/hooks/useUser';
-import { useEditUser } from '@/lib/apis/users/useEditUser';
-import { toast } from 'react-toastify';
 import CircularLoader from '@/components/ui/CircularLoader';
+import RadioButton from '@/components/ui/RadioButton';
+import { useTranslation } from '@/contexts/TranslationContext';
+import { useEditUser } from '@/lib/apis/users/useEditUser';
+import { CurrencyOption } from '@/types';
+import { currencySchema } from '@/utils/formsSchemas';
+import useUser from '@/utils/hooks/useUser';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 type CurrencyFormData = {
   currency: string;

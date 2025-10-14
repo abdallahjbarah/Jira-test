@@ -200,6 +200,7 @@ const en = {
     termsOfService: 'Terms of Service',
     checkTerms: 'Check our terms of service',
     logout: 'Logout',
+    currencyUpdated: 'Currency updated successfully',
 
     firstName: 'First Name',
     lastName: 'Last Name',
@@ -437,6 +438,8 @@ const en = {
     error: {
       generic: 'An error occurred. Please try again.',
     },
+    showMore: 'Show More',
+    loading: 'Loading...',
   },
   favorites: {
     addToCollection: 'Add to Collection',

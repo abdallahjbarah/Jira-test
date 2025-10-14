@@ -1,5 +1,4 @@
 'use client';
-import FilledButton from '@components/ui/buttons/FilledButton';
 import { useTranslation } from '@contexts/TranslationContext';
 import Vector from '@images/home/Vector.png';
 import MissionSvg from '@SVGs/home/MissionSvg.svg';
@@ -68,7 +67,7 @@ export default function AboutUs(): React.ReactElement {
             </div>
           </div>
 
-          <div className=''>
+          {/* <div className=''>
             <FilledButton
               path='#'
               text={t('aboutUs.readMore')}
@@ -80,7 +79,7 @@ export default function AboutUs(): React.ReactElement {
               buttonType='button'
               isDisable={false}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

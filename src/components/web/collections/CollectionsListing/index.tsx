@@ -35,6 +35,41 @@ const LoaderContainer = Styled.div`
   padding: 40px 0;
 `;
 
+const ShowMoreButton = Styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 32px auto;
+  padding: 12px 32px;
+  background: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+
+  &:hover:not(:disabled) {
+    background: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 24px;
+    font-size: 14px;
+    min-width: 150px;
+  }
+`;
+
 const MapToggleWidget = Styled.div`
   position: fixed;
   right: -60px;
@@ -103,7 +138,6 @@ function CollectionsListing(): React.ReactElement {
   const [isMapView, setIsMapView] = useState(false);
   const { t } = useTranslation();
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<HTMLDivElement>(null);
 
   const currentCollectionStatus = collectionStatus || COLLECTION_STATUS.ALL;
 
@@ -133,7 +167,7 @@ function CollectionsListing(): React.ReactElement {
     // Add pagination parameters
     return {
       ...backendParams,
-      limit: isMapView ? 100 : 20,
+      limit: isMapView ? 100 : 24,
     };
   }, [frontendFilters, collectionStatus, isMapView]);
 
@@ -189,21 +223,11 @@ function CollectionsListing(): React.ReactElement {
     setIsMapView(false);
   }, []);
 
-  const debouncedFetchNextPage = React.useMemo(() => {
-    let timeoutId: NodeJS.Timeout;
-    return () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        if (hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      }, 100);
-    };
+  const handleShowMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
-
-  const handleIntersect = React.useCallback(() => {
-    debouncedFetchNextPage();
-  }, [debouncedFetchNextPage]);
 
   useEffect(() => {
     if (isMapView && mapContainerRef.current) {
@@ -215,30 +239,6 @@ function CollectionsListing(): React.ReactElement {
       }, 100);
     }
   }, [isMapView]);
-
-  // Infinite scroll observer
-  useEffect(() => {
-    if (isMapView) return; // Don't observe when in map view
-
-    const observer = new IntersectionObserver(
-      entries => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          handleIntersect();
-        }
-      },
-      { threshold: 0.1, rootMargin: '100px' }
-    );
-
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
-    };
-  }, [hasNextPage, isFetchingNextPage, handleIntersect, isMapView]);
 
   const collectionsGrid = React.useMemo(() => {
     if (!collections?.length) return null;
@@ -327,12 +327,21 @@ function CollectionsListing(): React.ReactElement {
             <CollectionTypeLabel />
           </div>
           {collectionsGrid}
-          {/* Infinite scroll sentinel */}
-          <div ref={observerRef} className='h-10 w-full' />
-          {isFetchingNextPage && (
-            <LoaderContainer>
-              <CircularLoader size={40} />
-            </LoaderContainer>
+          {hasNextPage && (
+            <ShowMoreButton
+              onClick={handleShowMore}
+              disabled={isFetchingNextPage}
+              aria-label={isFetchingNextPage ? 'Loading...' : 'Show More'}
+            >
+              {isFetchingNextPage ? (
+                <>
+                  <CircularLoader size={20} />
+                  <span>{t('common.loading') || 'Loading...'}</span>
+                </>
+              ) : (
+                <span>{t('common.showMore') || 'Show More'}</span>
+              )}
+            </ShowMoreButton>
           )}
         </>
       )}

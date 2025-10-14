@@ -17,7 +17,7 @@ interface ContactUsFormValues {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   message: string;
 }
 
@@ -28,22 +28,19 @@ export default function ContactUsForm(): React.ReactElement {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, touchedFields },
     reset,
-    watch,
   } = useForm<ContactUsFormValues>({
     defaultValues: {
       firstName: '',
       lastName: '',
       email: '',
-      phone: '',
+      phoneNumber: '',
       message: '',
     },
     resolver: yupResolver(contactUsSchema),
     mode: 'onBlur',
   });
-
-  const values = watch();
 
   const {
     mutate,
@@ -68,7 +65,7 @@ export default function ContactUsForm(): React.ReactElement {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
-      phone: data.phone?.toString(),
+      phoneNumber: data.phoneNumber?.toString(),
       message: data.message,
     });
   };
@@ -97,13 +94,12 @@ export default function ContactUsForm(): React.ReactElement {
                 placeholder={t('contactUsForm.firstName')}
                 type='text'
                 id='firstName'
-                value={values.firstName}
                 {...register('firstName')}
                 pattern='.*'
               />
               <ErrorFormik
                 isError={!!errors.firstName}
-                isTouched={true}
+                isTouched={!!touchedFields.firstName}
                 error={errors.firstName?.message || ''}
               />
             </div>
@@ -114,13 +110,12 @@ export default function ContactUsForm(): React.ReactElement {
                 placeholder={t('contactUsForm.lastName')}
                 type='text'
                 id='lastName'
-                value={values.lastName}
                 {...register('lastName')}
                 pattern='.*'
               />
               <ErrorFormik
                 isError={!!errors.lastName}
-                isTouched={true}
+                isTouched={!!touchedFields.lastName}
                 error={errors.lastName?.message || ''}
               />
             </div>
@@ -133,13 +128,12 @@ export default function ContactUsForm(): React.ReactElement {
                 placeholder={t('contactUsForm.email')}
                 type='email'
                 id='email'
-                value={values.email}
                 {...register('email')}
                 pattern='.*'
               />
               <ErrorFormik
                 isError={!!errors.email}
-                isTouched={true}
+                isTouched={!!touchedFields.email}
                 error={errors.email?.message || ''}
               />
             </div>
@@ -147,17 +141,16 @@ export default function ContactUsForm(): React.ReactElement {
               <CustomInput
                 shape={1}
                 className='h-[3.5rem] w-full px-6 placeholder:text-custom-17 mobileM:h-[5rem] mobileM:placeholder:text-custom-24'
-                placeholder={t('contactUsForm.phone')}
+                placeholder={t('contactUsForm.phoneNumber')}
                 type='text'
-                id='phone'
-                value={values.phone}
-                {...register('phone')}
+                id='phoneNumber'
+                {...register('phoneNumber')}
                 pattern='.*'
               />
               <ErrorFormik
-                isError={!!errors.phone}
-                isTouched={true}
-                error={errors.phone?.message || ''}
+                isError={!!errors.phoneNumber}
+                isTouched={!!touchedFields.phoneNumber}
+                error={errors.phoneNumber?.message || ''}
               />
             </div>
           </div>
@@ -168,12 +161,11 @@ export default function ContactUsForm(): React.ReactElement {
               className='h-[11rem] w-full px-4 pt-5 placeholder:text-custom-17 mobileM:h-[15rem] mobileM:placeholder:text-custom-24'
               placeholder={t('contactUsForm.message')}
               id='message'
-              value={values.message}
               {...register('message')}
             />
             <ErrorFormik
               isError={!!errors.message}
-              isTouched={true}
+              isTouched={!!touchedFields.message}
               error={errors.message?.message || ''}
             />
           </div>

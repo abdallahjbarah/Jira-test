@@ -218,6 +218,7 @@ const ar = {
     termsOfService: 'شروط الخدمة',
     checkTerms: 'اطلع على شروط الخدمة لدينا',
     logout: 'تسجيل الخروج',
+    currencyUpdated: 'تم تحديث العملة بنجاح',
 
     firstName: 'الاسم الأول',
     lastName: 'اسم العائلة',
@@ -444,6 +445,8 @@ const ar = {
     error: {
       generic: 'حدث خطأ. يرجى المحاولة مرة أخرى.',
     },
+    showMore: 'عرض المزيد',
+    loading: 'جاري التحميل...',
   },
   favorites: {
     addToCollection: 'إضافة إلى المجموعة',
