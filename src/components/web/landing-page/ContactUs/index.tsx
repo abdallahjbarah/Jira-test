@@ -48,9 +48,7 @@ export default function ContactUs(): React.ReactElement {
           <div className='flex flex-col gap-4'>
             <div
               className='border border-solid rounded-custom-16 border-secondary_3 cursor-pointer'
-              onClick={() =>
-                window.open(SOCIAL_MEDIA_DATA?.gmail?.link, '_blank')
-              }
+              onClick={() => window.open(SOCIAL_MEDIA_DATA?.gmail?.link)}
             >
               <div className='flex gap-4 p-2 mobileM:p-4'>
                 <div className='w-full max-w-[4.4375rem] max-h-[4.4375rem] rounded-custom-20 flex justify-center items-center mobileM:max-w-[6.4375rem] mobileM:max-h-[6.4375rem]'>

@@ -164,7 +164,7 @@ export const SOCIAL_MEDIA_DATA: Record<string, SocialMediaLink> = {
     link: 'https://api.whatsapp.com/send?phone=962772236393&text&context=AfcxZaaj5CCnBYmpJnZCrXz91a9NWn2QjQMoOofGjyl_fZA5q3JYJuc84UMFCzUiadLxj8JDRHq1SPfLnfRSsZmQrILjK625t8oYSUX7uc87TXCb7H5iA9UW0ltaBGp2KU1hmlbbxmhXlxRcJw&source&app=facebook',
   },
   gmail: {
-    link: 'https://mail.google.com/mail/?view=cm&to=rudaina.h@hotmail.com',
+    link: 'mailto:rudaina.h@hotmail.com',
   },
 };
 
