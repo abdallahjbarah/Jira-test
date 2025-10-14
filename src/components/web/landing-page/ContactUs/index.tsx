@@ -6,7 +6,7 @@ import React from 'react';
 
 import AddressSVG from '@SVGs/home/Address.svg';
 import EmailSVG from '@SVGs/home/Email.svg';
-import PhoneSVG from '@SVGs/home/Phone.svg';
+import whatsSvg from '@SVGs/home/whatsSvg.svg';
 
 import Luster_Item from '@components/ui/Luster_Item';
 import FacebookSVG from '@SVGs/home/Facebook.svg';
@@ -46,7 +46,12 @@ export default function ContactUs(): React.ReactElement {
           </div>
 
           <div className='flex flex-col gap-4'>
-            <div className='border border-solid rounded-custom-16 border-secondary_3'>
+            <div
+              className='border border-solid rounded-custom-16 border-secondary_3 cursor-pointer'
+              onClick={() =>
+                window.open(SOCIAL_MEDIA_DATA?.gmail?.link, '_blank')
+              }
+            >
               <div className='flex gap-4 p-2 mobileM:p-4'>
                 <div className='w-full max-w-[4.4375rem] max-h-[4.4375rem] rounded-custom-20 flex justify-center items-center mobileM:max-w-[6.4375rem] mobileM:max-h-[6.4375rem]'>
                   <div className='w-[3.5rem] h-[3.5rem] mobileM:w-[5.5rem] mobileM:h-[5.5rem]'>
@@ -64,19 +69,24 @@ export default function ContactUs(): React.ReactElement {
               </div>
             </div>
 
-            <div className='border border-solid rounded-custom-16 border-secondary_3'>
+            <div
+              className='border border-solid rounded-custom-16 border-secondary_3 cursor-pointer'
+              onClick={() =>
+                window.open(SOCIAL_MEDIA_DATA?.whatsapp?.link, '_blank')
+              }
+            >
               <div className='flex gap-4 p-2 mobileM:p-4'>
                 <div className='w-full max-w-[4.4375rem] max-h-[4.4375rem] rounded-custom-20 flex justify-center items-center mobileM:max-w-[6.4375rem] mobileM:max-h-[6.4375rem]'>
                   <div className='w-[3.5rem] h-[3.5rem] mobileM:w-[5.5rem] mobileM:h-[5.5rem]'>
-                    <Image src={PhoneSVG} alt={t('contactUs.phone.title')} />
+                    <Image src={whatsSvg} alt={t('contactUs.whatsapp.title')} />
                   </div>
                 </div>
                 <div>
                   <h2 className='text-custom-18 font-custom-800 text-primary_5 font-gellix-Bold mobileM:text-custom-24'>
-                    {t('contactUs.phone.title')}
+                    {t('contactUs.whatsapp.title')}
                   </h2>
                   <p className='text-custom-14 font-custom-400 text-secondary_1 mt-2 mobileM:text-custom-18'>
-                    {t('contactUs.phone.value')}
+                    {t('contactUs.whatsapp.value')}
                   </p>
                 </div>
               </div>

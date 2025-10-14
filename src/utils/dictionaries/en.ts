@@ -64,8 +64,8 @@ const en = {
       title: 'Email',
       value: 'rudaina.h@hotmail.com',
     },
-    phone: {
-      title: 'Phone',
+    whatsapp: {
+      title: 'Whatsapp',
       value: '00962-77-2236393',
     },
     address: {

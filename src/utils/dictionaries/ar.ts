@@ -79,8 +79,8 @@ const ar = {
       title: 'البريد الإلكتروني',
       value: 'info@bookagri.com',
     },
-    phone: {
-      title: 'الهاتف',
+    whatsapp: {
+      title: 'واتساب',
       value: '00962-77-2236393',
     },
     address: {
