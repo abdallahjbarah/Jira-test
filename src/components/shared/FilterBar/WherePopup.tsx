@@ -1,12 +1,12 @@
 import Modal from '@/components/ui/Modal';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { api } from '@/lib/apis';
 import { useFetchSearchDestination } from '@/lib/apis/shared/useFetchSearchDestination';
 import debounce from '@/utils/helpers/debounce';
+import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/apis';
 
 const FILTERS = [
   { key: 'all', label: 'All', icon: '' },
@@ -475,14 +475,10 @@ const WherePopup: React.FC<WherePopupProps> = ({
           <div className='flex justify-center'>
             <button
               onClick={handleNext}
-              disabled={
-                !searchText.trim() && !selectedLocation && selected === 'all'
-              }
+              disabled={!searchText.trim() || !selectedLocation}
               className={`w-full max-w-[340px] py-2.5 font-medium rounded-lg transition-colors
                                 ${
-                                  !searchText.trim() &&
-                                  !selectedLocation &&
-                                  selected === 'all'
+                                  !searchText.trim() || !selectedLocation
                                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                     : 'bg-[#FF3A1E] text-white hover:bg-[#E63219]'
                                 }
