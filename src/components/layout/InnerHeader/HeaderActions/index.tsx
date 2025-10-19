@@ -32,6 +32,7 @@ function HeaderActions(): React.ReactElement {
       <div className='!text-secondary_6 hover:!text-primary_2 cursor-pointer'>
         <LanguageSwitcher />
       </div>
+
       <ProfileDropdown />
     </div>
   );
