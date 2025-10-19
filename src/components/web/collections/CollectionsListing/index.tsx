@@ -266,7 +266,7 @@ function CollectionsListing(): React.ReactElement {
 
   if (isLoading) {
     return (
-      <div>
+      <div ref={mapContainerRef}>
         <CollectionTypeLabel />
         <LoaderContainer>
           <CircularLoader size={50} />

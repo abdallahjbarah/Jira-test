@@ -1,5 +1,4 @@
 'use client';
-import CustomSvg from '@/components/ui/CustomSvg';
 import useUser from '@/utils/hooks/useUser';
 import Image from 'next/image';
 import React from 'react';
@@ -18,7 +17,7 @@ const ProfileTrigger: React.FC = () => {
         />
       ) : (
         <div className='w-full h-full flex items-center justify-center bg-white rounded-full text-primary_2'>
-          <CustomSvg
+          <img
             src='/SVGs/shared/profile-2user.svg'
             width={33}
             height={33}

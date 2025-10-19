@@ -72,7 +72,7 @@ export default function ContactUsForm(): React.ReactElement {
 
   return (
     <div id='ContactUsForm' className='bg-secondary_2'>
-      <div className='container mx-auto py-[15.125rem] flex flex-col laptopS:flex-row w-full justify-center items-center gap-[5rem] px-4 laptopS:px-[8.75rem]'>
+      <div className='container mx-auto tabletS:py-[5.125rem] laptopS:py-[15.125rem] flex flex-col laptopS:flex-row w-full justify-center items-center gap-[5rem] px-4 laptopS:px-[8.75rem]'>
         <div className='flex flex-col justify-center max-w-[35.875rem] mt-16 laptopS:mt-0'>
           <h1 className='text-custom-30 font-custom-700 text-primary_5 font-gellix-Bold mobileM:text-custom-70'>
             {t('contactUsForm.title')}
