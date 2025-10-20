@@ -117,7 +117,7 @@ export default function Footer(): React.ReactElement {
                   {t('footer.email.title')}
                 </h2>
                 <p
-                  className='font-custom-400 cursor-pointer'
+                  className='font-custom-400 cursor-pointer transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
                   onClick={() => window.open('mailto:info@bookagri.com')}
                 >
                   {t('footer.email.value')}
@@ -130,7 +130,7 @@ export default function Footer(): React.ReactElement {
                 {phoneValues.map((phone, index) => (
                   <p
                     key={index}
-                    className='font-custom-400 cursor-pointer'
+                    className='font-custom-400 cursor-pointer transition-all duration-300 hover:text-primary_1 hover:font-custom-800'
                     onClick={() =>
                       window.open(SOCIAL_MEDIA_DATA?.whatsapp?.link, '_blank')
                     }
