@@ -116,7 +116,7 @@ const ar = {
       value: 'info@bookagri.com',
     },
     phone: {
-      title: 'الهاتف',
+      title: 'واتساب',
       values: [
         '00962-77-2236393',
         '00962-77-0504153',

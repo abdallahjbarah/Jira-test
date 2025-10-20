@@ -12,7 +12,7 @@ type PostContactUsData = {
 const postContactUs = async (
   data: PostContactUsData
 ): Promise<PostContactUsData> => {
-  const response = await api.url('/users/contact-form').post(data);
+  const response = await api.url('/contact-us').post(data);
   return response.json();
 };
 

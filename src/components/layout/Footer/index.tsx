@@ -116,14 +116,25 @@ export default function Footer(): React.ReactElement {
                 <h2 className='font-custom-700 mb-2'>
                   {t('footer.email.title')}
                 </h2>
-                <p className='font-custom-400'>{t('footer.email.value')}</p>
+                <p
+                  className='font-custom-400 cursor-pointer'
+                  onClick={() => window.open('mailto:info@bookagri.com')}
+                >
+                  {t('footer.email.value')}
+                </p>
               </div>
               <div className='text-custom-15 text-primary_4 w-full mobileM:text-custom-18'>
                 <h2 className='font-custom-700 mb-2'>
                   {t('footer.phone.title')}
                 </h2>
                 {phoneValues.map((phone, index) => (
-                  <p key={index} className='font-custom-400'>
+                  <p
+                    key={index}
+                    className='font-custom-400 cursor-pointer'
+                    onClick={() =>
+                      window.open(SOCIAL_MEDIA_DATA?.whatsapp?.link, '_blank')
+                    }
+                  >
                     {phone}
                   </p>
                 ))}

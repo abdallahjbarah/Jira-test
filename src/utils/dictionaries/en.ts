@@ -102,7 +102,7 @@ const en = {
       value: 'info@bookagri.com',
     },
     phone: {
-      title: 'Phone',
+      title: 'Whatsapp',
       values: [
         '00962-77-2236393',
         '00962-77-0504153',

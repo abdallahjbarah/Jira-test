@@ -141,7 +141,7 @@ export default function ContactUsForm(): React.ReactElement {
               <CustomInput
                 shape={1}
                 className='h-[3.5rem] w-full px-6 placeholder:text-custom-17 mobileM:h-[5rem] mobileM:placeholder:text-custom-24'
-                placeholder={t('contactUsForm.phoneNumber')}
+                placeholder={t('contactUsForm.phone')}
                 type='text'
                 id='phoneNumber'
                 {...register('phoneNumber')}
