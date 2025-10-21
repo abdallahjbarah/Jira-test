@@ -34,9 +34,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # 4️⃣ Install dependencies
+      # 4️⃣ Install dependencies (ignore peer conflicts)
       - name: Install dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       # 5️⃣ Build frontend
       - name: Build frontend
