@@ -19,19 +19,34 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
 
-      # 2️⃣ Install dependencies
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 3️⃣ Cache npm dependencies
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # 4️⃣ Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 3️⃣ Build frontend
+      # 5️⃣ Build frontend
       - name: Build frontend
         run: npm run build
 
-      # 4️⃣ Setup Amplify CLI
+      # 6️⃣ Setup Amplify CLI
       - name: Setup Amplify CLI
         run: npm install -g @aws-amplify/cli
 
-      # 5️⃣ Deploy to Amplify using branch name as environment / subdomain
+      # 7️⃣ Deploy to Amplify
       - name: Deploy to Amplify
         env:
           AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
@@ -40,23 +55,29 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           QA_BACKEND_URL: ${{ secrets.QA_BACKEND_URL }}
         run: |
+          set -e
           BRANCH="${{ github.event.inputs.branch }}"
           echo "Deploying branch: $BRANCH"
 
           # Pull existing environment if it exists
-          amplify pull --appId $AMPLIFY_APP_ID --envName $BRANCH || echo "Env does not exist yet"
+          if ! amplify pull --appId $AMPLIFY_APP_ID --envName $BRANCH --yes; then
+            echo "Environment $BRANCH does not exist yet."
+          fi
 
           # Checkout or create environment
-          amplify env checkout $BRANCH || amplify env add --name $BRANCH --appId $AMPLIFY_APP_ID --yes
+          if ! amplify env checkout $BRANCH; then
+            amplify env add --name $BRANCH --appId $AMPLIFY_APP_ID --yes
+          fi
 
-          # Set backend URL for this environment
+          # Set backend API URL for this environment
           echo "REACT_APP_API_URL=$QA_BACKEND_URL" > .env.production
 
-          # Push and publish
+          # Push backend changes
           amplify push --yes
+
+          # Publish frontend
           amplify publish --yes
 
-      # 6️⃣ Show deployed URL
-      - name: Show deployed URL
-        run: |
-          echo "✅ QA environment deployed at: https://${{ github.event.inputs.branch }}.<your-amplify-app>.amplifyapp.com"
+          # Get deployed URL dynamically
+          DEPLOYED_URL=$(amplify status | grep "Hosting endpoint" | awk '{print $3}')
+          echo "✅ QA environment deployed at: $DEPLOYED_URL"
