@@ -1,19 +1,19 @@
-name: QA Frontend Build
+name: QA Frontend Deploy
 
 on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Select the branch to build'
+        description: 'Select the branch to deploy'
         required: true
         default: 'main'
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-22.04
 
     steps:
-      # 1️⃣ Checkout the selected branch
+      # 1️⃣ Checkout the branch
       - name: Checkout branch
         uses: actions/checkout@v4
         with:
@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: 18
 
-      # 3️⃣ Cache dependencies
+      # 3️⃣ Cache npm dependencies
       - name: Cache Node.js modules
         uses: actions/cache@v3
         with:
@@ -34,11 +34,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # 4️⃣ Install dependencies (ignore peer conflicts)
+      # 4️⃣ Install dependencies
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 5️⃣ Set placeholder API URL for frontend
+      # 5️⃣ Set placeholder API URL
       - name: Set frontend environment
         run: |
           echo "REACT_APP_API_URL=${{ secrets.QA_BACKEND_URL }}" > .env.production
@@ -48,9 +48,24 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      # 7️⃣ Upload build artifacts (optional)
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: next-build
-          path: .next/
+      # 7️⃣ Trigger Amplify Console redeploy
+      - name: Trigger Amplify redeploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
+          BRANCH: ${{ github.event.inputs.branch }}
+        run: |
+          echo "Triggering Amplify redeploy for branch: $BRANCH"
+          aws amplify start-job \
+            --app-id $AMPLIFY_APP_ID \
+            --branch-name $BRANCH \
+            --job-type RELEASE \
+            --region $AWS_REGION
+
+      # 8️⃣ Output redeploy info
+      - name: Deployed info
+        run: |
+          echo "✅ QA redeploy triggered for branch: ${{ github.event.inputs.branch }}"
+          echo "Check Amplify Console to see deployment progress."
