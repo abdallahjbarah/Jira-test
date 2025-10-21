@@ -80,4 +80,4 @@ jobs:
 
           # Get deployed URL dynamically
           DEPLOYED_URL=$(amplify status | grep "Hosting endpoint" | awk '{print $3}')
-          echo "✅ QA environment deployed at: $DEPLOYED_URL"
+          echo "QA environment deployed at: $DEPLOYED_URL"
