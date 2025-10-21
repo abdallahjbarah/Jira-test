@@ -1,15 +1,15 @@
-name: QA Manual Deploy
+name: QA Frontend Build
 
 on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Select the branch to deploy'
+        description: 'Select the branch to build'
         required: true
         default: 'main'
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: 18
 
-      # 3️⃣ Cache npm dependencies
+      # 3️⃣ Cache dependencies
       - name: Cache Node.js modules
         uses: actions/cache@v3
         with:
@@ -48,18 +48,9 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      # 7️⃣ Deploy frontend to Amplify Hosting using npx
-      - name: Deploy frontend to Amplify
-        env:
-          AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: |
-          echo "Publishing frontend for branch: ${{ github.event.inputs.branch }}"
-          npx @aws-amplify/cli publish --yes
-
-      # 8️⃣ Show deployed URL
-      - name: Show deployed URL
-        run: |
-          echo "✅ QA environment deployed at: https://${{ github.event.inputs.branch }}.<your-amplify-app>.amplifyapp.com"
+      # 7️⃣ Optional: upload artifacts (if you want to save build output)
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: next-build
+          path: .next/
