@@ -48,7 +48,7 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      # 7️⃣ Deploy frontend to Amplify Hosting
+      # 7️⃣ Deploy frontend to Amplify Hosting using npx
       - name: Deploy frontend to Amplify
         env:
           AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
@@ -57,7 +57,7 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
           echo "Publishing frontend for branch: ${{ github.event.inputs.branch }}"
-          amplify publish --yes
+          npx @aws-amplify/cli publish --yes
 
       # 8️⃣ Show deployed URL
       - name: Show deployed URL
