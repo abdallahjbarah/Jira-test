@@ -38,46 +38,28 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 5️⃣ Build frontend
+      # 5️⃣ Set placeholder API URL for frontend
+      - name: Set frontend environment
+        run: |
+          echo "REACT_APP_API_URL=${{ secrets.QA_BACKEND_URL }}" > .env.production
+          cat .env.production
+
+      # 6️⃣ Build frontend
       - name: Build frontend
         run: npm run build
 
-      # 6️⃣ Setup Amplify CLI
-      - name: Setup Amplify CLI
-        run: npm install -g @aws-amplify/cli
-
-      # 7️⃣ Deploy to Amplify
-      - name: Deploy to Amplify
+      # 7️⃣ Deploy frontend to Amplify Hosting
+      - name: Deploy frontend to Amplify
         env:
           AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          QA_BACKEND_URL: ${{ secrets.QA_BACKEND_URL }}
         run: |
-          set -e
-          BRANCH="${{ github.event.inputs.branch }}"
-          echo "Deploying branch: $BRANCH"
-
-          # Pull existing environment if it exists
-          if ! amplify pull --appId $AMPLIFY_APP_ID --envName $BRANCH --yes; then
-            echo "Environment $BRANCH does not exist yet."
-          fi
-
-          # Checkout or create environment
-          if ! amplify env checkout $BRANCH; then
-            amplify env add --name $BRANCH --appId $AMPLIFY_APP_ID --yes
-          fi
-
-          # Set backend API URL for this environment
-          echo "REACT_APP_API_URL=$QA_BACKEND_URL" > .env.production
-
-          # Push backend changes
-          amplify push --yes
-
-          # Publish frontend
+          echo "Publishing frontend for branch: ${{ github.event.inputs.branch }}"
           amplify publish --yes
 
-          # Get deployed URL dynamically
-          DEPLOYED_URL=$(amplify status | grep "Hosting endpoint" | awk '{print $3}')
-          echo "QA environment deployed at: $DEPLOYED_URL"
+      # 8️⃣ Show deployed URL
+      - name: Show deployed URL
+        run: |
+          echo "✅ QA environment deployed at: https://${{ github.event.inputs.branch }}.<your-amplify-app>.amplifyapp.com"
