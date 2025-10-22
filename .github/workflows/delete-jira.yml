@@ -1,0 +1,34 @@
+name: Delete Branch on Jira Done
+
+on:
+  repository_dispatch:
+    types: [jira-done]
+
+jobs:
+  delete-branch:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # fetch all branches
+
+      # Step 2: Configure Git to use your GH_TOKEN and remove GitHub Actions bot override
+      - name: Configure Git to use PAT
+        env:
+          PAT_GITHUB: ${{ secrets.GH_TOKEN }}
+        run: |
+          # Remove the extraheader that forces GITHUB_TOKEN authentication
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          # Set origin to use PAT for your new repo
+          git remote set-url origin https://${PAT_GITHUB}@github.com/abdallahjbarah/Jira-test.git
+          git fetch origin --prune
+
+      # Step 3: Delete Jira-created branch
+      - name: Delete Jira-created branch
+        env:
+          BRANCH_NAME: ${{ github.event.client_payload.branch }}
+        run: |
+          echo "Deleting branch: $BRANCH_NAME"
+          git push origin --delete $BRANCH_NAME || echo "Branch does not exist"
