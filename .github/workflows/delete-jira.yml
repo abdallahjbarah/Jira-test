@@ -8,31 +8,48 @@ jobs:
   delete-branch:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # fetch all branches
+          fetch-depth: 0
 
-      # Step 2: Reconfigure Git to use your personal access token (PAT)
       - name: Configure Git to use PAT
         env:
           PAT_GITHUB: ${{ secrets.GH_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
           echo "Resetting Git credentials..."
-          # Remove any GITHUB_TOKEN-based headers
           git config --local --unset-all http.https://github.com/.extraheader || true
-
-          # Set new origin using your PAT
           git remote set-url origin https://${PAT_GITHUB}@github.com/${REPO}.git
-
           git fetch origin --prune
 
-      # Step 3: Delete Jira-created branch
+      # 👇 Step: Determine prefix based on Jira issue type
+      - name: Compute branch name with prefix
+        id: branch
+        env:
+          ISSUE_TYPE: ${{ github.event.client_payload.issue_type }}
+          ISSUE_KEY: ${{ github.event.client_payload.branch }}
+        run: |
+          echo "Issue type: $ISSUE_TYPE"
+          echo "Issue key: $ISSUE_KEY"
+
+          # Default: no prefix
+          PREFIX=""
+
+          # Map Jira issue types to branch prefixes
+          case "$ISSUE_TYPE" in
+            "Story") PREFIX="features/" ;;
+            "Bug") PREFIX="fixes/" ;;
+            "Sub-task") PREFIX="todo/" ;;
+          esac
+
+          FULL_BRANCH="${PREFIX}${ISSUE_KEY}"
+          echo "Full branch name resolved to: $FULL_BRANCH"
+          echo "FULL_BRANCH=$FULL_BRANCH" >> $GITHUB_OUTPUT
+
       - name: Delete Jira-created branch
         env:
-          BRANCH_NAME: ${{ github.event.client_payload.branch }}
+          BRANCH_NAME: ${{ steps.branch.outputs.FULL_BRANCH }}
         run: |
           echo "Deleting branch: $BRANCH_NAME"
           git push origin --delete "$BRANCH_NAME" || echo "Branch does not exist"
