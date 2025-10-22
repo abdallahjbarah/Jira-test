@@ -35,7 +35,7 @@ jobs:
           PREFIX=""
           # Map Jira issue types to branch prefixes
           case "$ISSUE_TYPE" in
-            "Story") PREFIX="features/" ;;
+            "Story") PREFIX="feature/" ;;
             "Bug") PREFIX="fixes/" ;;
             "Sub-task") PREFIX="todo/" ;;
           esac
