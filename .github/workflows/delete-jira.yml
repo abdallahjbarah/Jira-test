@@ -22,7 +22,6 @@ jobs:
           git config --local --unset-all http.https://github.com/.extraheader || true
           git remote set-url origin https://${PAT_GITHUB}@github.com/${REPO}.git
           git fetch origin --prune
-
       # 👇 Step: Determine prefix based on Jira issue type
       - name: Compute branch name with prefix
         id: branch
@@ -32,21 +31,17 @@ jobs:
         run: |
           echo "Issue type: $ISSUE_TYPE"
           echo "Issue key: $ISSUE_KEY"
-
           # Default: no prefix
           PREFIX=""
-
           # Map Jira issue types to branch prefixes
           case "$ISSUE_TYPE" in
             "Story") PREFIX="features/" ;;
             "Bug") PREFIX="fixes/" ;;
             "Sub-task") PREFIX="todo/" ;;
           esac
-
           FULL_BRANCH="${PREFIX}${ISSUE_KEY}"
           echo "Full branch name resolved to: $FULL_BRANCH"
           echo "FULL_BRANCH=$FULL_BRANCH" >> $GITHUB_OUTPUT
-
       - name: Delete Jira-created branch
         env:
           BRANCH_NAME: ${{ steps.branch.outputs.FULL_BRANCH }}
