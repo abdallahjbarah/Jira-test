@@ -10,19 +10,23 @@ jobs:
     steps:
       # Step 1: Checkout repository
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # fetch all branches
 
-      # Step 2: Configure Git to use your GH_TOKEN and remove GitHub Actions bot override
+      # Step 2: Reconfigure Git to use your personal access token (PAT)
       - name: Configure Git to use PAT
         env:
           PAT_GITHUB: ${{ secrets.GH_TOKEN }}
+          REPO: ${{ github.repository }}
         run: |
-          # Remove the extraheader that forces GITHUB_TOKEN authentication
+          echo "Resetting Git credentials..."
+          # Remove any GITHUB_TOKEN-based headers
           git config --local --unset-all http.https://github.com/.extraheader || true
-          # Set origin to use PAT for your new repo
-          git remote set-url origin https://${PAT_GITHUB}@github.com/abdallahjbarah/Jira-test.git
+
+          # Set new origin using your PAT
+          git remote set-url origin https://${PAT_GITHUB}@github.com/${REPO}.git
+
           git fetch origin --prune
 
       # Step 3: Delete Jira-created branch
@@ -31,4 +35,4 @@ jobs:
           BRANCH_NAME: ${{ github.event.client_payload.branch }}
         run: |
           echo "Deleting branch: $BRANCH_NAME"
-          git push origin --delete $BRANCH_NAME || echo "Branch does not exist"
+          git push origin --delete "$BRANCH_NAME" || echo "Branch does not exist"
