@@ -38,4 +38,3 @@ Thumbs.db
 
 # Optional: Ignore markdown files, except for the README
 *.md
-!README.md
